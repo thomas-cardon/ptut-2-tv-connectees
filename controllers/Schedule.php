@@ -71,6 +71,7 @@ class Schedule extends ControllerG
      * @throws Exception
      */
     public function displaySchedules(){
+        echo 'test';
         $current_user = wp_get_current_user();
         //test pour admin
         if(in_array("administrator", $current_user->roles)) {
