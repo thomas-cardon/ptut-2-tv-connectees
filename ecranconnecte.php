@@ -1,11 +1,16 @@
 <?php
+
 /**
- * Plugin Name: TvConnecteeAmu
- * Description: Plugin de la télé connectée de l'AMU, ce plugin permet de générer des fichiers ICS. Ces fichiers sont ensuite lus pour pouvoir afficher l'emploi du temps de la personne connectée. Ce plugin permet aussi d'afficher la météo, des informations, des alertes. Tant en ayant une gestion des utilisateurs et des informations.
- * Version: 2.5.6
- * Author: Léa Arnaud & Nicolas Rohrbach
- * Author URI: http://tvconnectee.alwaysdata.net/
-*/
+ * Plugin Name:       Ecran connecté AMU
+ * Plugin URI:        https://github.com/Nicolas-Rohrbach/plugin_ecran_connecte
+ * Description:       Plugin écrans connectées de l'AMU, ce plugin permet de générer des fichiers ICS. Ces fichiers sont ensuite lus pour pouvoir afficher l'emploi du temps de la personne connectée. Ce plugin permet aussi d'afficher la météo, des informations, des alertes. Tant en ayant une gestion des utilisateurs et des informations.
+ * Version:           1.2.1
+ * Author:            Léa Arnaud & Nicolas Rohrbach
+ * License:           GNU General Public License v2
+ * License URI:       http://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       github-updater
+ * GitHub Plugin URI: https://github.com/Nicolas-Rohrbach/plugin_ecran_connecte
+ */
 
 //On inclut tous les fichiers du plugin
 include_once 'install_DB_Tv.php';
