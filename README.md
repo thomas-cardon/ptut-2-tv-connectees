@@ -1,1 +1,1 @@
-# plugin_ecran_connecte
+# Plugin écran connecté
