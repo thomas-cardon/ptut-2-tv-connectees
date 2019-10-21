@@ -1,0 +1,57 @@
+/* WEATHER */
+
+* {box-sizing:border-box}
+
+.Infos{
+    width: 100%;
+    background-color: #00558b;
+    box-sizing: border-box;
+    color: #FFF;
+    height: 8vw;
+    text-align: center;
+}
+.Infos .Weather{
+    box-sizing: border-box;
+    border-top: solid 1px #FFF;
+    height: 39%;
+    font-size: 24px;
+    text-align: center;
+    width: 100%;
+}
+.Infos .Weather #weather{
+    border-right: solid 1px #FFF;
+    display: inline-block;
+    height: 100%;
+    width: 49%;
+}
+.Infos .Weather #wind{
+    display: inline-block;
+    height: 100%;
+    width: 50%;
+}
+.Infos .Weather img{
+    display: inline-block;
+    height: 70%;
+}
+.Infos .Time{
+    text-align: center;
+    font-size: 1.6vw;
+    font-weight: 600;
+    margin: -2px 0 -4px 0;
+}
+.Infos .Date{
+    font-size: 1.3vw;
+}
+
+@media only screen and (max-device-width: 1000px){
+    .Infos {
+        height: 8.7vw;
+        width: 100%;
+    }
+    .Infos .Time{
+        font-size: 2.4vw;
+    }
+    .Infos .Date{
+        font-size: 1.6vw;
+    }
+}

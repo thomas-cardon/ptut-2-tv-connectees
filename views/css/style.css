@@ -1,0 +1,24 @@
+.red {
+    color:red;
+}
+
+.wp-block-tvconnecteeamu-test {
+    color: darkred;
+    background: #fcc;
+    border: 2px solid #c99;
+    padding: 20px;
+}
+
+.trente {
+    float: left;
+    width: 30%;
+}
+
+.sept {
+    float: left;
+    width: 70%;
+}
+
+input[type="submit"]:disabled {
+    background: #dddddd;
+}

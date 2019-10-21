@@ -1,0 +1,62 @@
+/*__Information main__*/
+
+.titleInfo {
+    font-family: "Titillium Web", sans-serif;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.content_info{
+    max-width: 100%;
+    font-size : 1.5em;
+    text-align: center;
+}
+
+.content_info img{
+    max-height:30ex;
+}
+
+.red {
+    color:red;
+}
+
+@media (max-height: 1100px) {
+
+    .titleInfo {
+        width: 100%;
+        font-size : 3em;
+        text-align: center;
+    }
+
+    .content_info{
+        width: 100%;
+        font-size : 1.5em;
+        text-align: center;
+    }
+
+    .content_info img{
+        max-height:40ex;
+    }
+}
+
+@media (max-height: 800px) {
+    .titleInfo {
+        width: 100%;
+        font-size : 3em;
+        text-align: center;
+    }
+
+    .content_info td {
+        height: 20px;
+    }
+
+    .content_info{
+        width: 100%;
+        font-size : 1.5em;
+        text-align: center;
+    }
+
+    .content_info img{
+        max-height:30ex;
+    }
+}

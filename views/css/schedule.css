@@ -1,0 +1,42 @@
+/**
+CSS de l'emploi du temps
+ */
+
+/* TABLE */
+.errorNotRegister{
+    font-weight: bold;
+    color: white;
+    background-color: red;
+}
+
+/* SLIDESHOW */
+.slideshow-container {
+    max-width: 1000px;
+    position: relative;
+    margin: auto;
+}
+
+.mySlides {
+    display: none;
+}
+
+.tabSchedule {
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.headerTab {
+    background-color: #00558a;
+}
+
+.technician {
+    float: left;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+    width: 40% !important;
+}
+
+@media (max-width: 640px) {
+    .technician {
+        width: 100%;
+    }
+}
