@@ -4,11 +4,11 @@
  * Plugin Name:       Ecran connecté AMU
  * Plugin URI:        https://github.com/Nicolas-Rohrbach/plugin-ecran-connecte
  * Description:       Plugin écrans connectées de l'AMU, ce plugin permet de générer des fichiers ICS. Ces fichiers sont ensuite lus pour pouvoir afficher l'emploi du temps de la personne connectée. Ce plugin permet aussi d'afficher la météo, des informations, des alertes. Tant en ayant une gestion des utilisateurs et des informations.
- * Version:           1.2.3
+ * Version:           1.2.4
  * Author:            Léa Arnaud & Nicolas Rohrbach
  * License:           GNU General Public License v2
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       github-updater
+ * Text Domain:       ecran-connecte
  * GitHub Plugin URI: https://github.com/Nicolas-Rohrbach/plugin-ecran-connecte
  */
 
@@ -168,25 +168,26 @@ function dlSchedule($users) {
  */
 function wpdocs_plugin_teleconnecteeAmu_scripts() {
     wp_enqueue_style('plugin-bootstrap-style', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', array(), true);
-    wp_enqueue_style('weather-style', '/wp-content/plugins/TeleConnecteeAmu/views/css/weather.css', array(), true);
-    wp_enqueue_style('style-style', '/wp-content/plugins/TeleConnecteeAmu/views/css/style.css', array(), true);
-    wp_enqueue_style('alert-style', '/wp-content/plugins/TeleConnecteeAmu/views/css/alert.css', array(), true);
-    wp_enqueue_style('info-style', '/wp-content/plugins/TeleConnecteeAmu/views/css/information.css', array(), true);
-    wp_enqueue_style('schedule-style', '/wp-content/plugins/TeleConnecteeAmu/views/css/schedule.css', array(), true);
+    wp_enqueue_style('weather-style', '/wp-content/plugins/plugin-ecran-connecte/views/css/weather.css', array(), true);
+    wp_enqueue_style('style-style', '/wp-content/plugins/plugin-ecran-connecte/views/css/style.css', array(), true);
+    wp_enqueue_style('alert-style', '/wp-content/plugins/plugin-ecran-connecte/views/css/alert.css', array(), true);
+    wp_enqueue_style('info-style', '/wp-content/plugins/plugin-ecran-connecte/views/css/information.css', array(), true);
+    wp_enqueue_style('schedule-style', '/wp-content/plugins/plugin-ecran-connecte/views/css/schedule.css', array(), true);
     wp_enqueue_script( 'theme-jquery', get_template_directory_uri() . '/assets/js/jquery-3.3.1.min.js', array (), '', false);
     wp_enqueue_script( 'theme-jqueryUI', get_template_directory_uri() . '/assets/js/jquery-ui.min.js', array ( 'jquery' ), '', false);
-    wp_enqueue_script( 'theme-jqueryEzTic', '/wp-content/plugins/TeleConnecteeAmu/views/js/jquery.easy-ticker.js', array ( 'jquery' ), '', false);
-    wp_enqueue_script( 'plugin-addCheckBox', '/wp-content/plugins/TeleConnecteeAmu/views/js/addAllCheckBox.js', array ( 'jquery' ), '', false);
-    wp_enqueue_script( 'plugin-addCodeTv', '/wp-content/plugins/TeleConnecteeAmu/views/js/addOrDeleteTvCode.js', array ( 'jquery' ), '', false);
-    wp_enqueue_script( 'plugin-checkCaptcha', '/wp-content/plugins/TeleConnecteeAmu/views/js/checkCaptcha.js', array ( 'jquery' ), '', false);
-    wp_enqueue_script( 'plugin-addCodeAlert', '/wp-content/plugins/TeleConnecteeAmu/views/js/addOrDeleteAlertCode.js', array ( 'jquery' ), '', false);
-    wp_enqueue_script( 'plugin-marquee', '/wp-content/plugins/TeleConnecteeAmu/views/js/jquery.marquee.js', array ( 'jquery' ), '', false);
-    wp_enqueue_script( 'plugin-slideshow', '/wp-content/plugins/TeleConnecteeAmu/views/js/slideshow.js', array ( 'jquery' ), '', true);
-    wp_enqueue_script( 'plugin-showModal', '/wp-content/plugins/TeleConnecteeAmu/views/js/modal.js', array ( 'jquery' ), '', true);
-    wp_enqueue_script( 'plugin-ticker', '/wp-content/plugins/TeleConnecteeAmu/views/js/jquery.tickerNews.js', array ( 'jquery' ), '', true);
-    wp_enqueue_script( 'plugin-alertTicker', '/wp-content/plugins/TeleConnecteeAmu/views/js/alertTicker.js', array ( 'jquery' ), '', true);
-    wp_enqueue_script( 'plugin-OneSignal', '/wp-content/plugins/TeleConnecteeAmu/views/js/oneSignalPush.js', array ( 'jquery' ), '', true);
-    wp_enqueue_script( 'plugin-confPass', '/wp-content/plugins/TeleConnecteeAmu/views/js/confirmPass.js', array ( 'jquery' ), '', false);
+    wp_enqueue_script( 'theme-jqueryEzTic', '/wp-content/plugins/plugin-ecran-connecte/views/js/jquery.easy-ticker.js', array ( 'jquery' ), '', false);
+    wp_enqueue_script( 'plugin-addCheckBox', '/wp-content/plugins/plugin-ecran-connecte/views/js/addAllCheckBox.js', array ( 'jquery' ), '', false);
+    wp_enqueue_script( 'plugin-addCodeTv', '/wp-content/plugins/plugin-ecran-connecte/views/js/addOrDeleteTvCode.js', array ( 'jquery' ), '', false);
+    wp_enqueue_script( 'plugin-checkCaptcha', '/wp-content/plugins/plugin-ecran-connecte/views/js/checkCaptcha.js', array ( 'jquery' ), '', false);
+    wp_enqueue_script( 'plugin-addCodeAlert', '/wp-content/plugins/plugin-ecran-connecte/views/js/addOrDeleteAlertCode.js', array ( 'jquery' ), '', false);
+    wp_enqueue_script( 'plugin-marquee', '/wp-content/plugins/plugin-ecran-connecte/views/js/jquery.marquee.js', array ( 'jquery' ), '', false);
+    wp_enqueue_script( 'plugin-slideshow', '/wp-content/plugins/plugin-ecran-connecte/views/js/slideshow.js', array ( 'jquery' ), '', true);
+    wp_enqueue_script( 'plugin-showModal', '/wp-content/plugins/plugin-ecran-connecte/views/js/modal.js', array ( 'jquery' ), '', true);
+    wp_enqueue_script( 'plugin-ticker', '/wp-content/plugins/plugin-ecran-connecte/views/js/jquery.tickerNews.js', array ( 'jquery' ), '', true);
+    wp_enqueue_script( 'plugin-alertTicker', '/wp-content/plugins/plugin-ecran-connecte/views/js/alertTicker.js', array ( 'jquery' ), '', true);
+    wp_enqueue_script( 'plugin-OneSignal', '/wp-content/plugins/plugin-ecran-connecte/views/js/oneSignalPush.js', array ( 'jquery' ), '', true);
+    wp_enqueue_script( 'plugin-confPass', '/wp-content/plugins/plugin-ecran-connecte/views/js/confirmPass.js', array ( 'jquery' ), '', false);
+    wp_enqueue_script( 'plugin-weathertime', '/wp-content/plugins/plugin-ecran-connecte/views/js/weather_and_time.js', array ( 'jquery' ), '', true);
 }
 add_action( 'wp_enqueue_scripts', 'wpdocs_plugin_teleconnecteeAmu_scripts' );
 

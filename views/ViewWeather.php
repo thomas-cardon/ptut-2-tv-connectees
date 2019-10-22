@@ -13,9 +13,9 @@ class ViewWeather
      */
     public function displayWeather() {
         echo '
-    <script src="/wp-content/plugins/TeleConnecteeAmu/views/js/weather.js"></script>
     <div class="Infos">
         <div class="Time" id="Time">
+      
         </div>
         <div class="Date" id="Date">
         </div>
