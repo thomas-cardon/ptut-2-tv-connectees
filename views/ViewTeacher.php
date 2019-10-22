@@ -1,12 +1,12 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Rohrb
+ * UserView: Rohrb
  * Date: 25/04/2019
  * Time: 10:58
  */
 
-class ViewTeacher extends ViewG
+class ViewTeacher extends UserView
 {
     /**
      * Affiche un formulaire pour inscrire des enseignants via fichier Excel

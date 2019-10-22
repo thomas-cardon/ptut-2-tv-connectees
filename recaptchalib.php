@@ -72,7 +72,7 @@ function _recaptcha_http_post($host, $path, $data, $port = 80) {
         $http_request .= "Host: $host\r\n";
         $http_request .= "Content-Type: application/x-www-form-urlencoded;\r\n";
         $http_request .= "Content-Length: " . strlen($req) . "\r\n";
-        $http_request .= "User-Agent: reCAPTCHA/PHP\r\n";
+        $http_request .= "UserView-Agent: reCAPTCHA/PHP\r\n";
         $http_request .= "\r\n";
         $http_request .= $req;
 

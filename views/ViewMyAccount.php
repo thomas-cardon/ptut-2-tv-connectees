@@ -1,12 +1,12 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Rohrb
+ * UserView: Rohrb
  * Date: 06/05/2019
  * Time: 08:42
  */
 
-class ViewMyAccount extends ViewG
+class ViewMyAccount extends UserView
 {
     /**
      * Début de formulaire qui vérifie le mot de passe

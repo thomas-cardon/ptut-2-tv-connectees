@@ -4,7 +4,7 @@ namespace PhpOffice\PhpSpreadsheet\Chart;
 
 /**
  * Created by PhpStorm.
- * User: Wiktor Trzonkowski
+ * UserView: Wiktor Trzonkowski
  * Date: 6/17/14
  * Time: 12:11 PM.
  */

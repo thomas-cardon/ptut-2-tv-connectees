@@ -1,12 +1,12 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Rohrb
+ * UserView: Rohrb
  * Date: 25/04/2019
  * Time: 10:46
  */
 
-class ViewTelevision extends ViewG{
+class ViewTelevision extends UserView {
 
     /**
      * Affiche un select permettant de choisir une année un groupe ou un demi-groupe déjà enregistré

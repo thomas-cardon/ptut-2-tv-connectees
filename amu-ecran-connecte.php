@@ -19,6 +19,7 @@ include_once 'recaptchalib.php';
 include_once 'controllers/ControllerG.php';
 include_once 'models/Model.php';
 include_once 'views/ViewG.php';
+include_once 'views/UserView.php';
 
 include_once 'controllers/CodeAde.php';
 include_once 'models/CodeAdeManager.php';

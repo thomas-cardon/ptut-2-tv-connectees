@@ -1,7 +1,7 @@
 <?php
 
 
-class ViewTechnician extends ViewG
+class ViewTechnician extends UserView
 {
     /**
      * Formulaire pour inscrire un utilisateur

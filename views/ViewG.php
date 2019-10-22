@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Rohrb
+ * UserView: Rohrb
  * Date: 26/04/2019
  * Time: 08:49
  */
@@ -11,57 +11,6 @@
  * Class ViewG
  */
 abstract class ViewG{
-
-    /**
-     * Affiche un formulaire pour ajouter des utilisateurs via fichier Excel
-     * @param $name     Nom du rôle à inscrire
-     * @return string   Renvoie le formulaire
-     */
-    protected function displayInsertImportFile($name){
-        return '
-        <div class="cadre">
-        <a href="/wp-content/plugins/TeleConnecteeAmu/models/Excel/addUsers/Ajout '.$name.'s.xlsx"
-                download="Ajout '.$name.'s.xlsx">Télécharger le fichier Excel ! </a>
-             <form id="'.$name.'" method="post" enctype="multipart/form-data">
-				<input type="file" name="excel'.$name.'" class="inpFil" required=""/>
-				<br/>
-				<button type="submit" name="import'.$name.'" value="Importer">Importer le fichier</button>
-			</form>
-			</div>
-			<br/>';
-    }
-
-    /**
-     * Affiche un formulaire classique
-     * @param $name Nom du rôle à inscrire
-     * @return string   Renvoie le formulaire
-     */
-    protected function displayBaseForm($name, $secu = false){
-        require_once(ABSPATH . '/wp-content/plugins/TeleConnecteeAmu/recaptchalib.php');
-        $publickey = "6LefDq4UAAAAAHnf43F9zBqCCMfof0MdX1TgNti4"; // you got this from the signup page
-        $string = '
-        <div class="cadre">
-             <div align="center">
-                <form method="post">
-                    <label for="login'.$name.'">Login</label>
-                    <input minlength="4" type="text" class="form-control text-center modal-sm" name="login'.$name.'" placeholder="Login" required="">
-                    <label for="email'.$name.'">Email</label>
-                    <input type="email" class="form-control text-center modal-sm" name="email'.$name.'" placeholder="Email" required="">
-                    <label for="pwd'.$name.'">Mot de passe</label>
-                    <input minlength="4" type="password" class="form-control text-center modal-sm" id="pwd'.$name.'" name="pwd'.$name.'" placeholder="Mot de passe" required="" onkeyup=checkPwd("'.$name.'")>
-                      <input minlength="4" type="password" class="form-control text-center modal-sm" id="pwdConf'.$name.'" name="pwdConfirm'.$name.'" placeholder="Confirmer le Mot de passe" required="" onkeyup=checkPwd("'.$name.'")>';
-        if($secu) {
-            $string .= '<div class="g-recaptcha" data-sitekey="'.$publickey.'"></div>
-                        <input type="submit" id="valid'.$name.'" name="create'.$name.'">';
-        } else {
-            $string .= '<input type="submit" id="valid'.$name.'" name="create'.$name.'">
-                </form>
-            </div>
-         </div>';
-        }
-
-        return $string;
-    }
 
     /**
      * Affiche une ligne contenant les données d'un enseignant

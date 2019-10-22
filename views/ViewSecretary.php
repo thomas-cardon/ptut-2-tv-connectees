@@ -1,12 +1,12 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Rohrb
+ * UserView: Rohrb
  * Date: 25/04/2019
  * Time: 10:52
  */
 
-class ViewSecretary extends ViewG
+class ViewSecretary extends UserView
 {
     /**
      * Affiche un formulaire d'inscription pour les secretaires
