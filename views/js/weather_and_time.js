@@ -34,8 +34,8 @@ jQuery(document).ready(function($) {
 
     if (navigator.geolocation)
         navigator.geolocation.getCurrentPosition(showPosition);
-    else
-        alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
+    //else
+        //alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
 });
 
 function showPosition(position){
@@ -51,8 +51,13 @@ jQuery(document).ready(function($) {
         success : function(parsed_json) {
             var location = parsed_json['location']['city'];
             var temp_f = parsed_json['current_observation']['temp_f'];
-            alert("Current temperature in " + location + " is: " + temp_f);
+            //alert("Current temperature in " + location + " is: " + temp_f);
         }
     });
 });
 
+var temp_c = parsed_json['current_observation']['temp_c']; /*Température en Celcius*/
+var icon = parsed_json['current_observation']['icon_url']; /*Icon de la température*/
+var weather = parsed_json['current_observation']['weather']; /*température actuelle*/
+
+document.getElementById("Time").$("body").append(" <div> <h2>" + location + " </h2> <div> <h3>" + temp_c + " °C</h3> <img src='"+icon+"' alt='"+weather+"' title='"+weather+"'/> </div> <h4>"+weather+"</h4> </div>");
