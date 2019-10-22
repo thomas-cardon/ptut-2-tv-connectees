@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2b1d3d0f-72cd-429f-bd68-b89ebcd2831a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/controllers/Schedule.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/Schedule.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/amu-ecran-connecte.php" beforeDir="false" afterPath="$PROJECT_DIR$/amu-ecran-connecte.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -54,7 +54,7 @@
       <option name="presentableId" value="Default" />
       <updated>1571724122404</updated>
       <workItem from="1571724127548" duration="1063000" />
-      <workItem from="1571728441040" duration="684000" />
+      <workItem from="1571728441040" duration="1144000" />
     </task>
     <servers />
   </component>
