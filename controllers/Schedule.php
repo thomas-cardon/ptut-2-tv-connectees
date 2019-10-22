@@ -74,7 +74,7 @@ class Schedule extends ControllerG
         $current_user = wp_get_current_user();
         //test pour admin
         if(in_array("administrator", $current_user->roles)) {
-            echo 'test test';
+
         }
         if (in_array("television",$current_user->roles) || in_array("etudiant",$current_user->roles) || in_array("enseignant",$current_user->roles)) {
 

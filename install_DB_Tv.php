@@ -135,12 +135,12 @@ $result = add_role(
     )
 );
 
-$result = add_role(
-    'directeuretude',
-    __( 'Directeur etude' ),
-    array(
-        'read'         => true,  // true allows this capability
-        'edit_posts'   => true,
-        'delete_posts' => false, // Use false to explicitly deny
-    )
-);
+//$result = add_role(
+//    'directeuretude',
+//    __( 'Directeur etude' ),
+//    array(
+//        'read'         => true,  // true allows this capability
+//        'edit_posts'   => true,
+//        'delete_posts' => false, // Use false to explicitly deny
+//    )
+//);
