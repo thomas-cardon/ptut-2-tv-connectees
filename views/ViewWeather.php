@@ -13,14 +13,14 @@ class ViewWeather
      */
     public function displayWeather() {
         echo '
-    <div class="Infos">
-        <div class="Time" id="Time">
+    <aside class="Infos">
+        <p class="Time" id="Time">
       
-        </div>
-        <div class="Date" id="Date">
-        </div>
-        <div class="Weather" id="Weather">
-        </div>
-    </div>';
+        </p>
+        <p class="Date" id="Date">
+        </p>
+        <p class="Weather" id="Weather">
+        </p>
+    </aside>';
     }
 }

@@ -26,38 +26,3 @@ function heure() {
 
 setInterval(dateFr,  1000);
 setInterval(heure,  1000);
-
-
-jQuery(document).ready(function($) {
-    var maLatitude;		/*Variable gobale contenant la latitude*/
-    var maLongitude;	/*Variable gobale contenant la longitude*/
-
-    if (navigator.geolocation)
-        navigator.geolocation.getCurrentPosition(showPosition);
-    //else
-        //alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
-});
-
-function showPosition(position){
-    maLatitude= position.coords.latitude;
-    maLongitude= position.coords.longitude;
-    alert(maLatitude + ", " + maLongitude );
-}
-
-jQuery(document).ready(function($) {
-    $.ajax({
-        url : "http://api.wunderground.com/api/TA_KEY/geolookup/conditions/lang:FC/q/IA/\"+maLatitude+\",\"+maLongitude+\".json\"",
-        dataType : "jsonp",
-        success : function(parsed_json) {
-            var location = parsed_json['location']['city'];
-            var temp_f = parsed_json['current_observation']['temp_f'];
-            //alert("Current temperature in " + location + " is: " + temp_f);
-        }
-    });
-});
-
-var temp_c = parsed_json['current_observation']['temp_c']; /*Température en Celcius*/
-var icon = parsed_json['current_observation']['icon_url']; /*Icon de la température*/
-var weather = parsed_json['current_observation']['weather']; /*température actuelle*/
-
-document.getElementById("Time").$("body").append(" <div> <h2>" + location + " </h2> <div> <h3>" + temp_c + " °C</h3> <img src='"+icon+"' alt='"+weather+"' title='"+weather+"'/> </div> <h4>"+weather+"</h4> </div>");

@@ -188,6 +188,7 @@ function wpdocs_plugin_teleconnecteeAmu_scripts() {
     wp_enqueue_script( 'plugin-OneSignal', '/wp-content/plugins/plugin-ecran-connecte/views/js/oneSignalPush.js', array ( 'jquery' ), '', true);
     wp_enqueue_script( 'plugin-confPass', '/wp-content/plugins/plugin-ecran-connecte/views/js/confirmPass.js', array ( 'jquery' ), '', false);
     wp_enqueue_script( 'plugin-weathertime', '/wp-content/plugins/plugin-ecran-connecte/views/js/weather_and_time.js', array ( 'jquery' ), '', true);
+    wp_enqueue_script( 'plugin-weather', '/wp-content/plugins/plugin-ecran-connecte/views/js/weather.js', array ( 'jquery' ), '', true);
 }
 add_action( 'wp_enqueue_scripts', 'wpdocs_plugin_teleconnecteeAmu_scripts' );
 
