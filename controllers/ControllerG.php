@@ -83,7 +83,7 @@ abstract class ControllerG {
         $time = date("D, d M Y H:i:s");
         $time = "[".$time."] ";
         $event = $time.$event."\n";
-        file_put_contents(ABSPATH."/wp-content/plugins/TeleConnecteeAmu/fichier.log", $event, FILE_APPEND);
+        file_put_contents(ABSPATH."/wp-content/plugins/plugin-ecran-connecte/fichier.log", $event, FILE_APPEND);
     }
 
     /**
@@ -107,7 +107,7 @@ abstract class ControllerG {
      * @return string   Renvoie le chemin jusqu'au fichier ICS
      */
     public function getFilePath($code){
-        $path = ABSPATH . "/wp-content/plugins/TeleConnecteeAmu/controllers/fileICS/".$code;
+        $path = ABSPATH . "/wp-content/plugins/plugin-ecran-connecte/controllers/fileICS/".$code;
         return $path;
     }
 
@@ -116,18 +116,36 @@ abstract class ControllerG {
      * @param $code     Code ADE
      */
     public function addFile($code){
-        $path = $this->getFilePath($code);
-        $url = $this->getUrl($code);
-        //file_put_contents($path, fopen($url, 'r'));
-        $handler = fopen($url, "r");
-        $contents = '';
-        if($handler)
-            while(!feof($handler))
-                $contents .= fread($handler, 8192);
-        fclose($handler);
-        $handlew = fopen($path, "w");
-        fwrite($handlew, $contents);
-        fclose($handlew);
+        try {
+            $path = $this->getFilePath($code);
+            $url = $this->getUrl($code);
+            //file_put_contents($path, fopen($url, 'r'));
+            $contents = '';
+            if ( !file_exists($url) ) {
+                throw new Exception('File not found.');
+            }
+
+            if($handler = fopen($url, "r")) {
+                    while(!feof($handler)) {
+                        $contents .= fread($handler, 8192);
+                    }
+                fclose($handler);
+            } else {
+                throw new Exception('File open failed.');
+            }
+
+            if($handlew = fopen($path, "w")) {
+                fwrite($handlew, $contents);
+                fclose($handlew);
+            } else {
+                throw new Exception('File open failed.');
+            }
+
+
+        } catch (Exception $e) {
+            $this->addLogEvent($e);
+        }
+
     }
 
     /**

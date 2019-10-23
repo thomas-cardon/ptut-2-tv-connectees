@@ -48,7 +48,7 @@ class Information extends ControllerG {
      * @param $id
      */
     public function deleteFile($id) {
-        $file = glob("/wp-content/plugins/TeleConnecteeAmu/views/media/{$id}.*");
+        $file = glob("/wp-content/plugins/plugin-ecran-connecte/views/media/{$id}.*");
         foreach ($file as $filename) {
             unlink($filename);
         }
@@ -96,62 +96,62 @@ class Information extends ControllerG {
      * cf snippet Modification Info
      */
     public function modifyInformation() {
-            $id = $this->getMyIdUrl();
+        $id = $this->getMyIdUrl();
 
-            $actionText = $_POST['validateChange'];
-            $actionImg = $_POST['validateChangeImg'];
-            $actionTab = $_POST['validateChangeTab'];
+        $actionText = $_POST['validateChange'];
+        $actionImg = $_POST['validateChangeImg'];
+        $actionTab = $_POST['validateChangeTab'];
 
-            $result = $this->DB->getInformationByID($id);
-            $title = $result['title'];
-            $content = $result['content'];
-            $endDate = date('Y-m-d',strtotime($result['end_date']));
-            $typeI = $result['type'];
+        $result = $this->DB->getInformationByID($id);
+        $title = $result['title'];
+        $content = $result['content'];
+        $endDate = date('Y-m-d',strtotime($result['end_date']));
+        $typeI = $result['type'];
 
-            if($actionText == "Modifier") {
-                $title = filter_input(INPUT_POST, 'titleInfo');
-                $content = filter_input(INPUT_POST, 'contentInfo');
-                $endDate = $_POST['endDateInfo'];
+        if($actionText == "Modifier") {
+            $title = filter_input(INPUT_POST, 'titleInfo');
+            $content = filter_input(INPUT_POST, 'contentInfo');
+            $endDate = $_POST['endDateInfo'];
 
+            $this->DB->modifyInformation($id,$title,$content,$endDate);
+            $this->view->displayModifyValidate();
+        }
+        elseif($actionImg == "Modifier") { //si il s'agit d'une modification d'affiche
+            $contentFile = $_FILES['contentFile'];
+
+            $title = filter_input(INPUT_POST,'titleInfo');
+            $endDate = $_POST['endDateInfo'];
+            if($_FILES['contentFile']['size'] != 0) {    //si l'image est modifié
+                $contentNew = $this->uploadFile($contentFile,"modify","img",$id);
+                if($contentNew != null || $contentNew != 0) {
+                    $this->DB->modifyInformation($id,$title,$contentNew,$endDate);
+                    $this->view->displayModifyValidate();
+                }
+            }
+            else { // si le texte et/ou la date de fin est modifié
                 $this->DB->modifyInformation($id,$title,$content,$endDate);
                 $this->view->displayModifyValidate();
             }
-            elseif($actionImg == "Modifier") { //si il s'agit d'une modification d'affiche
-                $contentFile = $_FILES['contentFile'];
 
-                $title = filter_input(INPUT_POST,'titleInfo');
-                $endDate = $_POST['endDateInfo'];
-                if($_FILES['contentFile']['size'] != 0) {    //si l'image est modifié
-                    $contentNew = $this->uploadFile($contentFile,"modify","img",$id);
-                    if($contentNew != null || $contentNew != 0) {
-                        $this->DB->modifyInformation($id,$title,$contentNew,$endDate);
-                        $this->view->displayModifyValidate();
-                    }
-                }
-                else { // si le texte et/ou la date de fin est modifié
-                    $this->DB->modifyInformation($id,$title,$content,$endDate);
+        }
+        elseif($actionTab == "Modifier") { //si il s'agit d'une modification d'un tableau
+            $contentFile = $_FILES['contentFile'];
+
+            $title = filter_input(INPUT_POST,'titleInfo');
+            $endDate =$_POST['endDateInfo'];
+            if($_FILES['contentFile']['size'] != 0) {    //si le fichier est modifié
+                $contentNew = $this->uploadFile($contentFile,"modify","tab",$id);
+                if($contentNew != null || $contentNew != 0) {
+                    $this->DB->modifyInformation($id,$title,$contentNew,$endDate);
                     $this->view->displayModifyValidate();
                 }
-
             }
-            elseif($actionTab == "Modifier") { //si il s'agit d'une modification d'un tableau
-                $contentFile = $_FILES['contentFile'];
-
-                $title = filter_input(INPUT_POST,'titleInfo');
-                $endDate =$_POST['endDateInfo'];
-                if($_FILES['contentFile']['size'] != 0) {    //si le fichier est modifié
-                    $contentNew = $this->uploadFile($contentFile,"modify","tab",$id);
-                    if($contentNew != null || $contentNew != 0) {
-                        $this->DB->modifyInformation($id,$title,$contentNew,$endDate);
-                        $this->view->displayModifyValidate();
-                    }
-                }
-                else { // si le texte et/ou la date de fin est modifié
-                    $this->DB->modifyInformation($id,$title,$content,$endDate);
-                    $this->view->displayModifyValidate();
-                }
-
+            else { // si le texte et/ou la date de fin est modifié
+                $this->DB->modifyInformation($id,$title,$content,$endDate);
+                $this->view->displayModifyValidate();
             }
+
+        }
     } //modifyInformation()
 
     /**
@@ -185,7 +185,7 @@ class Information extends ControllerG {
             $type = $row['type'];
             $this->endDateCheckInfo($id,$endDate);
             if($type == 'tab'){
-                $source = $_SERVER['DOCUMENT_ROOT']."/wp-content/plugins/TeleConnecteeAmu/views/media/".$content;
+                $source = $_SERVER['DOCUMENT_ROOT']."/wp-content/plugins/plugin-ecran-connecte/views/media/".$content;
                 if(! file_exists($source)) {
                     array_push($idList,$id);
                     array_push($titleList,$title);
@@ -258,11 +258,11 @@ class Information extends ControllerG {
                 $extension_upload = strtolower(  substr(  strrchr($_FILES['file']['name'], '.')  ,1)  );
 
                 //renomme le fichier avec l'id de l'info
-                rename($_SERVER['DOCUMENT_ROOT']."/wp-content/plugins/TeleConnecteeAmu/views/media/temporary.{$extension_upload}",
-                    $_SERVER['DOCUMENT_ROOT']."/wp-content/plugins/TeleConnecteeAmu/views/media/{$id}.{$extension_upload}");
+                rename($_SERVER['DOCUMENT_ROOT']."/wp-content/plugins/plugin-ecran-connecte/views/media/temporary.{$extension_upload}",
+                    $_SERVER['DOCUMENT_ROOT']."/wp-content/plugins/plugin-ecran-connecte/views/media/{$id}.{$extension_upload}");
 
                 //modifie le contenu de l'information pour avoir le bon lien de l'image
-                $content = '<img src="/wp-content/plugins/TeleConnecteeAmu/views/media/'.$id.'.'.$extension_upload.'">';
+                $content = '<img src="/wp-content/plugins/plugin-ecran-connecte/views/media/'.$id.'.'.$extension_upload.'">';
                 $this->changeContentFile($id, $content);
             }
             $this->view->displayCreateValidate();
@@ -275,8 +275,8 @@ class Information extends ControllerG {
                 $extension_upload = strtolower(  substr(  strrchr($_FILES['file']['name'], '.')  ,1)  );
 
                 //renomme le fichier avec l'id de l'info
-                rename($_SERVER['DOCUMENT_ROOT']."/wp-content/plugins/TeleConnecteeAmu/views/media/temporary.{$extension_upload}",
-                    $_SERVER['DOCUMENT_ROOT']."/wp-content/plugins/TeleConnecteeAmu/views/media/{$id}.{$extension_upload}");
+                rename($_SERVER['DOCUMENT_ROOT']."/wp-content/plugins/plugin-ecran-connecte/views/media/temporary.{$extension_upload}",
+                    $_SERVER['DOCUMENT_ROOT']."/wp-content/plugins/plugin-ecran-connecte/views/media/{$id}.{$extension_upload}");
 
                 //modifie le contenu de l'information pour avoir le bon nom du fichier
                 $content = $id.'.'.$extension_upload;
@@ -334,7 +334,7 @@ class Information extends ControllerG {
 
         $extension_upload = strtolower(  substr(  strrchr($_FILES['file']['name'], '.')  ,1)  );
         if ( in_array($extension_upload,$extensions_valides) ) {
-            $nom =  $_SERVER['DOCUMENT_ROOT']."/wp-content/plugins/TeleConnecteeAmu/views/media/{$id}.{$extension_upload}";
+            $nom =  $_SERVER['DOCUMENT_ROOT']."/wp-content/plugins/plugin-ecran-connecte/views/media/{$id}.{$extension_upload}";
             $resultat = move_uploaded_file($_FILES['file']['tmp_name'],$nom);
         } else {
             echo "Extension incorrecte <br>";
@@ -356,7 +356,7 @@ class Information extends ControllerG {
             } elseif ($action == "modify"){
                 if($type == "img") {
                     //renvoie le nouveau contenu de l'info
-                    $content = '<img src="/wp-content/plugins/TeleConnecteeAmu/views/media/' . $id . '.' . $extension_upload . '">';
+                    $content = '<img src="/wp-content/plugins/plugin-ecran-connecte/views/media/' . $id . '.' . $extension_upload . '">';
                     return $content;
                 } elseif ($type == "tab"){
                     //renvoie le nouveau contenu de l'info
@@ -374,7 +374,7 @@ class Information extends ControllerG {
 
     public function readSpreadSheet($id){
 
-        $file = glob($_SERVER['DOCUMENT_ROOT']."/wp-content/plugins/TeleConnecteeAmu/views/media/{$id}.*");
+        $file = glob($_SERVER['DOCUMENT_ROOT']."/wp-content/plugins/plugin-ecran-connecte/views/media/{$id}.*");
         foreach ($file as $i) {
             $filename = $i;
         }
@@ -422,4 +422,3 @@ class Information extends ControllerG {
     }
 
 }
-

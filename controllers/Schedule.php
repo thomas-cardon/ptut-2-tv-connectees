@@ -34,7 +34,7 @@ class Schedule extends ControllerG
         global $R34ICS;
         $R34ICS = new R34ICS();
 
-        $url = ABSPATH."/wp-content/plugins/TeleConnecteeAmu/controllers/fileICS/".$code;
+        $url = ABSPATH."/wp-content/plugins/plugin-ecran-connecte/controllers/fileICS/".$code;
         // On demande d'afficher l'emploi du temps en liste, les autres arguments ne servent à rien pour nous
         $args = array(
             'count' => 10,
@@ -74,7 +74,7 @@ class Schedule extends ControllerG
         $current_user = wp_get_current_user();
         //test pour admin
         if(in_array("administrator", $current_user->roles)) {
-
+            echo 'test';
         }
         if (in_array("television",$current_user->roles) || in_array("etudiant",$current_user->roles) || in_array("enseignant",$current_user->roles)) {
 
