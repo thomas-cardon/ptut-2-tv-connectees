@@ -75,6 +75,22 @@ class Schedule extends ControllerG
         //test pour admin
         if(in_array("administrator", $current_user->roles)) {
 
+//            if($myfiles = scandir(ABSPATH . TV_PLUG_PATH."controllers/fileICS/file3")) {
+//                foreach ($myfiles as $myfile) {
+//                    unlink(ABSPATH . TV_PLUG_PATH."controllers/fileICS/file3/".$myfile);
+//                }
+//            }
+//            if($myfiles = scandir(ABSPATH . TV_PLUG_PATH."controllers/fileICS/file2")) {
+//                foreach ($myfiles as $myfile) {
+//                    rename(ABSPATH . TV_PLUG_PATH."controllers/fileICS/file2/".$myfile, ABSPATH . TV_PLUG_PATH."controller/fileICS/file3/".$myfile);
+//                }
+//            }
+//
+//            if($myfiles = scandir(ABSPATH . TV_PLUG_PATH."controllers/fileICS/file1")) {
+//                foreach ($myfiles as $myfile) {
+//                    rename(ABSPATH . TV_PLUG_PATH."controllers/fileICS/file1/".$myfile, ABSPATH . TV_PLUG_PATH."controllers/fileICS/file2/".$myfile);
+//                }
+//            }
         }
         if (in_array("television",$current_user->roles) || in_array("etudiant",$current_user->roles) || in_array("enseignant",$current_user->roles)) {
 

@@ -4,7 +4,7 @@
  * Plugin Name:       Ecran connecté AMU
  * Plugin URI:        https://github.com/Nicolas-Rohrbach/plugin-ecran-connecte
  * Description:       Plugin écrans connectées de l'AMU, ce plugin permet de générer des fichiers ICS. Ces fichiers sont ensuite lus pour pouvoir afficher l'emploi du temps de la personne connectée. Ce plugin permet aussi d'afficher la météo, des informations, des alertes. Tant en ayant une gestion des utilisateurs et des informations.
- * Version:           1.2.8
+ * Version:           1.2.9
  * Author:            Léa Arnaud & Nicolas Rohrbach
  * License:           GNU General Public License v2
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.html
@@ -123,6 +123,22 @@ function downloadFileICS_func() {
     $model = new CodeAdeManager();
     $allCodes = $model->getAllCode();
     $controllerAde = new CodeAde();
+    if($myfiles = scandir("controllers/fileICS/file3")) {
+        foreach ($myfiles as $myfile) {
+            unlink($myfile);
+        }
+    }
+    if($myfiles = scandir("controllers/fileICS/file2")) {
+        foreach ($myfiles as $myfile) {
+            rename($myfile, "../file3/".$myfile);
+        }
+    }
+
+    if($myfiles = scandir("controllers/fileICS/file1")) {
+        foreach ($myfiles as $myfile) {
+            rename($myfile, "../file2/".$myfile);
+        }
+    }
     foreach ($allCodes as $code){
         $path = $controllerAde->getFilePath($code['code']);
         $controllerAde->addFile($code['code']);
