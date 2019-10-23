@@ -123,22 +123,22 @@ function downloadFileICS_func() {
     $model = new CodeAdeManager();
     $allCodes = $model->getAllCode();
     $controllerAde = new CodeAde();
-    if($myfiles = scandir("controllers/fileICS/file3")) {
-        foreach ($myfiles as $myfile) {
-            unlink($myfile);
-        }
-    }
-    if($myfiles = scandir("controllers/fileICS/file2")) {
-        foreach ($myfiles as $myfile) {
-            rename($myfile, "../file3/".$myfile);
-        }
-    }
-
-    if($myfiles = scandir("controllers/fileICS/file1")) {
-        foreach ($myfiles as $myfile) {
-            rename($myfile, "../file2/".$myfile);
-        }
-    }
+//    if($myfiles = scandir("controllers/fileICS/file3")) {
+//        foreach ($myfiles as $myfile) {
+//            unlink($myfile);
+//        }
+//    }
+//    if($myfiles = scandir("controllers/fileICS/file2")) {
+//        foreach ($myfiles as $myfile) {
+//            rename($myfile, "../file3/".$myfile);
+//        }
+//    }
+//
+//    if($myfiles = scandir("controllers/fileICS/file1")) {
+//        foreach ($myfiles as $myfile) {
+//            rename($myfile, "../file2/".$myfile);
+//        }
+//    }
     foreach ($allCodes as $code){
         $path = $controllerAde->getFilePath($code['code']);
         $controllerAde->addFile($code['code']);
