@@ -1,8 +1,7 @@
 <?php
 
 
-class ViewTechnician extends UserView
-{
+class TechnicianView extends UserView {
     /**
      * Formulaire pour inscrire un utilisateur
      * @return string

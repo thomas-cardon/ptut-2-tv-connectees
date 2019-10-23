@@ -6,8 +6,7 @@
  * Time: 10:52
  */
 
-class ViewSecretary extends UserView
-{
+class SecretaryView extends UserView {
     /**
      * Affiche un formulaire d'inscription pour les secretaires
      * @return string   Renvoie le formulaire

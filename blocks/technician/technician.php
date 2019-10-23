@@ -2,7 +2,7 @@
 
 function technician_render_callback() {
     $technician = new Technician();
-    $view = new ViewTechnician();
+    $view = new TechnicianView();
     if(is_page()){
         $technician->insertTechnician();
         return $view->displayFormTechnician();

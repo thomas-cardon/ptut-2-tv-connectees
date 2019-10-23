@@ -2,7 +2,7 @@
 
 function secretary_render_callback() {
     $secretary = new Secretary();
-    $view = new ViewSecretary();
+    $view = new SecretaryView();
     if(is_page()){
         $secretary->insertSecretary();
         return $view->displayFormSecretary();

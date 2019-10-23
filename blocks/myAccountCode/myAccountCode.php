@@ -1,8 +1,8 @@
 <?php
 function code_account_render_callback() {
-    $myAccount = new MyAccount();
-    $model = new CodeAdeManager();
-    $view = new ViewMyAccount();
+    $myAccount = new User();
+    $model = new UserModel();
+    $view = new UserView();
     $current_user = wp_get_current_user();
     if(is_page() && in_array('etudiant', $current_user->roles)){
         $myAccount->modifyMyCodes();

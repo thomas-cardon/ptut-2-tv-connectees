@@ -2,7 +2,7 @@
 
 function student_render_callback() {
     $student = new Student();
-    $view = new ViewStudent();
+    $view = new StudentView();
     if(is_page()){
         $student->insertStudent();
         return $view->displayInsertImportFileStudent();

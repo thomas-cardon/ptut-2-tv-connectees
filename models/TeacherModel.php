@@ -6,8 +6,7 @@
  * Time: 10:13
  */
 
-class TeacherManager extends Model
-{
+class TeacherModel extends UserModel {
     public function insertTeacher($login, $pwd, $email,$code){
         $role = "enseignant";
         return $this->insertUser($login, $pwd, $role, $email, $code);

@@ -10,44 +10,7 @@
  * Vue générale, rassemble toutes les vues utilisées par plusieurs vues
  * Class ViewG
  */
-abstract class ViewG{
-
-    /**
-     * Affiche une ligne contenant les données d'un enseignant
-     * @param $result   Données de l'enseignant
-     * @param $row      Numéro de ligne
-     * @return string   Renvoie la ligne
-     */
-    protected function displayAllTeacher($result, $name, $row){
-        $page = get_page_by_title( 'Modification utilisateur');
-        $linkModifyUser = get_permalink($page->ID);
-        $code = unserialize($result['code']);
-        $tab = [$result['user_login'], $code[0]];
-        return $this->displayAll($row, $name, $result['ID'], $tab).
-            '
-          <td class="text-center"> <a href="'.$linkModifyUser.$result['ID'].'" name="modif" type="submit" value="Modifier">Modifier</a></td>
-        </tr>';
-    }
-
-    /**
-     * Affiche le formulaire pour modifier un enseignant
-     * @param $result   Données de l'enseignant
-     */
-    protected function displayModifyTeacher($result){
-        $page = get_page_by_title( 'Gestion des utilisateurs');
-        $linkManageUser = get_permalink($page->ID);
-        $code = unserialize($result->code);
-        echo '
-         <div class="cadre">
-             <form method="post">
-                <h3>'.$result->user_login.'</h3>
-                <label>Code ADE</label>
-                <input name="modifCode" type="text" class="form-control" placeholder="Entrer le Code ADE" value="'.$code[0].'" required="">
-                <button name="modifValidate" type="submit" value="Valider">Valider</button>
-                <a href="'.$linkManageUser.'">Annuler</a>
-             </form>
-         </div>';
-    }
+abstract class ViewG {
 
     /**
      * Affiche l'en-tête d'un tableau

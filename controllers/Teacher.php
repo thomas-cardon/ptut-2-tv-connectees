@@ -14,13 +14,13 @@ class Teacher extends ControllerG
 {
     /**
      * Vue de Teacher
-     * @var ViewTeacher
+     * @var TeacherView
      */
     private $view;
 
     /**
      * Modèle de Teacher
-     * @var TeacherManager
+     * @var TeacherModel
      */
     private $model;
 
@@ -28,8 +28,8 @@ class Teacher extends ControllerG
      * Constructeur de Teacher
      */
     public function __construct(){
-        $this->view = new ViewTeacher();
-        $this->model = new TeacherManager();
+        $this->view = new TeacherView();
+        $this->model = new TeacherModel();
     }
 
     /**

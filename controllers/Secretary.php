@@ -10,17 +10,17 @@
  * Permet de gérer la création et l'affichage des secrétaires
  * Class Secretary
  */
-class Secretary{
+class Secretary extends  User {
 
     /**
      * Vue de Secretary
-     * @var ViewSecretary
+     * @var SecretaryView
      */
     private $view;
 
     /**
      * Modèle de Secretary
-     * @var SecretaryManager
+     * @var SecretaryModel
      */
     private $model;
 
@@ -28,8 +28,9 @@ class Secretary{
      * Constructeur de Secretary.
      */
     public function __construct(){
-        $this->view = new ViewSecretary();
-        $this->model = new SecretaryManager();
+
+        $this->view = new SecretaryView();
+        $this->model = new SecretaryModel();
     }
 
     /**

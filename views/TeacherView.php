@@ -6,8 +6,7 @@
  * Time: 10:58
  */
 
-class ViewTeacher extends UserView
-{
+class TeacherView extends UserView {
     /**
      * Affiche un formulaire pour inscrire des enseignants via fichier Excel
      */

@@ -6,7 +6,7 @@
  * Time: 10:46
  */
 
-class ViewTelevision extends UserView {
+class TelevisionView extends UserView {
 
     /**
      * Affiche un select permettant de choisir une année un groupe ou un demi-groupe déjà enregistré

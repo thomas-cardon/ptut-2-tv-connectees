@@ -6,8 +6,7 @@
  * Time: 10:44
  */
 
-class ViewStudent extends UserView
-{
+class StudentView extends UserView {
 
     public function displayFormInscription() {
         return $this->displayBaseForm('Etu', true);

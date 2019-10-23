@@ -19,8 +19,19 @@ class WidgetWeather extends WP_Widget{
     }
 
     public function widget( $args, $instance ) {
-        $view = new ViewWeather();
-        $view->displayWeather();
+        if (is_user_logged_in()) {
+            echo '
+            <aside class="Infos">
+                <p class="Time" id="Time">
+              
+                </p>
+                <p class="Date" id="Date">
+                </p>
+                <p class="Weather" id="Weather">
+                </p>
+            </aside>';
+        }
+
     }
 
     public function form( $instance ) {

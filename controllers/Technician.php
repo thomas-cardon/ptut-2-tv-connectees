@@ -9,13 +9,13 @@ class Technician extends ControllerG
 {
     /**
      * Vue de Technician
-     * @var ViewTechnician
+     * @var TechnicianView
      */
     private $view;
 
     /**
      * Modèle de Technician
-     * @var TechnicianManager
+     * @var TechnicianModel
      */
     private $model;
 
@@ -23,8 +23,8 @@ class Technician extends ControllerG
      * Constructeur de Secretary.
      */
     public function __construct(){
-        $this->view = new ViewTechnician();
-        $this->model = new TechnicianManager();
+        $this->view = new TechnicianView();
+        $this->model = new TechnicianModel();
     }
 
     /**

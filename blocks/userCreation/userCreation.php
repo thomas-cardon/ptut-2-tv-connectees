@@ -1,8 +1,8 @@
 <?php
 
 function creation_user_render_callback() {
-    $manageUser = new ManagementUsers();
-    $view = new ViewManagementUsers();
+    $manageUser = new User();
+    $view = new UserView();
     if(is_page()){
         $manageUser->deleteUsers();
         return $manageUser->createUsers();

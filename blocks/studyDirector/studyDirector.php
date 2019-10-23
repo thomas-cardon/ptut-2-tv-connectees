@@ -2,7 +2,7 @@
 
 function studyDirector_render_callback() {
     $director = new StudyDirector();
-    $view = new ViewStudyDirector();
+    $view = new StudyDirectorView();
     if(is_page()){
         $director->insertDirector();
         return $view->displayCreateDirector();

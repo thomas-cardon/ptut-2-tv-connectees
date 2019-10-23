@@ -6,8 +6,7 @@
  * Time: 10:29
  */
 
-class TelevisionManager extends Model
-{
+class TelevisionModel extends UserModel {
     public function insertMyTelevision($login, $pwd, $code){
         $role = "television";
         return $this->insertUser($login, $pwd, $role, $login, $code);

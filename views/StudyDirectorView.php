@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class ViewStudyDirector
+ * Class StudyDirectorView
  */
-class ViewStudyDirector extends ViewG {
+class StudyDirectorView extends UserView {
 
     /**
      * Formulaire pour créer un directeur d'études

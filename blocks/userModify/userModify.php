@@ -1,7 +1,7 @@
 <?php
 
 function user_modify_render_callback() {
-    $user = new ManagementUsers();
+    $user = new User();
     if(is_page()){
         $user->modifyUser();
     }

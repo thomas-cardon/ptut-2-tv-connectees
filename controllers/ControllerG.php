@@ -19,62 +19,6 @@ abstract class ControllerG {
     }
 
     /**
-     * Supprime tout les utilisateurs sélectionnés via des checkboxs
-     */
-    public function deleteUsers(){
-        $actionDelete = $_POST['Delete'];
-        $roles = ['etu','teacher','direc','tech','secre','tele'];
-        if(isset($actionDelete)){
-            foreach ($roles as $role) {
-                if(isset($_REQUEST['checkboxstatus'.$role])) {
-                    $checked_values = $_REQUEST['checkboxstatus'.$role];
-                    foreach($checked_values as $val) {
-                        $this->deleteUser($val);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Supprime l'utilisateur, si c'est un enseignant, on supprime son fichier ICS et ses alertes
-     * De même pour un secrétaire ou un administrateur, on supprime les alertes & informations postés par ces-derniers
-     * @param $id   ID de la personne a supprimer
-     */
-    public function deleteUser($id){
-        $model = new StudentManager();
-        $user = $model->getById($id);
-        $data = get_userdata($id);
-        $model->deleteUser($id);
-        if(in_array("enseignant", $data->roles) == 'enseignant' ){
-            $code = unserialize($user[0]['code']);
-            unlink($this->getFilePath($code[0]));
-        }
-        if(in_array("enseignant", $data->roles) || in_array("secretaire", $data->roles) || in_array("administrator", $data->roles)){
-            $modelAlert = new AlertManager();
-            $modelInfo = new InformationManager();
-            $alerts = $modelAlert->getListAlertByAuthor($user[0]['user_login']);
-            if(isset($alerts)){
-                foreach ($alerts as $alert) {
-                    $modelAlert->deleteAlertDB($alert['ID_alert']);
-                }
-            }
-            if(in_array("secretaire", $data->roles) || in_array("administrator", $data->roles)) {
-                $infos = $modelInfo->getListInformationByAuthor($user[0]['user_login']);
-                if(isset($infos)){
-                    foreach ($infos as $info) {
-                        $type = $info['type'];
-                        if($type == "img" || $type == "") {
-                            $this->deleteFile($info['ID_info']);
-                        }
-                        $modelInfo->deleteInformationDB($info['ID_info']);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * Permet de signaler une erreur lorsqu'on l'utilise
      * Cela envoie dans un fichier.log la date et l'heure puis un message d'erreur
      * @param $event    Événement de l'erreur
@@ -83,7 +27,7 @@ abstract class ControllerG {
         $time = date("D, d M Y H:i:s");
         $time = "[".$time."] ";
         $event = $time.$event."\n";
-        file_put_contents(ABSPATH."/wp-content/plugins/plugin-ecran-connecte/fichier.log", $event, FILE_APPEND);
+        file_put_contents(ABSPATH.TV_PLUG_PATH."fichier.log", $event, FILE_APPEND);
     }
 
     /**
@@ -107,7 +51,7 @@ abstract class ControllerG {
      * @return string   Renvoie le chemin jusqu'au fichier ICS
      */
     public function getFilePath($code){
-        $path = ABSPATH . "/wp-content/plugins/plugin-ecran-connecte/controllers/fileICS/".$code;
+        $path = ABSPATH . TV_PLUG_PATH."controllers/fileICS/file1/".$code;
         return $path;
     }
 

@@ -2,7 +2,7 @@
 
 function teacher_render_callback() {
     $teacher = new Teacher();
-    $view = new ViewTeacher();
+    $view = new TeacherView();
     if(is_page()){
         $teacher->insertTeacher();
         return $view->displayInsertImportFileTeacher();

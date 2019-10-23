@@ -10,13 +10,13 @@ class Television extends ControllerG {
 
     /**
      * View de Television
-     * @var ViewTelevision
+     * @var TelevisionView
      */
     private $view;
 
     /**
      * Model de Television
-     * @var TelevisionManager
+     * @var TelevisionModel
      */
     private $model;
 
@@ -24,8 +24,8 @@ class Television extends ControllerG {
      * Constructeur de Television
      */
     public function __construct(){
-        $this->view = new ViewTelevision();
-        $this->model = new TelevisionManager();
+        $this->view = new TelevisionView();
+        $this->model = new TelevisionModel();
     }
 
     public function insertTelevision(){

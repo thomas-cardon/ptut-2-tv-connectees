@@ -6,7 +6,7 @@
  * Time: 10:02
  */
 
-class StudentManager extends Model{
+class StudentModel extends UserModel {
 
     public function insertStudent($login, $pwd, $email){
         $role = "etudiant";

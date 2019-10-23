@@ -5,13 +5,13 @@ class StudyDirector extends ControllerG {
 
     /**
      * Vue de StudyDirector
-     * @var ViewStudyDirector
+     * @var StudyDirectorView
      */
     private $view;
 
     /**
      * Modèle de StudyDirector
-     * @var StudyDirectorManager
+     * @var StudyDirectorModel
      */
     private $model;
 
@@ -19,8 +19,8 @@ class StudyDirector extends ControllerG {
      * Constructeur de StudyDirector
      */
     public function __construct(){
-        $this->view = new ViewStudyDirector();
-        $this->model = new StudyDirectorManager();
+        $this->view = new StudyDirectorView();
+        $this->model = new StudyDirectorModel();
     }
 
     /**

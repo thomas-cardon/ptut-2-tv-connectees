@@ -14,13 +14,13 @@ class Student extends ControllerG
 {
     /**
      * Vue de Student
-     * @var ViewStudent
+     * @var StudentView
      */
     public $view;
 
     /**
      * Modèle de Student
-     * @var StudentManager
+     * @var StudentModel
      */
     private $model;
 
@@ -29,8 +29,8 @@ class Student extends ControllerG
      */
     public function __construct()
     {
-        $this->view = new ViewStudent();
-        $this->model = new StudentManager();
+        $this->view = new StudentView();
+        $this->model = new StudentModel();
     }
 
     public function inscriptionStudent() {
@@ -224,5 +224,31 @@ class Student extends ControllerG
                 $this->view->displayModificationValidate($linkManageUser);
             }
         }
+    }
+
+    /**
+     * Modifie les codes de l'étudiant connecté
+     * @param $result   Données de l'étudiant avant modification
+     */
+    public function modifyMyCodes(){
+        //On récupère toutes les années, groupes et demi-groupes
+        // pour pouvoir permettre à l'utilisateur de les sélectionner lors de la modification
+        $current_user = wp_get_current_user();
+        $years = $this->model->getCodeYear();
+        $groups = $this->model->getCodeGroup();
+        $halfgroups = $this->model->getCodeHalfgroup();
+        $action = $_POST['modifvalider'];
+
+        if($action == 'Valider'){
+            $year = filter_input(INPUT_POST,'modifYear');
+            $group = filter_input(INPUT_POST,'modifGroup');
+            $halfgroup = filter_input(INPUT_POST,'modifHalfgroup');
+
+            $codes = [$year, $group, $halfgroup];
+            if($this->model->modifyMyCodes($current_user->ID, $current_user->user_login, $codes)){
+                $this->view->displayModificationValidate();
+            }
+        }
+        return $this->view->displayModifyMyCodes($current_user, $years, $groups, $halfgroups);
     }
 }

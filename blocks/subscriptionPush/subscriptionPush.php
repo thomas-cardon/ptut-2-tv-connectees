@@ -5,9 +5,8 @@
  * @return string Return la vue du formulaire
  */
 function subscription_render_callback() {
-    $view = new ViewMyAccount();
+    $view = new UserView();
     if(is_page()){
-
         return $view->displayButtonSubscription();
     }
 }

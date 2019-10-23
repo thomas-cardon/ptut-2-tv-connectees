@@ -1,7 +1,7 @@
 <?php
 
 
-class StudyDirectorManager extends  Model {
+class StudyDirectorModel extends UserModel {
     public function insertDirector($login, $pwd, $email,$code){
         $role = "directeuretude";
         return $this->insertUser($login, $pwd, $role, $email, $code);
