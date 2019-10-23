@@ -35,7 +35,7 @@ class ViewInformation extends ViewG
                 $source = substr($source[1], 0, -1);
                 $source = substr($source, 1, -1);
                 $source = home_url() . $source;
-                if (! getimagesize($source)) {
+                if(! file_exists($source)) {
                     $string .= '<td class="text-center red"> Le fichier n\'existe pas ';
                 } else {
                     $string .= '<td class="text-center">';

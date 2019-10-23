@@ -204,7 +204,7 @@ class Information extends ControllerG {
                     $source = substr($source[1],0,-1);
                     $source = substr($source,1,-1);
                     $source = home_url().$source;
-                    if(! getimagesize($source)){
+                    if(! file_exists($source)) {
                         array_push($idList,$id);
                         array_push($titleList,$title);
                         array_push($contentList,'Une belle image devrait être ici !');
