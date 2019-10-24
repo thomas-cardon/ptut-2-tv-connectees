@@ -65,11 +65,8 @@ abstract class ControllerG {
             $url = $this->getUrl($code);
             //file_put_contents($path, fopen($url, 'r'));
             $contents = '';
-            if ( !file_exists($url) ) {
-                throw new Exception('File not found.');
-            }
-
-            if($handler = fopen($url, "r")) {
+            $handler = fopen($url, "r");
+            if($handler) {
                     while(!feof($handler)) {
                         $contents .= fread($handler, 8192);
                     }
@@ -77,8 +74,8 @@ abstract class ControllerG {
             } else {
                 throw new Exception('File open failed.');
             }
-
-            if($handlew = fopen($path, "w")) {
+            $handlew = fopen($path, "w");
+            if($handlew) {
                 fwrite($handlew, $contents);
                 fclose($handlew);
             } else {
