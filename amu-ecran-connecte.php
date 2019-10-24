@@ -105,8 +105,11 @@ require ('models/Excel/vendor/autoload.php');
 
 // Initialize plugin
 add_action('init', function(){
-    global $R34ICS;
-    $R34ICS = new R34ICS();
+    if(class_exists(R34ICS )) {
+        global $R34ICS;
+        $R34ICS = new R34ICS();
+    }
+
 });
 
 $dl = $_POST['dlEDT'];
