@@ -165,14 +165,22 @@ function dlSchedule($users) {
                 foreach ($codes as $code) {
                     $path = $controllerAde->getFilePath($code);
                     $controllerAde->addFile($code);
-                    if(file_get_contents($path) == ''){
-                        $controllerAde->addFile($code);
+                    if(file_exists($path)) {
+                        if(file_get_contents($path) == ''){
+                            $controllerAde->addFile($codes);
+                        }
+                    } else {
+                        $controllerAde->addFile($codes);
                     }
                 }
             } else {
                 $path = $controllerAde->getFilePath($codes);
                 $controllerAde->addFile($codes);
-                if(file_get_contents($path) == ''){
+                if(file_exists($path)) {
+                    if(file_get_contents($path) == ''){
+                        $controllerAde->addFile($codes);
+                    }
+                } else {
                     $controllerAde->addFile($codes);
                 }
             }
