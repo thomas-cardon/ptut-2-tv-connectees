@@ -19,4 +19,3 @@ function showSlides() {
 setTimeout(function(){
     window.location.reload(1);
 }, 300000);
-

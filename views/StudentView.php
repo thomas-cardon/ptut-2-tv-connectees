@@ -17,7 +17,7 @@ class StudentView extends UserView {
      * @return string   Renvoie le formulaire
      */
     public function displayInsertImportFileStudent() {
-        return '<h1> Création comptes étudiants</h1>'.$this->displayInsertImportFile("Etu");
+        return '<h2> Comptes étudiants</h2>'.$this->displayInsertImportFile("Etu");
     }
 
     /**

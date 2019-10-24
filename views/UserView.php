@@ -11,7 +11,7 @@ class UserView extends ViewG {
     protected function displayInsertImportFile($name){
         return '
         <article class="cadre">
-            <a href="/wp-content/plugins/TeleConnecteeAmu/models/Excel/addUsers/Ajout '.$name.'s.xlsx"
+            <a href="'.TV_PLUG_PATH.'models/Excel/addUsers/Ajout '.$name.'s.xlsx"
                 download="Ajout '.$name.'s.xlsx">Télécharger le fichier Excel ! </a>
              <form id="'.$name.'" method="post" enctype="multipart/form-data">
 				<input type="file" name="excel'.$name.'" class="inpFil" required=""/>

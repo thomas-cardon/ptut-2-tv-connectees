@@ -12,7 +12,7 @@ class SecretaryView extends UserView {
      * @return string   Renvoie le formulaire
      */
     public function displayFormSecretary() {
-        return '<h1> Création compte secrétaire </h1>'.$this->displayBaseForm('Secre');
+        return '<h2> Compte secrétaire </h2>'.$this->displayBaseForm('Secre');
     }
 
     /**

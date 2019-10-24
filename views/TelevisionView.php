@@ -58,7 +58,7 @@ class TelevisionView extends UserView {
      */
     public function displayFormTelevision($years, $groups, $halfgroups) {
         return '
-        <h1> Création compte télévision</h1>
+        <h2> Compte télévision</h2>
          <div class="cadre">
             <div align="center">
                 <form method="post" id="registerTvForm">

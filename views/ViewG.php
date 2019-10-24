@@ -20,7 +20,7 @@ abstract class ViewG {
     protected function displayHeaderTab($name, $title = null){
         $name = "'$name'";
         return '
-            <h1>'.$title.'</h1>
+            <h2>'.$title.'</h2>
             <form method="post">
                 <div class="table-responsive">
                 <table class="table text-center"> 

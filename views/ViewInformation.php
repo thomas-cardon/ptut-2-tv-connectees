@@ -58,7 +58,7 @@ class ViewInformation extends ViewG
      * @param $content
      */
 
-    public function displayInformationView($title, $content)
+    public function displayInformationView($title, $content, $type)
     {
         $cpt = 0;
         echo '<div class="container-fluid">
@@ -70,8 +70,13 @@ class ViewInformation extends ViewG
                                 for($i=0; $i < sizeof($title); ++$i) {
                                     $var = ($cpt == 0) ? ' active">' : '">';
                                     echo '<div class="carousel-item' . $var.'
-                                                <h2 class="titleInfo">'.$title[$i].' </h2>
-                                                <div class="content_info">'.$content[$i].'</div> 
+                                                <h2 class="titleInfo">'.$title[$i].' </h2>';
+                                                if($type == 'pdf') {
+                                                    echo do_shortcode($content[$i]);
+                                                } else {
+                                                    echo '<div class="content_info">'.$content[$i].'</div>';
+                                                }
+                                                echo '
                                            </div>';
                                     $cpt++;
                                 }
@@ -87,7 +92,7 @@ class ViewInformation extends ViewG
         $linkManageInfo = get_permalink($page->ID);
         $dateMin = date('Y-m-d', strtotime("+1 day"));
         return '
-        <h1>Créer une information avec du texte</h1>
+        <h2>Créer une information avec du texte</h2>
             <div class="cadre">
                 <form method="post">
                     Titre : <input type="text" name="titleInfo" placeholder="Inserer un titre" required maxlength="20"> </br>
@@ -104,7 +109,7 @@ class ViewInformation extends ViewG
         $linkManageInfo = get_permalink($page->ID);
         $dateMin = date('Y-m-d', strtotime("+1 day"));
         return '
-            <h1>Créer une information avec une image</h1>
+            <h2>Créer une information avec une image</h2>
                 <div class="cadre">
                     <form method="post" enctype="multipart/form-data">
                         Titre : <input type="text" name="titleInfo" placeholder="Inserer un titre" required maxlength="20"> </br>
@@ -122,7 +127,7 @@ class ViewInformation extends ViewG
         $linkManageInfo = get_permalink($page->ID);
         $dateMin = date('Y-m-d', strtotime("+1 day"));
         return '
-            <h1>Créer une information avec un tableau</h1>
+            <h2>Créer une information avec un tableau</h2>
             <div class="cadre">
                 <form method="post" enctype="multipart/form-data">
                     Titre : <input type="text" name="titleInfo" placeholder="Inserer un titre" required maxlength="20"> </br>
@@ -134,6 +139,29 @@ class ViewInformation extends ViewG
             </div>
             <div>Nous vous conseillons de ne pas dépasser trois colonnes.</div>
             <div>Nous vous conseillons également de ne pas mettre trop de contenu dans une cellule.</div>
+            <a href="'.$linkManageInfo.'"> Page de gestion</a>';
+    }
+
+    /**
+     * Form pour créer une information sous pdf
+     * @return string
+     */
+    public function displayFormPDF() {
+        $page = get_page_by_title( 'Gérer les informations');
+        $linkManageInfo = get_permalink($page->ID);
+        $dateMin = date('Y-m-d', strtotime("+1 day"));
+        return '
+            <h2>Créer une information avec un pdf</h2>
+            <form class="cadre" method="post" enctype="multipart/form-data">
+                <label>Titre</label>
+                <input type="text" name="titleInfo" placeholder="Inserer un titre" required maxlength="20">
+                <label>Date d\'expiration</label>
+                <input type="date" name="endDateInfo" min="' . $dateMin . '" required>
+                <label>Ajout du fichier PDF</label>
+                <input type="file" name="contentFile" />
+                <input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
+                <input type="submit" value="creer" name="createPDF">
+            </form>
             <a href="'.$linkManageInfo.'"> Page de gestion</a>';
     }
 

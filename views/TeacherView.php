@@ -11,7 +11,7 @@ class TeacherView extends UserView {
      * Affiche un formulaire pour inscrire des enseignants via fichier Excel
      */
     public function displayInsertImportFileTeacher() {
-        return '<h1> Création comptes enseignants</h1>'.$this->displayInsertImportFile("Prof");
+        return '<h2> Comptes enseignants</h2>'.$this->displayInsertImportFile("Prof");
     }
 
     /**

@@ -74,7 +74,6 @@ class Schedule extends ControllerG
         $current_user = wp_get_current_user();
         //test pour admin
         if(in_array("administrator", $current_user->roles)) {
-
 //            if($myfiles = scandir(ABSPATH . TV_PLUG_PATH."controllers/fileICS/file3")) {
 //                foreach ($myfiles as $myfile) {
 //                    unlink(ABSPATH . TV_PLUG_PATH."controllers/fileICS/file3/".$myfile);

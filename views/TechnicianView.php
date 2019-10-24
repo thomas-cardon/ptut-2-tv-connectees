@@ -7,7 +7,7 @@ class TechnicianView extends UserView {
      * @return string
      */
     public function displayFormTechnician(){
-        return '<h1> Création compte technicien</h1>'.$this->displayBaseForm('Tech');
+        return '<h2> Compte technicien</h2>'.$this->displayBaseForm('Tech');
     }
 
     /**

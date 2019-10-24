@@ -220,7 +220,7 @@ class Information extends ControllerG {
                 }
             }
         }
-        $this->view->displayInformationView($titleList,$contentList);
+        $this->view->displayInformationView($titleList,$contentList, $type);
     } // informationMain()
 
 
@@ -238,6 +238,7 @@ class Information extends ControllerG {
         $actionText = $_POST['createText'];
         $actionImg = $_POST['createImg'];
         $actionTab = $_POST['createTab'];
+        $actionPDF = $_POST['createPDF'];
 
         $title = filter_input(INPUT_POST,'titleInfo');
         $content = filter_input(INPUT_POST,'contentInfo');
@@ -283,16 +284,37 @@ class Information extends ControllerG {
                 $this->changeContentFile($id, $content);
             }
             $this->view->displayCreateValidate();
+        } else if ($actionPDF) {
+            $result = $this->uploadFile($contentFile,"create", "pdf", 0, $title, $endDate);
+            if($result != 0) {
+
+                $id = $result;
+                //récupère l'extension du fichier
+                $_FILES['file'] = $contentFile;
+                $extension_upload = strtolower(  substr(  strrchr($_FILES['file']['name'], '.')  ,1)  );
+
+                //renomme le fichier avec l'id de l'info
+                rename($_SERVER['DOCUMENT_ROOT'].TV_PLUG_PATH."views/media/temporary.{$extension_upload}",
+                    $_SERVER['DOCUMENT_ROOT'].TV_PLUG_PATH."views/media/{$id}.{$extension_upload}");
+
+                //modifie le contenu de l'information pour avoir le bon lien de l'image
+                $content = '[pdf-embedder url="'.TV_PLUG_PATH.'views/media/' . $id . '.pdf]';
+                //$content =  '<embed src="'.TV_PLUG_PATH.'views/media/' . $id . '.pdf'.'"pdf#toolbar=0&navpanes=0&scrollbar=0">';
+                //$content = '<img src="'.TV_PLUG_PATH.'views/media/'.$id.'.'.$extension_upload.'">';
+                $this->changeContentFile($id, $content);
+            }
         }
         return
             $this->view->displayStartMultiSelect().
             $this->view->displayTitleSelect('text', 'Texte', true).
             $this->view->displayTitleSelect('image', 'Image').
             $this->view->displayTitleSelect('table', 'Tableau').
+            $this->view->displayTitleSelect('pdf', 'PDF').
             $this->view->displayEndOfTitle().
             $this->view->displayContentSelect('text', $this->view->displayFormText(), true).
             $this->view->displayContentSelect('image', $this->view->displayFormImg()).
             $this->view->displayContentSelect('table', $this->view->displayFormTab()).
+            $this->view->displayContentSelect('pdf', $this->view->displayFormPDF()).
             $this->view->displayEndDiv();
 
     } //insertInformation()
@@ -331,6 +353,7 @@ class Information extends ControllerG {
 
         if($type == "img"){$extensions_valides = array( 'jpg' , 'jpeg' , 'gif' , 'png' );}
         if($type == "tab") {$extensions_valides = array( 'xls' , 'xlsx' , 'ods' );}
+        if($type == "pdf") { $extensions_valides = array("pdf"); }
 
         $extension_upload = strtolower(  substr(  strrchr($_FILES['file']['name'], '.')  ,1)  );
         if ( in_array($extension_upload,$extensions_valides) ) {
@@ -340,18 +363,15 @@ class Information extends ControllerG {
             echo "Extension incorrecte <br>";
         }
 
+        $goodtypes = ["img", "tab", "pdf"];
+
         if ($resultat){
             if($action == "create"){
-                if($type == "img") {
-                    // Ajoute dans la BD avec un contenu temporaire
-                    $result = $this->DB->addInformationDB($title,"temporary content",$endDate, "img");
-                    return $result;
-                } elseif ($type == "tab") {
-                    // Ajoute dans la BD avec un contenu temporaire
-                    $result = $this->DB->addInformationDB($title,"temporary content",$endDate, "tab");
+                if(in_array($type, $goodtypes)) {
+                    $result = $this->DB->addInformationDB($title,"temporary content",$endDate, $type);
                     return $result;
                 } else {
-                    echo "le type d'information n'est pas le bon";
+                    echo "<p>le type d'information n'est pas le bon </p>";
                 }
             } elseif ($action == "modify"){
                 if($type == "img") {
@@ -361,6 +381,10 @@ class Information extends ControllerG {
                 } elseif ($type == "tab"){
                     //renvoie le nouveau contenu de l'info
                     $content =  $id .'.'. $extension_upload;
+                    return $content;
+                } else if($type == "pdf"){
+                    $content = '[pdf-embedder url="'.TV_PLUG_PATH.'views/media/' . $id . '.pdf]';
+                    //$content =  '<embed src="'.TV_PLUG_PATH.'views/media/' . $id . '.pdf'.'"pdf#toolbar=0&navpanes=0&scrollbar=0">';
                     return $content;
                 } else {
                     echo "le type d'information n'est pas le bon";
@@ -389,7 +413,6 @@ class Information extends ControllerG {
         $contentList = array();
         $content = "";
         $mod = 0;
-
 
         for ($i = 0; $i < $highestRow; ++$i) {
             $mod = $i % 10;
@@ -420,5 +443,4 @@ class Information extends ControllerG {
         }
         return $contentList;
     }
-
 }

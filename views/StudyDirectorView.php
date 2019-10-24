@@ -11,7 +11,7 @@ class StudyDirectorView extends UserView {
      */
     public function displayCreateDirector() {
         return '
-                <h1> Création compte directeur d\'études</h1>
+                <h2> Compte directeur d\'études</h2>
                 <div class="cadre">
                     <div align="center">
                         <form method="post">

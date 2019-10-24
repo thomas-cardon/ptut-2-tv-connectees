@@ -20,7 +20,17 @@
     color:red;
 }
 
+.pdfemb-toolbar {
+    display: none !important;
+}
+
 @media (max-height: 1100px) {
+
+    .pdfemb-viewer {
+        width: auto;
+        height: 40ex;
+        overflow: visible;
+    }
 
     .titleInfo {
         width: 100%;

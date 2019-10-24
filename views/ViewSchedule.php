@@ -54,14 +54,14 @@ class ViewSchedule extends ViewG
      * Souhaite la bienvenue à l'utilisateur
      */
     public function displayWelcome(){
-        echo '<h3> Bienvenue sur l\'écran connecté ! </h3>';
+        echo '<h1>Écran connecté</h1>';
     }
 
     /**
      * Souhaite la bienvenue à l'utilisateur
      */
     public function displayWelcomeAdmin(){
-        echo '<h3> Bienvenue sur l\'écran connecté ! </h3>
+        echo '<h1>Écran connecté</h1>
                 <form method="post" id="dlAllEDT">
                     <input type="submit" name="dlEDT" value="Retélécharger les emplois du temps">
                 </form>';
