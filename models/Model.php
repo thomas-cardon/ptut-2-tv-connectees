@@ -39,6 +39,20 @@ abstract class Model
         $req->closeCursor();
     }
 
+    public function getUsersByRole($role){
+        $req = $this->getDb()->prepare('SELECT * FROM wp_users user, wp_usermeta meta WHERE user.ID = meta.user_id AND meta.meta_value =:role 
+                                        ORDER BY user.code, user.user_login');
+        $size = strlen($role);
+        $role = 'a:1:{s:'.$size.':"'.$role.'";b:1;}';
+        $req->bindParam(':role', $role);
+        $req->execute();
+        while ($data = $req->fetch()) {
+            $var[] = $data;
+        }
+        return $var;
+        $req->closeCursor();
+    }
+
     public function getTitleOfCode($code){
         $req = $this->getDb()->prepare('SELECT title FROM code_ade WHERE code = :code');
         $req->bindParam(':code', $code);

@@ -217,20 +217,6 @@ class UserModel extends Model {
         }
     }
 
-    public function getUsersByRole($role){
-        $req = $this->getDb()->prepare('SELECT * FROM wp_users user, wp_usermeta meta WHERE user.ID = meta.user_id AND meta.meta_value =:role 
-                                        ORDER BY user.code, user.user_login');
-        $size = strlen($role);
-        $role = 'a:1:{s:'.$size.':"'.$role.'";b:1;}';
-        $req->bindParam(':role', $role);
-        $req->execute();
-        while ($data = $req->fetch()) {
-            $var[] = $data;
-        }
-        return $var;
-        $req->closeCursor();
-    }
-
     public function getUserByLogin($login){
         $req = $this->getDb()->prepare('SELECT * FROM wp_users WHERE user_login = :login');
         $req->bindParam(':login', $login);

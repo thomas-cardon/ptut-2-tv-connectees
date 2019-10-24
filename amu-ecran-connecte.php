@@ -142,8 +142,10 @@ function downloadFileICS_func() {
     foreach ($allCodes as $code){
         $path = $controllerAde->getFilePath($code['code']);
         $controllerAde->addFile($code['code']);
-        if(filesize($path) < 200){
-            $controllerAde->addFile($code['code']);
+        if(file_exists($path)) {
+            if(filesize($path) < 200){
+                $controllerAde->addFile($code['code']);
+            }
         }
     }
     $teachers = $model->getUsersByRole('enseignant');
