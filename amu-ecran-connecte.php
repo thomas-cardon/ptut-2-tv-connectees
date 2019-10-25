@@ -102,6 +102,9 @@ include_once 'blocks/inscription/inscription.php';
 
 require ('models/Excel/vendor/autoload.php');
 
+if (!file_exists('views/media')) {
+    mkdir('views/media', 0777, true);
+}
 
 // Initialize plugin
 add_action('init', function(){
