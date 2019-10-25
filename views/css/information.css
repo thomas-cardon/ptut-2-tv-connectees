@@ -9,7 +9,7 @@
 }
 
 .content_info img{
-    max-height:45vh;
+    max-height:40vh;
     width: auto;
 }
 
@@ -21,12 +21,19 @@
     display: none !important;
 }
 
+.pdfemb-viewer {
+    max-height:45vh !important;
+}
+
+td div.pdfemb-viewer {
+    width: 50px;
+    height: 50px;
+}
+
 @media (max-height: 1100px) {
 
     .pdfemb-viewer {
         max-height:45vh;
-        height: 40ex;
-        overflow: visible;
     }
 
     .content_info{
@@ -53,6 +60,11 @@
     }
 
     .content_info img{
+        max-height:100%;
+        width: auto;
+    }
+
+    .pdfemb-viewer {
         max-height:100%;
         width: auto;
     }

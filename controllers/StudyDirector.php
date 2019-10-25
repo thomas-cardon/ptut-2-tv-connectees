@@ -32,7 +32,7 @@ class StudyDirector extends ControllerG {
         $pwd = filter_input(INPUT_POST,'pwdDirec');
         $pwdConf = filter_input(INPUT_POST, 'pwdConfirmDirec');
         $email = filter_input(INPUT_POST,'emailDirec');
-        $code = filter_input(INPUT_POST, 'codeDirec');
+        $code = [filter_input(INPUT_POST, 'codeDirec')];
 
         if(isset($action)){
             if($pwd == $pwdConf) {

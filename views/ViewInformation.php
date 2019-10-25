@@ -162,35 +162,6 @@ class ViewInformation extends ViewG
             <a href="'.$linkManageInfo.'"> Page de gestion</a>';
     }
 
-
-    /**
-     * Affiche un formulaire pour choisir le type d'information que l'on veut créer
-     * et affiche le formulaire de création en fonction.
-     */
-    public function displayInformationCreation()
-    {
-        $page = get_page_by_title( 'Gérer les informations');
-        $linkManageInfo = get_permalink($page->ID);
-
-        $string = 'Quel type de contenu voulez vous pour votre information ? </br>';
-
-
-
-
-        $choice = $_POST['typeChoice'];
-        if ($choice == 'text') {
-
-        } elseif ($choice == 'image') {
-
-        } elseif ($choice == 'tab') {
-
-        }
-        $string .= '';
-        return $string;
-    } //displayInformationCreation()
-
-
-
     public function displayModifyInformationForm($title, $content, $endDate, $typeInfo)
     {
         $page = get_page_by_title( 'Gérer les informations');
@@ -198,19 +169,15 @@ class ViewInformation extends ViewG
         $dateMin = date('Y-m-d', strtotime("+1 day"));
         if ($typeInfo == "text") {
             return '
-                <div>
                     <form id="modify_info" method="post">
                   
                       Titre : <input type="text" name="titleInfo" value="' . $title . '" required maxlength="20"> </br>
                       Contenu : <textarea name="contentInfo" maxlength="200">' . $content . '</textarea> </br>
                       Date d\'expiration : <input type="date" name="endDateInfo" min="' . $dateMin . '" value = "' . $endDate . '" required > </br>
                       <input type="submit" name="validateChange" value="Modifier" ">
-                 </form>
-                 <a href="'.$linkManageInfo.'"> Page de gestion</a>
-            </div>';
+                 </form>';
         } elseif ($typeInfo == "img") {
             return '
-                <div>
                     <form id="modify_info" method="post" enctype="multipart/form-data">
                       Titre : <input type="text" name="titleInfo" value="' . $title . '" required maxlength="20"> </br>
                       ' . $content . ' </br>
@@ -218,12 +185,9 @@ class ViewInformation extends ViewG
                        <input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
                       Date d\'expiration : <input type="date" name="endDateInfo" min="' . $dateMin . '" value = "' . $endDate . '" required > </br>
                        <input type="submit" name="validateChangeImg" value="Modifier"/>
-                 </form>
-               <a href="'.$linkManageInfo.'"> Page de gestion</a>
-            </div>';
+                 </form>';
         } elseif ($typeInfo == "tab") {
             return '
-                <div>
                     <form id="modify_info" method="post" enctype="multipart/form-data">
                       Titre : <input type="text" name="titleInfo" value="' . $title . '" required maxlength="20"> </br>
                       ' . $content . ' </br>
@@ -231,11 +195,20 @@ class ViewInformation extends ViewG
                        <input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
                       Date d\'expiration : <input type="date" name="endDateInfo" min="' . $dateMin . '" value = "' . $endDate . '" required > </br>
                        <input type="submit" name="validateChangeTab" value="Modifier"/>
-                 </form>
-               <a href="'.$linkManageInfo.'"> Page de gestion</a>
-            </div>';
+                 </form>';
+        }elseif ($typeInfo == "pdf") {
+            return '
+                    <form id="modify_info" method="post" enctype="multipart/form-data">
+                        <label for="titleInfo">Titre</label>
+                        <input id="titleInfo" type="text" name="titleInfo" value="' . $title . '" required maxlength="20">' . $content . '
+                        <label for="contentFile">Modifier le fichier</label>
+                        <input id="contentFile" type="file" name="contentFile" />
+                        <label for="endDateInfo">Date d\'expiration </label>
+                        <input id="endDateInfo" type="date" name="endDateInfo" min="' . $dateMin . '" value = "' . $endDate . '" required > </br>
+                        <input type="submit" name="validateChangePDF" value="Modifier"/>
+                 </form>';
         } else {
-            return 'Désolé, une erreur semble être survenue.';
+            return '<p>Désolé, une erreur semble être survenue.</p>';
         }
     } //displayModifyInformationForm()
 

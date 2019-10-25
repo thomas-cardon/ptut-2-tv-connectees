@@ -34,17 +34,7 @@ class Information extends ControllerG {
                     $type = $res['type'];
                     $types = ["img", "pdf", "tab"];
                     if(in_array($type, $types)) {
-                        $source = "";
-                        $content = $res['content'];
-                        if ($type == "img") {
-                            $source = explode('src=', $content);
-                            $source = substr($source[1],0,-1);
-                            $source = substr($source,1,-1);
-                            $source = $_SERVER['DOCUMENT_ROOT'].$source;
-                        } else {
-                            $source = $_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH.$content;
-                        }
-                        unlink($source);
+                        $this->deleteFile($val);
                     }
                     $this->DB->deleteInformationDB($val);
                 }
@@ -54,10 +44,28 @@ class Information extends ControllerG {
     } //deleteInformations()
 
     /**
+     * @param Code $id
+     */
+    public function deleteFile($id) {
+        $res = $this->DB->getInformationByID($id);
+        $type = $res['type'];
+        $content = $res['content'];
+        if ($type == "img") {
+            $source = explode('src=', $content);
+            $source = substr($source[1],0,-1);
+            $source = substr($source,1,-1);
+            $source = $_SERVER['DOCUMENT_ROOT'].$source;
+        } else {
+            $source = $_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH.$content;
+        }
+        unlink($source);
+    }
+
+    /**
      * Affiche un tableau avec toutes les informations et des boutons de modification ainsi qu'un bouton de suppression.
      * cf snippet Handle Informations
      */
-    function informationManagement(){
+    function informationManagement() {
         $current_user = wp_get_current_user();
         $user = $current_user->user_login;
         if(in_array("administrator", $current_user->roles)) {
@@ -69,7 +77,7 @@ class Information extends ControllerG {
         $string = $this->view->tabHeadInformation();
         $i = 0;
 
-        foreach ($result as $row){
+        foreach ($result as $row) {
             $id = $row['ID_info'];
             $title = $row['title'];
             $author = $row['author'];
@@ -100,6 +108,7 @@ class Information extends ControllerG {
         $actionText = $_POST['validateChange'];
         $actionImg = $_POST['validateChangeImg'];
         $actionTab = $_POST['validateChangeTab'];
+        $actionPDF = $_POST['validateChangePDF'];
 
         $result = $this->DB->getInformationByID($id);
         $title = $result['title'];
@@ -126,14 +135,11 @@ class Information extends ControllerG {
                     $this->DB->modifyInformation($id,$title,$contentNew,$endDate);
                     $this->view->displayModifyValidate();
                 }
-            }
-            else { // si le texte et/ou la date de fin est modifié
+            } else { // si le texte et/ou la date de fin est modifié
                 $this->DB->modifyInformation($id,$title,$content,$endDate);
                 $this->view->displayModifyValidate();
             }
-
-        }
-        elseif($actionTab == "Modifier") { //si il s'agit d'une modification d'un tableau
+        } elseif($actionTab == "Modifier") { //si il s'agit d'une modification d'un tableau
             $contentFile = $_FILES['contentFile'];
 
             $title = filter_input(INPUT_POST,'titleInfo');
@@ -150,6 +156,20 @@ class Information extends ControllerG {
                 $this->view->displayModifyValidate();
             }
 
+        } else if($actionPDF) {
+            $contentFile = $_FILES['contentFile'];
+            $title = filter_input(INPUT_POST,'titleInfo');
+            $endDate = $_POST['endDateInfo'];
+            if($_FILES['contentFile']['size'] != 0) {
+                $contentNew = $this->uploadFile($contentFile,"modify","pdf",$id);
+                if($contentNew != null || $contentNew != 0) {
+                    $this->DB->modifyInformation($id,$title,$contentNew,$endDate);
+                    $this->view->displayModifyValidate();
+                }
+            } else { // si le texte et/ou la date de fin est modifié
+                $this->DB->modifyInformation($id,$title,$content,$endDate);
+                $this->view->displayModifyValidate();
+            }
         }
     } //modifyInformation()
 
@@ -161,6 +181,7 @@ class Information extends ControllerG {
     public function endDateCheckInfo($id, $endDate){
         if($endDate <= date("Y-m-d")) {
             $this->DB->deleteInformationDB($id);
+            $this->deleteFile($id);
         }
     } //endDateCheckInfo()
 
@@ -265,8 +286,8 @@ class Information extends ControllerG {
                 //modifie le contenu de l'information pour avoir le bon lien de l'image
                 $content = '<img src="'.TV_UPLOAD_PATH.$id.'.'.$extension_upload.'">';
                 $this->changeContentFile($id, $content);
+                $this->view->displayCreateValidate();
             }
-            $this->view->displayCreateValidate();
         } elseif (isset($actionTab)) { //si c'est une création d'un tableau de note
             $result = $this->uploadFile($contentFile,"create", "tab", 0, $title, $endDate);
             if($result != 0) {
@@ -282,8 +303,8 @@ class Information extends ControllerG {
                 //modifie le contenu de l'information pour avoir le bon nom du fichier
                 $content = $id.'.'.$extension_upload;
                 $this->changeContentFile($id, $content);
+                $this->view->displayCreateValidate();
             }
-            $this->view->displayCreateValidate();
         } else if ($actionPDF) {
             $result = $this->uploadFile($contentFile,"create", "pdf", 0, $title, $endDate);
             if($result != 0) {
@@ -302,6 +323,7 @@ class Information extends ControllerG {
                 //$content =  '<embed src="'.TV_PLUG_PATH.'views/media/' . $id . '.pdf'.'"pdf#toolbar=0&navpanes=0&scrollbar=0">';
                 //$content = '<img src="'.TV_PLUG_PATH.'views/media/'.$id.'.'.$extension_upload.'">';
                 $this->changeContentFile($id, $content);
+                $this->view->displayCreateValidate();
             }
         }
         return
@@ -348,8 +370,8 @@ class Information extends ControllerG {
 
         $_FILES['file'] = $file;
         $maxsize = 5000000; //5Mo
-        if ($_FILES['file']['error'] > 0) echo "Erreur lors du transfert <br>";
-        if ($_FILES['file']['size'] > $maxsize) echo "Le fichier est trop volumineux <br>";
+        if ($_FILES['file']['error'] > 0) echo "<p>Erreur lors du transfert! </p>";
+        if ($_FILES['file']['size'] > $maxsize) echo "<p>Le fichier est trop volumineux</p>";
 
         if($type == "img"){$extensions_valides = array( 'jpg' , 'jpeg' , 'gif' , 'png' );}
         if($type == "tab") {$extensions_valides = array( 'xls' , 'xlsx' , 'ods' );}
@@ -360,7 +382,7 @@ class Information extends ControllerG {
             $nom =  $_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH.$id.".".$extension_upload;
             $resultat = move_uploaded_file($_FILES['file']['tmp_name'],$nom);
         } else {
-            echo "Extension incorrecte <br>";
+            echo "<p>Extension incorrecte </p>";
         }
 
         $goodtypes = ["img", "tab", "pdf"];
@@ -383,7 +405,7 @@ class Information extends ControllerG {
                     $content =  $id .'.'. $extension_upload;
                     return $content;
                 } else if($type == "pdf"){
-                    $content = '[pdf-embedder url="'.TV_UPLOAD_PATH.$id.'.pdf]';
+                    $content = '[pdf-embedder url="'.TV_UPLOAD_PATH.$id.'.pdf"]';
                     return $content;
                 } else {
                     echo "le type d'information n'est pas le bon";

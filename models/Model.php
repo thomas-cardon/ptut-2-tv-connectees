@@ -167,7 +167,7 @@ abstract class Model
             foreach ($users as $user){
                 $codes = unserialize($user['code']);
                 foreach ($codes as $code) {
-                    if($code != '') {
+                    if($code != '' && $code != 0) {
                         $usersCodes[] = $codes[$type];
                     }
                 }

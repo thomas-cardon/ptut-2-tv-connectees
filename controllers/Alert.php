@@ -171,8 +171,9 @@ class Alert extends ControllerG
             $content .= "&emsp;&emsp;&emsp;&emsp;";
             array_push($contentList, $content);
         }
-        $this->view->displayAlertMain($contentList);
-
+        if(isset($content)) {
+            $this->view->displayAlertMain($contentList);
+        }
     } // alertMain()
 
 
