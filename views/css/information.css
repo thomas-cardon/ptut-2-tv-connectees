@@ -4,13 +4,13 @@
 }
 
 .content_info{
-    max-width: 100%;
     font-size : 1.5em;
     text-align: center;
 }
 
 .content_info img{
-    max-height:30ex;
+    max-height:45vh;
+    width: auto;
 }
 
 .red {
@@ -24,7 +24,7 @@
 @media (max-height: 1100px) {
 
     .pdfemb-viewer {
-        width: auto;
+        max-height:45vh;
         height: 40ex;
         overflow: visible;
     }
@@ -35,9 +35,9 @@
         text-align: center;
     }
 
-    .content_info img{
-        max-height:40ex;
-    }
+    /*.content_info img{*/
+    /*    max-height:40ex;*/
+    /*}*/
 }
 
 @media (max-height: 800px) {
@@ -53,6 +53,11 @@
     }
 
     .content_info img{
-        max-height:30ex;
+        max-height:100%;
+        width: auto;
     }
+
+    /*.content_info img{*/
+    /*    max-height:30ex;*/
+    /*}*/
 }

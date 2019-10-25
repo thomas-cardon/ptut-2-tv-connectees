@@ -13,6 +13,7 @@
  */
 
 define('TV_PLUG_PATH', '/wp-content/plugins/plugin-ecran-connecte/');
+define('TV_UPLOAD_PATH', '/wp-content/uploads/media/');
 
 //On inclut tous les fichiers du plugin
 include_once 'install_DB_Tv.php';
@@ -102,8 +103,8 @@ include_once 'blocks/inscription/inscription.php';
 
 require ('models/Excel/vendor/autoload.php');
 
-if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_PLUG_PATH.'views/media')) {
-    mkdir($_SERVER['DOCUMENT_ROOT'].TV_PLUG_PATH.'views/media');
+if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH)) {
+    mkdir($_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH);
 }
 
 // Initialize plugin

@@ -59,31 +59,27 @@ class ViewInformation extends ViewG
      * @param $type
      */
 
-    public function displayInformationView($title, $content, $type)
+    public function displayInformationView($title, $content, $types)
     {
         $cpt = 0;
-        echo '<div class="container-fluid">
-                    <div id="information_carousel">
-                        <div id="demo" class="carousel slide" data-ride="carousel" data-interval="10000">
-                            
-                            <!--The slides -->
-                            <div class="carousel-inner">';
-                                for($i=0; $i < sizeof($title); ++$i) {
-                                    $var = ($cpt == 0) ? ' active">' : '">';
-                                    echo '<div class="carousel-item' . $var.'
-                                                <h2 class="titleInfo">'.$title[$i].' </h2>';
-                                                if($type == 'pdf') {
-                                                    echo do_shortcode($content[$i]);
-                                                } else {
-                                                    echo '<div class="content_info">'.$content[$i].'</div>';
-                                                }
-                                                echo '
-                                           </div>';
+        echo '<div id="information_carousel">
+                <div id="demo" class="carousel slide" data-ride="carousel" data-interval="10000">
+                <!--The slides -->
+                    <div class="carousel-inner">';
+                    for($i=0; $i < sizeof($title); ++$i) {
+                        $var = ($cpt == 0) ? ' active">' : '">';
+                        echo '<div class="carousel-item' . $var.'
+                                <h2 class="titleInfo">'.$title[$i].' </h2>';
+                                if($types[$i] == 'pdf') {
+                                    echo do_shortcode($content[$i]);
+                                } else {
+                                    echo '<div class="content_info">'.$content[$i].'</div>';
+                                }
+                                echo '</div>';
                                     $cpt++;
                                 }
                         echo'   </div>
                             </div>
-                        </div>
                         </div>
                         </div>';
     } //displayInformationView()

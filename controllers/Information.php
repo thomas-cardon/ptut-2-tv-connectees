@@ -42,7 +42,7 @@ class Information extends ControllerG {
                             $source = substr($source,1,-1);
                             $source = $_SERVER['DOCUMENT_ROOT'].$source;
                         } else {
-                            $source = $_SERVER['DOCUMENT_ROOT'].TV_PLUG_PATH."views/media/".$content;
+                            $source = $_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH.$content;
                         }
                         unlink($source);
                     }
@@ -182,9 +182,10 @@ class Information extends ControllerG {
             $content = $row['content'];
             $endDate = date('Y-m-d',strtotime($row['end_date']));
             $type = $row['type'];
+            array_push($typeList, $type);
             $this->endDateCheckInfo($id,$endDate);
             if($type == 'tab'){
-                $source = $_SERVER['DOCUMENT_ROOT'].TV_PLUG_PATH."views/media/".$content;
+                $source = $_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH.$content;
                 if(! file_exists($source)) {
                     array_push($idList,$id);
                     array_push($titleList,$title);
@@ -219,7 +220,7 @@ class Information extends ControllerG {
                 }
             }
         }
-        $this->view->displayInformationView($titleList,$contentList, $type);
+        $this->view->displayInformationView($titleList,$contentList, $typeList);
     } // informationMain()
 
 
@@ -258,11 +259,11 @@ class Information extends ControllerG {
                 $extension_upload = strtolower(  substr(  strrchr($_FILES['file']['name'], '.')  ,1)  );
 
                 //renomme le fichier avec l'id de l'info
-                rename($_SERVER['DOCUMENT_ROOT'].TV_PLUG_PATH."views/media/temporary.{$extension_upload}",
-                    $_SERVER['DOCUMENT_ROOT'].TV_PLUG_PATH."views/media/{$id}.{$extension_upload}");
+                rename($_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH."temporary.".$extension_upload,
+                    $_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH.$id.".".$extension_upload);
 
                 //modifie le contenu de l'information pour avoir le bon lien de l'image
-                $content = '<img src="'.TV_PLUG_PATH.'views/media/'.$id.'.'.$extension_upload.'">';
+                $content = '<img src="'.TV_UPLOAD_PATH.$id.'.'.$extension_upload.'">';
                 $this->changeContentFile($id, $content);
             }
             $this->view->displayCreateValidate();
@@ -275,8 +276,8 @@ class Information extends ControllerG {
                 $extension_upload = strtolower(  substr(  strrchr($_FILES['file']['name'], '.')  ,1)  );
 
                 //renomme le fichier avec l'id de l'info
-                rename($_SERVER['DOCUMENT_ROOT'].TV_PLUG_PATH."views/media/temporary.{$extension_upload}",
-                    $_SERVER['DOCUMENT_ROOT'].TV_PLUG_PATH."views/media/{$id}.{$extension_upload}");
+                rename($_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH."temporary.".$extension_upload,
+                    $_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH.$id.".".$extension_upload);
 
                 //modifie le contenu de l'information pour avoir le bon nom du fichier
                 $content = $id.'.'.$extension_upload;
@@ -293,11 +294,11 @@ class Information extends ControllerG {
                 $extension_upload = strtolower(  substr(  strrchr($_FILES['file']['name'], '.')  ,1)  );
 
                 //renomme le fichier avec l'id de l'info
-                rename($_SERVER['DOCUMENT_ROOT'].TV_PLUG_PATH."views/media/temporary.{$extension_upload}",
-                    $_SERVER['DOCUMENT_ROOT'].TV_PLUG_PATH."views/media/{$id}.{$extension_upload}");
+                rename($_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH."temporary.".$extension_upload,
+                    $_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH.$id.".".$extension_upload);
 
                 //modifie le contenu de l'information pour avoir le bon lien de l'image
-                $content = '[pdf-embedder url="'.TV_PLUG_PATH.'views/media/' . $id . '.pdf]';
+                $content = '[pdf-embedder url="'.TV_UPLOAD_PATH.$id.'.pdf"]';
                 //$content =  '<embed src="'.TV_PLUG_PATH.'views/media/' . $id . '.pdf'.'"pdf#toolbar=0&navpanes=0&scrollbar=0">';
                 //$content = '<img src="'.TV_PLUG_PATH.'views/media/'.$id.'.'.$extension_upload.'">';
                 $this->changeContentFile($id, $content);
@@ -356,7 +357,7 @@ class Information extends ControllerG {
 
         $extension_upload = strtolower(  substr(  strrchr($_FILES['file']['name'], '.')  ,1)  );
         if ( in_array($extension_upload,$extensions_valides) ) {
-            $nom =  $_SERVER['DOCUMENT_ROOT'].TV_PLUG_PATH."views/media/{$id}.{$extension_upload}";
+            $nom =  $_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH.$id.".".$extension_upload;
             $resultat = move_uploaded_file($_FILES['file']['tmp_name'],$nom);
         } else {
             echo "Extension incorrecte <br>";
@@ -375,14 +376,14 @@ class Information extends ControllerG {
             } elseif ($action == "modify"){
                 if($type == "img") {
                     //renvoie le nouveau contenu de l'info
-                    $content = '<img src="'.TV_PLUG_PATH.'views/media/' . $id . '.' . $extension_upload . '">';
+                    $content = '<img src="'.TV_UPLOAD_PATH.$id. '.' . $extension_upload . '">';
                     return $content;
                 } elseif ($type == "tab"){
                     //renvoie le nouveau contenu de l'info
                     $content =  $id .'.'. $extension_upload;
                     return $content;
                 } else if($type == "pdf"){
-                    $content = '[pdf-embedder url="'.TV_PLUG_PATH.'views/media/' . $id . '.pdf]';
+                    $content = '[pdf-embedder url="'.TV_UPLOAD_PATH.$id.'.pdf]';
                     return $content;
                 } else {
                     echo "le type d'information n'est pas le bon";
@@ -396,7 +397,7 @@ class Information extends ControllerG {
 
     public function readSpreadSheet($id){
 
-        $file = glob($_SERVER['DOCUMENT_ROOT'].TV_PLUG_PATH."views/media/{$id}.*");
+        $file = glob($_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH.$id."."."*");
         foreach ($file as $i) {
             $filename = $i;
         }
