@@ -102,8 +102,8 @@ include_once 'blocks/inscription/inscription.php';
 
 require ('models/Excel/vendor/autoload.php');
 
-if (!file_exists('views/media')) {
-    mkdir('views/media', 0777, true);
+if (!file_exists(TV_PLUG_PATH.'views/media')) {
+    mkdir(TV_PLUG_PATH.'views/media', 0777, true);
 }
 
 // Initialize plugin
