@@ -32,8 +32,19 @@ class Information extends ControllerG {
                 foreach ($checked_values as $val) {
                     $res = $this->DB->getInformationByID($val);
                     $type = $res['type'];
-                    if($type == "img"){
-                        $this->deleteFile($val);
+                    $types = ["img", "pdf", "tab"];
+                    if(in_array($type, $types)) {
+                        $source = "";
+                        $content = $res['content'];
+                        if ($type == "img") {
+                            $source = explode('src=', $content);
+                            $source = substr($source[1],0,-1);
+                            $source = substr($source,1,-1);
+                            $source = $_SERVER['DOCUMENT_ROOT'].$source;
+                        } else {
+                            $source = $_SERVER['DOCUMENT_ROOT'].TV_PLUG_PATH."views/media/".$content;
+                        }
+                        unlink($source);
                     }
                     $this->DB->deleteInformationDB($val);
                 }
@@ -41,18 +52,6 @@ class Information extends ControllerG {
             $this->view->refreshPage();
         }
     } //deleteInformations()
-
-
-    /**
-     * Supprime un fichier dans le dossier media ayant comme nom une id.
-     * @param $id
-     */
-    public function deleteFile($id) {
-        $file = glob(TV_PLUG_PATH."views/media/{$id}.*");
-        foreach ($file as $filename) {
-            unlink($filename);
-        }
-    } //deleteFile()
 
     /**
      * Affiche un tableau avec toutes les informations et des boutons de modification ainsi qu'un bouton de suppression.
@@ -204,7 +203,7 @@ class Information extends ControllerG {
                     $source = substr($source[1],0,-1);
                     $source = substr($source,1,-1);
                     $source = home_url().$source;
-                    if(! file_exists($source)) {
+                    if (! @getimagesize($source)) {
                         array_push($idList,$id);
                         array_push($titleList,$title);
                         array_push($contentList,'Une belle image devrait être ici !');

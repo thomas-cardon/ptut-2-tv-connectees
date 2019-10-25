@@ -23,7 +23,7 @@ class ViewInformation extends ViewG
         $tab = [$title, $author, $content, $creationDate, $endDate];
         $string = $this->displayAll($row, 'info',$id, $tab);
         if($type == 'tab'){
-            $source = $_SERVER['DOCUMENT_ROOT']."/wp-content/plugins/TeleConnecteeAmu/views/media/".$content;
+            $source = $_SERVER['DOCUMENT_ROOT'].TV_PLUG_PATH."views/media/".$content;
             if(! file_exists($source)) {
                 $string .= '<td class="text-center red"> Le ficier n\'exite pas';
             } else {
@@ -35,7 +35,7 @@ class ViewInformation extends ViewG
                 $source = substr($source[1], 0, -1);
                 $source = substr($source, 1, -1);
                 $source = home_url() . $source;
-                if(! file_exists($source)) {
+                if (! @getimagesize($source)) {
                     $string .= '<td class="text-center red"> Le fichier n\'existe pas ';
                 } else {
                     $string .= '<td class="text-center">';
@@ -56,6 +56,7 @@ class ViewInformation extends ViewG
      * Affiche les informations sur la page principal avec un carousel
      * @param $title
      * @param $content
+     * @param $type
      */
 
     public function displayInformationView($title, $content, $type)
