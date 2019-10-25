@@ -383,14 +383,13 @@ class Information extends ControllerG {
                     return $content;
                 } else if($type == "pdf"){
                     $content = '[pdf-embedder url="'.TV_PLUG_PATH.'views/media/' . $id . '.pdf]';
-                    //$content =  '<embed src="'.TV_PLUG_PATH.'views/media/' . $id . '.pdf'.'"pdf#toolbar=0&navpanes=0&scrollbar=0">';
                     return $content;
                 } else {
                     echo "le type d'information n'est pas le bon";
                 }
             }
         } else {
-            echo "le fichier n'as pas été upload <br>";
+            echo "<p>le fichier n'as pas été upload</p>";
             return 0;
         }
     }//uploadFile()
