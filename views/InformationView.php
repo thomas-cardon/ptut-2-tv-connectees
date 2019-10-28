@@ -6,7 +6,7 @@
  * Time: 11:35
  */
 
-class ViewInformation extends ViewG
+class InformationView extends ViewG
 {
 
     public function tabHeadInformation(){
@@ -56,16 +56,17 @@ class ViewInformation extends ViewG
      * Affiche les informations sur la page principal avec un carousel
      * @param $title
      * @param $content
-     * @param $type
+     * @param $types
      */
 
-    public function displayInformationView($title, $content, $types)
-    {
+    public function displayInformationView($title, $content, $types) {
+        $current_user = wp_get_current_user();
         $cpt = 0;
-        echo '<div id="information_carousel">
-                <div id="demo" class="carousel slide" data-ride="carousel" data-interval="10000">
+
+        echo '<li id="information_carousel"'; if(in_array("television", $current_user->roles)) echo 'class="tv"'; echo '>';
+        echo '<section id="demo" class="carousel slide" data-ride="carousel" data-interval="10000">
                 <!--The slides -->
-                    <div class="carousel-inner">';
+                    <article class="carousel-inner">';
                     for($i=0; $i < sizeof($title); ++$i) {
                         $var = ($cpt == 0) ? ' active">' : '">';
                         echo '<div class="carousel-item' . $var.'
@@ -73,15 +74,15 @@ class ViewInformation extends ViewG
                                 if($types[$i] == 'pdf') {
                                     echo do_shortcode($content[$i]);
                                 } else {
-                                    echo '<div class="content_info">'.$content[$i].'</div>';
+                                    echo '<p class="content_info">'.$content[$i].'</p>';
                                 }
                                 echo '</div>';
                                     $cpt++;
                                 }
                         echo'   </div>
-                            </div>
-                        </div>
-                        </div>';
+                            </article>
+                        </section>
+                        </li>';
     } //displayInformationView()
 
     public function displayFormText() {
@@ -90,15 +91,15 @@ class ViewInformation extends ViewG
         $dateMin = date('Y-m-d', strtotime("+1 day"));
         return '
         <h2>Créer une information avec du texte</h2>
-            <div class="cadre">
-                <form method="post">
-                    Titre : <input type="text" name="titleInfo" placeholder="Inserer un titre" required maxlength="20"> </br>
-                    Date d\'expiration : <input type="date" name="endDateInfo" min="' . $dateMin . '" required ></br>
-                    Contenu : <textarea name="contentInfo" maxlength="200"></textarea> </br>
-                    <input type="submit" value="creer" name="createText">
-                </form>
-            </div>
-                <a href="'.$linkManageInfo.'"> Page de gestion</a>';
+            <form class="cadre" method="post">
+                <label for="titleInfo">Titre</label>
+                <input id="titleInfo" type="text" name="titleInfo" placeholder="Inserer un titre" required maxlength="20">
+                <label for="endDateInfo">Date d\'expiration</label>
+                <input id="endDateInfo" type="date" name="endDateInfo" min="' . $dateMin . '" required >
+                <label for="contentInfo">Contenu</label>
+                <textarea id="contentInfo" name="contentInfo" maxlength="200"></textarea>
+                <input type="submit" value="creer" name="createText">
+            </form>';
     }
 
     public function displayFormImg() {
@@ -107,16 +108,16 @@ class ViewInformation extends ViewG
         $dateMin = date('Y-m-d', strtotime("+1 day"));
         return '
             <h2>Créer une information avec une image</h2>
-                <div class="cadre">
-                    <form method="post" enctype="multipart/form-data">
-                        Titre : <input type="text" name="titleInfo" placeholder="Inserer un titre" required maxlength="20"> </br>
-                        Date d\'expiration : <input type="date" name="endDateInfo" min="' . $dateMin . '" required ></br>
-                        Ajouter une image :<input type="file" name="contentFile" /> </br>
+                    <form class="cadre" method="post" enctype="multipart/form-data">
+                        <label for="titleInfo">Titre</label>
+                        <input id="titleInfo" type="text" name="titleInfo" placeholder="Inserer un titre" required maxlength="20">
+                        <label for="endDateInfo">Date d\'expiration</label>
+                        <input id="endDateInfo" type="date" name="endDateInfo" min="' . $dateMin . '" required >
+                        <label for="contentFile">Ajouter une image</label>
+                        <input id="contentFile" type="file" name="contentFile" />
                         <input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
                         <input type="submit" value="creer" name="createImg">
-                    </form>
-                </div>
-                    <a href="'.$linkManageInfo.'"> Page de gestion</a>';
+                    </form>';
     }
 
     public function displayFormTab() {
@@ -125,18 +126,18 @@ class ViewInformation extends ViewG
         $dateMin = date('Y-m-d', strtotime("+1 day"));
         return '
             <h2>Créer une information avec un tableau</h2>
-            <div class="cadre">
-                <form method="post" enctype="multipart/form-data">
-                    Titre : <input type="text" name="titleInfo" placeholder="Inserer un titre" required maxlength="20"> </br>
-                    Date d\'expiration : <input type="date" name="endDateInfo" min="' . $dateMin . '" required ></br>
-                    Ajout du fichier Xls (ou xlsx) : <input type="file" name="contentFile" /> </br>
-                    <input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
-                    <input type="submit" value="creer" name="createTab">
-                </form>
-            </div>
-            <div>Nous vous conseillons de ne pas dépasser trois colonnes.</div>
-            <div>Nous vous conseillons également de ne pas mettre trop de contenu dans une cellule.</div>
-            <a href="'.$linkManageInfo.'"> Page de gestion</a>';
+            <form class="cadre" method="post" enctype="multipart/form-data">
+                <label for="titleInfo">Titre</label>
+                <input id="titleInfo" type="text" name="titleInfo" placeholder="Inserer un titre" required maxlength="20">
+                <label for="endDateInfo">Date d\'expiration</label>
+                <input id="endDateInfo" type="date" name="endDateInfo" min="' . $dateMin . '" required ></br>
+                <label for="contentFile">Ajout du fichier Xls (ou xlsx)</label>
+                <input id="contentFile" type="file" name="contentFile" />
+                <input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
+                <input type="submit" value="creer" name="createTab">
+            </form>
+            <p>Nous vous conseillons de ne pas dépasser trois colonnes.</p>
+            <p>Nous vous conseillons également de ne pas mettre trop de contenu dans une cellule.</p>';
     }
 
     /**
@@ -144,22 +145,19 @@ class ViewInformation extends ViewG
      * @return string
      */
     public function displayFormPDF() {
-        $page = get_page_by_title( 'Gérer les informations');
-        $linkManageInfo = get_permalink($page->ID);
         $dateMin = date('Y-m-d', strtotime("+1 day"));
         return '
             <h2>Créer une information avec un pdf</h2>
             <form class="cadre" method="post" enctype="multipart/form-data">
-                <label>Titre</label>
-                <input type="text" name="titleInfo" placeholder="Inserer un titre" required maxlength="20">
+                <label for="titleInfo">Titre</label>
+                <input id="titleInfo" type="text" name="titleInfo" placeholder="Inserer un titre" required maxlength="20">
                 <label>Date d\'expiration</label>
                 <input type="date" name="endDateInfo" min="' . $dateMin . '" required>
                 <label>Ajout du fichier PDF</label>
                 <input type="file" name="contentFile" />
                 <input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
                 <input type="submit" value="creer" name="createPDF">
-            </form>
-            <a href="'.$linkManageInfo.'"> Page de gestion</a>';
+            </form>';
     }
 
     public function displayModifyInformationForm($title, $content, $endDate, $typeInfo)
@@ -169,33 +167,44 @@ class ViewInformation extends ViewG
         $dateMin = date('Y-m-d', strtotime("+1 day"));
         if ($typeInfo == "text") {
             return '
-                    <form id="modify_info" method="post">
-                  
-                      Titre : <input type="text" name="titleInfo" value="' . $title . '" required maxlength="20"> </br>
-                      Contenu : <textarea name="contentInfo" maxlength="200">' . $content . '</textarea> </br>
-                      Date d\'expiration : <input type="date" name="endDateInfo" min="' . $dateMin . '" value = "' . $endDate . '" required > </br>
-                      <input type="submit" name="validateChange" value="Modifier" ">
+                 <form id="modify_info" method="post">
+                    <label for="titleInfo">Titre</label>
+                    <input id="titleInfo" type="text" name="titleInfo" value="' . $title . '" required maxlength="20">
+                    <label for="contentInfo">Contenu</label>
+                    <textarea id="contentInfo" name="contentInfo" maxlength="200">' . $content . '</textarea>
+                    <label for="endDateInfo">Date d\'expiration</label>
+                    <input id="endDateInfo" type="date" name="endDateInfo" min="' . $dateMin . '" value = "' . $endDate . '" required >
+                    <input type="submit" name="validateChange" value="Modifier" ">
                  </form>';
         } elseif ($typeInfo == "img") {
             return '
                     <form id="modify_info" method="post" enctype="multipart/form-data">
-                      Titre : <input type="text" name="titleInfo" value="' . $title . '" required maxlength="20"> </br>
-                      ' . $content . ' </br>
-                       Changer l\'image :<input type="file" name="contentFile" /> </br>
-                       <input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
-                      Date d\'expiration : <input type="date" name="endDateInfo" min="' . $dateMin . '" value = "' . $endDate . '" required > </br>
-                       <input type="submit" name="validateChangeImg" value="Modifier"/>
-                 </form>';
+                        <label for="titleInfo">Titre</label>
+                        <input id="titleInfo" type="text" name="titleInfo" value="' . $title . '" required maxlength="20">
+                        <figure>
+                          ' . $content . ' 
+                          <figcaption>' . $title . '</figcaption>
+                        </figure>
+                        <label for="contentFile">Changer l\'image</label>
+                        <input id="contentFile" type="file" name="contentFile" />
+                        <input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
+                        <label for="endDateInfo">Date d\'expiration</label>
+                        <input id="endDateInfo" type="date" name="endDateInfo" min="' . $dateMin . '" value = "' . $endDate . '" required > </br>
+                        <input type="submit" name="validateChangeImg" value="Modifier"/>
+                    </form>';
         } elseif ($typeInfo == "tab") {
             return '
                     <form id="modify_info" method="post" enctype="multipart/form-data">
-                      Titre : <input type="text" name="titleInfo" value="' . $title . '" required maxlength="20"> </br>
-                      ' . $content . ' </br>
-                       Modifier le fichier:<input type="file" name="contentFile" /> </br>
-                       <input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
-                      Date d\'expiration : <input type="date" name="endDateInfo" min="' . $dateMin . '" value = "' . $endDate . '" required > </br>
-                       <input type="submit" name="validateChangeTab" value="Modifier"/>
-                 </form>';
+                        <label for="titleInfo">Titre</label>
+                        <input type="text" name="titleInfo" value="' . $title . '" required maxlength="20">
+                        ' . $content . '
+                        <label for="contentFile">Modifier le fichier</label>
+                        <input id="contentFile" type="file" name="contentFile" />
+                        <input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
+                        <label for="endDateInfo">Date d\'expiration</label>
+                        <input id="endDateInfo" type="date" name="endDateInfo" min="' . $dateMin . '" value = "' . $endDate . '" required > </br>
+                        <input type="submit" name="validateChangeTab" value="Modifier"/>
+                    </form>';
         }elseif ($typeInfo == "pdf") {
             return '
                     <form id="modify_info" method="post" enctype="multipart/form-data">
@@ -206,7 +215,7 @@ class ViewInformation extends ViewG
                         <label for="endDateInfo">Date d\'expiration </label>
                         <input id="endDateInfo" type="date" name="endDateInfo" min="' . $dateMin . '" value = "' . $endDate . '" required > </br>
                         <input type="submit" name="validateChangePDF" value="Modifier"/>
-                 </form>';
+                    </form>';
         } else {
             return '<p>Désolé, une erreur semble être survenue.</p>';
         }
@@ -220,7 +229,7 @@ class ViewInformation extends ViewG
         $page = get_page_by_title( 'Gérer les informations');
         $linkManageInfo = get_permalink($page->ID);
         $this->displayStartModal("Ajout d'information validé");
-        echo '<div class="alert alert-success"> L\'information a été ajoutée </div>';
+        echo '<p class="alert alert-success"> L\'information a été ajoutée </p>';
         $this->displayEndModal($linkManageInfo);
     }
 
@@ -232,7 +241,7 @@ class ViewInformation extends ViewG
         $page = get_page_by_title( 'Gérer les informations');
         $linkManageInfo = get_permalink($page->ID);
         $this->displayStartModal("Modification d'information validée");
-        echo '<div class="alert alert-success"> L\'information a été modifiée </div>';
+        echo '<p class="alert alert-success"> L\'information a été modifiée </p>';
         $this->displayEndModal($linkManageInfo);
     }
 }

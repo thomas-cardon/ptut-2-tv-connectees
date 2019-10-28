@@ -14,6 +14,7 @@
 
 define('TV_PLUG_PATH', '/wp-content/plugins/plugin-ecran-connecte/');
 define('TV_UPLOAD_PATH', '/wp-content/uploads/media/');
+define('TV_ICSFILE_PATH', '/wp-content/uploads/fileICS/');
 
 //On inclut tous les fichiers du plugin
 include_once 'install_DB_Tv.php';
@@ -65,12 +66,12 @@ include_once 'widgets/WidgetWeather.php';
 
 include_once 'controllers/Information.php';
 include_once 'models/InformationManager.php';
-include_once 'views/ViewInformation.php';
+include_once 'views/InformationView.php';
 include_once 'widgets/WidgetInformation.php';
 
 include_once 'controllers/Alert.php';
 include_once 'models/AlertManager.php';
-include_once 'views/ViewAlert.php';
+include_once 'views/AlertView.php';
 include_once 'widgets/WidgetAlert.php';
 
 //Blocks
@@ -107,6 +108,30 @@ if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH)) {
     mkdir($_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH);
 }
 
+if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH)) {
+    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH);
+    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/');
+    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/');
+    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3/');
+}
+
+if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3')) {
+    foreach ($myfiles as $myfile) {
+        wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3/'.$myfile);
+    }
+}
+if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2')) {
+    foreach ($myfiles as $myfile) {
+        rename($myfile, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3/'.$myfile);
+    }
+}
+
+if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1')) {
+    foreach ($myfiles as $myfile) {
+        rename($myfile, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/'.$myfile);
+    }
+}
+
 // Initialize plugin
 add_action('init', function(){
     if(class_exists(R34ICS::class )) {
@@ -130,22 +155,6 @@ function downloadFileICS_func() {
     $model = new CodeAdeManager();
     $allCodes = $model->getAllCode();
     $controllerAde = new CodeAde();
-//    if($myfiles = scandir("controllers/fileICS/file3")) {
-//        foreach ($myfiles as $myfile) {
-//            unlink($myfile);
-//        }
-//    }
-//    if($myfiles = scandir("controllers/fileICS/file2")) {
-//        foreach ($myfiles as $myfile) {
-//            rename($myfile, "../file3/".$myfile);
-//        }
-//    }
-//
-//    if($myfiles = scandir("controllers/fileICS/file1")) {
-//        foreach ($myfiles as $myfile) {
-//            rename($myfile, "../file2/".$myfile);
-//        }
-//    }
     foreach ($allCodes as $code){
         $path = $controllerAde->getFilePath($code['code']);
         $controllerAde->addFile($code['code']);

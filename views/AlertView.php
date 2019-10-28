@@ -6,7 +6,7 @@
  * Time: 11:01
  */
 
-class ViewAlert extends ViewG {
+class AlertView extends ViewG {
 
     public function displaySelect($years, $groups, $halfgroups){
         $string = '<option value="0">Aucun</option>

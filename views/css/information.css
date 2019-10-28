@@ -1,28 +1,32 @@
 /*__Information main__*/
-.titleInfo {
+li.tv section article div p.content_info {
+    max-height: 60vh !important;
+    font-size : 1.5em;
     text-align: center;
+
 }
 
-.content_info{
+li.tv section article div .pdfemb-viewer {
+    max-height: 61vh !important;
     font-size : 1.5em;
     text-align: center;
 }
 
 .content_info img{
-    max-height:40vh;
-    width: auto;
+
 }
 
 .red {
     color:red;
 }
 
+/* PDF */
 .pdfemb-toolbar {
     display: none !important;
 }
 
 .pdfemb-viewer {
-    max-height:45vh !important;
+
 }
 
 td div.pdfemb-viewer {
@@ -33,7 +37,7 @@ td div.pdfemb-viewer {
 @media (max-height: 1100px) {
 
     .pdfemb-viewer {
-        max-height:45vh;
+
     }
 
     .content_info{
