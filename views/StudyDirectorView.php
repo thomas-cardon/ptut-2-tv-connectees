@@ -12,22 +12,18 @@ class StudyDirectorView extends UserView {
     public function displayCreateDirector() {
         return '
                 <h2> Compte directeur d\'études</h2>
-                <div class="cadre">
-                    <div align="center">
-                        <form method="post">
-                            <label for="loginDirec">Login</label>
-                            <input minlength="4" type="text" class="form-control text-center modal-sm" name="loginDirec" placeholder="Login" required="">
-                            <label for="emailDirec">Email</label>
-                            <input type="email" class="form-control text-center modal-sm" name="emailDirec" placeholder="Email" required="">
-                            <label for="pwdDirec">Mot de passe</label>
-                            <input minlength="4" type="password" class="form-control text-center modal-sm" id="pwdDirec" name="pwdDirec" placeholder="Mot de passe" required="" onkeyup=checkPwd("Direc")>
-                            <input minlength="4" type="password" class="form-control text-center modal-sm" id="pwdConfDirec" name="pwdConfirmDirec" placeholder="Confirmer le Mot de passe" required="" onkeyup=checkPwd("Direc")>
-                            <label for="codeADEDirec"> Code ADE</label>
-                            <input type="text" class="form-control text-center modal-sm" placeholder="Code ADE" name="codeDirec" required="">
-                            <input type="submit" id="validDirec" name="createDirec" value="Créer">
-                        </form>
-                    </div>
-                </div>';
+                <form class="cadre" method="post">
+                    <label for="loginDirec">Login</label>
+                    <input minlength="4" type="text" class="form-control text-center modal-sm" name="loginDirec" placeholder="Login" required="">
+                    <label for="emailDirec">Email</label>
+                    <input type="email" class="form-control text-center modal-sm" name="emailDirec" placeholder="Email" required="">
+                    <label for="pwdDirec">Mot de passe</label>
+                    <input minlength="4" type="password" class="form-control text-center modal-sm" id="pwdDirec" name="pwdDirec" placeholder="Mot de passe" required="" onkeyup=checkPwd("Direc")>
+                    <input minlength="4" type="password" class="form-control text-center modal-sm" id="pwdConfDirec" name="pwdConfirmDirec" placeholder="Confirmer le Mot de passe" required="" onkeyup=checkPwd("Direc")>
+                    <label for="codeADEDirec"> Code ADE</label>
+                    <input type="text" class="form-control text-center modal-sm" placeholder="Code ADE" name="codeDirec" required="">
+                    <input type="submit" id="validDirec" name="createDirec" value="Créer">
+                </form>';
     }
 
 //    public function displayCreateDirector() {

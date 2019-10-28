@@ -62,7 +62,7 @@ class StudentView extends UserView {
      * @return string   Renvoie la signification
      */
     public function displayRedSignification(){
-        return '<div class="red">Zone rouge = Code ADE non enregistré</div>';
+        return '<p class="red">Zone rouge = Code ADE non enregistré</p>';
     }
 
     /**
@@ -82,11 +82,11 @@ class StudentView extends UserView {
         $titleGroup = $model->getTitle($code[1]);
         $titleHalfgroup = $model->getTitle($code[2]);
         echo '
-        <div class="cadre">
-         <h3>'.$result->user_login.'</h3>
+        <article class="cadre">
+         <h2>'.$result->user_login.'</h2>
          <form method="post">
-            <label>Année</label>
-            <select class="form-control" name="modifYear">
+            <label for="modifYear">Année</label>
+            <select id="modifYear" class="form-control" name="modifYear">
                 <option value="'.$code[0].'">'.$titleYear.'</option>
                 <option value="0">Aucun</option>
                 <optgroup label="Année">
@@ -98,8 +98,8 @@ class StudentView extends UserView {
         echo'
             </optgroup>
             </select>
-            <label>Groupe</label>
-            <select class="form-control" name="modifGroup">
+            <label for="modifGroup">Groupe</label>
+            <select id="modifGroup" class="form-control" name="modifGroup">
                 <option value="'.$code[1].'">'.$titleGroup.'</option>
                 <option value="0">Aucun</option>
                 <optgroup label="Groupe">';
@@ -110,8 +110,8 @@ class StudentView extends UserView {
         echo'
             </optgroup>
             </select>
-            <label>Demi-groupe</label>
-            <select class="form-control" name="modifHalfgroup">
+            <label for="modifHalfgroup">Demi-groupe</label>
+            <select id="modifHalfgroup" class="form-control" name="modifHalfgroup">
                 <option value="'.$code[2].'">'.$titleHalfgroup.'</option>
                 <option value="0"> Aucun</option>
                 <optgroup label="Demi-Groupe">';
@@ -125,6 +125,6 @@ class StudentView extends UserView {
             <input name="modifvalider" type="submit" value="Valider">
             <a href="'.$linkManageUser.'">Annuler</a>
          </form>
-         </div>';
+         </article>';
     }
 }
