@@ -18,7 +18,7 @@ meteoRequest.onload =  function () {
     var div = document.getElementById('Weather');
     div.innerHTML = "";
     var weather = document.createElement("DIV");
-    weather.innerHTML = temp + "<span style=\"font-size: 16px;\">°C</span>";
+    weather.innerHTML = temp + "<span class=\"degree\">°C</span>";
     weather.id = "weather";
     var imgTemp = document.createElement("IMG");
     imgTemp.id = "icon";
@@ -26,7 +26,7 @@ meteoRequest.onload =  function () {
     imgTemp.alt = getAlt(json);
     weather.appendChild(imgTemp);
     var wind = document.createElement("DIV");
-    wind.innerHTML = vent + "<span style=\"font-size: 16px;\">km/h</span>";
+    wind.innerHTML = vent + "<span class=\"kmh\">km/h</span>";
     wind.id = "wind";
     var imgVent = document.createElement("IMG");
     imgVent.src = "/wp-content/plugins/plugin-ecran-connecte/views/imagesWeather/wind.png";

@@ -5,7 +5,7 @@ function delete_account_render_callback() {
     $view = new UserView();
     if(is_page()){
         $myAccount->deleteAccount();
-        return $view->displayVerifyPassword().$view->displayDeleteAccount().$view->displayEnterCode();
+        return $view->displayDeleteAccount().$view->displayEnterCode();
     }
 }
 

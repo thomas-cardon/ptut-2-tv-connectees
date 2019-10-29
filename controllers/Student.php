@@ -10,8 +10,7 @@
  * Permet de créer, modifier et afficher des étudiants
  * Class Student
  */
-class Student extends ControllerG
-{
+class Student extends User implements Schedule {
     /**
      * Vue de Student
      * @var StudentView
@@ -31,6 +30,20 @@ class Student extends ControllerG
     {
         $this->view = new StudentView();
         $this->model = new StudentModel();
+    }
+
+    public function displaySchedules(){
+        $current_user = wp_get_current_user();
+        $codes = unserialize($current_user->code); // On utilie cette fonction car les codes dans la base de données sont sérialisés
+        if(file_exists($this->getFilePath($codes[2]))) {
+            $this->displaySchedule($codes[2]);
+        } else if(file_exists($this->getFilePath($codes[1]))) {
+            $this->displaySchedule($codes[1]);
+        } else if($this->displaySchedule($codes[0])) {
+            $this->displaySchedule($codes[0]);
+        } else {
+            echo "T'as pas cours gros";
+        }
     }
 
     public function inscriptionStudent() {
@@ -201,7 +214,8 @@ class Student extends ControllerG
 
     /**
      * Modifie l'étudiant sélectionné
-     * @param $result   Données de l'étudiant avant modification
+     * @param $result   array Données de l'étudiant avant modification
+     * @return string
      */
     public function modifyMyStudent($result){
         $page = get_page_by_title( 'Gestion des utilisateurs');
@@ -211,7 +225,6 @@ class Student extends ControllerG
         $years = $this->model->getCodeYear();
         $groups = $this->model->getCodeGroup();
         $halfgroups = $this->model->getCodeHalfgroup();
-        $this->view->displayModifyStudent($result, $years, $groups, $halfgroups);
         $action = $_POST['modifvalider'];
 
         if($action == 'Valider'){
@@ -224,6 +237,7 @@ class Student extends ControllerG
                 $this->view->displayModificationValidate($linkManageUser);
             }
         }
+        return $this->view->displayModifyStudent($result, $years, $groups, $halfgroups);
     }
 
     /**

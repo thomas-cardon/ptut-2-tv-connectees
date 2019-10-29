@@ -10,8 +10,7 @@
  * Permet de créer, modifier et afficher des enseignants
  * Class Teacher
  */
-class Teacher extends ControllerG
-{
+class Teacher extends User implements Schedule {
     /**
      * Vue de Teacher
      * @var TeacherView
@@ -30,6 +29,12 @@ class Teacher extends ControllerG
     public function __construct(){
         $this->view = new TeacherView();
         $this->model = new TeacherModel();
+    }
+
+    public function displaySchedules() {
+        $current_user = wp_get_current_user();
+        $codes = unserialize($current_user->code); // On utilie cette fonction car les codes dans la base de données sont sérialisés
+        $this->displaySchedule($codes[0]); // On affiche le codes[0] car les enseignants n'ont qu'un code
     }
 
     /**
@@ -152,17 +157,18 @@ class Teacher extends ControllerG
     /**
      * Modifie l'enseignant
      * @param $result   Données de l'enseignant avant modification
+     * @return string
      */
     public function modifyTeacher($result){
         $page = get_page_by_title( 'Gestion des utilisateurs');
         $linkManageUser = get_permalink($page->ID);
         $action = $_POST['modifValidate'];
         $code = [$_POST['modifCode']];
-        $this->view->displayModifyMyTeacher($result);
         if($action === 'Valider'){
             if($this->model->modifyTeacher($result, $code)){
                 $this->view->displayModificationValidate($linkManageUser);
             }
         }
+        return $this->view->displayModifyMyTeacher($result);
     }
 }

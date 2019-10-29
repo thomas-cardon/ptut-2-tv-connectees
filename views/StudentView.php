@@ -81,10 +81,9 @@ class StudentView extends UserView {
         $titleYear = $model->getTitle($code[0]);
         $titleGroup = $model->getTitle($code[1]);
         $titleHalfgroup = $model->getTitle($code[2]);
-        echo '
-        <article class="cadre">
-         <h2>'.$result->user_login.'</h2>
+        $string = '
          <form method="post">
+            <h2>'.$result->user_login.'</h2>
             <label for="modifYear">Année</label>
             <select id="modifYear" class="form-control" name="modifYear">
                 <option value="'.$code[0].'">'.$titleYear.'</option>
@@ -93,9 +92,9 @@ class StudentView extends UserView {
             ';
         $selected = $_POST['modifYear'];
         foreach ($years as $year) {
-                echo '<option value="'.$year['code'].'"'; if($year['code'] == $selected) echo "selected"; echo'>'.$year['title'].'</option >';
+                $string .= '<option value="'.$year['code'].'"'; if($year['code'] == $selected) $string .= "selected"; $string .='>'.$year['title'].'</option >';
         }
-        echo'
+        $string .='
             </optgroup>
             </select>
             <label for="modifGroup">Groupe</label>
@@ -105,9 +104,9 @@ class StudentView extends UserView {
                 <optgroup label="Groupe">';
         $selected = $_POST['modifGroup'];
         foreach ($groups as $group){
-            echo'<option value="'.$group['code'].'"'; if($group['code'] == $selected) echo "selected"; echo'>'.$group['title'].'</option>';
+            $string .='<option value="'.$group['code'].'"'; if($group['code'] == $selected) $string .= "selected"; $string .='>'.$group['title'].'</option>';
         }
-        echo'
+        $string .='
             </optgroup>
             </select>
             <label for="modifHalfgroup">Demi-groupe</label>
@@ -117,14 +116,14 @@ class StudentView extends UserView {
                 <optgroup label="Demi-Groupe">';
         $selected = $_POST['modifHalfgroup'];
         foreach ($halfgroups as $halfgroup){
-            echo'<option value="'.$halfgroup['code'].'"'; if($halfgroup['code'] == $selected) echo "selected"; echo'>'.$halfgroup['title'].'</option>';
+            $string .='<option value="'.$halfgroup['code'].'"'; if($halfgroup['code'] == $selected) $string .= "selected"; $string .='>'.$halfgroup['title'].'</option>';
         }
-        echo'
+        $string .='
             </optgroup>
             </select>
             <input name="modifvalider" type="submit" value="Valider">
             <a href="'.$linkManageUser.'">Annuler</a>
-         </form>
-         </article>';
+         </form>';
+        return $string;
     }
 }

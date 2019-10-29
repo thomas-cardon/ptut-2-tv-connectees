@@ -24,6 +24,11 @@ include_once 'controllers/ControllerG.php';
 include_once 'models/Model.php';
 include_once 'views/ViewG.php';
 
+include_once 'controllers/R34ICS.php';
+include_once 'views/ViewICS.php';
+include_once 'controllers/Schedule.php';
+include_once 'widgets/WidgetSchedule.php';
+
 include_once 'controllers/User.php';
 include_once 'models/UserModel.php';
 include_once 'views/UserView.php';
@@ -55,12 +60,6 @@ include_once 'views/TechnicianView.php';
 include_once 'controllers/StudyDirector.php';
 include_once 'models/StudyDirectorModel.php';
 include_once 'views/StudyDirectorView.php';
-
-include_once 'controllers/R34ICS.php';
-include_once 'views/ViewICS.php';
-include_once 'controllers/Schedule.php';
-include_once 'views/ViewSchedule.php';
-include_once 'widgets/WidgetSchedule.php';
 
 include_once 'widgets/WidgetWeather.php';
 
@@ -109,27 +108,10 @@ if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH)) {
 }
 
 if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH)) {
-    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH);
-    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/');
-    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/');
-    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3/');
-}
-
-if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3')) {
-    foreach ($myfiles as $myfile) {
-        wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3/'.$myfile);
-    }
-}
-if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2')) {
-    foreach ($myfiles as $myfile) {
-        rename($myfile, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3/'.$myfile);
-    }
-}
-
-if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1')) {
-    foreach ($myfiles as $myfile) {
-        rename($myfile, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/'.$myfile);
-    }
+    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH,0777);
+    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/',0777);
+    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/',0777);
+    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3/',0777);
 }
 
 // Initialize plugin
@@ -146,12 +128,50 @@ if(isset($dl)) {
     downloadFileICS_func();
 }
 
+function displaySchedule() {
+    $current_user = wp_get_current_user();
+    if(in_array("enseignant",$current_user->roles)) {
+        $controller = new Teacher();
+        try {
+            $controller->displaySchedules();
+        } catch (Exception $e) {
+        }
+    }
+
+    if(in_array("etudiant",$current_user->roles)) {
+        $controller = new Student();
+        try {
+            $controller->displaySchedules();
+        } catch (Exception $e) {
+        }
+    }
+
+    if(in_array("television",$current_user->roles)) {
+        $controller = new Television();
+        $controller->displaySchedules();
+    }
+
+    if (in_array("technicien", $current_user->roles)){
+        $controller = new Technician();
+        try {
+            $controller->displaySchedules();
+        } catch (Exception $e) {
+        }
+    }
+
+    if(in_array("administrator", $current_user->roles) || in_array("secretary", $current_user->roles)) {
+        $controller = new Secretary();
+        $view = new SecretaryView();
+        $view->displayWelcomeAdmin();
+    }
+}
 
 /**
  * Fonction pour la Cron de WordPress
  * Cette fonction télécharge tous les fichiers ICS des codes ADE enregistrés dans la base de données
  */
 function downloadFileICS_func() {
+    move_fileICS_schedule();
     $model = new CodeAdeManager();
     $allCodes = $model->getAllCode();
     $controllerAde = new CodeAde();
@@ -172,6 +192,10 @@ function downloadFileICS_func() {
 }
 add_action( 'downloadFileICS', 'downloadFileICS_func' );
 
+/**
+ * Télécharge les emplois du temps des utilisateurs
+ * @param $users    User[]
+ */
 function dlSchedule($users) {
     $controllerAde = new CodeAde();
     if(isset($users)) {
@@ -199,6 +223,36 @@ function dlSchedule($users) {
                 } else {
                     $controllerAde->addFile($codes);
                 }
+            }
+        }
+    }
+}
+
+/**
+ * Déplace les fichier ICS afin d'avoir 3 jours de fichiers sauvegardés
+ */
+function move_fileICS_schedule() {
+    if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3')) {
+        foreach ($myfiles as $myfile) {
+            if(is_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3/'.$myfile)) {
+                wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3/'.$myfile);
+            }
+        }
+    }
+    if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2')) {
+        foreach ($myfiles as $myfile) {
+            if(is_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/'.$myfile)) {
+                copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/'.$myfile, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3/'.$myfile);
+                wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/'.$myfile);
+            }
+        }
+    }
+
+    if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1')) {
+        foreach ($myfiles as $myfile) {
+            if(is_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/'.$myfile)) {
+                copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/'.$myfile, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/'.$myfile);
+                wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/'.$myfile);
             }
         }
     }

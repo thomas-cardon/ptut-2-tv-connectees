@@ -1,13 +1,13 @@
 /*__Information main__*/
 li.tv section article div p.content_info {
-    max-height: 60vh !important;
+    max-height: 65vh !important;
     font-size : 1.5em;
     text-align: center;
 
 }
 
 li.tv section article div .pdfemb-viewer {
-    max-height: 61vh !important;
+    max-height: 65vh !important;
     font-size : 1.5em;
     text-align: center;
 }

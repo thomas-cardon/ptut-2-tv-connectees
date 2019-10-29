@@ -5,7 +5,7 @@ function password_modify_render_callback() {
     $view = new UserView();
     if(is_page()){
         $myAccount->modifyPwd();
-        return $view->displayVerifyPassword().$view->displayModifyPassword();
+        return $view->displayModifyPassword();
     }
 }
 

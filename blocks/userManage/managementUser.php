@@ -1,8 +1,8 @@
 <?php
 
 function management_user_render_callback() {
-    $manageUser = new User();
-    $view = new UserView();
+    $manageUser = new Secretary();
+    $view = new SecretaryView();
     if(is_page()){
         $manageUser->deleteUsers();
         return $manageUser->displayUsers();
