@@ -3,7 +3,7 @@
 function information_modify_render_callback() {
     $information = new Information();
     $model = new InformationManager();
-    $view = new ViewInformation();
+    $view = new InformationView();
     if(is_page()){
         $id = $information->getMyIdUrl();
         $result = $model->getInformationByID($id);

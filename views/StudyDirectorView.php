@@ -54,6 +54,6 @@ class StudyDirectorView extends UserView {
      * @param $result   Données de l'enseignant
      */
     public function displayModifyStudyDirector($result){
-        $this->displayModifyTeacher($result);
+        return $this->displayModifyTeacher($result);
     }
 }

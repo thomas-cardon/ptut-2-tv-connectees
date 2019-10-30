@@ -1,9 +1,32 @@
 <?php
 
 function schedule_render_callback() {
-    $schedule = new Schedule();
     if(is_page()){
-        return $schedule->displaySchedules();
+        $current_user = wp_get_current_user();
+        if(in_array("enseignant",$current_user->roles)) {
+            $controller = new Teacher();
+            $controller->displaySchedules();
+        }
+
+        if(in_array("etudiant",$current_user->roles)) {
+            $controller = new Student();
+            $controller->displaySchedules();
+        }
+
+        if(in_array("television",$current_user->roles)) {
+            $controller = new Television();
+            $controller->displaySchedules();
+        }
+
+        if (in_array("technicien", $current_user->roles)){
+            $controller = new Technician();
+            $controller->displaySchedules();
+        }
+
+        if(in_array("administrator", $current_user->roles) || in_array("secretary", $current_user->roles)) {
+            $controller = new Secretary();
+            $this->view->displayWelcomeAdmin();
+        }
     }
 }
 

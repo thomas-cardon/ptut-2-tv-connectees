@@ -1,9 +1,9 @@
 <?php
 
 function user_modify_render_callback() {
-    $user = new User();
+    $user = new Secretary();
     if(is_page()){
-        $user->modifyUser();
+        return $user->modifyUser();
     }
 }
 

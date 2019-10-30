@@ -5,8 +5,7 @@
  * Permet de créer et afficher des techniciens
  * Class Technician
  */
-class Technician extends ControllerG
-{
+class Technician extends User implements Schedule {
     /**
      * Vue de Technician
      * @var TechnicianView
@@ -25,6 +24,22 @@ class Technician extends ControllerG
     public function __construct(){
         $this->view = new TechnicianView();
         $this->model = new TechnicianModel();
+    }
+
+    public function displaySchedules() {
+        $modelCode = new CodeAdeManager();
+        $years = $modelCode->getCodeYear();
+        $row = 0;
+        foreach ($years as $year){
+            if($row % 2 == 0) {
+                $this->view->displayRow();
+            }
+            $this->displaySchedule($year['code']);
+            if($row % 2 == 1) {
+                $this->view->displayEndDiv();
+            }
+            $row = $row + 1;
+        }
     }
 
     /**

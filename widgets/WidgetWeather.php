@@ -23,7 +23,6 @@ class WidgetWeather extends WP_Widget{
             echo '
             <aside class="Infos">
                 <p class="Time" id="Time">
-              
                 </p>
                 <p class="Date" id="Date">
                 </p>

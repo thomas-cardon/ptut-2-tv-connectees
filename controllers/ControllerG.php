@@ -47,11 +47,25 @@ abstract class ControllerG {
 
     /**
      * Récupère le chemin où ce situe le fichier ICS voulu
-     * @param $code     Code ADE de l'emploi du temps souhaité
+     * @param $code     int Code ADE de l'emploi du temps souhaité
      * @return string   Renvoie le chemin jusqu'au fichier ICS
      */
     public function getFilePath($code){
-        $path = ABSPATH . TV_PLUG_PATH."controllers/fileICS/file1/".$code;
+        $filepath = ABSPATH . TV_ICSFILE_PATH;
+        if(file_exists($filepath."/file0/".$code) && filesize($filepath."/file0/".$code) > 120) {
+            $path = ABSPATH . TV_ICSFILE_PATH."/file0/".$code;
+        } else if(file_exists($filepath."/file1/".$code) && filesize($filepath."/file1/".$code) > 120) {
+            $path = ABSPATH . TV_ICSFILE_PATH."/file1/".$code;
+            copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/'.$code, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file0/'.$code);
+        } else if (file_exists($filepath."/file2/".$code) && filesize($filepath."/file2/".$code) > 120) {
+            $path = $filepath."/file2/".$code;
+            copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/'.$code, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file0/'.$code);
+        } else if(file_exists($filepath."/file3/".$code) && filesize($filepath."/file3/".$code) > 120) {
+            $path = $filepath."/file3/".$code;
+            copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3/'.$code, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file0/'.$code);
+        } else {
+            $path = $filepath."/file0/".$code;
+        }
         return $path;
     }
 
@@ -61,7 +75,7 @@ abstract class ControllerG {
      */
     public function addFile($code){
         try {
-            $path = $this->getFilePath($code);
+            $path = ABSPATH . TV_ICSFILE_PATH."/file0/".$code;
             $url = $this->getUrl($code);
             //file_put_contents($path, fopen($url, 'r'));
             $contents = '';
@@ -81,21 +95,9 @@ abstract class ControllerG {
             } else {
                 throw new Exception('File open failed.');
             }
-
-
         } catch (Exception $e) {
             $this->addLogEvent($e);
         }
 
-    }
-
-    /**
-     * Supprime le fichier lié au code
-     * @param $code     Code ADE
-     */
-    public function deleteFile($code){
-        $path = $this->getFilePath($code);
-        if(! unlink($path))
-            $this->addLogEvent("Le fichier ne s'est pas supprimer (chemin: ".$path.")");
     }
 }

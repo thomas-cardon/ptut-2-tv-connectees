@@ -11,9 +11,9 @@ if (!defined('ABSPATH')) { exit; }
 
 class R34ICS extends ControllerG {
 
-    var $ical_path = '/fileR34ICS/vendors/ics-parser/src/ICal/ICal.php';
-    var $event_path = '/fileR34ICS/vendors/ics-parser/src/ICal/Event.php';
-    var $carbon_path = '/fileR34ICS/vendors/ics-parser/vendor/nesbot/carbon/src/Carbon/Carbon.php';
+    var $ical_path = '/vendors/ics-parser/src/ICal/ICal.php';
+    var $event_path = '/vendors/ics-parser/src/ICal/Event.php';
+    var $carbon_path = '/vendors/ics-parser/vendor/nesbot/carbon/src/Carbon/Carbon.php';
     var $parser_loaded = false;
     var $limit_days = 365;
 

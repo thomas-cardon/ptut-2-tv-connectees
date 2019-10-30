@@ -1,7 +1,7 @@
 <?php
 
 
-class StudyDirector extends ControllerG {
+class StudyDirector extends User implements Schedule {
 
     /**
      * Vue de StudyDirector
@@ -21,6 +21,12 @@ class StudyDirector extends ControllerG {
     public function __construct(){
         $this->view = new StudyDirectorView();
         $this->model = new StudyDirectorModel();
+    }
+
+    public function displaySchedules() {
+        $current_user = wp_get_current_user();
+        $codes = unserialize($current_user->code); // On utilie cette fonction car les codes dans la base de données sont sérialisés
+        $this->displaySchedule($codes[0]); // On affiche le codes[0] car les enseignants n'ont qu'un code
     }
 
     /**
@@ -71,18 +77,19 @@ class StudyDirector extends ControllerG {
 
     /**
      * Modifie l'enseignant
-     * @param $result   Données de l'enseignant avant modification
+     * @param $result   array Données de l'enseignant avant modification
+     * @return string
      */
     public function modifyStudyDirector($result){
         $page = get_page_by_title( 'Gestion des utilisateurs');
         $linkManageUser = get_permalink($page->ID);
         $action = $_POST['modifValidate'];
         $code = [$_POST['modifCode']];
-        $this->view->displayModifyStudyDirector($result);
         if($action === 'Valider'){
             if($this->model->modifyStudyDirector($result, $code)){
                 $this->view->displayModificationValidate($linkManageUser);
             }
         }
+        return $this->view->displayModifyStudyDirector($result);
     }
 }

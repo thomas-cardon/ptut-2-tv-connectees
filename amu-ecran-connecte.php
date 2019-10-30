@@ -14,6 +14,7 @@
 
 define('TV_PLUG_PATH', '/wp-content/plugins/plugin-ecran-connecte/');
 define('TV_UPLOAD_PATH', '/wp-content/uploads/media/');
+define('TV_ICSFILE_PATH', '/wp-content/uploads/fileICS/');
 
 //On inclut tous les fichiers du plugin
 include_once 'install_DB_Tv.php';
@@ -22,6 +23,11 @@ include_once 'recaptchalib.php';
 include_once 'controllers/ControllerG.php';
 include_once 'models/Model.php';
 include_once 'views/ViewG.php';
+
+include_once 'controllers/fileR34ICS/R34ICS.php';
+include_once 'views/ViewICS.php';
+include_once 'controllers/Schedule.php';
+include_once 'widgets/WidgetSchedule.php';
 
 include_once 'controllers/User.php';
 include_once 'models/UserModel.php';
@@ -55,22 +61,16 @@ include_once 'controllers/StudyDirector.php';
 include_once 'models/StudyDirectorModel.php';
 include_once 'views/StudyDirectorView.php';
 
-include_once 'controllers/R34ICS.php';
-include_once 'views/ViewICS.php';
-include_once 'controllers/Schedule.php';
-include_once 'views/ViewSchedule.php';
-include_once 'widgets/WidgetSchedule.php';
-
 include_once 'widgets/WidgetWeather.php';
 
 include_once 'controllers/Information.php';
 include_once 'models/InformationManager.php';
-include_once 'views/ViewInformation.php';
+include_once 'views/InformationView.php';
 include_once 'widgets/WidgetInformation.php';
 
 include_once 'controllers/Alert.php';
 include_once 'models/AlertManager.php';
-include_once 'views/ViewAlert.php';
+include_once 'views/AlertView.php';
 include_once 'widgets/WidgetAlert.php';
 
 //Blocks
@@ -107,13 +107,19 @@ if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH)) {
     mkdir($_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH);
 }
 
+if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH)) {
+    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH,0777);
+    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/',0777);
+    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/',0777);
+    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3/',0777);
+}
+
 // Initialize plugin
 add_action('init', function(){
     if(class_exists(R34ICS::class )) {
         global $R34ICS;
         $R34ICS = new R34ICS();
     }
-
 });
 
 $dl = $_POST['dlEDT'];
@@ -121,31 +127,44 @@ if(isset($dl)) {
     downloadFileICS_func();
 }
 
+function displaySchedule() {
+    $current_user = wp_get_current_user();
+    if(in_array("enseignant",$current_user->roles)) {
+        $controller = new Teacher();
+        $controller->displaySchedules();
+    }
+
+    if(in_array("etudiant",$current_user->roles)) {
+        $controller = new Student();
+        $controller->displaySchedules();
+    }
+
+    if(in_array("television",$current_user->roles)) {
+        $controller = new Television();
+        $controller->displaySchedules();
+    }
+
+    if (in_array("technicien", $current_user->roles)){
+        $controller = new Technician();
+        $controller->displaySchedules();
+    }
+
+    if(in_array("administrator", $current_user->roles) || in_array("secretary", $current_user->roles)) {
+        $controller = new Secretary();
+        $view = new SecretaryView();
+        $view->displayWelcomeAdmin();
+    }
+}
 
 /**
  * Fonction pour la Cron de WordPress
  * Cette fonction télécharge tous les fichiers ICS des codes ADE enregistrés dans la base de données
  */
 function downloadFileICS_func() {
+    move_fileICS_schedule();
     $model = new CodeAdeManager();
     $allCodes = $model->getAllCode();
     $controllerAde = new CodeAde();
-//    if($myfiles = scandir("controllers/fileICS/file3")) {
-//        foreach ($myfiles as $myfile) {
-//            unlink($myfile);
-//        }
-//    }
-//    if($myfiles = scandir("controllers/fileICS/file2")) {
-//        foreach ($myfiles as $myfile) {
-//            rename($myfile, "../file3/".$myfile);
-//        }
-//    }
-//
-//    if($myfiles = scandir("controllers/fileICS/file1")) {
-//        foreach ($myfiles as $myfile) {
-//            rename($myfile, "../file2/".$myfile);
-//        }
-//    }
     foreach ($allCodes as $code){
         $path = $controllerAde->getFilePath($code['code']);
         $controllerAde->addFile($code['code']);
@@ -163,6 +182,10 @@ function downloadFileICS_func() {
 }
 add_action( 'downloadFileICS', 'downloadFileICS_func' );
 
+/**
+ * Télécharge les emplois du temps des utilisateurs
+ * @param $users    User[]
+ */
 function dlSchedule($users) {
     $controllerAde = new CodeAde();
     if(isset($users)) {
@@ -190,6 +213,45 @@ function dlSchedule($users) {
                 } else {
                     $controllerAde->addFile($codes);
                 }
+            }
+        }
+    }
+}
+
+/**
+ * Déplace les fichier ICS afin d'avoir 3 jours de fichiers sauvegardés
+ */
+function move_fileICS_schedule() {
+    if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3')) {
+        foreach ($myfiles as $myfile) {
+            if(is_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3/'.$myfile)) {
+                wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3/'.$myfile);
+            }
+        }
+    }
+    if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2')) {
+        foreach ($myfiles as $myfile) {
+            if(is_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/'.$myfile)) {
+                copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/'.$myfile, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3/'.$myfile);
+                wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/'.$myfile);
+            }
+        }
+    }
+
+    if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1')) {
+        foreach ($myfiles as $myfile) {
+            if(is_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/'.$myfile)) {
+                copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/'.$myfile, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/'.$myfile);
+                wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/'.$myfile);
+            }
+        }
+    }
+
+    if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file0')) {
+        foreach ($myfiles as $myfile) {
+            if(is_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file0/'.$myfile)) {
+                copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file0/'.$myfile, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/'.$myfile);
+                wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file0/'.$myfile);
             }
         }
     }

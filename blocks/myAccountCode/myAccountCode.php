@@ -1,8 +1,8 @@
 <?php
 function code_account_render_callback() {
-    $myAccount = new User();
-    $model = new UserModel();
-    $view = new UserView();
+    $myAccount = new Student();
+    $model = new StudentModel();
+    $view = new StudentView();
     $current_user = wp_get_current_user();
     if(is_page() && in_array('etudiant', $current_user->roles)){
         $myAccount->modifyMyCodes();

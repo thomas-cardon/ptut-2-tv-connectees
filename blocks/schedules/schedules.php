@@ -1,7 +1,7 @@
 <?php
 
 function schedules_render_callback() {
-    $schedule = new Schedule();
+    $schedule = new User();
     if(is_page()){
         return $schedule->displayYearSchedule();
     }
