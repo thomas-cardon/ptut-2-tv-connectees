@@ -15,26 +15,28 @@ meteoRequest.onload =  function () {
     var json = JSON.parse(this.responseText);
     var temp = Math.round(getTemp(json));
     var vent = getWind(json).toFixed(0);
-    var div = document.getElementById('Weather');
-    div.innerHTML = "";
-    var weather = document.createElement("DIV");
-    weather.innerHTML = temp + "<span class=\"degree\">°C</span>";
-    weather.id = "weather";
-    var imgTemp = document.createElement("IMG");
-    imgTemp.id = "icon";
-    imgTemp.src = "/wp-content/plugins/plugin-ecran-connecte/views/imagesWeather/" + getIcon(json) + ".png";
-    imgTemp.alt = getAlt(json);
-    weather.appendChild(imgTemp);
-    var wind = document.createElement("DIV");
-    wind.innerHTML = vent + "<span class=\"kmh\">km/h</span>";
-    wind.id = "wind";
-    var imgVent = document.createElement("IMG");
-    imgVent.src = "/wp-content/plugins/plugin-ecran-connecte/views/imagesWeather/wind.png";
-    imgVent.alt = "Img du vent";
-    wind.appendChild(imgVent);
-    div.appendChild(weather);
-    div.appendChild(wind);
-    setTimeout(refreshWeather, 900000);
+    if(document.getElementById('Weather') !== null) {
+        var div = document.getElementById('Weather');
+        div.innerHTML = "";
+        var weather = document.createElement("DIV");
+        weather.innerHTML = temp + "<span class=\"degree\">°C</span>";
+        weather.id = "weather";
+        var imgTemp = document.createElement("IMG");
+        imgTemp.id = "icon";
+        imgTemp.src = "/wp-content/plugins/plugin-ecran-connecte/views/imagesWeather/" + getIcon(json) + ".png";
+        imgTemp.alt = getAlt(json);
+        weather.appendChild(imgTemp);
+        var wind = document.createElement("DIV");
+        wind.innerHTML = vent + "<span class=\"kmh\">km/h</span>";
+        wind.id = "wind";
+        var imgVent = document.createElement("IMG");
+        imgVent.src = "/wp-content/plugins/plugin-ecran-connecte/views/imagesWeather/wind.png";
+        imgVent.alt = "Img du vent";
+        wind.appendChild(imgVent);
+        div.appendChild(weather);
+        div.appendChild(wind);
+        setTimeout(refreshWeather, 900000);
+    }
 };
 function getAlt(json){
     return json["weather"][0]["description"];

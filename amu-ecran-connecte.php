@@ -24,7 +24,7 @@ include_once 'controllers/ControllerG.php';
 include_once 'models/Model.php';
 include_once 'views/ViewG.php';
 
-include_once 'controllers/R34ICS.php';
+include_once 'controllers/fileR34ICS/R34ICS.php';
 include_once 'views/ViewICS.php';
 include_once 'controllers/Schedule.php';
 include_once 'widgets/WidgetSchedule.php';
@@ -120,7 +120,6 @@ add_action('init', function(){
         global $R34ICS;
         $R34ICS = new R34ICS();
     }
-
 });
 
 $dl = $_POST['dlEDT'];
@@ -132,18 +131,12 @@ function displaySchedule() {
     $current_user = wp_get_current_user();
     if(in_array("enseignant",$current_user->roles)) {
         $controller = new Teacher();
-        try {
-            $controller->displaySchedules();
-        } catch (Exception $e) {
-        }
+        $controller->displaySchedules();
     }
 
     if(in_array("etudiant",$current_user->roles)) {
         $controller = new Student();
-        try {
-            $controller->displaySchedules();
-        } catch (Exception $e) {
-        }
+        $controller->displaySchedules();
     }
 
     if(in_array("television",$current_user->roles)) {
@@ -153,10 +146,7 @@ function displaySchedule() {
 
     if (in_array("technicien", $current_user->roles)){
         $controller = new Technician();
-        try {
-            $controller->displaySchedules();
-        } catch (Exception $e) {
-        }
+        $controller->displaySchedules();
     }
 
     if(in_array("administrator", $current_user->roles) || in_array("secretary", $current_user->roles)) {
@@ -253,6 +243,15 @@ function move_fileICS_schedule() {
             if(is_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/'.$myfile)) {
                 copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/'.$myfile, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/'.$myfile);
                 wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/'.$myfile);
+            }
+        }
+    }
+
+    if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file0')) {
+        foreach ($myfiles as $myfile) {
+            if(is_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file0/'.$myfile)) {
+                copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file0/'.$myfile, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/'.$myfile);
+                wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file0/'.$myfile);
             }
         }
     }

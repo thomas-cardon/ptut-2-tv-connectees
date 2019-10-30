@@ -196,7 +196,7 @@ class TelevisionView extends UserView {
      */
     public function displayStartSlide(){
         echo '
-            <div class="slideshow-container">
+            <div id="slideshow-container" class="slideshow-container">
                 <div class="mySlides">';
     }
     /**

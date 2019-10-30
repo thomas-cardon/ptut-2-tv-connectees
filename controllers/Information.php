@@ -58,7 +58,7 @@ class Information extends ControllerG {
         } else {
             $source = $_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH.$content;
         }
-        unlink($source);
+        wp_delete_file($source);
     }
 
     /**
