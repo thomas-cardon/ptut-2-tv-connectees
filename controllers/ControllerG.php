@@ -64,6 +64,7 @@ abstract class ControllerG {
             $path = $filepath."file3/".$code;
             copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file3/'.$code, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file0/'.$code);
         } else {
+            $this->addFile($code);
             $path = $filepath."file0/".$code;
         }
         return $path;
@@ -71,7 +72,7 @@ abstract class ControllerG {
 
     /**
      * Ajoute un fichier ICS via le code donné
-     * @param $code     Code ADE
+     * @param $code     int Code ADE
      */
     public function addFile($code){
         try {
