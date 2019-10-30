@@ -2,7 +2,7 @@
 
 function information_render_callback() {
     $information = new Information();
-    $view = new ViewInformation();
+    $view = new InformationView();
     if(is_page()){
         return $information->insertInformation();
     }

@@ -16,6 +16,16 @@ class SecretaryView extends UserView {
     }
 
     /**
+     * Souhaite la bienvenue à l'utilisateur
+     */
+    public function displayWelcomeAdmin(){
+        echo '<h1>Écran connecté</h1>
+                <form method="post" id="dlAllEDT">
+                    <input type="submit" name="dlEDT" value="Retélécharger les emplois du temps">
+                </form>';
+    }
+
+    /**
      * Affiche l'en-tête du tableau des secrétaires
      * @return string
      */
@@ -34,5 +44,12 @@ class SecretaryView extends UserView {
     public function displayAllSecretary($row, $id, $login){
         $tab[] = $login;
         return $this->displayAll($row, 'secre',$id, $tab);
+    }
+
+    /**
+     * Demande de sélectionner un utilisateur
+     */
+    public function displaynoUser() {
+        return '<p class="alert alert-danger">Veuillez choisir un utilisateur </p>';
     }
 }

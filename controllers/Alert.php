@@ -16,7 +16,7 @@ class Alert extends ControllerG
      */
     public function __construct(){
         $this->DB = new AlertManager();
-        $this->view = new ViewAlert();
+        $this->view = new AlertView();
     }
 
     /**

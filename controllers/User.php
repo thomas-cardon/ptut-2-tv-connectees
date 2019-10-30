@@ -15,34 +15,13 @@ class User extends ControllerG {
 
     /**
      * User constructor.
-     * @param $model
-     * @param $view
+     * @param UserModel $model
+     * @param UserView $view
      */
-    public function __construct($model = null, $view = null) {
-        if($model == null && $view == null) {
-            $model = new UserModel();
-            $view = new UserView();
-        }
-        $this->model = $model;
-        $this->view = $view;
-    }
-
-    /**
-     * Supprime tout les utilisateurs sélectionnés via des checkboxs
-     */
-    public function deleteUsers(){
-        $actionDelete = $_POST['Delete'];
-        $roles = ['etu','teacher','direc','tech','secre','tele'];
-        if(isset($actionDelete)){
-            foreach ($roles as $role) {
-                if(isset($_REQUEST['checkboxstatus'.$role])) {
-                    $checked_values = $_REQUEST['checkboxstatus'.$role];
-                    foreach($checked_values as $val) {
-                        $this->deleteUser($val);
-                    }
-                }
-            }
-        }
+    public function __construct()
+    {
+        $this->model = new UserModel();
+        $this->view = new UserView();
     }
 
     /**
@@ -133,7 +112,7 @@ class User extends ControllerG {
                 $this->view->displayWrongPassword();
             }
         }
-        return $this->view->displayVerifyPassword().$this->view->displayDeleteAccount().$this->view->displayEnterCode();
+        return $this->view->displayDeleteAccount().$this->view->displayEnterCode();
     }
 
     public function chooseModif(){
@@ -159,11 +138,34 @@ class User extends ControllerG {
     }
 
     /**
+     * Modifie les codes de l'étudiant connecté
+     * @param $result   array Données de l'étudiant avant modification
+     */
+    public function modifyMyCodes(){
+        //On récupère toutes les années, groupes et demi-groupes
+        // pour pouvoir permettre à l'utilisateur de les sélectionner lors de la modification
+        $current_user = wp_get_current_user();
+        $years = $this->model->getCodeYear();
+        $groups = $this->model->getCodeGroup();
+        $halfgroups = $this->model->getCodeHalfgroup();
+        $action = $_POST['modifvalider'];
+        if($action == 'Valider'){
+            $year = filter_input(INPUT_POST,'modifYear');
+            $group = filter_input(INPUT_POST,'modifGroup');
+            $halfgroup = filter_input(INPUT_POST,'modifHalfgroup');
+            $codes = [$year, $group, $halfgroup];
+            if($this->model->modifyMyCodes($current_user->ID, $current_user->user_login, $codes)){
+                $this->view->displayModificationValidate();
+            }
+        }
+        return $this->view->displayModifyMyCodes($current_user, $years, $groups, $halfgroups);
+    }
+
+    /**
      * Modifie le mot de passe de l'utilisateur
      * s'il rentre son mot de passe actuel
      */
     public function modifyPwd(){
-
         $action = $_POST['modifyMyPwd'];
         $current_user = wp_get_current_user();
         if(isset($action)){
@@ -177,88 +179,178 @@ class User extends ControllerG {
                 $this->view->displayWrongPassword();
             }
         }
-        return $this->view->displayVerifyPassword().$this->view->displayModifyPassword();
+        return $this->view->displayModifyPassword();
     }
 
     /**
-     * @return string
+     * Affiche l'emploi du temps demandé
+     * @param $code     Code ADE de l'emploi du temps
      */
-    public function createUsers() {
-        $student = new Student();
-        $teacher = new Teacher();
-        $studyDirector = new StudyDirector();
-        $secretary = new Secretary();
-        $technician = new Technician();
-        $television = new Television();
-        return
-            $this->view->displayStartMultiSelect().
-            $this->view->displayTitleSelect('student', 'Étudiants', true).
-            $this->view->displayTitleSelect('teacher', 'Enseignants').
-            $this->view->displayTitleSelect('studyDirector', 'Directeurs d\'études').
-            $this->view->displayTitleSelect('secretary', 'Secrétaires').
-            $this->view->displayTitleSelect('technician', 'Technicien').
-            $this->view->displayTitleSelect('television', 'Télévisions').
-            $this->view->displayEndOfTitle().
-            $this->view->displayContentSelect('student', $student->insertStudent(), true).
-            $this->view->displayContentSelect('teacher', $teacher->insertTeacher()).
-            $this->view->displayContentSelect('studyDirector', $studyDirector->insertDirector()).
-            $this->view->displayContentSelect('secretary', $secretary->insertSecretary()).
-            $this->view->displayContentSelect('technician', $technician->insertTechnician()).
-            $this->view->displayContentSelect('television', $television->insertTelevision()).
-            $this->view->displayEndDiv();
+    public function displaySchedule($code){
+        global $R34ICS;
+        $R34ICS = new R34ICS();
+
+        $url = $this->getFilePath($code);
+        // On demande d'afficher l'emploi du temps en liste, les autres arguments ne servent à rien pour nous
+        $args = array(
+            'count' => 10,
+            'description' => null,
+            'eventdesc' => null,
+            'format' => null,
+            'hidetimes' => null,
+            'showendtimes' => null,
+            'title' => null,
+            'view' => 'list',
+        );
+        $R34ICS->display_calendar($url, $code, $args);
     }
 
     /**
-     * Affiche les utilisateurs choisis dans un tableau
+     * Affiche l'emploi du temps d'une année en fonction de l'ID récupéré dans l'url
      */
-    public function displayUsers(){
-        $student = new Student();
-        $teacher = new Teacher();
-        $studyDirector = new StudyDirector();
-        $secretary = new Secretary();
-        $technician = new Technician();
-        $television = new Television();
-        return
-            $this->view->displayStartMultiSelect().
-            $this->view->displayTitleSelect('student', 'Étudiants', true).
-            $this->view->displayTitleSelect('teacher', 'Enseignants').
-            $this->view->displayTitleSelect('studyDirector', 'Directeurs d\'études').
-            $this->view->displayTitleSelect('secretary', 'Secrétaires').
-            $this->view->displayTitleSelect('technician', 'Technicien').
-            $this->view->displayTitleSelect('television', 'Télévisions').
-            $this->view->displayEndOfTitle().
-            $this->view->displayContentSelect('student', $student->displayAllStudents(), true).
-            $this->view->displayContentSelect('teacher', $teacher->displayAllTeachers()).
-            $this->view->displayContentSelect('studyDirector', $studyDirector->displayAllStudyDirector()).
-            $this->view->displayContentSelect('secretary', $secretary->displayAllSecretary()).
-            $this->view->displayContentSelect('technician', $technician->displayAllTechnician()).
-            $this->view->displayContentSelect('television', $television->displayAllTv()).
-            $this->view->displayEndDiv();
-    }
-
-    /**
-     * Modifie l'utilisateur choisi
-     */
-    public function modifyUser(){
-        if(is_numeric($this->getMyIdUrl())) {
-            $user = get_user_by( 'id', $this->getMyIdUrl() );
-            if(in_array("etudiant",$user->roles)){
-                $controller = new Student();
-                $controller->modifyMyStudent($user);
-            } elseif (in_array("enseignant",$user->roles)){
-                $controller = new Teacher();
-                $controller->modifyTeacher($user);
-            } elseif (in_array("directeuretude", $user->roles)) {
-                $controller = new StudyDirector();
-                $controller->modifyStudyDirector($user);
-            } elseif (in_array("television",$user->roles)){
-                $controller = new Television();
-                $controller->modifyTv($user);
-            } else {
-                $this->view->displaynoUser();
-            }
+    function displayYearSchedule(){
+        $code = $this->getMyIdUrl(); // On récupère l'ID qui sert de code ADE
+        if($code == 'emploi-du-temps') {
+            return $this->view->displaySelectSchedule();
         } else {
-            $this->view->displaynoUser();
+            $path = $this->getFilePath($code);
+            if(! file_exists($path) || filesize($path) <= 0){
+                $this->addFile($code);
+            }
+            return $this->displaySchedule($code);
         }
     }
+
+    /**
+     * Affiche un titre
+     * @param $title    Titre à afficher
+     */
+    public function displayName($title) {
+        echo '<h1>'.$title.'</h1>';
+    }
+
+    /**
+     * Début du diaporama
+     */
+    public function displayStartSlide(){
+        echo '
+            <div class="slideshow-container">
+                <div class="mySlides">';
+    }
+
+    /**
+     * Milieu du dipao, on l'utilise une fois par objet à afficher
+     */
+    public function displayMidSlide(){
+        echo '
+                </div>
+              <div class="mySlides">';
+    }
+
+    /**
+     * Fin du diaporama
+     */
+    public function displayEndSlide() {
+        echo '          
+                       </div>
+                   </div>';
+    }
+
+    /**
+     * Signal qu'il n'y pas cours
+     */
+    public function displayEmptySchedule(){
+        echo '<p> Vous n\'avez pas cours !</p>';
+    }
+
+    /**
+     * Souhaite la bienvenue à l'utilisateur
+     */
+    public function displayWelcome(){
+        echo '<h1>Écran connecté</h1>';
+    }
+
+    /**
+     * Souhaite la bienvenue à l'utilisateur
+     */
+    public function displayWelcomeAdmin(){
+        echo '<h1>Écran connecté</h1>
+                <form method="post" id="dlAllEDT">
+                    <input type="submit" name="dlEDT" value="Retélécharger les emplois du temps">
+                </form>';
+    }
+
+    /**
+     * Demande à la persone de choisir son emploi du temps
+     */
+    public function displaySelectSchedule(){
+        echo '<p> Veuillez sélectionner un emploi du temps </p>';
+    }
+
+    /*
+    public function displayYearSchedule(){
+        $code = $this->getMyIdUrl(); // On récupère l'ID qui sert de code ADE
+        if($code == 'emploi-du-temps') {
+            return $this->view->displaySelectSchedule();
+        } else {
+            $path = $this->getFilePath($code);
+            if(! file_exists($path) || filesize($path) <= 0){
+                $this->addFile($code);
+            }
+            return $this->displaySchedule($code);
+        }
+    }
+
+    public function displaySchedules() {
+    $current_user = wp_get_current_user();
+        $codes = unserialize($current_user->code); // On utilie cette fonction car les codes dans la base de données sont sérialisés
+
+        if(in_array("enseignant",$current_user->roles)) {
+            $this->displaySchedule($codes[0]); // On affiche le codes[0] car les enseignants n'ont qu'un code
+        }
+
+        if(in_array("etudiant",$current_user->roles)) {
+            if(file_exists($this->getFilePath($codes[2]))) {
+                $this->displaySchedule($codes[2]);
+            } else if(file_exists($this->getFilePath($codes[1]))) {
+                $this->displaySchedule($codes[1]);
+            } else if($this->displaySchedule($codes[0])) {
+                $this->displaySchedule($codes[0]);
+            } else {
+                echo "T'as pas cours gros";
+            }
+        }
+
+        if(in_array("television",$current_user->roles)) {
+            $this->view->displayStartSlide();
+            foreach ($codes as $code) {
+                $path = $this->getFilePath($code);
+                if(file_exists($path)){
+                    $this->displaySchedule($code);
+                    $this->view->displayMidSlide();
+                }
+            }
+            $this->view->displayEndSlide();
+        }
+
+        if (in_array("technicien", $current_user->roles)){
+            $model = new CodeAdeManager();
+            $years = $model->getCodeYear();
+            $row = 0;
+            foreach ($years as $year){
+                if($row % 2 == 0) {
+                    $this->view->displayRow();
+                }
+                $this->displaySchedule($year['code']);
+                if($row % 2 == 1) {
+                    $this->view->displayEndDiv();
+                }
+                $row = $row + 1;
+            }
+        }
+
+        if(in_array("administrator", $current_user->roles) || in_array("secretary", $current_user->roles)) {
+            $this->view->displayWelcomeAdmin();
+        }
+     */
 }

@@ -204,7 +204,7 @@ abstract class ViewG {
 
     /**
      * Affiche le début d'un modal
-     * @param $title    Titre du modal
+     * @param $title    string Titre du modal
      */
     protected function displayStartModal($title){
         echo '

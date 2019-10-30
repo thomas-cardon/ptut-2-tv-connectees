@@ -41,12 +41,15 @@ class ViewICS extends ViewG
                                             if($nbevents == 20){
                                                 $nbevents = 0;
                                                 echo'</tbody>
-                                           </table>';
+                                           </table>
+                                           </div>';
                                             }
-                                            echo'<table class="table tabSchedule">
-                                            <thead class="headerTab">
-                                            <tr>
-                                                <th scope="col" class="text-light text-center" width="20%">Horaire</th>';
+                                            echo'
+                                            <div class="table-responsive">
+                                                <table class="table tabSchedule">
+                                                    <thead class="headerTab">
+                                                        <tr>
+                                                            <th scope="col" class="text-light text-center" width="20%">Horaire</th>';
                                             if(! in_array("technicien", $current_user->roles)){
                                                 echo '<th scope="col" class="text-light text-center" width="35%">Cours</th>
                                                 <th scope="col" class="text-light text-center" width="25%">Groupe/Enseignant</th>';
@@ -136,14 +139,15 @@ class ViewICS extends ViewG
                                 }
                             }
                             echo '</tbody>
-                        </table>';
+                        </table>
+                        </div>';
                             break(3);
                         }
                         echo '</div>';
                     }
                 }
             } if($study == 0) {
-                echo '<div> Vous n\'avez pas cours !</div>';
+                echo '<p> Vous n\'avez pas cours !</p>';
             }
         }
         if( in_array("technicien", $current_user->roles)){

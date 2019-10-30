@@ -59,22 +59,18 @@ class TelevisionView extends UserView {
     public function displayFormTelevision($years, $groups, $halfgroups) {
         return '
         <h2> Compte télévision</h2>
-         <div class="cadre">
-            <div align="center">
-                <form method="post" id="registerTvForm">
-                    <label for="loginTv">Login</label>
-                    <input type="text" class="form-control text-center modal-sm" name="loginTv" placeholder="Nom de compte" required="">
-                    <label for="pwdTv">Mot de passe</label>
-                    <input type="password" class="form-control text-center modal-sm" id="pwdTv" name="pwdTv" placeholder="Mot de passe" required="" onkeyup=checkPwd("Tv")>
-                    <input type="password" class="form-control text-center modal-sm" id="pwdConfTv" name="pwdConfirmTv" placeholder="Confirmer le Mot de passe" required="" onkeyup=checkPwd("Tv")>
-                    <label>Premier emploi du temps</label>
-                    <select class="form-control firstSelect" name="selectTv[]" required="">'.
-        $this->displaySelect($years, $groups, $halfgroups). '
-                <input type="button" onclick="addButtonTv()" value="Ajouter des emplois du temps">
-                    <input type="submit" id="validTv" name="createTv" value="Créer">
-                </form>
-            </div> 
-         </div>';
+        <form method="post" id="registerTvForm">
+            <label for="loginTv">Login</label>
+            <input type="text" class="form-control text-center modal-sm" name="loginTv" placeholder="Nom de compte" required="">
+            <label for="pwdTv">Mot de passe</label>
+            <input type="password" class="form-control text-center modal-sm" id="pwdTv" name="pwdTv" placeholder="Mot de passe" required="" onkeyup=checkPwd("Tv")>
+            <input type="password" class="form-control text-center modal-sm" id="pwdConfTv" name="pwdConfirmTv" placeholder="Confirmer le Mot de passe" required="" onkeyup=checkPwd("Tv")>
+            <label>Premier emploi du temps</label>
+            <select class="form-control firstSelect" name="selectTv[]" required="">'.
+            $this->displaySelect($years, $groups, $halfgroups). '
+            <input type="button" onclick="addButtonTv()" value="Ajouter des emplois du temps">
+            <input type="submit" id="validTv" name="createTv" value="Créer">
+        </form>';
     }
 
     /**
@@ -106,10 +102,10 @@ class TelevisionView extends UserView {
 
     /**
      * Affiche un select avec comme valeur par défaut celle choisit
-     * @param $years        Années enregistrées dans la base de données
-     * @param $groups       Groupes enregistrés dans la base de données
-     * @param $halfgroups   Demi-groupes enregistrés dans la base de données
-     * @param $name         Code par défaut
+     * @param $years        array Années enregistrées dans la base de données
+     * @param $groups       array Groupes enregistrés dans la base de données
+     * @param $halfgroups   arrayDemi-groupes enregistrés dans la base de données
+     * @param $name         string Code par défaut
      * @return string       Renvoie le select
      */
     public function displaySelectSelected($years, $groups, $halfgroups, $name){
@@ -148,52 +144,42 @@ class TelevisionView extends UserView {
 
     /**
      * Affiche le formulaire pour modifier une télévision
-     * @param $result       Données de la télévision
-     * @param $years        Années enregistrées dans la base de données
-     * @param $groups       Groupes enregistrés dans la base de données
-     * @param $halfgroups   Demi-groupes enregistrés dans la base de données
+     * @param $result       array Données de la télévision
+     * @param $years        array Années enregistrées dans la base de données
+     * @param $groups       array Groupes enregistrés dans la base de données
+     * @param $halfgroups   array Demi-groupes enregistrés dans la base de données
+     * @return string
      */
     public function displayModifyTv($result, $years, $groups, $halfgroups){
         $codes = unserialize($result->code);
         $count = 0;
-        echo '
-         <h3>'.$result->user_login.'</h3>
-         <div class="cadre">
-         <div align="center">
+        $string = '
          <form method="post" id="registerTvForm">
+            <h2>'.$result->user_login.'</h2>
             <label>Nouveau mot de passe </label>
             <input  minlength="4" type="password" class="form-control text-center modal-sm" id="pwdTv" name="pwdTv" placeholder="Nouveau mot de passe" onkeyup=checkPwd("Tv")>
             <input  minlength="4" type="password" class="form-control text-center modal-sm" id="pwdConfTv" name="pwdConfirmTv" placeholder="Confirmer le nouveau mot de passe" onkeyup=checkPwd("Tv")>
             <label> Emploi du temps</label>';
-        if(is_array($codes)){
             foreach ($codes as $code) {
                 $count = $count + 1;
                 if($count == 1){
-                    echo '<select class="form-control firstSelect" name="selectTv[]" id="selectId'.$count.'">'.
-                    $this->displaySelectSelected($years, $groups, $halfgroups, $code).
-                    '<br/>';
+                    $string .= '<select class="form-control firstSelect" name="selectTv[]" id="selectId'.$count.'">'.
+                    $this->displaySelectSelected($years, $groups, $halfgroups, $code);
                 } else {
-                    echo '<div class="row">'.
+                    $string .= '<div class="row">'.
                     '<select class="form-control select" name="selectTv[]" id="selectId'.$count.'">'.
                      $this->displaySelectSelected($years, $groups, $halfgroups, $code).
                      '<input type="button" id="selectId'.$count.'" onclick="deleteRow(this.id)" class="selectbtn" value="Supprimer"></div>';
                 }
             }
-        } else {
-            echo '<select class="form-control firstSelect" name="selectTv[]" id="selectId'.$count.'">'.
-            $this->displaySelectSelected($years, $groups, $halfgroups, $codes).
-            '<br/>';
-        }
-
         $page = get_page_by_title( 'Gestion des utilisateurs');
         $linkManageUser = get_permalink($page->ID);
-        echo '
+        $string .= '
             <input type="button" onclick="addButtonTv()" value="Ajouter des emplois du temps">
             <input name="modifValidate" type="submit" id="validTv" value="Valider">
             <a href="'.$linkManageUser.'">Annuler</a>
-         </form>
-         </div>
-         </div>';
+        </form>';
+        return $string;
     }
 
     /**
@@ -203,5 +189,30 @@ class TelevisionView extends UserView {
         $this->displayStartModal('Inscription échouée');
         echo '<div class="alert alert-danger"> Le login est déjà utilisé ! </div>';
         $this->displayEndModal();
+    }
+
+    /**
+     * Début du diaporama
+     */
+    public function displayStartSlide(){
+        echo '
+            <div id="slideshow-container" class="slideshow-container">
+                <div class="mySlides">';
+    }
+    /**
+     * Milieu du dipao, on l'utilise une fois par objet à afficher
+     */
+    public function displayMidSlide(){
+        echo '
+                </div>
+              <div class="mySlides">';
+    }
+    /**
+     * Fin du diaporama
+     */
+    public function displayEndSlide() {
+        echo '          
+                       </div>
+                   </div>';
     }
 }

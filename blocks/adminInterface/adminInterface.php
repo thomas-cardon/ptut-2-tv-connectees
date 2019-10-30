@@ -8,7 +8,7 @@
 function admininterface_render_callback() {
     $alert = new Alert();
     $model = new AlertManager();
-    $view = new ViewAlert();
+    $view = new AlertView();
     if(is_page()){
         $years = $model->getCodeYear();
         $groups = $model->getCodeGroup();

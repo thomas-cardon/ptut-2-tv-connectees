@@ -65,28 +65,14 @@ class UserView extends ViewG {
         $page = get_page_by_title( 'Gestion des utilisateurs');
         $linkManageUser = get_permalink($page->ID);
         $code = unserialize($result->code);
-        echo '
-         <div class="cadre">
-             <form method="post">
-                <h3>'.$result->user_login.'</h3>
-                <label>Code ADE</label>
-                <input name="modifCode" type="text" class="form-control" placeholder="Entrer le Code ADE" value="'.$code[0].'" required="">
-                <button name="modifValidate" type="submit" value="Valider">Valider</button>
-                <a href="'.$linkManageUser.'">Annuler</a>
-             </form>
-         </div>';
-    }
-
-    /**
-     * Début de formulaire qui vérifie le mot de passe
-     * @return string   Renvoie le début du formulaire
-     */
-    public function displayVerifyPassword(){
         return '
-          <div class="cadre">
-            <form id="check" method="post">
-                <label for="verifPwd">Votre mot de passe actuel</label>
-                <input type="password" class="form-control text-center" name="verifPwd" placeholder="Mot de passe" required="">';
+        <form method="post">
+            <h2>'.$result->user_login.'</h2>
+            <label>Code ADE</label>
+            <input name="modifCode" type="text" class="form-control" placeholder="Entrer le Code ADE" value="'.$code[0].'" required="">
+            <button name="modifValidate" type="submit" value="Valider">Valider</button>
+            <a href="'.$linkManageUser.'">Annuler</a>
+        </form>';
     }
 
     /**
@@ -95,11 +81,14 @@ class UserView extends ViewG {
      */
     public function displayModifyPassword(){
         return '
+            <form id="check" method="post">
+                <h2>Modifier le mot de passe</h2>
+                <label for="verifPwd">Votre mot de passe actuel</label>
+                <input type="password" class="form-control text-center" name="verifPwd" placeholder="Mot de passe" required="">
                 <label for="newPwd">Votre nouveau mot de passe</label>
                 <input type="password" class="form-control text-center" name="newPwd" placeholder="Mot de passe" required="">
                 <button type="submit"  name="modifyMyPwd"> Modifier </button>
-            </form>
-          </div>';
+            </form>';
     }
 
     /**
@@ -108,9 +97,12 @@ class UserView extends ViewG {
      */
     public function displayDeleteAccount(){
         return '
+            <h2>Supprimer le compte</h2>
+            <form id="check" method="post">
+                <label for="verifPwd">Votre mot de passe actuel</label>
+                <input type="password" class="form-control text-center" name="verifPwd" placeholder="Mot de passe" required="">
                 <button type="submit" name="deleteMyAccount">Confirmer</button>
-                </form>
-                </div>';
+            </form>';
     }
 
     /**
@@ -119,13 +111,11 @@ class UserView extends ViewG {
      */
     public function displayEnterCode(){
         return '
-      <div class="cadre">
         <form method="post">
             <label for="codeDelete"> Code de suppression de compte</label>
             <input type="text" class="form-control text-center" name="codeDelete" placeholder="Code à rentrer" required="">
             <button type="submit" name="deleteAccount">Supprimer</button>
-        </form>
-      </div>';
+        </form>';
     }
 
     /**
@@ -166,23 +156,19 @@ class UserView extends ViewG {
         $titleGroup = $model->getTitle($code[1]);
         $titleHalfgroup = $model->getTitle($code[2]);
         $string = '
-        <h1> Modifier mes groupes</h1>
-        <div class="cadre">
-         <form method="post">
+        <form method="post">
+            <h2> Modifier mes groupes</h2>
             <label>Année</label>
             <select class="form-control" name="modifYear">
                 <option value="'.$code[0].'">'.$titleYear.'</option>
                 <option value="0">Aucun</option>
                 <optgroup label="Année">';
         $selected = $_POST['modifYear'];
-        if(is_array($years)) {
-            foreach ($years as $year) {
-                $string .= '<option value="'.$year['code'].'"'; if($year['code'] == $selected) $string .= "selected"; $string .='>'.$year['title'].'</option >';
-            }
+        foreach ($years as $year) {
+            $string .= '<option value="'.$year['code'].'"'; if($year['code'] == $selected) $string .= "selected"; $string .='>'.$year['title'].'</option >';
         }
-
         $string .= '
-            </optgroup>
+                </optgroup>
             </select>
             <label>Groupe</label>
             <select class="form-control" name="modifGroup">
@@ -190,13 +176,11 @@ class UserView extends ViewG {
                 <option value="0">Aucun</option>
                 <optgroup label="Groupe">';
         $selected = $_POST['modifGroup'];
-        if(is_array($groups)) {
-            foreach ($groups as $group){
+        foreach ($groups as $group){
                 $string .= '<option value="'.$group['code'].'"'; if($group['code'] == $selected) $string .= "selected"; $string .='>'.$group['title'].'</option>';
-            }
         }
         $string .= '
-            </optgroup>
+                </optgroup>
             </select>
             <label>Demi-groupe</label>
             <select class="form-control" name="modifHalfgroup">
@@ -204,25 +188,14 @@ class UserView extends ViewG {
                 <option value="0"> Aucun</option>
                 <optgroup label="Demi-Groupe">';
         $selected = $_POST['modifHalfgroup'];
-        if(is_array($halfgroups)) {
-            foreach ($halfgroups as $halfgroup){
+        foreach ($halfgroups as $halfgroup){
                 $string .= '<option value="'.$halfgroup['code'].'"'; if($halfgroup['code'] == $selected) $string .= "selected"; $string .='>'.$halfgroup['title'].'</option>';
-            }
         }
         $string .= '
-            </optgroup>
+                </optgroup>
             </select>
             <input name="modifvalider" type="submit" value="Valider">
-         </form>
-         </div>';
+         </form>';
         return $string;
     }
-
-    /**
-     * Demande de sélectionner un utilisateur
-     */
-    public function displaynoUser() {
-        echo '<div class="alert alert-danger">Veuillez choisir un utilisateur </div>';
-    }
-
 }

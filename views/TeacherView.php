@@ -39,6 +39,6 @@ class TeacherView extends UserView {
      * @param $result   Données de l'enseignant
      */
     public function displayModifyMyTeacher($result){
-        $this->displayModifyTeacher($result);
+        return $this->displayModifyTeacher($result);
     }
 }

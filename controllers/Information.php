@@ -15,7 +15,7 @@ class Information extends ControllerG {
      */
     public function __construct(){
         $this->DB = new InformationManager();
-        $this->view = new ViewInformation();
+        $this->view = new InformationView();
     }
 
 
@@ -58,7 +58,7 @@ class Information extends ControllerG {
         } else {
             $source = $_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH.$content;
         }
-        unlink($source);
+        wp_delete_file($source);
     }
 
     /**
@@ -398,7 +398,7 @@ class Information extends ControllerG {
             } elseif ($action == "modify"){
                 if($type == "img") {
                     //renvoie le nouveau contenu de l'info
-                    $content = '<img src="'.TV_UPLOAD_PATH.$id. '.' . $extension_upload . '">';
+                    $content = '<img src="'.TV_UPLOAD_PATH.$id. '.' . $extension_upload . '" alt="'.$title.'">';
                     return $content;
                 } elseif ($type == "tab"){
                     //renvoie le nouveau contenu de l'info

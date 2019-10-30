@@ -9,7 +9,8 @@ function dateFr() {
     message += date.getDate() + " ";   // numero du jour
     message += mois[date.getMonth()] + " ";   // mois
     message += date.getFullYear();
-    document.getElementById("Date").innerHTML =  message;
+    if(document.getElementById('Date') !== null)
+        document.getElementById("Date").innerHTML =  message;
 }
 
 function heure() {
@@ -21,7 +22,8 @@ function heure() {
         minutes = "0" + minutes;
     if(seconds < 10)
         seconds = "0" + seconds;
-  document.getElementById("Time").innerHTML = heure + ":" + minutes + ":"+ seconds;
+    if(document.getElementById('Time') !== null)
+        document.getElementById("Time").innerHTML = heure + ":" + minutes + ":"+ seconds;
 }
 
 setInterval(dateFr,  1000);

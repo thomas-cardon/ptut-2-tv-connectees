@@ -6,7 +6,7 @@
  * Time: 11:41
  */
 
-class Television extends ControllerG {
+class Television extends User implements Schedule {
 
     /**
      * View de Television
@@ -26,6 +26,21 @@ class Television extends ControllerG {
     public function __construct(){
         $this->view = new TelevisionView();
         $this->model = new TelevisionModel();
+    }
+
+    public function displaySchedules() {
+        $current_user = wp_get_current_user();
+        $codes = unserialize($current_user->code); // On utilie cette fonction car les codes dans la base de données sont sérialisés
+
+        $this->view->displayStartSlide();
+        foreach ($codes as $code) {
+            $path = $this->getFilePath($code);
+            if(file_exists($path)){
+                $this->displaySchedule($code);
+                $this->view->displayMidSlide();
+            }
+        }
+        $this->view->displayEndSlide();
     }
 
     public function insertTelevision(){
@@ -85,7 +100,6 @@ class Television extends ControllerG {
         $years = $this->model->getCodeYear();
         $groups = $this->model->getCodeGroup();
         $halfgroups = $this->model->getCodeHalfgroup();
-        $this->view->displayModifyTv($result, $years, $groups, $halfgroups);
 
         $action = $_POST['modifValidate'];
 
@@ -108,5 +122,6 @@ class Television extends ControllerG {
                 $this->view->displayModificationValidate($linkManageUser);
             }
         }
+        return $this->view->displayModifyTv($result, $years, $groups, $halfgroups);
     }
 }
