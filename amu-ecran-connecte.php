@@ -103,15 +103,30 @@ include_once 'blocks/inscription/inscription.php';
 
 require ('models/Excel/vendor/autoload.php');
 
+/**
+ * Create all directory
+ */
 if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH)) {
     mkdir($_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH);
 }
 
 if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH)) {
     mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH,0777);
+}
+
+if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file0')) {
     mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file0',0777);
+}
+
+if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file1')) {
     mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file1',0777);
+}
+
+if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file2')) {
     mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file2',0777);
+}
+
+if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file3')) {
     mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file3',0777);
 }
 
