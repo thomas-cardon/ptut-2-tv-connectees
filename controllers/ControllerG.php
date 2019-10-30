@@ -80,8 +80,7 @@ abstract class ControllerG {
             $url = $this->getUrl($code);
             //file_put_contents($path, fopen($url, 'r'));
             $contents = '';
-            $handler = fopen($url, "r");
-            if($handler) {
+            if($handler = fopen($url, "r")) {
                     while(!feof($handler)) {
                         $contents .= fread($handler, 8192);
                     }
@@ -89,8 +88,7 @@ abstract class ControllerG {
             } else {
                 throw new Exception('File open failed.');
             }
-            $handlew = fopen($path, "w");
-            if($handlew) {
+            if($handlew = fopen($path, "w")) {
                 fwrite($handlew, $contents);
                 fclose($handlew);
             } else {
