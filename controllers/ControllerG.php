@@ -52,19 +52,19 @@ abstract class ControllerG {
      */
     public function getFilePath($code){
         $filepath = ABSPATH . TV_ICSFILE_PATH;
-        if(file_exists($filepath."/file0/".$code) && filesize($filepath."/file0/".$code) > 120) {
-            $path = ABSPATH . TV_ICSFILE_PATH."/file0/".$code;
-        } else if(file_exists($filepath."/file1/".$code) && filesize($filepath."/file1/".$code) > 120) {
-            $path = ABSPATH . TV_ICSFILE_PATH."/file1/".$code;
-            copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/'.$code, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file0/'.$code);
-        } else if (file_exists($filepath."/file2/".$code) && filesize($filepath."/file2/".$code) > 120) {
-            $path = $filepath."/file2/".$code;
-            copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/'.$code, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file0/'.$code);
-        } else if(file_exists($filepath."/file3/".$code) && filesize($filepath."/file3/".$code) > 120) {
-            $path = $filepath."/file3/".$code;
-            copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3/'.$code, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file0/'.$code);
+        if(file_exists($filepath."file0/".$code) && filesize($filepath."file0/".$code) > 120) {
+            $path = ABSPATH . TV_ICSFILE_PATH."file0/".$code;
+        } else if(file_exists($filepath."file1/".$code) && filesize($filepath."file1/".$code) > 120) {
+            $path = ABSPATH . TV_ICSFILE_PATH."file1/".$code;
+            copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file1/'.$code, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file0/'.$code);
+        } else if (file_exists($filepath."file2/".$code) && filesize($filepath."file2/".$code) > 120) {
+            $path = $filepath."file2/".$code;
+            copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file2/'.$code, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file0/'.$code);
+        } else if(file_exists($filepath."file3/".$code) && filesize($filepath."file3/".$code) > 120) {
+            $path = $filepath."file3/".$code;
+            copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file3/'.$code, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file0/'.$code);
         } else {
-            $path = $filepath."/file0/".$code;
+            $path = $filepath."file0/".$code;
         }
         return $path;
     }
@@ -75,7 +75,7 @@ abstract class ControllerG {
      */
     public function addFile($code){
         try {
-            $path = ABSPATH . TV_ICSFILE_PATH."/file0/".$code;
+            $path = ABSPATH . TV_ICSFILE_PATH."file0/".$code;
             $url = $this->getUrl($code);
             //file_put_contents($path, fopen($url, 'r'));
             $contents = '';

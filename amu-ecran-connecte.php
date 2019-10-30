@@ -178,7 +178,6 @@ function downloadFileICS_func() {
     dlSchedule($teachers);
     $studyDirector = $model->getUsersByRole('directeuretude');
     dlSchedule($studyDirector);
-
 }
 add_action( 'downloadFileICS', 'downloadFileICS_func' );
 
@@ -222,36 +221,36 @@ function dlSchedule($users) {
  * Déplace les fichier ICS afin d'avoir 3 jours de fichiers sauvegardés
  */
 function move_fileICS_schedule() {
-    if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3')) {
+    if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file3')) {
         foreach ($myfiles as $myfile) {
-            if(is_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3/'.$myfile)) {
-                wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3/'.$myfile);
+            if(is_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file3/'.$myfile)) {
+                wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file3/'.$myfile);
             }
         }
     }
-    if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2')) {
+    if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file2')) {
         foreach ($myfiles as $myfile) {
-            if(is_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/'.$myfile)) {
-                copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/'.$myfile, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3/'.$myfile);
-                wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/'.$myfile);
-            }
-        }
-    }
-
-    if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1')) {
-        foreach ($myfiles as $myfile) {
-            if(is_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/'.$myfile)) {
-                copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/'.$myfile, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/'.$myfile);
-                wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/'.$myfile);
+            if(is_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file2/'.$myfile)) {
+                copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file2/'.$myfile, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file3/'.$myfile);
+                wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file2/'.$myfile);
             }
         }
     }
 
-    if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file0')) {
+    if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file1')) {
         foreach ($myfiles as $myfile) {
-            if(is_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file0/'.$myfile)) {
-                copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file0/'.$myfile, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/'.$myfile);
-                wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file0/'.$myfile);
+            if(is_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file1/'.$myfile)) {
+                copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file1/'.$myfile, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file2/'.$myfile);
+                wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file1/'.$myfile);
+            }
+        }
+    }
+
+    if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file0')) {
+        foreach ($myfiles as $myfile) {
+            if(is_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file0/'.$myfile)) {
+                copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file0/'.$myfile, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file1/'.$myfile);
+                wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file0/'.$myfile);
             }
         }
     }
