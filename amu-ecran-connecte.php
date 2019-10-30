@@ -12,9 +12,9 @@
  * GitHub Plugin URI: https://github.com/Nicolas-Rohrbach/plugin-ecran-connecte
  */
 
-define('TV_PLUG_PATH', 'wp-content/plugins/plugin-ecran-connecte/');
-define('TV_UPLOAD_PATH', 'wp-content/uploads/media/');
-define('TV_ICSFILE_PATH', 'wp-content/uploads/fileICS/');
+define('TV_PLUG_PATH', '/wp-content/plugins/plugin-ecran-connecte/');
+define('TV_UPLOAD_PATH', '/wp-content/uploads/media/');
+define('TV_ICSFILE_PATH', '/wp-content/uploads/fileICS/');
 
 //On inclut tous les fichiers du plugin
 include_once 'install_DB_Tv.php';
@@ -109,9 +109,10 @@ if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH)) {
 
 if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH)) {
     mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH,0777);
-    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file1/',0777);
-    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file2/',0777);
-    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'/file3/',0777);
+    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file0',0777);
+    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file1',0777);
+    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file2',0777);
+    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file3',0777);
 }
 
 // Initialize plugin
