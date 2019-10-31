@@ -6,10 +6,15 @@ li.tv section article div p.content_info {
     width: 100%;
 }
 
+p.content_info img {
+    width: 100%;
+    height: auto;
+}
+
 div.pdfemb-viewer {
     border: none !important;
-    width: auto !important;
-    max-height: none !important;
+    width: 100% !important;
+    height: auto !important;
 }
 
 .red {
