@@ -184,7 +184,7 @@ class User extends ControllerG {
 
     /**
      * Affiche l'emploi du temps demandé
-     * @param $code     Code ADE de l'emploi du temps
+     * @param $code     int Code ADE de l'emploi du temps
      */
     public function displaySchedule($code){
         global $R34ICS;

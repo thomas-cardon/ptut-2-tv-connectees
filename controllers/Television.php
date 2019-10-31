@@ -32,15 +32,19 @@ class Television extends User implements Schedule {
         $current_user = wp_get_current_user();
         $codes = unserialize($current_user->code); // On utilie cette fonction car les codes dans la base de données sont sérialisés
 
-        $this->view->displayStartSlide();
-        foreach ($codes as $code) {
-            $path = $this->getFilePath($code);
-            if(file_exists($path)){
-                $this->displaySchedule($code);
-                $this->view->displayMidSlide();
+        if(is_array($codes)) {
+            $this->view->displayStartSlide();
+            foreach ($codes as $code) {
+                $path = $this->getFilePath($code);
+                if(file_exists($path)){
+                    $this->displaySchedule($code);
+                    $this->view->displayMidSlide();
+                }
             }
+            $this->view->displayEndSlide();
+        } else {
+            $this->displaySchedule($codes);
         }
-        $this->view->displayEndSlide();
     }
 
     public function insertTelevision(){

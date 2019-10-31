@@ -286,7 +286,7 @@ function wpdocs_plugin_teleconnecteeAmu_scripts() {
     wp_enqueue_script( 'theme-jqueryUI', get_template_directory_uri() . '/assets/js/jquery-ui.min.js', array ( 'jquery' ), '', false);
     wp_enqueue_script( 'theme-jqueryEzTic', TV_PLUG_PATH.'views/js/jquery.easy-ticker.js', array ( 'jquery' ), '', false);
     wp_enqueue_script( 'plugin-addCheckBox', TV_PLUG_PATH.'views/js/addAllCheckBox.js', array ( 'jquery' ), '', false);
-    wp_enqueue_script( 'plugin-addCodeTv', TV_PLUG_PATH.'views/js/addOrDeleteTvCode.js', array ( 'jquery' ), '', false);
+    wp_enqueue_script( 'plugin-addCodeTv', TV_PLUG_PATH.'views/js/addOrDeleteTvCode.js', array ( 'jquery' ), '', true);
     wp_enqueue_script( 'plugin-checkCaptcha', TV_PLUG_PATH.'views/js/checkCaptcha.js', array ( 'jquery' ), '', false);
     wp_enqueue_script( 'plugin-addCodeAlert', TV_PLUG_PATH.'views/js/addOrDeleteAlertCode.js', array ( 'jquery' ), '', false);
     wp_enqueue_script( 'plugin-marquee', TV_PLUG_PATH.'views/js/jquery.marquee.js', array ( 'jquery' ), '', false);

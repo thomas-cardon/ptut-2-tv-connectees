@@ -6,7 +6,7 @@ let count = 0;
 function addButtonTv() {
     count = count + 1;
     $.ajax({
-        url: '/wp-content/plugins/TeleConnecteeAmu/views/js/utils/allCodes.php',
+        url: '/wp-content/plugins/plugin-ecran-connecte/views/js/utils/allCodes.php',
     }).done(function(data) {
         let div = $('<div >', {
             class:'row'

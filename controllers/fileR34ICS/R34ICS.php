@@ -73,8 +73,8 @@ class R34ICS extends ControllerG {
 
     /**
      * Lit un fichier ICS et l'affiche
-     * @param $ics_url  url du fichier ICS
-     * @param $code     Code ADE relié à l'url
+     * @param $ics_url      string url du fichier ICS
+     * @param $code         int Code ADE relié à l'url
      * @param array $args   Array d'option
      */
     public function display_calendar($ics_url, $code, $args=array()) {

@@ -11,12 +11,12 @@
 
 .trente {
     float: left;
-    width: 30%;
+    width: 35%;
 }
 
 .sept {
     float: left;
-    width: 70%;
+    width: 65%;
 }
 
 input[type="submit"]:disabled {
