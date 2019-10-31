@@ -17,7 +17,7 @@ class ViewICS extends ViewG {
         $string .= '<h1>'.$title.'</h1>';
         // Empty calendar message
         if (empty($ics_data['events'])){
-            return '<p>Vous n\'avez pas cours !</p>';
+            return $string.'<p>Vous n\'avez pas cours !</p>';
         } else {
             $i = 0;
             $study = 0;
