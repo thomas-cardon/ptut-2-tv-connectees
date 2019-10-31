@@ -34,7 +34,7 @@ class Secretary extends User {
     }
 
     public function displaySchedules() {
-        $this->view->displayWelcomeAdmin();
+        return $this->view->displayWelcomeAdmin();
     }
 
     /**

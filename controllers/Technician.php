@@ -30,16 +30,18 @@ class Technician extends User implements Schedule {
         $modelCode = new CodeAdeManager();
         $years = $modelCode->getCodeYear();
         $row = 0;
+        $string = "";
         foreach ($years as $year){
             if($row % 2 == 0) {
-                $this->view->displayRow();
+                $string .= $this->view->displayRow();
             }
-            $this->displaySchedule($year['code']);
+            $string .= $this->displaySchedule($year['code']);
             if($row % 2 == 1) {
-                $this->view->displayEndDiv();
+                $string .= $this->view->displayEndDiv();
             }
             $row = $row + 1;
         }
+        return $string;
     }
 
     /**

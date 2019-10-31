@@ -318,7 +318,7 @@ class R34ICS extends ControllerG {
             $current_user = wp_get_current_user();
             $title = $current_user->user_login;
         }
-        $this->view->displaySchedule($ics_data, $title);
+        return $this->view->displaySchedule($ics_data, $title);
     }
 
     public function first_dow($date=null) {

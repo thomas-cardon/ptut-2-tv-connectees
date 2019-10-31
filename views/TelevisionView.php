@@ -193,25 +193,28 @@ class TelevisionView extends UserView {
 
     /**
      * Début du diaporama
+     * @return string
      */
     public function displayStartSlide(){
-        echo '
+        return '
             <div id="slideshow-container" class="slideshow-container">
                 <div class="mySlides">';
     }
     /**
      * Milieu du dipao, on l'utilise une fois par objet à afficher
+     * @return string
      */
     public function displayMidSlide(){
-        echo '
+        return '
                 </div>
               <div class="mySlides">';
     }
     /**
      * Fin du diaporama
+     * @return string
      */
     public function displayEndSlide() {
-        echo '</div>
+        return '</div>
            </div>';
     }
 }

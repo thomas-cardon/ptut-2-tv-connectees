@@ -36,13 +36,13 @@ class Student extends User implements Schedule {
         $current_user = wp_get_current_user();
         $codes = unserialize($current_user->code); // On utilie cette fonction car les codes dans la base de données sont sérialisés
         if(file_exists($this->getFilePath($codes[2]))) {
-            $this->displaySchedule($codes[2]);
+            return $this->displaySchedule($codes[2]);
         } else if(file_exists($this->getFilePath($codes[1]))) {
-            $this->displaySchedule($codes[1]);
+            return $this->displaySchedule($codes[1]);
         } else if($this->displaySchedule($codes[0])) {
-            $this->displaySchedule($codes[0]);
+            return $this->displaySchedule($codes[0]);
         } else {
-            echo "T'as pas cours gros";
+            return "<p>Pas de cours</p>";
         }
     }
 

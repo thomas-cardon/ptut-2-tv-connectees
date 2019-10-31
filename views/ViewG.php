@@ -308,16 +308,18 @@ abstract class ViewG {
 
     /**
      * Ajoute une ligne
+     * @return string
      */
     public function displayRow() {
-        echo '<div class="row">';
+        return '<div class="row">';
     }
 
     /**
      * Ferme une div
+     * @return string
      */
     public function displayEndDiv() {
-        echo '</div>';
+        return '</div>';
     }
 
     /**

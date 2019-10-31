@@ -10,14 +10,14 @@ class ViewICS extends ViewG {
      */
     public function displaySchedule($ics_data, $title){
         $current_user = wp_get_current_user();
+        $string = "";
         if( in_array("technicien", $current_user->roles)){
-            echo '<div class="col-sm-6">';
+            $string .= '<div class="col-sm-6">';
         }
-        echo '<h1>'.$title.'</h1>';
+        $string .= '<h1>'.$title.'</h1>';
         // Empty calendar message
         if (empty($ics_data['events'])){
-            echo 'Vous n\'avez pas cours !';
-            return false;
+            return '<p>Vous n\'avez pas cours !</p>';
         } else {
             $i = 0;
             $study = 0;
@@ -39,11 +39,11 @@ class ViewICS extends ViewG {
                                         if(($nboccurence == 0 || $nbevents == 20)){
                                             if($nbevents == 20){
                                                 $nbevents = 0;
-                                                echo'</tbody>
+                                                $string .='</tbody>
                                            </table>
                                            </div>';
                                             }
-                                            echo'
+                                            $string .='
                                             <div class="table-responsive">
                                                 <table class="table tabSchedule">
                                                     <thead class="headerTab">
@@ -55,10 +55,10 @@ class ViewICS extends ViewG {
                                                 //width="35%"
                                                 //width="25%"
                                                 //width="20%"
-                                                echo '<th scope="col" class="text-light text-center" >Cours</th>
+                                                $string .= '<th scope="col" class="text-light text-center" >Cours</th>
                                                 <th scope="col" class="text-light text-center">Groupe/Enseignant</th>';
                                             }
-                                            echo '
+                                            $string .= '
                                                 <th scope="col" class="text-light text-center">Salle</th>
                                             </tr>
                                             </thead>
@@ -72,39 +72,39 @@ class ViewICS extends ViewG {
                                             //Si le cours est en vigueur
                                             if(date("H:i",strtotime($event['deb'])) <= $heure && $heure < date("H:i",strtotime($event['fin']))){
                                                 ++$nbevents;
-                                                echo '<tr class="table-success" scope="row">';
+                                                $string .= '<tr class="table-success" scope="row">';
                                             }
                                             else if(date("H:i",strtotime($event['deb'])) > $heure) {
                                                 ++$nbevents;
-                                                echo '<tr scope="row">';
+                                                $string .= '<tr scope="row">';
                                             }
                                             if ($time == 'all-day') {
                                                 if (!$all_day_indicator_shown) {
-                                                    echo '<td class="all-day-indicator">'; _e('All Day', 'R34ICS'); echo'</td>';
+                                                    $string .= '<td class="all-day-indicator">'; _e('All Day', 'R34ICS'); $string .='</td>';
                                                     $all_day_indicator_shown = true;
                                                 }
-                                                echo '<td class="event">
-                                            <span class="title">';  echo str_replace('/', '/<wbr />',$event['label']).'</span>';
+                                                $string .= '<td class="event">
+                                            <span class="title">';  $string .= str_replace('/', '/<wbr />',$event['label']).'</span>';
                                                 if (!empty($event['sublabel'])) {
-                                                    echo '<span class="sublabel">'; echo str_replace('/()', '/<wbr />',$event['sublabel']).'</span>';
+                                                    $string .= '<span class="sublabel">'; $string .= str_replace('/()', '/<wbr />',$event['sublabel']).'</span>';
                                                 }
-                                                echo '</td>';
+                                                $string .= '</td>';
                                             }
                                             else {
                                                 if (!empty($event['start'])) {
                                                     //width="20%"
-                                                    echo '<td class="text-center">';
+                                                    $string .= '<td class="text-center">';
                                                     $deb = date("H:i",strtotime($event['deb']));
                                                     $newDeb = str_replace(':','h',$deb);
-                                                    echo $newDeb.' ';
+                                                    $string .= $newDeb.' ';
                                                     if (!empty($event['end'])) {
-                                                        echo '<span class="time">&#8211;'; $fin = date("H:i",strtotime($event['fin']));
+                                                        $string .= '<span class="time">&#8211;'; $fin = date("H:i",strtotime($event['fin']));
                                                         $newFin = str_replace(':','h',$fin);
-                                                        echo ' '.$newFin.'</span>';
-                                                        echo '<!--'. date("d"). '-->';
-                                                        echo '<!--'. date("d",strtotime($event['fin'])).' -->';
+                                                        $string .= ' '.$newFin.'</span>';
+                                                        $string .= '<!--'. date("d"). '-->';
+                                                        $string .= '<!--'. date("d",strtotime($event['fin'])).' -->';
                                                     }
-                                                    echo '</td>';
+                                                    $string .= '</td>';
                                                 }
                                                 if(! in_array("technicien", $current_user->roles)) {
                                                     $oldEvent = $event['label'];
@@ -113,32 +113,32 @@ class ViewICS extends ViewG {
                                                         $oldEvent = substr($oldEvent,0, -3);
                                                     }
                                                     //width="35%"
-                                                    echo '<td class="text-center">
-                                                    <span class="title">'; echo str_replace('/', '/<wbr />',$oldEvent).'</span>';
+                                                    $string .= '<td class="text-center">
+                                                    <span class="title">'; $string .= str_replace('/', '/<wbr />',$oldEvent).'</span>';
 
                                                     if (!empty($event['sublabel'])) {
-                                                        echo '<span class="sublabel">';
+                                                        $string .= '<span class="sublabel">';
                                                         if (empty($event['start']) && !empty($event['end'])) {
-                                                            echo '<span class="carryover">&#10554;</span>';
+                                                            $string .= '<span class="carryover">&#10554;</span>';
                                                         }
-                                                        echo str_replace('/', '/<wbr />',$event['sublabel']).'</span>';
+                                                        $string .= str_replace('/', '/<wbr />',$event['sublabel']).'</span>';
                                                     }
                                                     //width="25%"
-                                                    echo '</td>
+                                                    $string .= '</td>
                                                 <td class="text-center">
                                                         <span class="sublabel">'; $des = $event['description'];
                                                     $des = substr($des,0,-29);
-                                                    echo $des.'</span>
+                                                    $string .= $des.'</span>
                                                 </td >';
                                                 }
 
                                                 //width="20%"
-                                                echo '
+                                                $string .= '
                                         <td class="text-center">
-                                            <span>'; echo str_replace('/', '/<wbr />',$event['location']).'</span>
+                                            <span>'; $string .= str_replace('/', '/<wbr />',$event['location']).'</span>
                                         </td>';
                                             }
-                                            echo '</tr>';
+                                            $string .= '</tr>';
                                         }
                                         if ($nbevents == 8){
                                             break(2);
@@ -146,20 +146,21 @@ class ViewICS extends ViewG {
                                     }
                                 }
                             }
-                            echo '</tbody>
+                            $string .= '</tbody>
                         </table>
                         </div>';
                             break(3);
                         }
-                        echo '</div>';
+                        $string .= '</div>';
                     }
                 }
             } if($study == 0) {
-                echo '<p> Vous n\'avez pas cours !</p>';
+                $string .= '<p> Vous n\'avez pas cours !</p>';
             }
         }
         if( in_array("technicien", $current_user->roles)){
-            echo '</div>';
+            $string .= '</div>';
         }
+        return $string;
     }
 }

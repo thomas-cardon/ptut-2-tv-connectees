@@ -211,6 +211,6 @@ class UserView extends ViewG {
      * Message indiquant de choisir un emploi du temps
      */
     public function displaySelectSchedule() {
-        echo '<p>Veuillez choisir un emploi du temps.</p>';
+        return '<p>Veuillez choisir un emploi du temps.</p>';
     }
 }

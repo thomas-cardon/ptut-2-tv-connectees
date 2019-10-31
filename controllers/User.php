@@ -202,7 +202,7 @@ class User extends ControllerG {
             'title' => null,
             'view' => 'list',
         );
-        $R34ICS->display_calendar($url, $code, $args);
+        return $R34ICS->display_calendar($url, $code, $args);
     }
 
     /**
