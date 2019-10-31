@@ -20,9 +20,9 @@ class SecretaryView extends UserView {
      */
     public function displayWelcomeAdmin(){
         echo '<h1>Écran connecté</h1>
-                <form method="post" id="dlAllEDT">
-                    <input type="submit" name="dlEDT" value="Retélécharger les emplois du temps">
-                </form>';
+              <form method="post" id="dlAllEDT">
+                <input type="submit" name="dlEDT" value="Retélécharger les emplois du temps">
+              </form>';
     }
 
     /**

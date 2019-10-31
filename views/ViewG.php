@@ -20,8 +20,8 @@ abstract class ViewG {
     protected function displayHeaderTab($name, $title = null){
         $name = "'$name'";
         return '
-            <h2>'.$title.'</h2>
             <form method="post">
+                <h2>'.$title.'</h2>
                 <div class="table-responsive">
                 <table class="table text-center"> 
                 <thead>
@@ -37,15 +37,15 @@ abstract class ViewG {
      */
     protected function displayStartTabLog($name, $title){
         return $this->displayHeaderTab($name, $title).
-        '<th scope="col">Login</th>
+        '               <th scope="col">Login</th>
                     </tr>
                 </thead>
-                <tbody>';
+             <tbody>';
     }
 
     /**
      * Affiche l'en-tête avec les noms de colonnes
-     * @param $tab          Noms des colonnes
+     * @param $tab          array Noms des colonnes
      * @param null $title   Titre du tableau
      * @return string       Renvoie l'en-tête
      */
@@ -64,19 +64,19 @@ abstract class ViewG {
      */
     protected function displayEndheaderTab(){
         return'
-                <th scope="col" class="text-center">Modifer</th>
+                         <th scope="col" class="text-center">Modifer</th>
                      </tr>
                 </thead>
-                <tbody>
+             <tbody>
         ';
     }
 
 
     /**
      * Affiche le contenu d'une ligne du tableau
-     * @param $row      Numéro de ligne du tableau
-     * @param $id       ID de l'objet mis dans le tableau, permet de pouvoir supprimer la ligne via des checkbox
-     * @param $tab      Valeur à mettre par colonne
+     * @param $row      int Numéro de ligne du tableau
+     * @param $id       int ID de l'objet mis dans le tableau, permet de pouvoir supprimer la ligne via des checkbox
+     * @param $tab      array Valeur à mettre par colonne
      * @return string   Renvoie la ligne
      */
     protected function displayAll($row, $name, $id, $tab){
@@ -99,10 +99,10 @@ abstract class ViewG {
      */
     public function displayEndTab(){
         return '
-          </tbody>
-        </table>
-        </div>
-        <input type="submit" value="Supprimer" name="Delete" onclick="return confirm(\' Voulez-vous supprimer le(s) élément(s) sélectionné(s) ?\');"/>
+                        </tbody>
+                    </table>
+                </div>
+            <input type="submit" value="Supprimer" name="Delete" onclick="return confirm(\' Voulez-vous supprimer le(s) élément(s) sélectionné(s) ?\');"/>
         </form>';
     }
 
@@ -117,7 +117,8 @@ abstract class ViewG {
     }
 
     public function displayEndOfTitle() {
-        return '</div>
+        return '
+            </div>
         </nav>
         <br/>
         <div class="tab-content" id="nav-tabContent">';
@@ -238,14 +239,14 @@ abstract class ViewG {
     }
 
     public function displayTest() {
-        echo '<div class="alert alert-danger"> Cette fonctionnalitée est en test ! </div>';
+        echo '<p class="alert alert-danger"> Cette fonctionnalitée est en test ! </p>';
     }
 
     /**
      * Prévient s'il n'y a pas d'utilisateur du rôle demandé inscrit
      */
     public function displayEmpty() {
-        return "<div> Il n'y pas d'utilisateur de ce rôle inscrit!</div>";
+        return "<p> Il n'y pas d'utilisateur de ce rôle inscrit!</p>";
     }
 
     /**
@@ -255,7 +256,7 @@ abstract class ViewG {
     public function displayErrorDouble($doubles){
         $this->displayStartModal('Erreur durant l\'incription ');
         foreach ($doubles as $double) {
-            echo "<div class='alert alert-danger'>$double a rencontré un problème lors de l'enregistrement, vérifié son login et son email ! </div>";
+            echo "<p class='alert alert-danger'>$double a rencontré un problème lors de l'enregistrement, vérifié son login et son email ! </p>";
         }
         $this->displayEndModal();
     }
@@ -292,7 +293,7 @@ abstract class ViewG {
      */
     public function displayModificationValidate($redirect = null) {
         $this->displayStartModal('Modification réussie');
-        echo '<div class="alert alert-success"> La modification a été appliquée </div>';
+        echo '<p class="alert alert-success"> La modification a été appliquée </p>';
         $this->displayEndModal($redirect);
     }
 
@@ -301,7 +302,7 @@ abstract class ViewG {
      */
     public function displayErrorInsertion() {
         $this->displayStartModal('Erreur lors de l\'inscription ');
-        echo '<div class="alert alert-danger"> Le login ou l\'adresse mail est déjà utilisé(e) </div>';
+        echo '<p class="alert alert-danger"> Le login ou l\'adresse mail est déjà utilisé(e) </p>';
         $this->displayEndModal();
     }
 
@@ -324,7 +325,7 @@ abstract class ViewG {
      */
     public function displayBadPassword() {
         $this->displayStartModal("Mauvais mot de passe");
-        echo "<div class='alert alert-danger'>Les deux mots de passe ne sont pas correctes </div>";
+        echo "<p class='alert alert-danger'>Les deux mots de passe ne sont pas correctes </p>";
         $this->displayEndModal();
     }
 }

@@ -15,8 +15,6 @@ class ViewCodeAde extends ViewG
      */
     public function displayFormAddCode(){
         return '
-         <div class="cadre">
-             <div align="center">
                 <form method="post">
                     <label for="titleAde">Titre</label>
                     <input type="text" class="form-control text-center modal-sm" name="titleAde" placeholder="Titre" required="">
@@ -30,9 +28,7 @@ class ViewCodeAde extends ViewG
                     <input type="radio" name="typeCode" id="Demi-groupe" value="Demi-groupe">
                     <br/>
                   <button type="submit" name="addCode" value="Valider">Ajouter</button>
-                </form>
-            </div>
-         </div>';
+                </form>';
     }
 
     /**
@@ -46,8 +42,8 @@ class ViewCodeAde extends ViewG
 
     /**
      * Affiche toutes les données d'un code
-     * @param $result   Données du code ADE
-     * @param $row      Numéro de la ligne
+     * @param $result   array Données du code ADE
+     * @param $row      int Numéro de la ligne
      * @return string   Renvoie la ligne de tableau
      */
     public function displayAllCode($result, $row){
@@ -60,14 +56,13 @@ class ViewCodeAde extends ViewG
 
     /**
      * Affiche le formulaire de modification de code ADE
-     * @param $result   Données du code ADE non modifié
+     * @param $result   array Données du code ADE non modifié
      * @return string   Renvoie le formulaire
      */
     public function displayModifyCode($result){
         $page = get_page_by_title( 'Gestion des codes ADE');
         $linkManageCode = get_permalink($page->ID);
         return '
-        <div class="cadre">
          <form method="post">
             <label>Titre</label>
             <input name="modifTitle" type="text" class="form-control" placeholder="Titre" value="'.$result[0]['title'].'">
@@ -84,8 +79,7 @@ class ViewCodeAde extends ViewG
             </div>
             <input name="modifCodeValid" type="submit" value="Valider">
             <a href="'.$linkManageCode.'">Annuler</a>
-         </form>
-         </div>';
+         </form>';
     }
 
     /**

@@ -10,9 +10,9 @@ class TelevisionView extends UserView {
 
     /**
      * Affiche un select permettant de choisir une année un groupe ou un demi-groupe déjà enregistré
-     * @param $years        Années enregistrées dans la base de données
-     * @param $groups       Groupes enregistrés dans la base de données
-     * @param $halfgroups   Demi-groupes enregistrés dans la base de données
+     * @param $years        array Années enregistrées dans la base de données
+     * @param $groups       array Groupes enregistrés dans la base de données
+     * @param $halfgroups   array Demi-groupes enregistrés dans la base de données
      * @return string       Renvoie le select
      */
     public function displaySelect($years, $groups, $halfgroups){
@@ -51,15 +51,15 @@ class TelevisionView extends UserView {
     /**
      * Affiche un formulaire pour ajouter un compte télévision
      * On peut y ajouter autant d'emploi du temps que l'on souhaite
-     * @param $years        Années enregistrées dans la base de données
-     * @param $groups       Groupes enregistrés dans la base de données
-     * @param $halfgroups   Demi-groupes enregistrés dans la base de données
+     * @param $years        array Années enregistrées dans la base de données
+     * @param $groups       array Groupes enregistrés dans la base de données
+     * @param $halfgroups   array Demi-groupes enregistrés dans la base de données
      * @return string   Renvoie le formulaire
      */
     public function displayFormTelevision($years, $groups, $halfgroups) {
         return '
-        <h2> Compte télévision</h2>
         <form method="post" id="registerTvForm">
+            <h2> Compte télévision</h2>
             <label for="loginTv">Login</label>
             <input type="text" class="form-control text-center modal-sm" name="loginTv" placeholder="Nom de compte" required="">
             <label for="pwdTv">Mot de passe</label>
@@ -85,10 +85,10 @@ class TelevisionView extends UserView {
 
     /**
      * Affiche une ligne dans un tableau contenant le nombre d'emploi du temps affichés par la télévision
-     * @param $id       ID de la télévision
-     * @param $login    Login de la télévision
-     * @param $nbCode   Nombre d'emploi du temps dans la télévision
-     * @param $row      Numéro de ligne
+     * @param $id       int ID de la télévision
+     * @param $login    string Login de la télévision
+     * @param $nbCode   int Nombre d'emploi du temps dans la télévision
+     * @param $row      int Numéro de ligne
      * @return string   Renvoie la ligne
      */
     public function displayAllTv($id, $login,  $nbCode, $row){
@@ -96,7 +96,7 @@ class TelevisionView extends UserView {
         $linkModifyUser = get_permalink($page->ID);
         $tab = [$login, $nbCode];
         return $this->displayAll($row, 'tele', $id, $tab).
-        '<td class="text-center"> <a href="'.$linkModifyUser.$id.'" name="modif" type="submit" value="Modifier">Modifier</a></td>
+            '<td class="text-center"> <a href="'.$linkModifyUser.$id.'" name="modif" type="submit" value="Modifier">Modifier</a></td>
         </tr>';
     }
 
@@ -211,8 +211,7 @@ class TelevisionView extends UserView {
      * Fin du diaporama
      */
     public function displayEndSlide() {
-        echo '          
-                       </div>
-                   </div>';
+        echo '</div>
+           </div>';
     }
 }

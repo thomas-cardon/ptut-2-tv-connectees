@@ -80,7 +80,7 @@ abstract class ControllerG {
             $url = $this->getUrl($code);
             //file_put_contents($path, fopen($url, 'r'));
             $contents = '';
-            if($handler = fopen($url, "r")) {
+            if(($handler = @fopen($url, "r")) !== FALSE){
                     while(!feof($handler)) {
                         $contents .= fread($handler, 8192);
                     }

@@ -16,14 +16,13 @@ class InformationView extends ViewG
 
 
 
-    public function displayAllInformation($id, $title, $author, $content, $type, $creationDate, $endDate, $row)
-    {
+    public function displayAllInformation($id, $title, $author, $content, $type, $creationDate, $endDate, $row) {
         $page = get_page_by_title( 'Modification information');
         $linkModifyInfo = get_permalink($page->ID);
         $tab = [$title, $author, $content, $creationDate, $endDate];
         $string = $this->displayAll($row, 'info',$id, $tab);
         if($type == 'tab'){
-            $source = $_SERVER['DOCUMENT_ROOT'].TV_PLUG_PATH."views/media/".$content;
+            $source = $_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH.$content;
             if(! file_exists($source)) {
                 $string .= '<td class="text-center red"> Le ficier n\'exite pas';
             } else {
@@ -63,26 +62,32 @@ class InformationView extends ViewG
         $current_user = wp_get_current_user();
         $cpt = 0;
 
+        if(in_array("pdf", $types)) {
+            $myclass = "info_pdf";
+        } else if (in_array("img", $types)) {
+            $myclass = "info_img";
+        } else {
+            $myclass = "info_txt";
+        }
+
         echo '<li id="information_carousel"'; if(in_array("television", $current_user->roles)) echo 'class="tv"'; echo '>';
         echo '<section id="demo" class="carousel slide" data-ride="carousel" data-interval="10000">
-                <!--The slides -->
-                    <article class="carousel-inner">';
-                    for($i=0; $i < sizeof($title); ++$i) {
-                        $var = ($cpt == 0) ? ' active">' : '">';
-                        echo '<div class="carousel-item' . $var.'
-                                <h2 class="titleInfo">'.$title[$i].' </h2>';
-                                if($types[$i] == 'pdf') {
-                                    echo do_shortcode($content[$i]);
-                                } else {
-                                    echo '<p class="content_info">'.$content[$i].'</p>';
-                                }
-                                echo '</div>';
-                                    $cpt++;
-                                }
-                        echo'   </div>
-                            </article>
-                        </section>
-                        </li>';
+                <article class="carousel-inner">';
+                for($i=0; $i < sizeof($title); ++$i) {
+                    $var = ($cpt == 0) ? ' active">' : '">';
+                    echo '<div class="carousel-item' . $var.'
+                            <h2 class="titleInfo">'.$title[$i].'</h2>';
+                            if($types[$i] == 'pdf') {
+                                echo do_shortcode($content[$i]);
+                            } else {
+                                echo '<p class="content_info '.$myclass.'">'.$content[$i].'</p>';
+                            }
+                    echo '</div>';
+                    $cpt++;
+                }
+        echo'    </article>
+               </section>
+             </li>';
     } //displayInformationView()
 
     public function displayFormText() {
@@ -90,8 +95,8 @@ class InformationView extends ViewG
         $linkManageInfo = get_permalink($page->ID);
         $dateMin = date('Y-m-d', strtotime("+1 day"));
         return '
-        <h2>Créer une information avec du texte</h2>
             <form class="cadre" method="post">
+                <h2>Information avec du texte</h2>
                 <label for="titleInfo">Titre</label>
                 <input id="titleInfo" type="text" name="titleInfo" placeholder="Inserer un titre" required maxlength="20">
                 <label for="endDateInfo">Date d\'expiration</label>
@@ -107,8 +112,8 @@ class InformationView extends ViewG
         $linkManageInfo = get_permalink($page->ID);
         $dateMin = date('Y-m-d', strtotime("+1 day"));
         return '
-            <h2>Créer une information avec une image</h2>
                     <form class="cadre" method="post" enctype="multipart/form-data">
+                        <h2>Information avec une image</h2>
                         <label for="titleInfo">Titre</label>
                         <input id="titleInfo" type="text" name="titleInfo" placeholder="Inserer un titre" required maxlength="20">
                         <label for="endDateInfo">Date d\'expiration</label>
@@ -125,8 +130,8 @@ class InformationView extends ViewG
         $linkManageInfo = get_permalink($page->ID);
         $dateMin = date('Y-m-d', strtotime("+1 day"));
         return '
-            <h2>Créer une information avec un tableau</h2>
             <form class="cadre" method="post" enctype="multipart/form-data">
+                <h2>Information avec un tableau</h2>
                 <label for="titleInfo">Titre</label>
                 <input id="titleInfo" type="text" name="titleInfo" placeholder="Inserer un titre" required maxlength="20">
                 <label for="endDateInfo">Date d\'expiration</label>
@@ -147,8 +152,8 @@ class InformationView extends ViewG
     public function displayFormPDF() {
         $dateMin = date('Y-m-d', strtotime("+1 day"));
         return '
-            <h2>Créer une information avec un pdf</h2>
             <form class="cadre" method="post" enctype="multipart/form-data">
+                <h2>Information avec un pdf</h2>
                 <label for="titleInfo">Titre</label>
                 <input id="titleInfo" type="text" name="titleInfo" placeholder="Inserer un titre" required maxlength="20">
                 <label>Date d\'expiration</label>

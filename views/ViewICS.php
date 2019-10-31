@@ -1,12 +1,11 @@
 <?php
 
 
-class ViewICS extends ViewG
-{
+class ViewICS extends ViewG {
     /**
      * Affiche l'emploi du temps d'un fichier ICS
-     * @param $ics_data     Toutes les données du fichier ICS
-     * @param $title        Titre de l'emploi du temps
+     * @param $ics_data     array Toutes les données du fichier ICS
+     * @param $title        string Titre de l'emploi du temps
      * @return bool         Renvoie vrai s'il y a des données
      */
     public function displaySchedule($ics_data, $title){
@@ -49,13 +48,18 @@ class ViewICS extends ViewG
                                                 <table class="table tabSchedule">
                                                     <thead class="headerTab">
                                                         <tr>
-                                                            <th scope="col" class="text-light text-center" width="20%">Horaire</th>';
+                                                            <th scope="col" class="text-light text-center">Horaire</th>';
                                             if(! in_array("technicien", $current_user->roles)){
-                                                echo '<th scope="col" class="text-light text-center" width="35%">Cours</th>
-                                                <th scope="col" class="text-light text-center" width="25%">Groupe/Enseignant</th>';
+                                                //Ancienne val
+                                                //width="20%"
+                                                //width="35%"
+                                                //width="25%"
+                                                //width="20%"
+                                                echo '<th scope="col" class="text-light text-center" >Cours</th>
+                                                <th scope="col" class="text-light text-center">Groupe/Enseignant</th>';
                                             }
                                             echo '
-                                                <th scope="col" class="text-light text-center" width="20%">Salle</th>
+                                                <th scope="col" class="text-light text-center">Salle</th>
                                             </tr>
                                             </thead>
                                             <tbody>';
@@ -88,7 +92,8 @@ class ViewICS extends ViewG
                                             }
                                             else {
                                                 if (!empty($event['start'])) {
-                                                    echo '<td class="text-center" width="20%">';
+                                                    //width="20%"
+                                                    echo '<td class="text-center">';
                                                     $deb = date("H:i",strtotime($event['deb']));
                                                     $newDeb = str_replace(':','h',$deb);
                                                     echo $newDeb.' ';
@@ -107,7 +112,8 @@ class ViewICS extends ViewG
                                                     if($subEvent == "alt"){
                                                         $oldEvent = substr($oldEvent,0, -3);
                                                     }
-                                                    echo '<td class="text-center" width="35%">
+                                                    //width="35%"
+                                                    echo '<td class="text-center">
                                                     <span class="title">'; echo str_replace('/', '/<wbr />',$oldEvent).'</span>';
 
                                                     if (!empty($event['sublabel'])) {
@@ -117,16 +123,18 @@ class ViewICS extends ViewG
                                                         }
                                                         echo str_replace('/', '/<wbr />',$event['sublabel']).'</span>';
                                                     }
+                                                    //width="25%"
                                                     echo '</td>
-                                                <td class="text-center" width="25%">
+                                                <td class="text-center">
                                                         <span class="sublabel">'; $des = $event['description'];
                                                     $des = substr($des,0,-29);
                                                     echo $des.'</span>
                                                 </td >';
                                                 }
 
+                                                //width="20%"
                                                 echo '
-                                        <td class="text-center" width="20%">
+                                        <td class="text-center">
                                             <span>'; echo str_replace('/', '/<wbr />',$event['location']).'</span>
                                         </td>';
                                             }

@@ -210,7 +210,7 @@ class User extends ControllerG {
      */
     function displayYearSchedule(){
         $code = $this->getMyIdUrl(); // On récupère l'ID qui sert de code ADE
-        if($code == 'emploi-du-temps') {
+        if(! is_numeric($code)) {
             return $this->view->displaySelectSchedule();
         } else {
             $path = $this->getFilePath($code);

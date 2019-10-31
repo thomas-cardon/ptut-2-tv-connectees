@@ -10,8 +10,8 @@ class AlertView extends ViewG {
 
     public function displaySelect($years, $groups, $halfgroups){
         $string = '<option value="0">Aucun</option>
-              <option value="all">Tous</option>
-                        <optgroup label="Année">';
+                   <option value="all">Tous</option>
+                   <optgroup label="Année">';
         if(is_array($years)) {
             foreach ($years as $year) {
 
@@ -22,7 +22,7 @@ class AlertView extends ViewG {
         }
 
         $string .= '</optgroup>
-                          <optgroup label="Groupe">';
+                    <optgroup label="Groupe">';
         if(is_array($groups)) {
             foreach ($groups as $group){
                 $string .= '<option value="'.$group['code'].'">'.$group['title'].'</option>';
@@ -32,7 +32,7 @@ class AlertView extends ViewG {
         }
 
         $string .= '</optgroup>
-                          <optgroup label="Demi groupe">';
+                    <optgroup label="Demi groupe">';
         if(is_array($halfgroups)) {
             foreach ($halfgroups as $halfgroup){
                 $string .= '<option value="'.$halfgroup['code'].'">'.$halfgroup['title'].'</option>';
@@ -49,37 +49,38 @@ class AlertView extends ViewG {
     public function displaySelectModif($years, $groups, $halfgroups, $name){
         $selected = $name;
         $string = '<option value="0">Aucun</option>
-              <option value="all"';if('all' == $selected) $string .= "selected";  $string .= '> Tous</option>  
-                        <optgroup label="Année">';
-              if(is_array($years)){
-                  foreach ($years as $year) {
-                      $string .= '<option value="'.$year['code'].'" '; if($year['code'] == $selected) $string .= "selected"; $string .='>'.$year['title'].'</option >';
-                  }
-              } else {
-                  $string .= '<option value="'.$years['code'].'" '; if($years['code'] == $selected) $string .= "selected"; $string .='>'.$years['title'].'</option >';
-              }
+                   <option value="all"';if('all' == $selected) $string .= "selected";  $string .= '> Tous</option>  
+                   <optgroup label="Année">';
+
+        if(is_array($years)){
+            foreach ($years as $year) {
+                $string .= '<option value="'.$year['code'].'" '; if($year['code'] == $selected) $string .= "selected"; $string .='>'.$year['title'].'</option >';
+            }
+        } else {
+            $string .= '<option value="'.$years['code'].'" '; if($years['code'] == $selected) $string .= "selected"; $string .='>'.$years['title'].'</option >';
+        }
 
         $string .= '</optgroup>
-                          <optgroup label="Groupe">';
+                    <optgroup label="Groupe">';
 
-              if(is_array($groups)) {
-                  foreach ($groups as $group){
-                      $string .= '<option value="'.$group['code'].'"'; if($group['code'] == $selected) $string .= "selected"; $string .='>'.$group['title'].'</option>';
-                  }
-              } else {
-                  $string .= '<option value="'.$groups['code'].'"'; if($groups['code'] == $selected) $string .= "selected"; $string .='>'.$groups['title'].'</option>';
-              }
+        if(is_array($groups)) {
+            foreach ($groups as $group){
+                $string .= '<option value="'.$group['code'].'"'; if($group['code'] == $selected) $string .= "selected"; $string .='>'.$group['title'].'</option>';
+            }
+        } else {
+            $string .= '<option value="'.$groups['code'].'"'; if($groups['code'] == $selected) $string .= "selected"; $string .='>'.$groups['title'].'</option>';
+        }
 
         $string .= '</optgroup>
                           <optgroup label="Demi groupe">';
 
-              if(is_array($halfgroups)) {
-                  foreach ($halfgroups as $halfgroup){
-                      $string .= '<option value="'.$halfgroup['code'].'" '; if($halfgroup['code'] == $selected) $string .= "selected"; $string .='>'.$halfgroup['title'].'</option>';
-                  }
-              } else {
-                  $string .= '<option value="'.$halfgroups['code'].'" '; if($halfgroups['code'] == $selected) $string .= "selected"; $string .='>'.$halfgroups['title'].'</option>';
-              }
+        if(is_array($halfgroups)) {
+            foreach ($halfgroups as $halfgroup){
+                $string .= '<option value="'.$halfgroup['code'].'" '; if($halfgroup['code'] == $selected) $string .= "selected"; $string .='>'.$halfgroup['title'].'</option>';
+            }
+        } else {
+            $string .= '<option value="'.$halfgroups['code'].'" '; if($halfgroups['code'] == $selected) $string .= "selected"; $string .='>'.$halfgroups['title'].'</option>';
+        }
 
         $string .= '</optgroup>
         </select>';
@@ -93,20 +94,17 @@ class AlertView extends ViewG {
         $dateMin = date('Y-m-d',strtotime("+1 day")); //date minimum pour la date d'expiration
 
         return '
-        <div class="cadre">
             <form id="creationAlert" method="post">
-                   Contenu : <input type="text" name="content" required maxlength="280"> <br>
-                   Date d\'expiration : <input type="date" name="endDateAlert" min="'.$dateMin.'" required > </br> </br>
-                   
-                   Année, groupe, demi-groupes concernés : </br>
-                    <select class="form-control firstSelect" name="selectAlert[]" required="">'.
-                        $this->displaySelect($years, $groups, $halfgroups).
-        '
+                <label for="content">Contenu</label>
+                <input id="content" type="text" name="content" required maxlength="280">
+                <label for="endDateAlert">Date d\'expiration</label>
+                <input id="endDateAlert" type="date" name="endDateAlert" min="'.$dateMin.'" required >
+                <label for="selectAlert">Année, groupe, demi-groupes concernés</label>
+                <select id="selectAlert" class="form-control firstSelect" name="selectAlert[]" required="">
+                    '.$this->displaySelect($years, $groups, $halfgroups).'
                 <input type="button" onclick="addButtonAlert()" value="+">
-                    <input type="submit" value="Publier" name="createAlert">
-            </form>
-        </div> 
-        ';
+                <input type="submit" value="Publier" name="createAlert">
+            </form>';
     } //displayCreationForm();
 
     /**
@@ -148,35 +146,35 @@ class AlertView extends ViewG {
 
         $count = 0;
         $string = '
-                <div class="cadre">
                     <form id="modify_alert" method="post">
-                      Contenu : <input type="text" name="contentInfo" value="'.$content.'" maxlength="280"> </br>
-                      Date d\'expiration : <input type="date" name="endDateInfo" min="' . $dateMin . '" value = "' . $endDate . '" required > </br>';
+                        <label for="contentInfo">Contenu</label>
+                        <input id="contentInfo" type="text" name="contentInfo" value="'.$content.'" maxlength="280">
+                        <label for="endDateInfo">Date d\'expiration</label>
+                        <input id="endDateInfo" type="date" name="endDateInfo" min="' . $dateMin . '" value = "' . $endDate . '" required >';
         if(is_array($codes)){
             foreach ($codes as $code) {
                 $count = $count + 1;
                 if($count == 1){
                     $string .= '<select class="form-control firstSelect" name="selectAlert[]" id="selectId'.$count.'">'.
-                        $this->displaySelectModif($years, $groups, $halfgroups, $code).
-                        '<br/>';
+                                    $this->displaySelectModif($years, $groups, $halfgroups, $code);
                 } else {
-                    $string .= '<div class="row">
-                <select class="form-control select" name="selectAlert[]" id="selectId'.$count.'">'.
-                        $this->displaySelectModif($years, $groups, $halfgroups, $code)
-                        .'<input type="button" id="selectId'.$count.'" onclick="deleteRowAlert(this.id)" class="selectbtn" value="Supprimer"></div>';
+                    $string .= '
+                        <div class="row">
+                            <select class="form-control select" name="selectAlert[]" id="selectId'.$count.'">'.
+                            $this->displaySelectModif($years, $groups, $halfgroups, $code)
+                            .'<input type="button" id="selectId'.$count.'" onclick="deleteRowAlert(this.id)" class="selectbtn" value="Supprimer">
+                        </div>';
                 }
             }
         } else {
             $string .= '<select class="form-control firstSelect" name="selectAlert[]" id="selectId'.$count.'">'.
-                $this->displaySelectModif($years, $groups, $halfgroups, $codes).
-                '<br/>';
+                            $this->displaySelectModif($years, $groups, $halfgroups, $codes);
         }
 
-        $string .= '    <input type="button" onclick="addButtonAlert()" value="+">    
+        $string .= '<input type="button" onclick="addButtonAlert()" value="+">    
                     <input type="submit" name="validateChange" value="Valider" ">
                     <a href="'.$linkManageAlert.'">Annuler</a>
-                 </form>
-            </div>';
+                 </form>';
 
         return $string;
     } //displayModifyAlertForm()

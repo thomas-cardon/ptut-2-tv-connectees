@@ -27,8 +27,8 @@ class TeacherView extends UserView {
 
     /**
      * Affiche une ligne contenant les données d'un enseignant
-     * @param $result   Données de l'enseignant
-     * @param $row      Numéro de ligne
+     * @param $result   array Données de l'enseignant
+     * @param $row      int Numéro de ligne
      */
     public function displayAllTeachers($result, $row){
         return $this->displayAllTeacher($result, 'teacher', $row);
@@ -36,7 +36,7 @@ class TeacherView extends UserView {
 
     /**
      * Affiche le formulaire pour modifier un enseignant
-     * @param $result   Données de l'enseignant
+     * @param $result   array Données de l'enseignant
      */
     public function displayModifyMyTeacher($result){
         return $this->displayModifyTeacher($result);

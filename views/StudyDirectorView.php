@@ -11,8 +11,8 @@ class StudyDirectorView extends UserView {
      */
     public function displayCreateDirector() {
         return '
-                <h2> Compte directeur d\'études</h2>
                 <form class="cadre" method="post">
+                    <h2> Compte directeur d\'études</h2>
                     <label for="loginDirec">Login</label>
                     <input minlength="4" type="text" class="form-control text-center modal-sm" name="loginDirec" placeholder="Login" required="">
                     <label for="emailDirec">Email</label>
@@ -42,8 +42,8 @@ class StudyDirectorView extends UserView {
 
     /**
      * Affiche une ligne contenant les données d'un directeur d'études
-     * @param $result   Données du directeur d'études
-     * @param $row      Numéro de ligne
+     * @param $result   array Données du directeur d'études
+     * @param $row      int Numéro de ligne
      */
     public function displayAllStudyDirector($result, $row){
         return $this->displayAllTeacher($result, 'direc',$row);
@@ -51,7 +51,7 @@ class StudyDirectorView extends UserView {
 
     /**
      * Affiche le formulaire pour modifier un directeur d'études
-     * @param $result   Données de l'enseignant
+     * @param $result   array Données de l'enseignant
      */
     public function displayModifyStudyDirector($result){
         return $this->displayModifyTeacher($result);

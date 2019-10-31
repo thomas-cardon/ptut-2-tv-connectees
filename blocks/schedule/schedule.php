@@ -25,7 +25,8 @@ function schedule_render_callback() {
 
         if(in_array("administrator", $current_user->roles) || in_array("secretary", $current_user->roles)) {
             $controller = new Secretary();
-            $this->view->displayWelcomeAdmin();
+            $view = new SecretaryView();
+            $view->displayWelcomeAdmin();
         }
     }
 }

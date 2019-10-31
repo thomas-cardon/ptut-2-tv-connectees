@@ -33,12 +33,12 @@ class StudentView extends UserView {
     /**
      * Affiche une ligne contenant les données de l'étudiant
      * Pour les trois codes ADE, on affiche normaelement le titre, mais si ce n'est pas le cas, met le code en rouge
-     * @param $id           ID de l'étudiant
-     * @param $login        Login de l'étudiant
-     * @param $year         Code ADE de son année
-     * @param $group        Code ADE de son groupe
-     * @param $halfgroup    Code ADE de son demi-groupe
-     * @param $row          Numéro de la ligne
+     * @param $id           int ID de l'étudiant
+     * @param $login        string Login de l'étudiant
+     * @param $year         int Code ADE de son année
+     * @param $group        int Code ADE de son groupe
+     * @param $halfgroup    int Code ADE de son demi-groupe
+     * @param $row          int Numéro de la ligne
      * @return string       Renvoie la ligne
      */
     public function displayAllStudent($id, $login, $year, $group, $halfgroup, $row){
@@ -68,10 +68,10 @@ class StudentView extends UserView {
     /**
      * Affiche un formulaire pour modifier l'étudiant
      * Pour modifier les codes ADE, on les modifies via les codes déjà présent dans la base de données
-     * @param $result       Données de l'étudiant
-     * @param $years        Toutes les années enregistrées
-     * @param $groups       Tous les groupes enregistrés
-     * @param $halfgroups   Tous les demi-groupes enregistrés
+     * @param $result       array Données de l'étudiant
+     * @param $years        array Toutes les années enregistrées
+     * @param $groups       array Tous les groupes enregistrés
+     * @param $halfgroups   array Tous les demi-groupes enregistrés
      */
     public function displayModifyStudent($result, $years, $groups, $halfgroups){
         $page = get_page_by_title( 'Gestion des utilisateurs');
@@ -95,7 +95,7 @@ class StudentView extends UserView {
                 $string .= '<option value="'.$year['code'].'"'; if($year['code'] == $selected) $string .= "selected"; $string .='>'.$year['title'].'</option >';
         }
         $string .='
-            </optgroup>
+                </optgroup>
             </select>
             <label for="modifGroup">Groupe</label>
             <select id="modifGroup" class="form-control" name="modifGroup">
@@ -107,7 +107,7 @@ class StudentView extends UserView {
             $string .='<option value="'.$group['code'].'"'; if($group['code'] == $selected) $string .= "selected"; $string .='>'.$group['title'].'</option>';
         }
         $string .='
-            </optgroup>
+                </optgroup>
             </select>
             <label for="modifHalfgroup">Demi-groupe</label>
             <select id="modifHalfgroup" class="form-control" name="modifHalfgroup">
@@ -119,7 +119,7 @@ class StudentView extends UserView {
             $string .='<option value="'.$halfgroup['code'].'"'; if($halfgroup['code'] == $selected) $string .= "selected"; $string .='>'.$halfgroup['title'].'</option>';
         }
         $string .='
-            </optgroup>
+                </optgroup>
             </select>
             <input name="modifvalider" type="submit" value="Valider">
             <a href="'.$linkManageUser.'">Annuler</a>

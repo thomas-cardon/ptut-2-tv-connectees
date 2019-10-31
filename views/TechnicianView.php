@@ -7,7 +7,7 @@ class TechnicianView extends UserView {
      * @return string
      */
     public function displayFormTechnician(){
-        return '<h2> Compte technicien</h2>'.$this->displayBaseForm('Tech');
+        return '<h2>Compte technicien</h2>'.$this->displayBaseForm('Tech');
     }
 
     /**
@@ -20,9 +20,9 @@ class TechnicianView extends UserView {
 
     /**
      * Affiche une ligne contenant les données du technicien
-     * @param $row      Numéro de ligne
-     * @param $id       ID du technicien
-     * @param $login    Login du technicien
+     * @param $row      int Numéro de ligne
+     * @param $id       int ID du technicien
+     * @param $login    string Login du technicien
      * @return string   Renvoie la ligne
      */
     public function displayAllTechnicians($row, $id, $login){

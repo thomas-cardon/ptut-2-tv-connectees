@@ -5,7 +5,7 @@ class UserView extends ViewG {
 
     /**
      * Affiche un formulaire pour ajouter des utilisateurs via fichier Excel
-     * @param $name     Nom du rôle à inscrire
+     * @param $name     string Nom du rôle à inscrire
      * @return string   Renvoie le formulaire
      */
     protected function displayInsertImportFile($name){
@@ -22,7 +22,7 @@ class UserView extends ViewG {
 
     /**
      * Affiche un formulaire classique
-     * @param $name Nom du rôle à inscrire
+     * @param $name     string Nom du rôle à inscrire
      * @return string   Renvoie le formulaire
      */
     protected function displayBaseForm($name) {
@@ -42,8 +42,8 @@ class UserView extends ViewG {
 
     /**
      * Affiche une ligne contenant les données d'un enseignant
-     * @param $result   Données de l'enseignant
-     * @param $row      Numéro de ligne
+     * @param $result   array Données de l'enseignant
+     * @param $row      int Numéro de ligne
      * @return string   Renvoie la ligne
      */
     protected function displayAllTeacher($result, $name, $row){
@@ -53,13 +53,13 @@ class UserView extends ViewG {
         $tab = [$result['user_login'], $code[0]];
         return $this->displayAll($row, $name, unserialize($result['ID']), $tab).
             '
-          <td class="text-center"> <a href="'.$linkModifyUser.$result['ID'].'" name="modif" type="submit" value="Modifier">Modifier</a></td>
+            <td class="text-center"> <a href="'.$linkModifyUser.$result['ID'].'" name="modif" type="submit" value="Modifier">Modifier</a></td>
         </tr>';
     }
 
     /**
      * Affiche le formulaire pour modifier un enseignant
-     * @param $result   Données de l'enseignant
+     * @param $result   array Données de l'enseignant
      */
     protected function displayModifyTeacher($result){
         $page = get_page_by_title( 'Gestion des utilisateurs');
@@ -97,8 +97,8 @@ class UserView extends ViewG {
      */
     public function displayDeleteAccount(){
         return '
-            <h2>Supprimer le compte</h2>
             <form id="check" method="post">
+                <h2>Supprimer le compte</h2>
                 <label for="verifPwd">Votre mot de passe actuel</label>
                 <input type="password" class="form-control text-center" name="verifPwd" placeholder="Mot de passe" required="">
                 <button type="submit" name="deleteMyAccount">Confirmer</button>
@@ -149,6 +149,14 @@ class UserView extends ViewG {
         //return '<a href="#" id="my-notification-button" class="btn btn-danger">recevoirNotifications</a></br>';
     }
 
+    /**
+     * Affiche un formulaire pour permettre à l'étudiant de modifier ses groupes
+     * @param $result       array données de l'étudiant
+     * @param $years        array les promo enregistrées
+     * @param $groups       array les groupes enregistrés
+     * @param $halfgroups   array les demi-groupes enregistrés
+     * @return string       Le formulaire
+     */
     public function displayModifyMyCodes($result, $years, $groups, $halfgroups){
         $code = unserialize($result->code);
         $model = new CodeAdeManager();
@@ -197,5 +205,12 @@ class UserView extends ViewG {
             <input name="modifvalider" type="submit" value="Valider">
          </form>';
         return $string;
+    }
+
+    /**
+     * Message indiquant de choisir un emploi du temps
+     */
+    public function displaySelectSchedule() {
+        echo '<p>Veuillez choisir un emploi du temps.</p>';
     }
 }
