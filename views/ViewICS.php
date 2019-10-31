@@ -155,7 +155,7 @@ class ViewICS extends ViewG {
                     }
                 }
             } if($study == 0) {
-                $string .= '<p> Vous n\'avez pas cours !</p>';
+                return  $string.'<p> Vous n\'avez pas cours !</p>';
             }
         }
         if( in_array("technicien", $current_user->roles)){
