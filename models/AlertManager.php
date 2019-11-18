@@ -17,9 +17,10 @@ class AlertManager extends Model
     /**
      * Set the database.
      */
-    private static function setBdd(){
+    private static function setBdd()
+    {
         global $wpdb;
-        self::$bdd = new PDO('mysql:host='.$wpdb->dbhost.'; dbname='.$wpdb->dbname, $wpdb->dbuser, $wpdb->dbpassword);
+        self::$bdd = new PDO('mysql:host=' . $wpdb->dbhost . '; dbname=' . $wpdb->dbname, $wpdb->dbuser, $wpdb->dbpassword);
         self::$bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
     } //setBdd()
 
@@ -27,7 +28,8 @@ class AlertManager extends Model
      * Return the database.
      * @return mixed
      */
-    protected function getBdd(){
+    protected function getBdd()
+    {
         if (self:: $bdd == null)
             self::setBdd();
         return self::$bdd;
@@ -39,7 +41,8 @@ class AlertManager extends Model
      * @param $content
      * @param $endDate
      */
-    public function addAlertDB($content, $endDate, $codes){
+    public function addAlertDB($content, $endDate, $codes)
+    {
         global $wpdb;
 
         $current_user = wp_get_current_user();
@@ -96,9 +99,10 @@ class AlertManager extends Model
      * @param $id
      * @return array|null|object|void
      */
-    public function getAlertByID($id) {
+    public function getAlertByID($id)
+    {
         global $wpdb;
-        $result = $wpdb->get_row('SELECT * FROM alerts WHERE ID_alert ="'.$id.'"',ARRAY_A );
+        $result = $wpdb->get_row('SELECT * FROM alerts WHERE ID_alert ="' . $id . '"', ARRAY_A);
         return $result;
     } //getAlertByID()
 
@@ -125,23 +129,25 @@ class AlertManager extends Model
      * @param $content
      * @param $endDate
      */
-    public function modifyAlert($id, $content, $endDate, $codes){
+    public function modifyAlert($id, $content, $endDate, $codes)
+    {
         $serCode = serialize($codes);
         $req = $this->getBdd()->prepare('UPDATE alerts SET text=:content, end_date=:endDate, codes=:codes
                                          WHERE ID_alert=:id');
-        $req->bindParam(':id',$id);
-        $req->bindParam(':content',$content);
-        $req->bindParam(':endDate',$endDate);
+        $req->bindParam(':id', $id);
+        $req->bindParam(':content', $content);
+        $req->bindParam(':endDate', $endDate);
         $req->bindParam(':codes', $serCode);
 
         $req->execute();
     } //modifyAlert()
 
-    public function getListCodes($id) {
+    public function getListCodes($id)
+    {
         $var = array();
         $req = $this->getBdd()->prepare('SELECT * FROM alerts
                                          WHERE ID_alert=:id');
-        $req->bindParam(':id',$id);
+        $req->bindParam(':id', $id);
 
         $req->execute();
         while ($data = $req->fetch()) {

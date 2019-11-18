@@ -3,13 +3,15 @@
 /**
  * Class StudyDirectorView
  */
-class StudyDirectorView extends UserView {
+class StudyDirectorView extends UserView
+{
 
     /**
      * Formulaire pour créer un directeur d'études
      * @return string   Renvoie le formulaire
      */
-    public function displayCreateDirector() {
+    public function displayCreateDirector()
+    {
         return '
                 <form class="cadre" method="post">
                     <h2> Compte directeur d\'études</h2>
@@ -26,15 +28,12 @@ class StudyDirectorView extends UserView {
                 </form>';
     }
 
-//    public function displayCreateDirector() {
-//        return $this->displayBaseForm('Direc');
-//    }
-
     /**
      * En-tête du tableau des directeurs d'études
      * @return string
      */
-    public function displayTabHeadDirector(){
+    public function displayTabHeadDirector()
+    {
         $tab = ["Numéro Ent", "Code ADE"];
         $title = "Directeurs d'études";
         return $this->displayStartTab('direc', $tab, $title);
@@ -42,18 +41,22 @@ class StudyDirectorView extends UserView {
 
     /**
      * Affiche une ligne contenant les données d'un directeur d'études
-     * @param $result   array Données du directeur d'études
+     * @param $result   WP_User Données du directeur d'études
      * @param $row      int Numéro de ligne
+     * @return string
      */
-    public function displayAllStudyDirector($result, $row){
-        return $this->displayAllTeacher($result, 'direc',$row);
+    public function displayAllStudyDirector($result, $row)
+    {
+        return $this->displayAllTeacher($result, 'direc', $row);
     }
 
     /**
      * Affiche le formulaire pour modifier un directeur d'études
-     * @param $result   array Données de l'enseignant
+     * @param $result   WP_User Données de l'enseignant
+     * @return string
      */
-    public function displayModifyStudyDirector($result){
+    public function displayModifyStudyDirector($result)
+    {
         return $this->displayModifyTeacher($result);
     }
 }

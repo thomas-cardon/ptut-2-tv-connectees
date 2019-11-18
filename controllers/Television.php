@@ -6,7 +6,8 @@
  * Time: 11:41
  */
 
-class Television extends User implements Schedule {
+class Television extends User implements Schedule
+{
 
     /**
      * View de Television
@@ -23,21 +24,23 @@ class Television extends User implements Schedule {
     /**
      * Constructeur de Television
      */
-    public function __construct(){
+    public function __construct()
+    {
         $this->view = new TelevisionView();
         $this->model = new TelevisionModel();
     }
 
-    public function displaySchedules() {
+    public function displaySchedules()
+    {
         $current_user = wp_get_current_user();
         $codes = unserialize($current_user->code); // On utilie cette fonction car les codes dans la base de données sont sérialisés
 
         $string = "";
-        if(is_array($codes)) {
+        if (is_array($codes)) {
             $string .= $this->view->displayStartSlide();
             foreach ($codes as $code) {
                 $path = $this->getFilePath($code);
-                if(file_exists($path)){
+                if (file_exists($path)) {
                     $string .= $this->displaySchedule($code);
                     $string .= $this->view->displayMidSlide();
                 }
@@ -49,22 +52,22 @@ class Television extends User implements Schedule {
         return $string;
     }
 
-    public function insertTelevision(){
+    public function insertTelevision()
+    {
         $action = $_POST['createTv'];
         $years = $this->model->getCodeYear();
         $groups = $this->model->getCodeGroup();
         $halfgroups = $this->model->getCodeHalfgroup();
-        if(isset($action)){
-            $login = filter_input(INPUT_POST,'loginTv');
-            $pwd = filter_input(INPUT_POST,'pwdTv');
+        if (isset($action)) {
+            $login = filter_input(INPUT_POST, 'loginTv');
+            $pwd = filter_input(INPUT_POST, 'pwdTv');
             $pwdConf = filter_input(INPUT_POST, 'pwdConfirmTv');
             $codes = $_POST['selectTv'];
-            if($pwd == $pwdConf) {
+            if ($pwd == $pwdConf) {
                 $pwd = wp_hash_password($pwd);
-                if($this->model->insertMyTelevision($login, $pwd, $codes)){
+                if ($this->model->insertMyTelevision($login, $pwd, $codes)) {
                     $this->view->displayInsertValidate();
-                }
-                else{
+                } else {
                     $this->view->displayErrorLogin();
                 }
             } else {
@@ -74,17 +77,18 @@ class Television extends User implements Schedule {
         return $this->view->displayFormTelevision($years, $groups, $halfgroups);
     }
 
-    public function displayAllTv(){
+    public function displayAllTv()
+    {
         $results = $this->model->getUsersByRole('television');
-        if(isset($results)){
+        if (isset($results)) {
             $string = $this->view->displayHeaderTabTv();
             $row = 0;
-            foreach ($results as $result){
+            foreach ($results as $result) {
                 ++$row;
                 $id = $result['ID'];
                 $login = $result['user_login'];
                 $codes = unserialize($result['code']);
-                if(is_array($codes)) {
+                if (is_array($codes)) {
                     $nbCode = sizeof($codes);
                 } else {
                     $nbCode = 1;
@@ -94,14 +98,14 @@ class Television extends User implements Schedule {
             }
             $string .= $this->view->displayEndTab();
             return $string;
-        }
-        else {
+        } else {
             return $this->view->displayEmpty();
         }
     }
 
-    public function modifyTv($result){
-        $page = get_page_by_title( 'Gestion des utilisateurs');
+    public function modifyTv($result)
+    {
+        $page = get_page_by_title('Gestion des utilisateurs');
         $linkManageUser = get_permalink($page->ID);
         $years = $this->model->getCodeYear();
         $groups = $this->model->getCodeGroup();
@@ -109,21 +113,21 @@ class Television extends User implements Schedule {
 
         $action = $_POST['modifValidate'];
 
-        if(isset($action)){
+        if (isset($action)) {
             $codes = $_POST['selectTv'];
             $pwd = $result->user_pass;
-            if(strlen($_POST['pwdTv']) >= 4){
+            if (strlen($_POST['pwdTv']) >= 4) {
                 $newPwd = filter_input(INPUT_POST, 'pwdTv');
                 $pwdConf = filter_input(INPUT_POST, 'pwdConfirmTv');
-                if($newPwd != $pwdConf) {
+                if ($newPwd != $pwdConf) {
                     $this->view->displayBadPassword();
                 } else {
                     $pwd = $newPwd;
                 }
             }
-            if($this->model->modifyTv($result, $codes)){
-                if($pwd != $result->user_pass) {
-                    wp_set_password( $pwd, $result->ID);
+            if ($this->model->modifyTv($result, $codes)) {
+                if ($pwd != $result->user_pass) {
+                    wp_set_password($pwd, $result->ID);
                 }
                 $this->view->displayModificationValidate($linkManageUser);
             }

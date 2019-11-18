@@ -10,7 +10,8 @@
  * Permet de créer, modifier et afficher des étudiants
  * Class Student
  */
-class Student extends User implements Schedule {
+class Student extends User implements Schedule
+{
     /**
      * Vue de Student
      * @var StudentView
@@ -32,27 +33,29 @@ class Student extends User implements Schedule {
         $this->model = new StudentModel();
     }
 
-    public function displaySchedules(){
+    public function displaySchedules()
+    {
         $current_user = wp_get_current_user();
         $codes = unserialize($current_user->code); // On utilie cette fonction car les codes dans la base de données sont sérialisés
-        if(file_exists($this->getFilePath($codes[2]))) {
+        if (file_exists($this->getFilePath($codes[2]))) {
             return $this->displaySchedule($codes[2]);
-        } else if(file_exists($this->getFilePath($codes[1]))) {
+        } else if (file_exists($this->getFilePath($codes[1]))) {
             return $this->displaySchedule($codes[1]);
-        } else if($this->displaySchedule($codes[0])) {
+        } else if ($this->displaySchedule($codes[0])) {
             return $this->displaySchedule($codes[0]);
         } else {
             return "<p>Pas de cours</p>";
         }
     }
 
-    public function inscriptionStudent() {
+    public function inscriptionStudent()
+    {
 
         $action = $_POST['createEtu'];
-        $login = filter_input(INPUT_POST,'loginEtu');
-        $pwd = filter_input(INPUT_POST,'pwdEtu');
+        $login = filter_input(INPUT_POST, 'loginEtu');
+        $pwd = filter_input(INPUT_POST, 'pwdEtu');
         $pwdConf = filter_input(INPUT_POST, 'pwdConfirmEtu');
-        $email = filter_input(INPUT_POST,'emailEtu');
+        $email = filter_input(INPUT_POST, 'emailEtu');
 
         $privatekey = '6LefDq4UAAAAAO0ky6FGIcPDbNJXR9ucTom3E9aO';
 
@@ -62,16 +65,16 @@ class Student extends User implements Schedule {
         $error = null;
 
         if ($_POST["recaptcha_response_field"]) {
-            $resp = recaptcha_check_answer ($privatekey,
+            $resp = recaptcha_check_answer($privatekey,
                 $_SERVER["REMOTE_ADDR"],
                 $_POST["recaptcha_challenge_field"],
                 $_POST["recaptcha_response_field"]);
 
             if ($resp->is_valid) {
                 echo "You got it!";
-                if($pwd == $pwdConf) {
+                if ($pwd == $pwdConf) {
                     $pwd = wp_hash_password($pwd);
-                    if($this->model->insertStudent($login, $pwd, $email)){
+                    if ($this->model->insertStudent($login, $pwd, $email)) {
                         $this->view->displayInsertValidate();
                     } else {
                         $this->view->displayErrorInsertion();
@@ -87,7 +90,7 @@ class Student extends User implements Schedule {
         //echo recaptcha_get_html($publickey, $error);
 
 
-        if(isset($action)){
+        if (isset($action)) {
 
         }
         return $this->view->displayFormInscription();
@@ -96,7 +99,8 @@ class Student extends User implements Schedule {
     /**
      * Ajoute tous les étudiants présent dans un fichier excel
      */
-    public function insertStudent() {
+    public function insertStudent()
+    {
         $actionStudent = $_POST['importEtu'];
         if ($actionStudent) {
             $allowed_extension = array("Xls", "Xlsx", "Csv");
@@ -112,7 +116,7 @@ class Student extends User implements Schedule {
 
                 $row = $worksheet->getRowIterator(1, 1);
                 $cells = [];
-                foreach ($row as $value){
+                foreach ($row as $value) {
                     $cellIterator = $value->getCellIterator();
                     $cellIterator->setIterateOnlyExistingCells(FALSE);
                     foreach ($cellIterator as $cell) {
@@ -120,7 +124,7 @@ class Student extends User implements Schedule {
                     }
                 }
                 // On vérifie s'il s'agit bien du bon fichier Excel
-                if($cells[0] == "Identifiant Ent" && $cells[1] == "Adresse mail") {
+                if ($cells[0] == "Identifiant Ent" && $cells[1] == "Adresse mail") {
                     $doubles = array();
                     for ($i = 2; $i < $highestRow + 1; ++$i) {
                         $cells = array();
@@ -136,23 +140,24 @@ class Student extends User implements Schedule {
                         $login = $cells[0];
                         $email = $cells[1];
                         //Si le login et le l'email sont indiqués, on inscrit l'utilisateur
-                        if(isset($login) && isset($email)) {
+                        if (isset($login) && isset($email)) {
                             //On vérifie que le login et l'adresse mail ne sont pas déjà enregistrés
-                            if($this->model->insertStudent($login, $hashpass, $email)){
+                            if ($this->model->insertStudent($login, $hashpass, $email)) {
                                 //On envoie un email pour chaque étudiant inscrit, le mail contient le login et le mot de passe
-                                $to  = $email;
+                                $to = $email;
                                 $subject = "Inscription à la télé-connecté";
                                 $message = '
-                                 <html>
+                                 <!DOCTYPE html>
+                                 <html lang="fr">
                                   <head>
                                    <title>Inscription à la télé-connecté</title>
                                   </head>
                                   <body>
                                    <p>Bonjour, vous avez été inscrit sur le site de la Télé Connecté de votre département en tant qu\'étudiant</p>
                                    <p> Sur ce site, vous aurez accès à votre emploie du temps, à vos notes et aux informations concernant votre scolarité.</p>
-                                   <p> Votre identifiant est '.$login.' et votre mot de passe est '.$pwd.'.</p>
+                                   <p> Votre identifiant est ' . $login . ' et votre mot de passe est ' . $pwd . '.</p>
                                    <p> Veuillez changer votre mot de passe lors de votre première connexion pour plus de sécurité !</p>
-                                   <p> Pour vous connecter, rendez-vous sur le site : <a href="'.home_url().'"> '.home_url().' </a>.</p>
+                                   <p> Pour vous connecter, rendez-vous sur le site : <a href="' . home_url() . '"> ' . home_url() . ' </a>.</p>
                                    <p> Nous vous souhaitons une bonne expérience sur notre site.</p>
                                   </body>
                                  </html>
@@ -160,20 +165,18 @@ class Student extends User implements Schedule {
 
                                 $headers = array('Content-Type: text/html; charset=UTF-8');
 
-                                wp_mail( $to, $subject, $message, $headers );
-                            }
-                            else {
+                                wp_mail($to, $subject, $message, $headers);
+                            } else {
                                 array_push($doubles, $login);
                             }
                         }
                     }
-                    if(! is_null($doubles[0])) {
+                    if (!is_null($doubles[0])) {
                         $this->view->displayErrorDouble($doubles); //On affiche les utilisateurs qui n'ont pas été inscrits
                     } else {
                         $this->view->displayInsertValidate(); //Si tous les étudiants sont inscrits
                     }
-                }
-                else {
+                } else {
                     $this->view->displayWrongFile(); //Affiche une erreur s'il ne s'agit pas du bon fichier
                 }
             } else {
@@ -186,13 +189,14 @@ class Student extends User implements Schedule {
     /**
      * Affiche tout les étudiants dans un tableau
      */
-    function displayAllStudents(){
+    function displayAllStudents()
+    {
         $results = $this->model->getUsersByRole('etudiant'); //On récupère tous les étudiants
         // S'il y a des étudiants d'inscrit
-        if(isset($results)){
+        if (isset($results)) {
             $string = $this->view->displayTabHeadStudent();
             $row = 0;
-            foreach ($results as $result){
+            foreach ($results as $result) {
                 ++$row;
                 $id = $result['ID'];
                 $login = $result['user_login'];
@@ -205,20 +209,19 @@ class Student extends User implements Schedule {
             $string .= $this->view->displayEndTab();
             $string .= $this->view->displayRedSignification();
             return $string;
-        }
-        //S'il n'y a pas d'étudiants
-        else{
+        } else {
             return $this->view->displayEmpty();
         }
     }
 
     /**
      * Modifie l'étudiant sélectionné
-     * @param $result   array Données de l'étudiant avant modification
+     * @param $result   WP_User Données de l'étudiant avant modification
      * @return string
      */
-    public function modifyMyStudent($result){
-        $page = get_page_by_title( 'Gestion des utilisateurs');
+    public function modifyMyStudent($result)
+    {
+        $page = get_page_by_title('Gestion des utilisateurs');
         $linkManageUser = get_permalink($page->ID);
         //On récupère toutes les années, groupes et demi-groupes
         // pour pouvoir permettre à l'utilisateur de les sélectionner lors de la modification
@@ -227,13 +230,13 @@ class Student extends User implements Schedule {
         $halfgroups = $this->model->getCodeHalfgroup();
         $action = $_POST['modifvalider'];
 
-        if($action == 'Valider'){
-            $year = filter_input(INPUT_POST,'modifYear');
-            $group = filter_input(INPUT_POST,'modifGroup');
-            $halfgroup = filter_input(INPUT_POST,'modifHalfgroup');
+        if ($action == 'Valider') {
+            $year = filter_input(INPUT_POST, 'modifYear');
+            $group = filter_input(INPUT_POST, 'modifGroup');
+            $halfgroup = filter_input(INPUT_POST, 'modifHalfgroup');
 
             $codes = [$year, $group, $halfgroup];
-            if($this->model->modifyStudent($result->ID, $codes)){
+            if ($this->model->modifyStudent($result->ID, $codes)) {
                 $this->view->displayModificationValidate($linkManageUser);
             }
         }
@@ -242,9 +245,10 @@ class Student extends User implements Schedule {
 
     /**
      * Modifie les codes de l'étudiant connecté
-     * @param $result   Données de l'étudiant avant modification
+     * @return string
      */
-    public function modifyMyCodes(){
+    public function modifyMyCodes()
+    {
         //On récupère toutes les années, groupes et demi-groupes
         // pour pouvoir permettre à l'utilisateur de les sélectionner lors de la modification
         $current_user = wp_get_current_user();
@@ -253,13 +257,13 @@ class Student extends User implements Schedule {
         $halfgroups = $this->model->getCodeHalfgroup();
         $action = $_POST['modifvalider'];
 
-        if($action == 'Valider'){
-            $year = filter_input(INPUT_POST,'modifYear');
-            $group = filter_input(INPUT_POST,'modifGroup');
-            $halfgroup = filter_input(INPUT_POST,'modifHalfgroup');
+        if ($action == 'Valider') {
+            $year = filter_input(INPUT_POST, 'modifYear');
+            $group = filter_input(INPUT_POST, 'modifGroup');
+            $halfgroup = filter_input(INPUT_POST, 'modifHalfgroup');
 
             $codes = [$year, $group, $halfgroup];
-            if($this->model->modifyMyCodes($current_user->ID, $current_user->user_login, $codes)){
+            if ($this->model->modifyMyCodes($current_user->ID, $current_user->user_login, $codes)) {
                 $this->view->displayModificationValidate();
             }
         }

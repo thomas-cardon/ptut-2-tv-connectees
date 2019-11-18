@@ -9,9 +9,10 @@
 /**
  * Permet de gérer les emplois du temps,
  * C'est ici qu'on appel le controlleur R34ICS
- * Class Schedule
+ * Interface Schedule
  */
-interface Schedule {
+interface Schedule
+{
 
     /**
      * Affiche l'emploi du temps demandé

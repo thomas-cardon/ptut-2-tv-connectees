@@ -6,19 +6,23 @@
  * Time: 10:58
  */
 
-class TeacherView extends UserView {
+class TeacherView extends UserView
+{
+
     /**
      * Affiche un formulaire pour inscrire des enseignants via fichier Excel
      */
-    public function displayInsertImportFileTeacher() {
-        return '<h2> Comptes enseignants</h2>'.$this->displayInsertImportFile("Prof");
+    public function displayInsertImportFileTeacher()
+    {
+        return '<h2> Comptes enseignants</h2>' . $this->displayInsertImportFile("Prof");
     }
 
     /**
      * En-tête du tableau des enseignants
      * @return string
      */
-    public function displayTabHeadTeacher(){
+    public function displayTabHeadTeacher()
+    {
         $tab = ["Numéro Ent", "Code ADE"];
         $title = "Enseignants";
         return $this->displayStartTab('teacher', $tab, $title);
@@ -27,18 +31,22 @@ class TeacherView extends UserView {
 
     /**
      * Affiche une ligne contenant les données d'un enseignant
-     * @param $result   array Données de l'enseignant
+     * @param $result   WP_User Données de l'enseignant
      * @param $row      int Numéro de ligne
+     * @return string
      */
-    public function displayAllTeachers($result, $row){
+    public function displayAllTeachers($result, $row)
+    {
         return $this->displayAllTeacher($result, 'teacher', $row);
     }
 
     /**
      * Affiche le formulaire pour modifier un enseignant
-     * @param $result   array Données de l'enseignant
+     * @param $result   WP_User Données de l'enseignant
+     * @return string
      */
-    public function displayModifyMyTeacher($result){
+    public function displayModifyMyTeacher($result)
+    {
         return $this->displayModifyTeacher($result);
     }
 }

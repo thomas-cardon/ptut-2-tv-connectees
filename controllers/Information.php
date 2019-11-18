@@ -6,34 +6,36 @@
  * Time: 11:33
  */
 
-class Information extends ControllerG {
+class Information extends ControllerG
+{
     private $DB;
     private $view;
 
     /**
      * Constructeur d'information, initialise le modèle et la vue.
      */
-    public function __construct(){
+    public function __construct()
+    {
         $this->DB = new InformationManager();
         $this->view = new InformationView();
     }
-
 
 
     /**
      * Supprime les informations sélectionnées dans la page de gestion des informations.
      * @param $action
      */
-    public function deleteInformations() {
+    public function deleteInformations()
+    {
         $actionDelete = $_POST['Delete'];
-        if(isset($actionDelete)) {
+        if (isset($actionDelete)) {
             if (isset($_REQUEST['checkboxstatusinfo'])) {
                 $checked_values = $_REQUEST['checkboxstatusinfo'];
                 foreach ($checked_values as $val) {
                     $res = $this->DB->getInformationByID($val);
                     $type = $res['type'];
                     $types = ["img", "pdf", "tab"];
-                    if(in_array($type, $types)) {
+                    if (in_array($type, $types)) {
                         $this->deleteFile($val);
                     }
                     $this->DB->deleteInformationDB($val);
@@ -46,17 +48,18 @@ class Information extends ControllerG {
     /**
      * @param Code $id
      */
-    public function deleteFile($id) {
+    public function deleteFile($id)
+    {
         $res = $this->DB->getInformationByID($id);
         $type = $res['type'];
         $content = $res['content'];
         if ($type == "img") {
             $source = explode('src=', $content);
-            $source = substr($source[1],0,-1);
-            $source = substr($source,1,-1);
-            $source = $_SERVER['DOCUMENT_ROOT'].$source;
+            $source = substr($source[1], 0, -1);
+            $source = substr($source, 1, -1);
+            $source = $_SERVER['DOCUMENT_ROOT'] . $source;
         } else {
-            $source = $_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH.$content;
+            $source = $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $content;
         }
         wp_delete_file($source);
     }
@@ -65,10 +68,11 @@ class Information extends ControllerG {
      * Affiche un tableau avec toutes les informations et des boutons de modification ainsi qu'un bouton de suppression.
      * cf snippet Handle Informations
      */
-    function informationManagement() {
+    function informationManagement()
+    {
         $current_user = wp_get_current_user();
         $user = $current_user->user_login;
-        if(in_array("administrator", $current_user->roles)) {
+        if (in_array("administrator", $current_user->roles)) {
             $result = $this->DB->getListInformation();
         } else {
             $result = $this->DB->getListInformationByAuthor($user);
@@ -102,7 +106,8 @@ class Information extends ControllerG {
      * Récupère l'id de l'information depuis l'url et affiche le formulaire de modification pré-remplis.
      * cf snippet Modification Info
      */
-    public function modifyInformation() {
+    public function modifyInformation()
+    {
         $id = $this->getMyIdUrl();
 
         $actionText = $_POST['validateChange'];
@@ -113,61 +118,59 @@ class Information extends ControllerG {
         $result = $this->DB->getInformationByID($id);
         $title = $result['title'];
         $content = $result['content'];
-        $endDate = date('Y-m-d',strtotime($result['end_date']));
+        $endDate = date('Y-m-d', strtotime($result['end_date']));
         $typeI = $result['type'];
 
-        if($actionText == "Modifier") {
+        if ($actionText == "Modifier") {
             $title = filter_input(INPUT_POST, 'titleInfo');
             $content = filter_input(INPUT_POST, 'contentInfo');
             $endDate = $_POST['endDateInfo'];
 
-            $this->DB->modifyInformation($id,$title,$content,$endDate);
+            $this->DB->modifyInformation($id, $title, $content, $endDate);
             $this->view->displayModifyValidate();
-        }
-        elseif($actionImg == "Modifier") { //si il s'agit d'une modification d'affiche
+        } elseif ($actionImg == "Modifier") { //si il s'agit d'une modification d'affiche
             $contentFile = $_FILES['contentFile'];
 
-            $title = filter_input(INPUT_POST,'titleInfo');
+            $title = filter_input(INPUT_POST, 'titleInfo');
             $endDate = $_POST['endDateInfo'];
-            if($_FILES['contentFile']['size'] != 0) {    //si l'image est modifié
-                $contentNew = $this->uploadFile($contentFile,"modify","img",$id);
-                if($contentNew != null || $contentNew != 0) {
-                    $this->DB->modifyInformation($id,$title,$contentNew,$endDate);
+            if ($_FILES['contentFile']['size'] != 0) {    //si l'image est modifié
+                $contentNew = $this->uploadFile($contentFile, "modify", "img", $id);
+                if ($contentNew != null || $contentNew != 0) {
+                    $this->DB->modifyInformation($id, $title, $contentNew, $endDate);
                     $this->view->displayModifyValidate();
                 }
             } else { // si le texte et/ou la date de fin est modifié
-                $this->DB->modifyInformation($id,$title,$content,$endDate);
+                $this->DB->modifyInformation($id, $title, $content, $endDate);
                 $this->view->displayModifyValidate();
             }
-        } elseif($actionTab == "Modifier") { //si il s'agit d'une modification d'un tableau
+        } elseif ($actionTab == "Modifier") { //si il s'agit d'une modification d'un tableau
             $contentFile = $_FILES['contentFile'];
 
-            $title = filter_input(INPUT_POST,'titleInfo');
-            $endDate =$_POST['endDateInfo'];
-            if($_FILES['contentFile']['size'] != 0) {    //si le fichier est modifié
-                $contentNew = $this->uploadFile($contentFile,"modify","tab",$id);
-                if($contentNew != null || $contentNew != 0) {
-                    $this->DB->modifyInformation($id,$title,$contentNew,$endDate);
-                    $this->view->displayModifyValidate();
-                }
-            }
-            else { // si le texte et/ou la date de fin est modifié
-                $this->DB->modifyInformation($id,$title,$content,$endDate);
-                $this->view->displayModifyValidate();
-            }
-
-        } else if($actionPDF) {
-            $contentFile = $_FILES['contentFile'];
-            $title = filter_input(INPUT_POST,'titleInfo');
+            $title = filter_input(INPUT_POST, 'titleInfo');
             $endDate = $_POST['endDateInfo'];
-            if($_FILES['contentFile']['size'] != 0) {
-                $contentNew = $this->uploadFile($contentFile,"modify","pdf",$id);
-                if($contentNew != null || $contentNew != 0) {
-                    $this->DB->modifyInformation($id,$title,$contentNew,$endDate);
+            if ($_FILES['contentFile']['size'] != 0) {    //si le fichier est modifié
+                $contentNew = $this->uploadFile($contentFile, "modify", "tab", $id);
+                if ($contentNew != null || $contentNew != 0) {
+                    $this->DB->modifyInformation($id, $title, $contentNew, $endDate);
                     $this->view->displayModifyValidate();
                 }
             } else { // si le texte et/ou la date de fin est modifié
-                $this->DB->modifyInformation($id,$title,$content,$endDate);
+                $this->DB->modifyInformation($id, $title, $content, $endDate);
+                $this->view->displayModifyValidate();
+            }
+
+        } else if ($actionPDF) {
+            $contentFile = $_FILES['contentFile'];
+            $title = filter_input(INPUT_POST, 'titleInfo');
+            $endDate = $_POST['endDateInfo'];
+            if ($_FILES['contentFile']['size'] != 0) {
+                $contentNew = $this->uploadFile($contentFile, "modify", "pdf", $id);
+                if ($contentNew != null || $contentNew != 0) {
+                    $this->DB->modifyInformation($id, $title, $contentNew, $endDate);
+                    $this->view->displayModifyValidate();
+                }
+            } else { // si le texte et/ou la date de fin est modifié
+                $this->DB->modifyInformation($id, $title, $content, $endDate);
                 $this->view->displayModifyValidate();
             }
         }
@@ -178,8 +181,9 @@ class Information extends ControllerG {
      * @param $id
      * @param $endDate
      */
-    public function endDateCheckInfo($id, $endDate){
-        if($endDate <= date("Y-m-d")) {
+    public function endDateCheckInfo($id, $endDate)
+    {
+        if ($endDate <= date("Y-m-d")) {
             $this->DB->deleteInformationDB($id);
             $this->deleteFile($id);
         }
@@ -190,7 +194,8 @@ class Information extends ControllerG {
      * Affiche les informations sur la page principale (ou widget)
      * cf snippet Display Information
      */
-    public function informationMain(){
+    public function informationMain()
+    {
 
         $result = $this->DB->getListInformation();
         $idList = array();
@@ -201,47 +206,47 @@ class Information extends ControllerG {
             $id = $row['ID_info'];
             $title = $row['title'];
             $content = $row['content'];
-            $endDate = date('Y-m-d',strtotime($row['end_date']));
+            $endDate = date('Y-m-d', strtotime($row['end_date']));
             $type = $row['type'];
             array_push($typeList, $type);
-            $this->endDateCheckInfo($id,$endDate);
-            if($type == 'tab'){
-                $source = $_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH.$content;
-                if(! file_exists($source)) {
-                    array_push($idList,$id);
-                    array_push($titleList,$title);
+            $this->endDateCheckInfo($id, $endDate);
+            if ($type == 'tab') {
+                $source = $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $content;
+                if (!file_exists($source)) {
+                    array_push($idList, $id);
+                    array_push($titleList, $title);
                     array_push($contentList, 'Un beau tableau devrait être ici !');
                 } else {
                     $list = $this->readSpreadSheet($id);
                     foreach ($list as $table) {
-                        array_push($idList,$id);
-                        array_push($titleList,$title);
+                        array_push($idList, $id);
+                        array_push($titleList, $title);
                         array_push($contentList, $table);
                     }
                 }
             } else {
-                if($type == 'img'){
+                if ($type == 'img') {
                     $source = explode('src=', $content);
-                    $source = substr($source[1],0,-1);
-                    $source = substr($source,1,-1);
-                    $source = home_url().$source;
-                    if (! @getimagesize($source)) {
-                        array_push($idList,$id);
-                        array_push($titleList,$title);
-                        array_push($contentList,'Une belle image devrait être ici !');
+                    $source = substr($source[1], 0, -1);
+                    $source = substr($source, 1, -1);
+                    $source = home_url() . $source;
+                    if (!@getimagesize($source)) {
+                        array_push($idList, $id);
+                        array_push($titleList, $title);
+                        array_push($contentList, 'Une belle image devrait être ici !');
                     } else {
-                        array_push($idList,$id);
-                        array_push($titleList,$title);
-                        array_push($contentList,$content);
+                        array_push($idList, $id);
+                        array_push($titleList, $title);
+                        array_push($contentList, $content);
                     }
                 } else {
-                    array_push($idList,$id);
-                    array_push($titleList,$title);
-                    array_push($contentList,$content);
+                    array_push($idList, $id);
+                    array_push($titleList, $title);
+                    array_push($contentList, $content);
                 }
             }
         }
-        $this->view->displayInformationView($titleList,$contentList, $typeList);
+        $this->view->displayInformationView($titleList, $contentList, $typeList);
     } // informationMain()
 
 
@@ -255,71 +260,72 @@ class Information extends ControllerG {
      * @param $content
      * @param $endDate
      */
-    public function insertInformation(){
+    public function insertInformation()
+    {
         $actionText = $_POST['createText'];
         $actionImg = $_POST['createImg'];
         $actionTab = $_POST['createTab'];
         $actionPDF = $_POST['createPDF'];
 
-        $title = filter_input(INPUT_POST,'titleInfo');
-        $content = filter_input(INPUT_POST,'contentInfo');
-        $endDate = filter_input(INPUT_POST,'endDateInfo');
+        $title = filter_input(INPUT_POST, 'titleInfo');
+        $content = filter_input(INPUT_POST, 'contentInfo');
+        $endDate = filter_input(INPUT_POST, 'endDateInfo');
         $contentFile = $_FILES['contentFile'];
 
-        if(isset($actionText)) { // si c'est une création de texte
-            $this->DB->addInformationDB($title, $content, $endDate,"text");
+        if (isset($actionText)) { // si c'est une création de texte
+            $this->DB->addInformationDB($title, $content, $endDate, "text");
             $this->view->displayCreateValidate();
         } elseif (isset($actionImg)) { // si c'est une création d'affiche
             //upload le fichier avec un nom temporaire
-            $result = $this->uploadFile($contentFile,"create", "img", 0, $title, $endDate);
-            if($result != 0) {
+            $result = $this->uploadFile($contentFile, "create", "img", 0, $title, $endDate);
+            if ($result != 0) {
 
                 $id = $result;
                 //récupère l'extension du fichier
                 $_FILES['file'] = $contentFile;
-                $extension_upload = strtolower(  substr(  strrchr($_FILES['file']['name'], '.')  ,1)  );
+                $extension_upload = strtolower(substr(strrchr($_FILES['file']['name'], '.'), 1));
 
                 //renomme le fichier avec l'id de l'info
-                rename($_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH."temporary.".$extension_upload,
-                    $_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH.$id.".".$extension_upload);
+                rename($_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . "temporary." . $extension_upload,
+                    $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $id . "." . $extension_upload);
 
                 //modifie le contenu de l'information pour avoir le bon lien de l'image
-                $content = '<img src="'.TV_UPLOAD_PATH.$id.'.'.$extension_upload.'">';
+                $content = '<img src="' . TV_UPLOAD_PATH . $id . '.' . $extension_upload . '">';
                 $this->changeContentFile($id, $content);
                 $this->view->displayCreateValidate();
             }
         } elseif (isset($actionTab)) { //si c'est une création d'un tableau de note
-            $result = $this->uploadFile($contentFile,"create", "tab", 0, $title, $endDate);
-            if($result != 0) {
+            $result = $this->uploadFile($contentFile, "create", "tab", 0, $title, $endDate);
+            if ($result != 0) {
                 $id = $result;
                 //récupère l'extension du fichier
                 $_FILES['file'] = $contentFile;
-                $extension_upload = strtolower(  substr(  strrchr($_FILES['file']['name'], '.')  ,1)  );
+                $extension_upload = strtolower(substr(strrchr($_FILES['file']['name'], '.'), 1));
 
                 //renomme le fichier avec l'id de l'info
-                rename($_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH."temporary.".$extension_upload,
-                    $_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH.$id.".".$extension_upload);
+                rename($_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . "temporary." . $extension_upload,
+                    $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $id . "." . $extension_upload);
 
                 //modifie le contenu de l'information pour avoir le bon nom du fichier
-                $content = $id.'.'.$extension_upload;
+                $content = $id . '.' . $extension_upload;
                 $this->changeContentFile($id, $content);
                 $this->view->displayCreateValidate();
             }
         } else if ($actionPDF) {
-            $result = $this->uploadFile($contentFile,"create", "pdf", 0, $title, $endDate);
-            if($result != 0) {
+            $result = $this->uploadFile($contentFile, "create", "pdf", 0, $title, $endDate);
+            if ($result != 0) {
 
                 $id = $result;
                 //récupère l'extension du fichier
                 $_FILES['file'] = $contentFile;
-                $extension_upload = strtolower(  substr(  strrchr($_FILES['file']['name'], '.')  ,1)  );
+                $extension_upload = strtolower(substr(strrchr($_FILES['file']['name'], '.'), 1));
 
                 //renomme le fichier avec l'id de l'info
-                rename($_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH."temporary.".$extension_upload,
-                    $_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH.$id.".".$extension_upload);
+                rename($_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . "temporary." . $extension_upload,
+                    $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $id . "." . $extension_upload);
 
                 //modifie le contenu de l'information pour avoir le bon lien de l'image
-                $content = '[pdf-embedder url="'.TV_UPLOAD_PATH.$id.'.pdf"]';
+                $content = '[pdf-embedder url="' . TV_UPLOAD_PATH . $id . '.pdf"]';
                 //$content =  '<embed src="'.TV_PLUG_PATH.'views/media/' . $id . '.pdf'.'"pdf#toolbar=0&navpanes=0&scrollbar=0">';
                 //$content = '<img src="'.TV_PLUG_PATH.'views/media/'.$id.'.'.$extension_upload.'">';
                 $this->changeContentFile($id, $content);
@@ -327,24 +333,25 @@ class Information extends ControllerG {
             }
         }
         return
-            $this->view->displayStartMultiSelect().
-            $this->view->displayTitleSelect('text', 'Texte', true).
-            $this->view->displayTitleSelect('image', 'Image').
-            $this->view->displayTitleSelect('table', 'Tableau').
-            $this->view->displayTitleSelect('pdf', 'PDF').
-            $this->view->displayEndOfTitle().
-            $this->view->displayContentSelect('text', $this->view->displayFormText(), true).
-            $this->view->displayContentSelect('image', $this->view->displayFormImg()).
-            $this->view->displayContentSelect('table', $this->view->displayFormTab()).
-            $this->view->displayContentSelect('pdf', $this->view->displayFormPDF()).
+            $this->view->displayStartMultiSelect() .
+            $this->view->displayTitleSelect('text', 'Texte', true) .
+            $this->view->displayTitleSelect('image', 'Image') .
+            $this->view->displayTitleSelect('table', 'Tableau') .
+            $this->view->displayTitleSelect('pdf', 'PDF') .
+            $this->view->displayEndOfTitle() .
+            $this->view->displayContentSelect('text', $this->view->displayFormText(), true) .
+            $this->view->displayContentSelect('image', $this->view->displayFormImg()) .
+            $this->view->displayContentSelect('table', $this->view->displayFormTab()) .
+            $this->view->displayContentSelect('pdf', $this->view->displayFormPDF()) .
             $this->view->displayEndDiv();
 
     } //insertInformation()
 
-    public function changeContentFile($id, $content){
+    public function changeContentFile($id, $content)
+    {
         $result = $this->DB->getInformationByID($id);
         $title = $result['title'];
-        $endDate = date('Y-m-d',strtotime($result['end_date']));
+        $endDate = date('Y-m-d', strtotime($result['end_date']));
         $this->DB->modifyInformation($id, $title, $content, $endDate);
     }
 
@@ -359,10 +366,11 @@ class Information extends ControllerG {
      * @param $action
      * @return int|string
      */
-    public function uploadFile($file, $action, $type, $id =0, $title="", $endDate=""){
-        if($action == "create"){ //si la fonction a été appelée pour la création d'une info
+    public function uploadFile($file, $action, $type, $id = 0, $title = "", $endDate = "")
+    {
+        if ($action == "create") { //si la fonction a été appelée pour la création d'une info
             $id = "temporary"; //met un id temporaire pour le nom du fichier
-        } elseif ($action == "modify"){ //si la fonction a été appelée pour la modification d'une info
+        } elseif ($action == "modify") { //si la fonction a été appelée pour la modification d'une info
             $this->deleteFile($id); // efface le fichier correspondant a l'info modifié
         } else {
             echo "il y a une erreur dans l'appel de la fonction";
@@ -373,39 +381,45 @@ class Information extends ControllerG {
         if ($_FILES['file']['error'] > 0) echo "<p>Erreur lors du transfert! </p>";
         if ($_FILES['file']['size'] > $maxsize) echo "<p>Le fichier est trop volumineux</p>";
 
-        if($type == "img"){$extensions_valides = array( 'jpg' , 'jpeg' , 'gif' , 'png' );}
-        if($type == "tab") {$extensions_valides = array( 'xls' , 'xlsx' , 'ods' );}
-        if($type == "pdf") { $extensions_valides = array("pdf"); }
+        if ($type == "img") {
+            $extensions_valides = array('jpg', 'jpeg', 'gif', 'png');
+        }
+        if ($type == "tab") {
+            $extensions_valides = array('xls', 'xlsx', 'ods');
+        }
+        if ($type == "pdf") {
+            $extensions_valides = array("pdf");
+        }
 
-        $extension_upload = strtolower(  substr(  strrchr($_FILES['file']['name'], '.')  ,1)  );
-        if ( in_array($extension_upload,$extensions_valides) ) {
-            $nom =  $_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH.$id.".".$extension_upload;
-            $resultat = move_uploaded_file($_FILES['file']['tmp_name'],$nom);
+        $extension_upload = strtolower(substr(strrchr($_FILES['file']['name'], '.'), 1));
+        if (in_array($extension_upload, $extensions_valides)) {
+            $nom = $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $id . "." . $extension_upload;
+            $resultat = move_uploaded_file($_FILES['file']['tmp_name'], $nom);
         } else {
             echo "<p>Extension incorrecte </p>";
         }
 
         $goodtypes = ["img", "tab", "pdf"];
 
-        if ($resultat){
-            if($action == "create"){
-                if(in_array($type, $goodtypes)) {
-                    $result = $this->DB->addInformationDB($title,"temporary content",$endDate, $type);
+        if ($resultat) {
+            if ($action == "create") {
+                if (in_array($type, $goodtypes)) {
+                    $result = $this->DB->addInformationDB($title, "temporary content", $endDate, $type);
                     return $result;
                 } else {
                     echo "<p>le type d'information n'est pas le bon </p>";
                 }
-            } elseif ($action == "modify"){
-                if($type == "img") {
+            } elseif ($action == "modify") {
+                if ($type == "img") {
                     //renvoie le nouveau contenu de l'info
-                    $content = '<img src="'.TV_UPLOAD_PATH.$id. '.' . $extension_upload . '" alt="'.$title.'">';
+                    $content = '<img src="' . TV_UPLOAD_PATH . $id . '.' . $extension_upload . '" alt="' . $title . '">';
                     return $content;
-                } elseif ($type == "tab"){
+                } elseif ($type == "tab") {
                     //renvoie le nouveau contenu de l'info
-                    $content =  $id .'.'. $extension_upload;
+                    $content = $id . '.' . $extension_upload;
                     return $content;
-                } else if($type == "pdf"){
-                    $content = '[pdf-embedder url="'.TV_UPLOAD_PATH.$id.'.pdf"]';
+                } else if ($type == "pdf") {
+                    $content = '[pdf-embedder url="' . TV_UPLOAD_PATH . $id . '.pdf"]';
                     return $content;
                 } else {
                     echo "le type d'information n'est pas le bon";
@@ -417,9 +431,10 @@ class Information extends ControllerG {
         }
     }//uploadFile()
 
-    public function readSpreadSheet($id){
+    public function readSpreadSheet($id)
+    {
 
-        $file = glob($_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH.$id."."."*");
+        $file = glob($_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $id . "." . "*");
         foreach ($file as $i) {
             $filename = $i;
         }
@@ -437,29 +452,29 @@ class Information extends ControllerG {
 
         for ($i = 0; $i < $highestRow; ++$i) {
             $mod = $i % 10;
-            if($mod == 0){
+            if ($mod == 0) {
                 $content .= '<table class ="table table-bordered tablesize">';
             }
-            foreach ($worksheet->getRowIterator($i+1,1) as $row) {
+            foreach ($worksheet->getRowIterator($i + 1, 1) as $row) {
                 $content .= '<tr scope="row">';
                 $cellIterator = $row->getCellIterator();
                 $cellIterator->setIterateOnlyExistingCells(FALSE);
                 foreach ($cellIterator as $cell) {
-                    $content .='<td class="text-center">' .
+                    $content .= '<td class="text-center">' .
                         $cell->getValue() .
                         '</td>';
                 }
-                $content .='</tr>';
+                $content .= '</tr>';
             }
-            if($mod == 9){
+            if ($mod == 9) {
                 $content .= '</table>';
-                array_push($contentList,$content);
+                array_push($contentList, $content);
                 $content = "";
             }
         }
-        if($mod != 9 && $i >0){
+        if ($mod != 9 && $i > 0) {
             $content .= '</table>';
-            array_push($contentList,$content);
+            array_push($contentList, $content);
             $content = "";
         }
         return $contentList;

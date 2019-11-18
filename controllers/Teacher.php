@@ -10,7 +10,8 @@
  * Permet de créer, modifier et afficher des enseignants
  * Class Teacher
  */
-class Teacher extends User implements Schedule {
+class Teacher extends User implements Schedule
+{
     /**
      * Vue de Teacher
      * @var TeacherView
@@ -26,7 +27,8 @@ class Teacher extends User implements Schedule {
     /**
      * Constructeur de Teacher
      */
-    public function __construct(){
+    public function __construct()
+    {
         $this->view = new TeacherView();
         $this->model = new TeacherModel();
     }
@@ -34,7 +36,8 @@ class Teacher extends User implements Schedule {
     /**
      * Affiche l'emploi du temps de l'enseignant
      */
-    public function displaySchedules() {
+    public function displaySchedules()
+    {
         $current_user = wp_get_current_user();
         $codes = unserialize($current_user->code); // On utilie cette fonction car les codes dans la base de données sont sérialisés
         return $this->displaySchedule($codes[0]); // On affiche le codes[0] car les enseignants n'ont qu'un code
@@ -43,7 +46,8 @@ class Teacher extends User implements Schedule {
     /**
      * Inscrit tous les professeurs depuis un fichier excel
      */
-    public function insertTeacher(){
+    public function insertTeacher()
+    {
         $actionTeacher = $_POST['importProf'];
         if ($actionTeacher) {
             $allowed_extension = array("Xls", "Xlsx", "Csv");
@@ -62,7 +66,7 @@ class Teacher extends User implements Schedule {
                 $cells = [];
 
                 //On lit la première ligne
-                foreach ($row as $value){
+                foreach ($row as $value) {
                     $cellIterator = $value->getCellIterator();
                     $cellIterator->setIterateOnlyExistingCells(FALSE);
                     foreach ($cellIterator as $cell) {
@@ -71,7 +75,7 @@ class Teacher extends User implements Schedule {
                 }
 
                 //On vérifie si le fichier est le bon
-                if($cells[0] == "Identifiant Ent" && $cells[1] == "Adresse mail" && $cells[2] == "Code") {
+                if ($cells[0] == "Identifiant Ent" && $cells[1] == "Adresse mail" && $cells[2] == "Code") {
                     $doubles = array();
                     for ($i = 2; $i < $highestRow + 1; ++$i) {
                         $cells = array();
@@ -87,7 +91,7 @@ class Teacher extends User implements Schedule {
                         $login = $cells[0];
                         $email = $cells[1];
                         $codes = [$cells[2]];
-                        if(isset($login) && isset($email)) {
+                        if (isset($login) && isset($email)) {
                             if ($this->model->insertTeacher($login, $hashpass, $email, $codes)) {
                                 foreach ($codes as $code) {
                                     $path = $this->getFilePath($code);
@@ -116,19 +120,18 @@ class Teacher extends User implements Schedule {
 
                                 $headers = array('Content-Type: text/html; charset=UTF-8');
 
-                                wp_mail( $to, $subject, $message, $headers );
+                                wp_mail($to, $subject, $message, $headers);
                             } else {
                                 array_push($doubles, $cells[0]);
                             }
                         }
                     }
-                    if(! is_null($doubles[0])) {
+                    if (!is_null($doubles[0])) {
                         $this->view->displayErrorDouble($doubles);
                     } else {
                         $this->view->displayInsertValidate();
                     }
-                }
-                else {
+                } else {
                     $this->view->displayWrongFile();
                 }
             } else {
@@ -141,12 +144,13 @@ class Teacher extends User implements Schedule {
     /**
      * Affiche tous les enseignants dans un tableau
      */
-    public function displayAllTeachers(){
+    public function displayAllTeachers()
+    {
         $results = $this->model->getUsersByRole('enseignant');
-        if(isset($results)){
+        if (isset($results)) {
             $string = $this->view->displayTabHeadTeacher();
             $row = 0;
-            foreach ($results as $result){
+            foreach ($results as $result) {
                 ++$row;
                 $string .= $this->view->displayAllTeachers($result, $row);
             }
@@ -159,16 +163,17 @@ class Teacher extends User implements Schedule {
 
     /**
      * Modifie l'enseignant
-     * @param $result   Données de l'enseignant avant modification
+     * @param $result   WP_User Données de l'enseignant avant modification
      * @return string
      */
-    public function modifyTeacher($result){
-        $page = get_page_by_title( 'Gestion des utilisateurs');
+    public function modifyTeacher($result)
+    {
+        $page = get_page_by_title('Gestion des utilisateurs');
         $linkManageUser = get_permalink($page->ID);
         $action = $_POST['modifValidate'];
         $code = [$_POST['modifCode']];
-        if($action === 'Valider'){
-            if($this->model->modifyTeacher($result, $code)){
+        if ($action === 'Valider') {
+            if ($this->model->modifyTeacher($result, $code)) {
                 $this->view->displayModificationValidate($linkManageUser);
             }
         }
