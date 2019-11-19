@@ -19,7 +19,7 @@ class ICSView extends ViewG
         $string .= '<h1>' . $title . '</h1>';
         // Empty calendar message
         if (empty($ics_data['events'])) {
-            return $string . '<p>Vous n\'avez pas cours !</p>';
+            return false;
         } else {
             $i = 0;
             $study = 0;
@@ -164,7 +164,7 @@ class ICSView extends ViewG
                 }
             }
             if ($study == 0) {
-                return $string . '<p> Vous n\'avez pas cours !</p>';
+                return false;
             }
         }
         if (in_array("technicien", $current_user->roles)) {

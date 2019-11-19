@@ -315,18 +315,14 @@ class R34ICS extends ControllerG
             $ics_data['description'] = ($args['description'] == 'none') ? false : $args['description'];
         }
 
-        if (isset($ics_data['events'])) {
-            $model = new CodeAdeManager();
-            $title = $model->getTitle($code);
-            if ($code == $title) {
-                $this->addLogEvent("Code non enregistré: " . $code);
-                $current_user = wp_get_current_user();
-                $title = $current_user->user_login;
-            }
-            return $this->view->displaySchedule($ics_data, $title);
-        } else {
-            return false;
+        $model = new CodeAdeManager();
+        $title = $model->getTitle($code);
+        if ($code == $title) {
+            $this->addLogEvent("Code non enregistré: " . $code);
+            $current_user = wp_get_current_user();
+            $title = $current_user->user_login;
         }
+        return $this->view->displaySchedule($ics_data, $title);
     }
 
     public function first_dow($date = null)
