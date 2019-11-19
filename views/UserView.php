@@ -237,4 +237,12 @@ class UserView extends ViewG
     {
         return '<p>Veuillez choisir un emploi du temps.</p>';
     }
+
+    public function displayHome()
+    {
+        echo '<article>
+                <h1>' . get_bloginfo("name") . '</h1>
+                <p>Retrouvez ici votre emploi du temps</p>
+              </article>';
+    }
 }

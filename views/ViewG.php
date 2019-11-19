@@ -250,7 +250,7 @@ abstract class ViewG
      * Affiche le début d'un modal
      * @param $title    string Titre du modal
      */
-    protected function displayStartModal($title)
+    public function displayStartModal($title)
     {
         echo '
         <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -266,7 +266,7 @@ abstract class ViewG
      * Fin du modal
      * @param null $redirect Redirection lorsqu'on clique si Fermer
      */
-    protected function displayEndModal($redirect = null)
+    public function displayEndModal($redirect = null)
     {
         echo '</div>
               <div class="modal-footer">';

@@ -71,76 +71,97 @@ $query = "CREATE TABLE IF NOT EXISTS $commissions_table_name (
 
 dbDelta($query);
 
+$commissions_table_name = 'ecran_modification';
+
+$query = "CREATE TABLE IF NOT EXISTS $commissions_table_name (
+			`id` INT(20) NOT NULL AUTO_INCREMENT,
+			`title` VARCHAR( 255 ) NOT NULL ,
+			`content` VARCHAR ( 255 ) NOT NULL ,
+			PRIMARY KEY  (id)
+			) $charset_collate;";
+
+dbDelta($query);
+
+$col = $wpdb->get_results("SELECT id FROM $commissions_table_name");
+
+if (!$col) {
+    $data = ["title" => "column", "content" => "right"];
+    $wpdb->insert($commissions_table_name, $data);
+
+    $data = ["title" => "hideNoSchedule", "content" => "false"];
+    $wpdb->insert($commissions_table_name, $data);
+}
+
 $sql = "ALTER TABLE `" . $commissions_table_name . "` AUTO_INCREMENT = 2;";
 $wpdb->query($sql);
 
 $table = 'wp_users';
 $col_name = 'code';
 
-$col = $wpdb->get_results( "SELECT $col_name FROM $table" );
+$col = $wpdb->get_results("SELECT $col_name FROM $table");
 
 
-if (!$col){
+if (!$col) {
     $sql = "ALTER TABLE `" . $table . "` ADD `$col_name` VARCHAR(255) NOT NULL AFTER `user_pass`;";
     $wpdb->query($sql);
 }
 
 $result = add_role(
     'secretaire',
-    __( 'Secretaire' ),
+    __('Secretaire'),
     array(
-        'read'         => true,  // true allows this capability
-        'edit_posts'   => true,
+        'read' => true,  // true allows this capability
+        'edit_posts' => true,
         'delete_posts' => false, // Use false to explicitly deny
     )
 );
 
 $result = add_role(
     'television',
-    __( 'Television' ),
+    __('Television'),
     array(
-        'read'         => true,  // true allows this capability
-        'edit_posts'   => true,
+        'read' => true,  // true allows this capability
+        'edit_posts' => true,
         'delete_posts' => false, // Use false to explicitly deny
     )
 );
 
 $result = add_role(
     'etudiant',
-    __( 'Etudiant' ),
+    __('Etudiant'),
     array(
-        'read'         => true,  // true allows this capability
-        'edit_posts'   => true,
+        'read' => true,  // true allows this capability
+        'edit_posts' => true,
         'delete_posts' => false, // Use false to explicitly deny
     )
 );
 
 $result = add_role(
     'enseignant',
-    __( 'Enseignant' ),
+    __('Enseignant'),
     array(
-        'read'         => true,  // true allows this capability
-        'edit_posts'   => true,
+        'read' => true,  // true allows this capability
+        'edit_posts' => true,
         'delete_posts' => false, // Use false to explicitly deny
     )
 );
 
 $result = add_role(
     'technicien',
-    __( 'Technicien' ),
+    __('Technicien'),
     array(
-        'read'         => true,  // true allows this capability
-        'edit_posts'   => true,
+        'read' => true,  // true allows this capability
+        'edit_posts' => true,
         'delete_posts' => false, // Use false to explicitly deny
     )
 );
 
 $result = add_role(
     'directeuretude',
-    __( 'Directeur etude' ),
+    __('Directeur etude'),
     array(
-        'read'         => true,  // true allows this capability
-        'edit_posts'   => true,
+        'read' => true,  // true allows this capability
+        'edit_posts' => true,
         'delete_posts' => false, // Use false to explicitly deny
     )
 );

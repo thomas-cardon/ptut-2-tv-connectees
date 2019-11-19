@@ -60,8 +60,7 @@ class InformationView extends ViewG
             }
         }
         $string .= '
-               <a href="' . $linkModifyInfo . $id . '" 
-              name="modifetud" type="submit" value="Modifier">Modifier</a></td>
+               <a href="' . $linkModifyInfo . $id . '" name="modifetud" type="submit" value="Modifier">Modifier</a></td>
             </tr>';
         return $string;
     } // displayAllInformation()
@@ -69,9 +68,9 @@ class InformationView extends ViewG
 
     /**
      * Affiche les informations sur la page principal avec un carousel
-     * @param $title        string titre de l'information
-     * @param $content      string contenu de l'information
-     * @param $types        string type de l'information
+     * @param $title        array titres des informations
+     * @param $content      array contenus des informations
+     * @param $types        array types des informations
      */
     public function displayInformationView($title, $content, $types)
     {

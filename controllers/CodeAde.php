@@ -11,7 +11,7 @@ class CodeAde extends ControllerG
 {
     /**
      * Vue de CodeAde
-     * @var ViewCodeAde
+     * @var CodeAdeView
      */
     private $view;
 
@@ -26,7 +26,7 @@ class CodeAde extends ControllerG
      */
     public function __construct()
     {
-        $this->view = new ViewCodeAde();
+        $this->view = new CodeAdeView();
         $this->model = new CodeAdeManager();
     }
 

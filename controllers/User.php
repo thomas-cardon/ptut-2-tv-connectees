@@ -15,7 +15,7 @@ class User extends ControllerG
     private $view;
 
     /**
-     * User constructor.
+     * AdminModel constructor.
      */
     public function __construct()
     {
@@ -33,9 +33,11 @@ class User extends ControllerG
         $user = $this->model->getById($id);
         $data = get_userdata($id);
         $this->model->deleteUser($id);
-        if (in_array("enseignant", $data->roles) == 'enseignant') {
+        if (in_array("enseignant", $data->roles)) {
             $code = unserialize($user[0]['code']);
-            unlink($this->getFilePath($code[0]));
+            if(file_exists($this->getFilePath($code[0]))) {
+                unlink($this->getFilePath($code[0]));
+            }
         }
         if (in_array("enseignant", $data->roles) || in_array("secretaire", $data->roles) || in_array("administrator", $data->roles)) {
             $modelAlert = new AlertManager();

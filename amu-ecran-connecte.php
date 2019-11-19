@@ -25,7 +25,7 @@ include_once 'models/Model.php';
 include_once 'views/ViewG.php';
 
 include_once 'controllers/fileR34ICS/R34ICS.php';
-include_once 'views/ViewICS.php';
+include_once 'views/ICSView.php';
 include_once 'controllers/Schedule.php';
 include_once 'widgets/WidgetSchedule.php';
 
@@ -33,9 +33,13 @@ include_once 'controllers/User.php';
 include_once 'models/UserModel.php';
 include_once 'views/UserView.php';
 
+include_once 'controllers/Admin.php';
+include_once 'models/AdminModel.php';
+include_once 'views/AdminView.php';
+
 include_once 'controllers/CodeAde.php';
 include_once 'models/CodeAdeManager.php';
-include_once 'views/ViewCodeAde.php';
+include_once 'views/CodeAdeView.php';
 
 include_once 'controllers/Student.php';
 include_once 'models/StudentModel.php';
@@ -100,6 +104,7 @@ include_once 'blocks/myAccountCode/myAccountCode.php';
 include_once 'blocks/userCreation/userCreation.php';
 include_once 'blocks/myAccountChoose/myAccountChoose.php';
 include_once 'blocks/inscription/inscription.php';
+include_once 'blocks/adminInterface/adminInterface.php';
 
 require ('models/Excel/vendor/autoload.php');
 

@@ -1,15 +1,18 @@
 /* WEATHER */
 
-* {box-sizing:border-box}
+* {
+    box-sizing: border-box
+}
 
-.Infos{
+.Infos {
     width: 100%;
     background-color: #00558b;
     box-sizing: border-box;
     color: #FFF;
     text-align: center;
 }
-.Infos .Weather{
+
+.Infos .Weather {
     box-sizing: border-box;
     border-top: solid 1px #FFF;
     font-size: 1.6vw;
@@ -19,48 +22,53 @@
     margin-bottom: 0 !important;
 }
 
-.Infos .Weather #weather{
+.Infos .Weather #weather {
     border-right: solid 1px #FFF;
     display: inline-block;
     height: 100%;
     width: 49%;
 }
 
-.Infos .Weather #wind{
+.Infos .Weather #wind {
     display: inline-block;
     height: 100%;
     width: 50%;
 }
-.Infos .Weather img{
+
+.Infos .Weather img {
     display: inline-block;
     height: 70%;
 }
-.Infos .Time{
+
+.Infos .Time {
     text-align: center;
     font-size: 1.6vw;
     font-weight: 600;
     height: 2vw;
     margin: -2px 0 -4px 0;
 }
-.Infos .Date{
+
+.Infos .Date {
     font-size: 1.6vw;
     height: 2vw;
     margin-bottom: 0 !important;
 }
 
-.kmh, .degree  {
+.kmh, .degree {
     font-size: 1.4vw;
 }
 
-@media only screen and (max-device-width: 1000px){
+@media only screen and (max-device-width: 1000px) {
     .Infos {
         height: 8.7vw;
         width: 100%;
     }
-    .Infos .Time{
+
+    .Infos .Time {
         font-size: 2.4vw;
     }
-    .Infos .Date{
+
+    .Infos .Date {
         font-size: 1.6vw;
     }
 }

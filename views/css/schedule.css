@@ -3,7 +3,7 @@ CSS de l'emploi du temps
  */
 
 /* TABLE */
-.errorNotRegister{
+.errorNotRegister {
     font-weight: bold;
     color: white;
     background-color: red;
@@ -21,7 +21,7 @@ CSS de l'emploi du temps
 }
 
 .tabSchedule {
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 }
 
 .headerTab {

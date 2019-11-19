@@ -1,7 +1,7 @@
 <?php
 
 
-class ViewICS extends ViewG
+class ICSView extends ViewG
 {
     /**
      * Affiche l'emploi du temps d'un fichier ICS

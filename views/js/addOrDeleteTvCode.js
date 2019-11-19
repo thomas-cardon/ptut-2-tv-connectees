@@ -7,9 +7,9 @@ function addButtonTv() {
     count = count + 1;
     $.ajax({
         url: '/wp-content/plugins/plugin-ecran-connecte/views/js/utils/allCodes.php',
-    }).done(function(data) {
+    }).done(function (data) {
         let div = $('<div >', {
-            class:'row'
+            class: 'row'
         }).appendTo('#registerTvForm');
         let select = $('<select >', {
             id: count,

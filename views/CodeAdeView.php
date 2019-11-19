@@ -6,7 +6,7 @@
  * Time: 09:54
  */
 
-class ViewCodeAde extends ViewG
+class CodeAdeView extends ViewG
 {
 
     /**

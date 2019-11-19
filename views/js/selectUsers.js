@@ -1,5 +1,5 @@
-let test = $('<input >', { }).appendTo('body');
+let test = $('<input >', {}).appendTo('body');
 
-if(test.click()) {
+if (test.click()) {
     alert('test')
 }

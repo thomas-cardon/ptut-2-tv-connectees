@@ -41,8 +41,10 @@ class Television extends User implements Schedule
             foreach ($codes as $code) {
                 $path = $this->getFilePath($code);
                 if (file_exists($path)) {
-                    $string .= $this->displaySchedule($code);
-                    $string .= $this->view->displayMidSlide();
+                    if($this->displaySchedule($code)) {
+                        $string .= $this->displaySchedule($code);
+                        $string .= $this->view->displayMidSlide();
+                    }
                 }
             }
             $string .= $this->view->displayEndSlide();

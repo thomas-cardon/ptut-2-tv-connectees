@@ -1,41 +1,38 @@
 <?php
 
-function schedule_render_callback() {
-    if(is_page()){
+function schedule_render_callback()
+{
+    if (is_page()) {
         $current_user = wp_get_current_user();
-        if(in_array("enseignant",$current_user->roles)) {
+        if (in_array("enseignant", $current_user->roles)) {
             $controller = new Teacher();
             return $controller->displaySchedules();
-        }
-
-        if(in_array("etudiant",$current_user->roles)) {
+        } else if (in_array("etudiant", $current_user->roles)) {
             $controller = new Student();
             return $controller->displaySchedules();
-        }
-
-        if(in_array("television",$current_user->roles)) {
+        } else if (in_array("television", $current_user->roles)) {
             $controller = new Television();
             return $controller->displaySchedules();
-        }
-
-        if (in_array("technicien", $current_user->roles)){
+        } else if (in_array("technicien", $current_user->roles)) {
             $controller = new Technician();
             return $controller->displaySchedules();
-        }
-
-        if(in_array("administrator", $current_user->roles) || in_array("secretary", $current_user->roles)) {
+        } else if (in_array("administrator", $current_user->roles) || in_array("secretary", $current_user->roles)) {
             $controller = new Secretary();
             $view = new SecretaryView();
             return $view->displayWelcomeAdmin();
+        } else {
+            $user = new UserView();
+            $user->displayHome();
         }
     }
 }
 
-function block_schedule() {
+function block_schedule()
+{
     wp_register_script(
         'schedule-script',
-        plugins_url( 'block.js', __FILE__ ),
-        array( 'wp-blocks', 'wp-element', 'wp-data' )
+        plugins_url('block.js', __FILE__),
+        array('wp-blocks', 'wp-element', 'wp-data')
     );
 
     register_block_type('tvconnecteeamu/schedule', array(
@@ -43,4 +40,5 @@ function block_schedule() {
         'render_callback' => 'schedule_render_callback'
     ));
 }
-add_action( 'init', 'block_schedule' );
+
+add_action('init', 'block_schedule');

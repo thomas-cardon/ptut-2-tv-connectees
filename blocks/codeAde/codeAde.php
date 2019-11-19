@@ -3,7 +3,7 @@
 function code_ade_render_callback() {
     $codeAde = new CodeAde();
     $model = new CodeAdeManager();
-    $view = new ViewCodeAde();
+    $view = new CodeAdeView();
     if(is_page()){
         $badCodesYears = $model->codeNotBound(0);
         $badCodesGroups = $model->codeNotBound(1);

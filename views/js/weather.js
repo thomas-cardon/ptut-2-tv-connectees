@@ -6,16 +6,17 @@ var url = "https://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&
 /**
  * Affiche la météo
  */
-function refreshWeather(){
+function refreshWeather() {
     meteoRequest.open('GET', url, true);
     meteoRequest.setRequestHeader('Accept', 'application/json');
     meteoRequest.send();
 }
-meteoRequest.onload =  function () {
+
+meteoRequest.onload = function () {
     var json = JSON.parse(this.responseText);
     var temp = Math.round(getTemp(json));
     var vent = getWind(json).toFixed(0);
-    if(document.getElementById('Weather') !== null) {
+    if (document.getElementById('Weather') !== null) {
         var div = document.getElementById('Weather');
         div.innerHTML = "";
         var weather = document.createElement("DIV");
@@ -38,25 +39,33 @@ meteoRequest.onload =  function () {
         setTimeout(refreshWeather, 900000);
     }
 };
-function getAlt(json){
+
+function getAlt(json) {
     return json["weather"][0]["description"];
 }
-function getIcon(json){
+
+function getIcon(json) {
     return cutIcon(json["weather"][0]["icon"]);
 }
-function cutIcon(str){
-    return str.substr(0, str.length -1);
+
+function cutIcon(str) {
+    return str.substr(0, str.length - 1);
 }
-function getTemp(json){
+
+function getTemp(json) {
     return kelvinToC(json["main"]["temp"]);
 }
-function kelvinToC(kelvin){
+
+function kelvinToC(kelvin) {
     return kelvin - 273.15;
 }
+
 function getWind(json) {
     return msToKmh(json["wind"]["speed"]);
 }
+
 function msToKmh(speed) {
     return speed * 3.6;
 }
+
 refreshWeather();

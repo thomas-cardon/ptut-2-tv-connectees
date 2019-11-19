@@ -1,9 +1,9 @@
 var OneSignal = window.OneSignal || [];
 
-OneSignal.push(function() {
+OneSignal.push(function () {
     OneSignal.init({
         appId: "d7c7a01c-6e25-4b81-8bf7-5af2a55210d7",
-        subdomainName:"ecranconnectetc.os.tc",/* The label for your site that you added in Site Setup mylabel.os.tc */
+        subdomainName: "ecranconnectetc.os.tc",/* The label for your site that you added in Site Setup mylabel.os.tc */
         notifyButton: {
             enable: false
         },
@@ -16,9 +16,8 @@ OneSignal.push(function() {
 });
 
 
-
 function onManageWebPushSubscriptionButtonClicked(event) {
-    getSubscriptionState().then(function(state) {
+    getSubscriptionState().then(function (state) {
         if (state.isPushEnabled) {
             /* Subscribed, opt them out */
             OneSignal.setSubscription(false);
@@ -40,7 +39,7 @@ function updateMangeWebPushSubscriptionButton(buttonSelector) {
     var subscribeText = "Recevoir les notifications";
     var unsubscribeText = "Ne plus recevoir les notifications";
 
-    getSubscriptionState().then(function(state) {
+    getSubscriptionState().then(function (state) {
         var buttonText = !state.isPushEnabled || state.isOptedOut ? subscribeText : unsubscribeText;
 
         var element = document.querySelector(buttonSelector);
@@ -66,7 +65,7 @@ function getSubscriptionState() {
     return Promise.all([
         OneSignal.isPushNotificationsEnabled(),
         OneSignal.isOptedOut()
-    ]).then(function(result) {
+    ]).then(function (result) {
         var isPushEnabled = result[0];
         var isOptedOut = result[1];
 
@@ -77,28 +76,28 @@ function getSubscriptionState() {
     });
 }
 
-let errorMessage = function() {
-    $('body').html( 'une erreur critique est survenue')
+let errorMessage = function () {
+    $('body').html('une erreur critique est survenue')
 };
 var buttonSelector = "#my-notification-button";
 
 /* This example assumes you've already initialized OneSignal */
-OneSignal.push(function() {
+OneSignal.push(function () {
     // If we're on an unsupported browser, do nothing
     if (!OneSignal.isPushNotificationsSupported()) {
         return;
     }
     updateMangeWebPushSubscriptionButton(buttonSelector);
 
-    OneSignal.on("subscriptionChange", function(isSubscribed) {
+    OneSignal.on("subscriptionChange", function (isSubscribed) {
         /* If the user's subscription state changes during the page's session, update the button text */
         updateMangeWebPushSubscriptionButton(buttonSelector);
         $.ajax({
-            url : '/wp-content/plugins/TeleConnecteeAmu/views/js/utils/userID.php',
+            url: '/wp-content/plugins/TeleConnecteeAmu/views/js/utils/userID.php',
             method: 'get'
         })
-            .done(function(data) {
-                OneSignal.sendTag("login", data).then(function(tagsSent) {
+            .done(function (data) {
+                OneSignal.sendTag("login", data).then(function (tagsSent) {
                     console.log("tagsSent: " + tagsSent.login);
                 });
             })
