@@ -325,7 +325,7 @@ class R34ICS extends ControllerG
             }
             return $this->view->displaySchedule($ics_data, $title);
         } else {
-            return 'Vous n\'avez pas cours !';
+            return false;
         }
     }
 
