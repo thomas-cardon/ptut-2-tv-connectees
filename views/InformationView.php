@@ -98,10 +98,18 @@ class InformationView extends ViewG
                 echo do_shortcode($content[$i]);
             } else if ($types[$i] == 'special') {
                 $func = explode('(Do this(function:', $content[$i]);
+                $text = explode('.', $func[0]);
+                foreach ($text as $value) {
+                    echo '<p class="content_info ' . $myclass . '">' . $value . '</p>';
+                }
                 $func = explode(')end)', $func[1]);
                 echo '<p class="content_info ' . $myclass . '">'; echo $func[0](); echo '</p>';
             } else {
-                echo '<p class="content_info ' . $myclass . '">' . $content[$i] . '</p>';
+                $text = explode('.', $content[$i]);
+                foreach ($text as $value) {
+                    echo '<p class="content_info ' . $myclass . '">' . $value . '</p>';
+                }
+
             }
             echo '</div>';
             $cpt++;
