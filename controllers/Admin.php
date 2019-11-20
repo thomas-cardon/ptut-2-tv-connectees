@@ -23,7 +23,7 @@ class Admin extends User
         if ($validCol) {
             $col = $_POST['column'];
             $this->model->getModif('column');
-            if ($results[0]->content != $message) {
+            if ($results[0]->content != $col) {
                 if ($this->model->updateModif('column', $col)) {
                     $this->view->displayModificationValidate();
                 } else {

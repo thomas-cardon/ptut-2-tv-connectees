@@ -38,7 +38,12 @@ class Technician extends User implements Schedule
             if ($row % 2 == 0) {
                 $string .= $this->view->displayRow();
             }
-            $string .= $this->displaySchedule($year['code']);
+            if($this->displaySchedule($year['code'])) {
+                $string .= $this->displaySchedule($year['code']);
+            } else {
+                $string .= $this->view->displayNoStudy();
+            }
+
             if ($row % 2 == 1) {
                 $string .= $this->view->displayEndDiv();
             }

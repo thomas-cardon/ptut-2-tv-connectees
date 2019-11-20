@@ -44,7 +44,7 @@ class Student extends User implements Schedule
         } else if ($this->displaySchedule($codes[0])) {
             return $this->displaySchedule($codes[0]);
         } else {
-            return "<p>Pas de cours</p>";
+            return $this->view->displayNoStudy();
         }
     }
 

@@ -19,7 +19,16 @@ class ICSView extends ViewG
         $string .= '<h1>' . $title . '</h1>';
         // Empty calendar message
         if (empty($ics_data['events'])) {
-            return false;
+            $current_user = wp_get_current_user();
+            $admin = new AdminModel();
+            $results = $admin->getModif('hideNoSchedule');
+            if(in_array('television', $current_user->roles) && $results[0]->content == "true") {
+                return '<h1>'.$title. '</h1><p> Vous n\'avez pas cours !</p>';
+            } else if(! in_array('television', $current_user->roles)){
+                return '<h1>'.$title. '</h1><p> Vous n\'avez pas cours !</p>';
+            } else {
+                return false;
+            }
         } else {
             $i = 0;
             $study = 0;
@@ -164,7 +173,16 @@ class ICSView extends ViewG
                 }
             }
             if ($study == 0) {
-                return false;
+                $current_user = wp_get_current_user();
+                $admin = new AdminModel();
+                $results = $admin->getModif('hideNoSchedule');
+                if(in_array('television', $current_user->roles) && $results[0]->content  == "true") {
+                    return '<h1>'.$title. '</h1><p> Vous n\'avez pas cours !</p>';
+                } else if(! in_array('television', $current_user->roles)){
+                    return '<h1>'.$title. '</h1><p> Vous n\'avez pas cours !</p>';
+                } else {
+                    return false;
+                }
             }
         }
         if (in_array("technicien", $current_user->roles)) {

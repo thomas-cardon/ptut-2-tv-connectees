@@ -29,7 +29,11 @@ class StudyDirector extends User implements Schedule
     {
         $current_user = wp_get_current_user();
         $codes = unserialize($current_user->code); // On utilie cette fonction car les codes dans la base de données sont sérialisés
-        return $this->displaySchedule($codes[0]); // On affiche le codes[0] car les enseignants n'ont qu'un code
+        if($this->displaySchedule($codes[0])){ // On affiche le codes[0] car les enseignants n'ont qu'un code
+            return $this->displaySchedule($codes[0]);
+        } else {
+            return $this->view->displayNoStudy();
+        }
     }
 
     /**

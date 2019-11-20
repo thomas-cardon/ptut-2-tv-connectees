@@ -46,7 +46,7 @@ class Information extends ControllerG
     } //deleteInformations()
 
     /**
-     * @param Code $id
+     * @param $id int Code
      */
     public function deleteFile($id)
     {

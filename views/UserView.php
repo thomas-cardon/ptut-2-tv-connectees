@@ -245,4 +245,8 @@ class UserView extends ViewG
                 <p>Retrouvez ici votre emploi du temps</p>
               </article>';
     }
+
+    public function displayNoStudy() {
+        return '<p>Vous n\'avez pas cours! </p>';
+    }
 }

@@ -9,8 +9,10 @@ function code_ade_render_callback() {
         $badCodesGroups = $model->codeNotBound(1);
         $badCodesHalfgroups = $model->codeNotBound(2);
         $badCodes = [$badCodesYears, $badCodesGroups, $badCodesHalfgroups];
-        if(isset($badCodes)){
-            $string = $view->displayUnregisteredCode($badCodes);
+
+        $string = "";
+        if(sizeof($badCodesYears) < 1 || sizeof($badCodesGroups) < 1 || sizeof($badCodesHalfgroups) < 1){
+            $string .= $view->displayUnregisteredCode($badCodes);
         }
         $codeAde->insertCode();
         return $view->displayFormAddCode().$string;

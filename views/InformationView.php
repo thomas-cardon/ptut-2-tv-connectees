@@ -96,6 +96,10 @@ class InformationView extends ViewG
                             <h2 class="titleInfo">' . $title[$i] . '</h2>';
             if ($types[$i] == 'pdf') {
                 echo do_shortcode($content[$i]);
+            } else if ($types[$i] == 'special') {
+                $func = explode('(Do this(function:', $content[$i]);
+                $func = explode(')end)', $func[1]);
+                echo '<p class="content_info ' . $myclass . '">'; echo $func[0](); echo '</p>';
             } else {
                 echo '<p class="content_info ' . $myclass . '">' . $content[$i] . '</p>';
             }
@@ -124,7 +128,7 @@ class InformationView extends ViewG
                 <label for="endDateInfo">Date d\'expiration</label>
                 <input id="endDateInfo" type="date" name="endDateInfo" min="' . $dateMin . '" required >
                 <label for="contentInfo">Contenu</label>
-                <textarea id="contentInfo" name="contentInfo" maxlength="200"></textarea>
+                <textarea id="contentInfo" name="contentInfo" maxlength="500"></textarea>
                 <input type="submit" value="creer" name="createText">
             </form>';
     }

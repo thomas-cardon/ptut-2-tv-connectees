@@ -168,7 +168,7 @@ class User extends ControllerG
     /**
      * Affiche l'emploi du temps demandé
      * @param $code     int Code ADE de l'emploi du temps
-     * @return string
+     * @return string|bool
      */
     public function displaySchedule($code)
     {
@@ -204,7 +204,11 @@ class User extends ControllerG
             if (!file_exists($path) || filesize($path) <= 0) {
                 $this->addFile($code);
             }
-            return $this->displaySchedule($code);
+            if($this->displaySchedule($code)) {
+                return $this->displaySchedule($code);
+            } else {
+                return $this->view->displayNoStudy();
+            }
         }
     }
 

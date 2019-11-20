@@ -106,71 +106,72 @@ include_once 'blocks/myAccountChoose/myAccountChoose.php';
 include_once 'blocks/inscription/inscription.php';
 include_once 'blocks/adminInterface/adminInterface.php';
 
-require ('models/Excel/vendor/autoload.php');
+require('models/Excel/vendor/autoload.php');
 
 /**
  * Create all directory
  */
-if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH)) {
-    mkdir($_SERVER['DOCUMENT_ROOT'].TV_UPLOAD_PATH);
+if (!file_exists($_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH)) {
+    mkdir($_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH);
 }
 
-if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH)) {
-    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH,0777);
+if (!file_exists($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH)) {
+    mkdir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH, 0777);
 }
 
-if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file0')) {
-    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file0',0777);
+if (!file_exists($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0')) {
+    mkdir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0', 0777);
 }
 
-if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file1')) {
-    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file1',0777);
+if (!file_exists($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1')) {
+    mkdir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1', 0777);
 }
 
-if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file2')) {
-    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file2',0777);
+if (!file_exists($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2')) {
+    mkdir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2', 0777);
 }
 
-if (!file_exists($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file3')) {
-    mkdir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file3',0777);
+if (!file_exists($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3')) {
+    mkdir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3', 0777);
 }
 
 // Initialize plugin
-add_action('init', function(){
-    if(class_exists(R34ICS::class )) {
+add_action('init', function () {
+    if (class_exists(R34ICS::class)) {
         global $R34ICS;
         $R34ICS = new R34ICS();
     }
 });
 
 $dl = $_POST['dlEDT'];
-if(isset($dl)) {
+if (isset($dl)) {
     downloadFileICS_func();
 }
 
-function displaySchedule() {
+function displaySchedule()
+{
     $current_user = wp_get_current_user();
-    if(in_array("enseignant",$current_user->roles)) {
+    if (in_array("enseignant", $current_user->roles)) {
         $controller = new Teacher();
         $controller->displaySchedules();
     }
 
-    if(in_array("etudiant",$current_user->roles)) {
+    if (in_array("etudiant", $current_user->roles)) {
         $controller = new Student();
         $controller->displaySchedules();
     }
 
-    if(in_array("television",$current_user->roles)) {
+    if (in_array("television", $current_user->roles)) {
         $controller = new Television();
         $controller->displaySchedules();
     }
 
-    if (in_array("technicien", $current_user->roles)){
+    if (in_array("technicien", $current_user->roles)) {
         $controller = new Technician();
         $controller->displaySchedules();
     }
 
-    if(in_array("administrator", $current_user->roles) || in_array("secretary", $current_user->roles)) {
+    if (in_array("administrator", $current_user->roles) || in_array("secretary", $current_user->roles)) {
         $controller = new Secretary();
         $view = new SecretaryView();
         $view->displayWelcomeAdmin();
@@ -181,16 +182,17 @@ function displaySchedule() {
  * Fonction pour la Cron de WordPress
  * Cette fonction télécharge tous les fichiers ICS des codes ADE enregistrés dans la base de données
  */
-function downloadFileICS_func() {
+function downloadFileICS_func()
+{
     move_fileICS_schedule();
     $model = new CodeAdeManager();
     $allCodes = $model->getAllCode();
     $controllerAde = new CodeAde();
-    foreach ($allCodes as $code){
+    foreach ($allCodes as $code) {
         $path = $controllerAde->getFilePath($code['code']);
         $controllerAde->addFile($code['code']);
-        if(file_exists($path)) {
-            if(filesize($path) < 200){
+        if (file_exists($path)) {
+            if (filesize($path) < 200) {
                 $controllerAde->addFile($code['code']);
             }
         }
@@ -200,23 +202,25 @@ function downloadFileICS_func() {
     $studyDirector = $model->getUsersByRole('directeuretude');
     dlSchedule($studyDirector);
 }
-add_action( 'downloadFileICS', 'downloadFileICS_func' );
+
+add_action('downloadFileICS', 'downloadFileICS_func');
 
 /**
  * Télécharge les emplois du temps des utilisateurs
  * @param $users    User[]
  */
-function dlSchedule($users) {
+function dlSchedule($users)
+{
     $controllerAde = new CodeAde();
-    if(isset($users)) {
+    if (isset($users)) {
         foreach ($users as $user) {
             $codes = unserialize($user['code']);
-            if(is_array($codes)) {
+            if (is_array($codes)) {
                 foreach ($codes as $code) {
                     $path = $controllerAde->getFilePath($code);
                     $controllerAde->addFile($code);
-                    if(file_exists($path)) {
-                        if(file_get_contents($path) == ''){
+                    if (file_exists($path)) {
+                        if (file_get_contents($path) == '') {
                             $controllerAde->addFile($codes);
                         }
                     } else {
@@ -226,8 +230,8 @@ function dlSchedule($users) {
             } else {
                 $path = $controllerAde->getFilePath($codes);
                 $controllerAde->addFile($codes);
-                if(file_exists($path)) {
-                    if(file_get_contents($path) == ''){
+                if (file_exists($path)) {
+                    if (file_get_contents($path) == '') {
                         $controllerAde->addFile($codes);
                     }
                 } else {
@@ -241,37 +245,38 @@ function dlSchedule($users) {
 /**
  * Déplace les fichier ICS afin d'avoir 3 jours de fichiers sauvegardés
  */
-function move_fileICS_schedule() {
-    if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file3')) {
+function move_fileICS_schedule()
+{
+    if ($myfiles = scandir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3')) {
         foreach ($myfiles as $myfile) {
-            if(is_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file3/'.$myfile)) {
-                wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file3/'.$myfile);
+            if (is_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3/' . $myfile)) {
+                wp_delete_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3/' . $myfile);
             }
         }
     }
-    if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file2')) {
+    if ($myfiles = scandir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2')) {
         foreach ($myfiles as $myfile) {
-            if(is_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file2/'.$myfile)) {
-                copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file2/'.$myfile, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file3/'.$myfile);
-                wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file2/'.$myfile);
-            }
-        }
-    }
-
-    if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file1')) {
-        foreach ($myfiles as $myfile) {
-            if(is_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file1/'.$myfile)) {
-                copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file1/'.$myfile, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file2/'.$myfile);
-                wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file1/'.$myfile);
+            if (is_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2/' . $myfile)) {
+                copy($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2/' . $myfile, $_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3/' . $myfile);
+                wp_delete_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2/' . $myfile);
             }
         }
     }
 
-    if($myfiles = scandir($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file0')) {
+    if ($myfiles = scandir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1')) {
         foreach ($myfiles as $myfile) {
-            if(is_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file0/'.$myfile)) {
-                copy($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file0/'.$myfile, $_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file1/'.$myfile);
-                wp_delete_file($_SERVER['DOCUMENT_ROOT'].TV_ICSFILE_PATH.'file0/'.$myfile);
+            if (is_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1/' . $myfile)) {
+                copy($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1/' . $myfile, $_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2/' . $myfile);
+                wp_delete_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1/' . $myfile);
+            }
+        }
+    }
+
+    if ($myfiles = scandir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0')) {
+        foreach ($myfiles as $myfile) {
+            if (is_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0/' . $myfile)) {
+                copy($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0/' . $myfile, $_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1/' . $myfile);
+                wp_delete_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0/' . $myfile);
             }
         }
     }
@@ -280,40 +285,43 @@ function move_fileICS_schedule() {
 /**
  * Inclut tous les fichiers CSS et les fichiers JS
  */
-function wpdocs_plugin_teleconnecteeAmu_scripts() {
+function wpdocs_plugin_teleconnecteeAmu_scripts()
+{
     wp_enqueue_style('plugin-bootstrap-style', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', array(), true);
-    wp_enqueue_style('weather-style', TV_PLUG_PATH.'views/css/weather.css', array(), true);
-    wp_enqueue_style('style-style', TV_PLUG_PATH.'views/css/style.css', array(), true);
-    wp_enqueue_style('alert-style', TV_PLUG_PATH.'views/css/alert.css', array(), true);
-    wp_enqueue_style('info-style', TV_PLUG_PATH.'views/css/information.css', array(), true);
-    wp_enqueue_style('schedule-style', TV_PLUG_PATH.'views/css/schedule.css', array(), true);
-    wp_enqueue_script( 'theme-jquery', get_template_directory_uri() . '/assets/js/jquery-3.3.1.min.js', array (), '', false);
-    wp_enqueue_script( 'theme-jqueryUI', get_template_directory_uri() . '/assets/js/jquery-ui.min.js', array ( 'jquery' ), '', false);
-    wp_enqueue_script( 'theme-jqueryEzTic', TV_PLUG_PATH.'views/js/jquery.easy-ticker.js', array ( 'jquery' ), '', false);
-    wp_enqueue_script( 'plugin-addCheckBox', TV_PLUG_PATH.'views/js/addAllCheckBox.js', array ( 'jquery' ), '', false);
-    wp_enqueue_script( 'plugin-addCodeTv', TV_PLUG_PATH.'views/js/addOrDeleteTvCode.js', array ( 'jquery' ), '', true);
-    wp_enqueue_script( 'plugin-checkCaptcha', TV_PLUG_PATH.'views/js/checkCaptcha.js', array ( 'jquery' ), '', false);
-    wp_enqueue_script( 'plugin-addCodeAlert', TV_PLUG_PATH.'views/js/addOrDeleteAlertCode.js', array ( 'jquery' ), '', false);
-    wp_enqueue_script( 'plugin-marquee', TV_PLUG_PATH.'views/js/jquery.marquee.js', array ( 'jquery' ), '', false);
-    wp_enqueue_script( 'plugin-slideshow', TV_PLUG_PATH.'views/js/slideshow.js', array ( 'jquery' ), '', true);
-    wp_enqueue_script( 'plugin-showModal', TV_PLUG_PATH.'views/js/modal.js', array ( 'jquery' ), '', true);
-    wp_enqueue_script( 'plugin-ticker', TV_PLUG_PATH.'views/js/jquery.tickerNews.js', array ( 'jquery' ), '', true);
-    wp_enqueue_script( 'plugin-alertTicker', TV_PLUG_PATH.'views/js/alertTicker.js', array ( 'jquery' ), '', true);
-    wp_enqueue_script( 'plugin-OneSignal', TV_PLUG_PATH.'views/js/oneSignalPush.js', array ( 'jquery' ), '', true);
-    wp_enqueue_script( 'plugin-confPass', TV_PLUG_PATH.'views/js/confirmPass.js', array ( 'jquery' ), '', false);
-    wp_enqueue_script( 'plugin-weathertime', TV_PLUG_PATH.'views/js/weather_and_time.js', array ( 'jquery' ), '', true);
-    wp_enqueue_script( 'plugin-weather', TV_PLUG_PATH.'views/js/weather.js', array ( 'jquery' ), '', true);
+    wp_enqueue_style('weather-style', TV_PLUG_PATH . 'views/css/weather.css', array(), true);
+    wp_enqueue_style('style-style', TV_PLUG_PATH . 'views/css/style.css', array(), true);
+    wp_enqueue_style('alert-style', TV_PLUG_PATH . 'views/css/alert.css', array(), true);
+    wp_enqueue_style('info-style', TV_PLUG_PATH . 'views/css/information.css', array(), true);
+    wp_enqueue_style('schedule-style', TV_PLUG_PATH . 'views/css/schedule.css', array(), true);
+    wp_enqueue_script('theme-jquery', get_template_directory_uri() . '/assets/js/jquery-3.3.1.min.js', array(), '', false);
+    wp_enqueue_script('theme-jqueryUI', get_template_directory_uri() . '/assets/js/jquery-ui.min.js', array('jquery'), '', false);
+    wp_enqueue_script('theme-jqueryEzTic', TV_PLUG_PATH . 'views/js/jquery.easy-ticker.js', array('jquery'), '', false);
+    wp_enqueue_script('plugin-addCheckBox', TV_PLUG_PATH . 'views/js/addAllCheckBox.js', array('jquery'), '', false);
+    wp_enqueue_script('plugin-addCodeTv', TV_PLUG_PATH . 'views/js/addOrDeleteTvCode.js', array('jquery'), '', true);
+    wp_enqueue_script('plugin-checkCaptcha', TV_PLUG_PATH . 'views/js/checkCaptcha.js', array('jquery'), '', false);
+    wp_enqueue_script('plugin-addCodeAlert', TV_PLUG_PATH . 'views/js/addOrDeleteAlertCode.js', array('jquery'), '', false);
+    wp_enqueue_script('plugin-marquee', TV_PLUG_PATH . 'views/js/jquery.marquee.js', array('jquery'), '', false);
+    wp_enqueue_script('plugin-slideshow', TV_PLUG_PATH . 'views/js/slideshow.js', array('jquery'), '', true);
+    wp_enqueue_script('plugin-showModal', TV_PLUG_PATH . 'views/js/modal.js', array('jquery'), '', true);
+    wp_enqueue_script('plugin-ticker', TV_PLUG_PATH . 'views/js/jquery.tickerNews.js', array('jquery'), '', true);
+    wp_enqueue_script('plugin-alertTicker', TV_PLUG_PATH . 'views/js/alertTicker.js', array('jquery'), '', true);
+    wp_enqueue_script('plugin-OneSignal', TV_PLUG_PATH . 'views/js/oneSignalPush.js', array('jquery'), '', true);
+    wp_enqueue_script('plugin-confPass', TV_PLUG_PATH . 'views/js/confirmPass.js', array('jquery'), '', false);
+    wp_enqueue_script('plugin-weathertime', TV_PLUG_PATH . 'views/js/weather_and_time.js', array('jquery'), '', true);
+    wp_enqueue_script('plugin-weather', TV_PLUG_PATH . 'views/js/weather.js', array('jquery'), '', true);
 }
-add_action( 'wp_enqueue_scripts', 'wpdocs_plugin_teleconnecteeAmu_scripts' );
 
-function manageStudent() {
+add_action('wp_enqueue_scripts', 'wpdocs_plugin_teleconnecteeAmu_scripts');
+
+function manageStudent()
+{
     $current_user = wp_get_current_user();
-    if(in_array('etudiant', $current_user->roles)) {
+    if (in_array('etudiant', $current_user->roles)) {
         $codes = unserialize($current_user->code);
-        if(is_array($codes)) {
+        if (is_array($codes)) {
             $size = sizeof($codes);
         }
-        if(empty($size)) {
+        if (empty($size)) {
             $model = new StudentModel();
             $years = $model->getCodeYear();
             $groups = $model->getCodeGroup();
@@ -323,16 +331,17 @@ function manageStudent() {
             $year = filter_input(INPUT_POST, 'selectYears');
             $group = filter_input(INPUT_POST, 'selectGroups');
             $halfgroup = filter_input(INPUT_POST, 'selectHalfgroups');
-            if($action) {
+            if ($action) {
                 $current_user = wp_get_current_user();
-                $codes = [$year,$group,$halfgroup];
+                $codes = [$year, $group, $halfgroup];
                 $model->modifyStudent($current_user->ID, $codes);
             }
         }
     }
 }
 
-function selectSchedules($years, $groups, $halfgroups) {
+function selectSchedules($years, $groups, $halfgroups)
+{
     echo '
         <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
@@ -345,12 +354,12 @@ function selectSchedules($years, $groups, $halfgroups) {
                 <select class="form-control firstSelect" name="selectYears" required="">
                 <option value="0">Aucun</option>
                         <optgroup label="Année">';
-    if(is_array($years)) {
+    if (is_array($years)) {
         foreach ($years as $year) {
-            echo '<option value="'.$year['code'].'">'.$year['title'].'</option >';
+            echo '<option value="' . $year['code'] . '">' . $year['title'] . '</option >';
         }
     } else {
-        echo '<option value="'.$years['code'].'">'.$years['title'].'</option >';
+        echo '<option value="' . $years['code'] . '">' . $years['title'] . '</option >';
     }
     echo '</optgroup>
     </select>
@@ -358,24 +367,24 @@ function selectSchedules($years, $groups, $halfgroups) {
                 <select class="form-control firstSelect" name="selectGroups" required="">
                 <option value="0">Aucun</option>
                     <optgroup label="Groupe">';
-    if(is_array($groups)) {
-        foreach ($groups as $group){
-            echo '<option value="'.$group['code'].'">'.$group['title'].'</option>';
+    if (is_array($groups)) {
+        foreach ($groups as $group) {
+            echo '<option value="' . $group['code'] . '">' . $group['title'] . '</option>';
         }
     } else {
-        echo '<option value="'.$groups['code'].'">'.$groups['title'].'</option>';
+        echo '<option value="' . $groups['code'] . '">' . $groups['title'] . '</option>';
     }
     echo '</optgroup>
     </select>
     <select class="form-control firstSelect" name="selectHalfgroups" required="">
     <option value="0">Aucun</option>
           <optgroup label="Demi groupe">';
-    if(is_array($halfgroups)) {
-        foreach ($halfgroups as $halfgroup){
-            echo '<option value="'.$halfgroup['code'].'">'.$halfgroup['title'].'</option>';
+    if (is_array($halfgroups)) {
+        foreach ($halfgroups as $halfgroup) {
+            echo '<option value="' . $halfgroup['code'] . '">' . $halfgroup['title'] . '</option>';
         }
     } else {
-        echo '<option value="'.$halfgroups['code'].'">'.$halfgroups['title'].'</option>';
+        echo '<option value="' . $halfgroups['code'] . '">' . $halfgroups['title'] . '</option>';
     }
     echo '</optgroup>
                 </select>
@@ -388,4 +397,15 @@ function selectSchedules($years, $groups, $halfgroups) {
         
         <script> $("#myModal").show() </script>';
 }
+
 add_action('check', 'manageStudent');
+
+function displayParticipant()
+{
+    $url = "https://www.nuitdelinfo.com/inscription/sites/55";
+    $result = file_get_contents($url);
+    $result = explode('<li class="list-group-item list-group-item-info">', $result);
+    $result1 = substr($result[1], 0, -60);
+    $result2 = substr($result[2], 0, 70);
+    return $result1.$result2;
+}
