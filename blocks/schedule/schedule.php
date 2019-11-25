@@ -6,16 +6,16 @@ function schedule_render_callback()
         $current_user = wp_get_current_user();
         if (in_array("enseignant", $current_user->roles)) {
             $controller = new Teacher();
-            return $controller->displaySchedules();
+            return $controller->displayMySchedule();
         } else if (in_array("etudiant", $current_user->roles)) {
             $controller = new Student();
-            return $controller->displaySchedules();
+            return $controller->displayMySchedule();
         } else if (in_array("television", $current_user->roles)) {
             $controller = new Television();
-            return $controller->displaySchedules();
+            return $controller->displayMySchedule();
         } else if (in_array("technicien", $current_user->roles)) {
             $controller = new Technician();
-            return $controller->displaySchedules();
+            return $controller->displayMySchedule();
         } else if (in_array("administrator", $current_user->roles) || in_array("secretary", $current_user->roles)) {
             $controller = new Secretary();
             $view = new SecretaryView();

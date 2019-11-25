@@ -30,7 +30,7 @@ class Television extends User implements Schedule
         $this->model = new TelevisionModel();
     }
 
-    public function displaySchedules()
+    public function displayMySchedule()
     {
         $current_user = wp_get_current_user();
         $codes = unserialize($current_user->code); // On utilie cette fonction car les codes dans la base de données sont sérialisés

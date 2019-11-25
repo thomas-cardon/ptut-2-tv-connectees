@@ -3,13 +3,10 @@
 /**
  * Fonction qui est reliée au bloc
  * Affiche l'interface de gestion pour l'admin
- * @return string Return la vue du formulaire
  */
 function admininterface_render_callback()
 {
     if (is_page()) {
-        $admin = new Admin();
-        return $admin->changeMyWebsite();
     }
 }
 

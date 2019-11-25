@@ -28,7 +28,7 @@ class Technician extends User implements Schedule
         $this->model = new TechnicianModel();
     }
 
-    public function displaySchedules()
+    public function displayMySchedule()
     {
         $modelCode = new CodeAdeManager();
         $years = $modelCode->getCodeYear();
@@ -39,7 +39,9 @@ class Technician extends User implements Schedule
                 $string .= $this->view->displayRow();
             }
             if($this->displaySchedule($year['code'])) {
+	            $string .= $this->view->displayDivSchedule();
                 $string .= $this->displaySchedule($year['code']);
+	            $string .= $this->view->displayEndDiv();
             } else {
                 $string .= $this->view->displayNoStudy();
             }

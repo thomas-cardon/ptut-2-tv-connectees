@@ -23,7 +23,7 @@ abstract class ControllerG
     /**
      * Permet de signaler une erreur lorsqu'on l'utilise
      * Cela envoie dans un fichier.log la date et l'heure puis un message d'erreur
-     * @param $event    Événement de l'erreur
+     * @param $event    string Événement de l'erreur
      */
     public function addLogEvent($event)
     {

@@ -2,6 +2,9 @@
 CSS de l'emploi du temps
  */
 
+.shedule_tech{
+    width: 50%;
+}
 /* TABLE */
 .errorNotRegister {
     font-weight: bold;
@@ -28,15 +31,8 @@ CSS de l'emploi du temps
     background-color: #00558a;
 }
 
-.technician {
-    float: left;
-    margin-left: 2.5%;
-    margin-right: 2.5%;
-    width: 40% !important;
-}
-
-@media (max-width: 640px) {
-    .technician {
+@media (max-width: 1200px) {
+    .shedule_tech{
         width: 100%;
     }
 }

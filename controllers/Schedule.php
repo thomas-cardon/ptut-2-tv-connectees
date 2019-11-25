@@ -23,7 +23,6 @@ interface Schedule
     /**
      * Affiche l'emploi du temps de la personne connectée,
      * Si cette personne n'a pas d'emploi du temps, on lui souhaite la bienvenue sur le site
-     * @throws Exception
      */
-    public function displaySchedules();
+    public function displayMySchedule();
 }

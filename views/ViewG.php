@@ -368,7 +368,7 @@ abstract class ViewG
      */
     public function displayRow()
     {
-        return '<div class="row">';
+        return '<div class="flex-content">';
     }
 
     /**

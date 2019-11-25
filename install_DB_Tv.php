@@ -71,27 +71,6 @@ $query = "CREATE TABLE IF NOT EXISTS $commissions_table_name (
 
 dbDelta($query);
 
-$commissions_table_name = 'ecran_modification';
-
-$query = "CREATE TABLE IF NOT EXISTS $commissions_table_name (
-			`id` INT(20) NOT NULL AUTO_INCREMENT,
-			`title` VARCHAR( 255 ) NOT NULL ,
-			`content` VARCHAR ( 255 ) NOT NULL ,
-			PRIMARY KEY  (id)
-			) $charset_collate;";
-
-dbDelta($query);
-
-$col = $wpdb->get_results("SELECT id FROM $commissions_table_name");
-
-if (!$col) {
-    $data = ["title" => "column", "content" => "right"];
-    $wpdb->insert($commissions_table_name, $data);
-
-    $data = ["title" => "hideNoSchedule", "content" => "false"];
-    $wpdb->insert($commissions_table_name, $data);
-}
-
 $sql = "ALTER TABLE `" . $commissions_table_name . "` AUTO_INCREMENT = 2;";
 $wpdb->query($sql);
 

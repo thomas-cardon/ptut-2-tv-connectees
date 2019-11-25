@@ -20,7 +20,7 @@ class WidgetSchedule extends WP_Widget{
 
     public function widget( $args, $instance ) {
         $view = new Schedule();
-        $view->displaySchedules();
+        $view->displayMySchedule();
     }
 
     public function form( $instance ) {

@@ -1,4 +1,12 @@
 /*__Information main__*/
+.carousel-item {
+    float: none !important;
+}
+
+.carousel, .carousel-item, .carousel-inner, .pdfemb-viewer, div.pdfemb-inner-div, .pdfemb-the-canvas, .pdfemb-pagescontainer {
+    position: static !important;
+}
+
 li.tv section article div p.content_info {
     max-height: 65vh !important;
     font-size: 1.5em;

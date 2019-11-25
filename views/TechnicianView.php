@@ -34,4 +34,8 @@ class TechnicianView extends UserView
         $tab[] = $login;
         return $this->displayAll($row, 'tech', $id, $tab);
     }
+
+    public function displayDivSchedule() {
+    	return '<div class="shedule_tech">';
+    }
 }
