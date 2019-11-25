@@ -20,13 +20,16 @@ class ICSView extends ViewG {
 				for ( $m = 1; $m <= 12; $m ++ ) {
 					$month = $m < 10 ? '0' . $m : '' . $m;
 					foreach ( (array) $ics_data['events'][ $year ][ $month ] as $day => $day_events ) {
-						if ( in_array( 'television', $current_user->roles ) ) {
-							if ( $day == date( 'j' ) ) {
-								$string .= $this->displayStartSchedule( $current_user );
-							}
-						} else {
+						if ( $day == date( 'j' ) ) {
 							$string .= $this->displayStartSchedule( $current_user );
 						}
+//						if ( in_array( 'television', $current_user->roles ) ) {
+//							if ( $day == date( 'j' ) ) {
+//								$string .= $this->displayStartSchedule( $current_user );
+//							}
+//						} else {
+//							$string .= $this->displayStartSchedule( $current_user );
+//						}
 						foreach ( $day_events as $day_event => $events ) {
 							foreach ( $events as $event ) {
 								if ( in_array( 'television', $current_user->roles ) ) {
@@ -51,11 +54,14 @@ class ICSView extends ViewG {
 								}
 							}
 						}
-						if ( in_array( 'television', $current_user->roles ) ) {
-							if ( $day == date( 'j' ) ) {
-								$string .= $this->displayEndSchedule();
-							}
-						} else {
+//						if ( in_array( 'television', $current_user->roles ) ) {
+//							if ( $day == date( 'j' ) ) {
+//								$string .= $this->displayEndSchedule();
+//							}
+//						} else {
+//							$string .= $this->displayEndSchedule();
+//						}
+						if ( $day == date( 'j' ) ) {
 							$string .= $this->displayEndSchedule();
 						}
 					}
