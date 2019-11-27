@@ -2,7 +2,7 @@ $('.ticker1').easyTicker({
     direction: 'up',
     easing: 'swing',
     speed: 'slow',
-    interval: 5000,
+    interval: 3000,
     height: 'auto',
     visible: 0,
     mousePause: 1,
