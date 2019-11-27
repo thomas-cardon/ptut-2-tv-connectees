@@ -113,10 +113,10 @@ class InformationView extends ViewG {
 			} else if ( $types[ $i ] == 'text' ) {
 				$text = explode( '.', $content[ $i ] );
 				foreach ( $text as $value ) {
-					echo '<p class="content_info ' . $myclass . '">' . $value . '</p>';
+					echo '<p>' . $value . '</p>';
 				}
 			} else {
-				echo '<p class="content_info ' . $myclass . '">' . $content[ $i ] . '</p>';
+				echo '<p>' . $content[ $i ] . '</p>';
 			}
 			echo '</div>';
 			$cpt ++;
