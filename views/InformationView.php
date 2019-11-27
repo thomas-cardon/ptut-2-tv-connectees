@@ -104,7 +104,7 @@ class InformationView extends ViewG {
 				$func = explode( '(Do this(function:', $content[ $i ] );
 				$text = explode( '.', $func[0] );
 				foreach ( $text as $value ) {
-					echo '<p class="content_info ' . $myclass . '">' . $value . '</p>';
+					echo '<p>' . $value . '</p>';
 				}
 				$func = explode( ')end)', $func[1] );
 				echo '<p class="content_info ' . $myclass . '">';
