@@ -116,7 +116,7 @@ class InformationView extends ViewG {
 					echo '<p>' . $value . '</p>';
 				}
 			} else {
-				echo '<p>' . $content[ $i ] . '</p>';
+				echo '<p class="content_info ' . $myclass . '">' . $content[ $i ] . '</p>';
 			}
 			echo '</div>';
 			$cpt ++;
