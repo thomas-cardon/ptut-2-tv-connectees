@@ -17,8 +17,9 @@ interface Schedule
     /**
      * Affiche l'emploi du temps demandé
      * @param $code int Code ADE de l'emploi du temps
+     * @param $allDay bool Affiche toute la journée si true
      */
-    public function displaySchedule($code);
+    public function displaySchedule($code, $allDay);
 
     /**
      * Affiche l'emploi du temps de la personne connectée,

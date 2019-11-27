@@ -92,11 +92,8 @@ abstract class Model
     {
         $req = $this->getDb()->prepare('SELECT * FROM code_ade WHERE type = "Annee" ORDER BY title');
         $req->execute();
-        while ($data = $req->fetch()) {
-            $var[] = $data;
-        }
-        return $var;
-        $req->closeCursor();
+		$data = $req->fetchAll();
+        return $data;
     }
 
     /**

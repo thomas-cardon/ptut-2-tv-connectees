@@ -27,6 +27,8 @@ input[type="submit"]:disabled {
 .flex-column {
     display: flex;
     flex-direction: column;
+    width: 70%;
+    margin: auto;
 }
 
 .form-admin {

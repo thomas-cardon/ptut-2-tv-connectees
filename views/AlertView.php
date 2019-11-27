@@ -240,7 +240,7 @@ class AlertView extends ViewG
                 <div class="ti_slide">
                     <div class="ti_content">';
         for ($i = 0; $i < sizeof($content); ++$i) {
-            echo '<div class="ti_news"><span>' . $content[$i] . '</span> </div>';
+            echo '<div class="ti_news"><span>' . $content[$i] . '</span></div>';
         }
         echo '
                     </div>

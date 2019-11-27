@@ -4,7 +4,10 @@ function schedule_render_callback()
 {
     if (is_page()) {
         $current_user = wp_get_current_user();
-        if (in_array("enseignant", $current_user->roles)) {
+        if(in_array('directeuretude', $current_user->roles)) {
+            $controller = new StudyDirector();
+            return $controller->displayMySchedule();
+        } else if (in_array("enseignant", $current_user->roles)) {
             $controller = new Teacher();
             return $controller->displayMySchedule();
         } else if (in_array("etudiant", $current_user->roles)) {

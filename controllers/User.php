@@ -170,7 +170,7 @@ class User extends ControllerG
      * @param $code     int Code ADE de l'emploi du temps
      * @return string|bool
      */
-    public function displaySchedule($code)
+    public function displaySchedule($code, $allDay = false)
     {
         global $R34ICS;
         $R34ICS = new R34ICS();
@@ -187,7 +187,7 @@ class User extends ControllerG
             'title' => null,
             'view' => 'list',
         );
-        return $R34ICS->display_calendar($url, $code, $args);
+        return $R34ICS->display_calendar($url, $code, $allDay, $args);
     }
 
     /**
@@ -197,18 +197,15 @@ class User extends ControllerG
     function displayYearSchedule()
     {
         $code = $this->getMyIdUrl(); // On récupère l'ID qui sert de code ADE
-        if (!is_numeric($code)) {
-            return $this->view->displaySelectSchedule();
+	    $codes = array();
+	    $results = $this->model->getCodeYear();
+	    foreach ($results as $result) {
+	    	$codes[] = $result['code'];
+	    }
+        if (in_array($code, $codes)) {
+        	return $this->displaySchedule($code, true);
         } else {
-            $path = $this->getFilePath($code);
-            if (!file_exists($path) || filesize($path) <= 0) {
-                $this->addFile($code);
-            }
-            if($this->displaySchedule($code)) {
-                return $this->displaySchedule($code);
-            } else {
-                return $this->view->displayNoStudy();
-            }
+                return $this->view->displaySelectSchedule();
         }
     }
 

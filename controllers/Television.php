@@ -37,17 +37,37 @@ class Television extends User implements Schedule
 
         $string = "";
         if (is_array($codes)) {
-            $string .= $this->view->displayStartSlide();
-            foreach ($codes as $code) {
-                $path = $this->getFilePath($code);
-                if (file_exists($path)) {
-                    if($this->displaySchedule($code)) {
-                        $string .= $this->displaySchedule($code);
-                        $string .= $this->view->displayMidSlide();
-                    }
-                }
-            }
-            $string .= $this->view->displayEndSlide();
+        	if(sizeof($codes) > 1) {
+		        if(get_theme_mod('ecran_connecte_schedule_scroll', 'vert') == 'vert') {
+			        $string .= '<div class="ticker1">
+							<div class="innerWrap">';
+			        foreach ($codes as $code) {
+				        $path = $this->getFilePath($code);
+				        if (file_exists($path)) {
+					        if($this->displaySchedule($code)) {
+						        $string .= '<div class="list">';
+						        $string .= $this->displaySchedule($code);
+						        $string .= '</div>';
+					        }
+				        }
+			        }
+			        $string .= '</div></div>';
+		        } else {
+			        $string .= $this->view->displayStartSlide();
+			        foreach ($codes as $code) {
+				        $path = $this->getFilePath($code);
+				        if (file_exists($path)) {
+					        if($this->displaySchedule($code)) {
+						        $string .= $this->displaySchedule($code);
+						        $string .= $this->view->displayMidSlide();
+					        }
+				        }
+			        }
+			        $string .= $this->view->displayEndSlide();
+		        }
+	        } else {
+		        $string .= $this->displaySchedule($codes[0]);
+	        }
         } else {
             $string .= $this->displaySchedule($codes);
         }

@@ -1,11 +1,11 @@
-$('#ticker1').easyTicker({
+$('.ticker1').easyTicker({
     direction: 'up',
     easing: 'swing',
     speed: 'slow',
-    interval: 3000,
+    interval: 5000,
     height: 'auto',
-    visible: 1,
-    mousePause: 0,
+    visible: 0,
+    mousePause: 1,
     controls: {
         up: '',
         down: '',
@@ -14,4 +14,3 @@ $('#ticker1').easyTicker({
         stopText: 'Stop'
     }
 });
-

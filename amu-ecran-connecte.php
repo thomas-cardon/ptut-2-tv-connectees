@@ -283,28 +283,34 @@ function move_fileICS_schedule()
  */
 function wpdocs_plugin_teleconnecteeAmu_scripts()
 {
+	//CSS
     wp_enqueue_style('plugin-bootstrap-style', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', array(), true);
     wp_enqueue_style('weather-style', TV_PLUG_PATH . 'views/css/weather.css', array(), true);
     wp_enqueue_style('style-style', TV_PLUG_PATH . 'views/css/style.css', array(), true);
     wp_enqueue_style('alert-style', TV_PLUG_PATH . 'views/css/alert.css', array(), true);
     wp_enqueue_style('info-style', TV_PLUG_PATH . 'views/css/information.css', array(), true);
     wp_enqueue_style('schedule-style', TV_PLUG_PATH . 'views/css/schedule.css', array(), true);
-    wp_enqueue_script('theme-jquery', get_template_directory_uri() . '/assets/js/jquery-3.3.1.min.js', array(), '', false);
-    wp_enqueue_script('theme-jqueryUI', get_template_directory_uri() . '/assets/js/jquery-ui.min.js', array('jquery'), '', false);
-    wp_enqueue_script('theme-jqueryEzTic', TV_PLUG_PATH . 'views/js/jquery.easy-ticker.js', array('jquery'), '', false);
-    wp_enqueue_script('plugin-addCheckBox', TV_PLUG_PATH . 'views/js/addAllCheckBox.js', array('jquery'), '', false);
-    wp_enqueue_script('plugin-addCodeTv', TV_PLUG_PATH . 'views/js/addOrDeleteTvCode.js', array('jquery'), '', true);
-    wp_enqueue_script('plugin-checkCaptcha', TV_PLUG_PATH . 'views/js/checkCaptcha.js', array('jquery'), '', false);
-    wp_enqueue_script('plugin-addCodeAlert', TV_PLUG_PATH . 'views/js/addOrDeleteAlertCode.js', array('jquery'), '', false);
-    wp_enqueue_script('plugin-marquee', TV_PLUG_PATH . 'views/js/jquery.marquee.js', array('jquery'), '', false);
-    wp_enqueue_script('plugin-slideshow', TV_PLUG_PATH . 'views/js/slideshow.js', array('jquery'), '', true);
-    wp_enqueue_script('plugin-showModal', TV_PLUG_PATH . 'views/js/modal.js', array('jquery'), '', true);
-    wp_enqueue_script('plugin-ticker', TV_PLUG_PATH . 'views/js/jquery.tickerNews.js', array('jquery'), '', true);
-    wp_enqueue_script('plugin-alertTicker', TV_PLUG_PATH . 'views/js/alertTicker.js', array('jquery'), '', true);
-    wp_enqueue_script('plugin-OneSignal', TV_PLUG_PATH . 'views/js/oneSignalPush.js', array('jquery'), '', true);
-    wp_enqueue_script('plugin-confPass', TV_PLUG_PATH . 'views/js/confirmPass.js', array('jquery'), '', false);
-    wp_enqueue_script('plugin-weathertime', TV_PLUG_PATH . 'views/js/weather_and_time.js', array('jquery'), '', true);
-    wp_enqueue_script('plugin-weather', TV_PLUG_PATH . 'views/js/weather.js', array('jquery'), '', true);
+
+    // JQUERY
+	wp_enqueue_script('plugin-jquerymin', TV_PLUG_PATH . 'views/js/jquery.min.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-JqueryEzMin', TV_PLUG_PATH . 'views/js/jquery.easing.min.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-jqueryEzTic', TV_PLUG_PATH . 'views/js/jquery.easy-ticker.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-jqueryEzMinTic', TV_PLUG_PATH . 'views/js/jquery.easy-ticker.min.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-marquee', TV_PLUG_PATH . 'views/js/jquery.marquee.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-ticker', TV_PLUG_PATH . 'views/js/jquery.tickerNews.js', array('jquery'), '', true);
+
+	// SCRIPT
+	wp_enqueue_script('plugin-addCheckBox', TV_PLUG_PATH . 'views/js/addAllCheckBox.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-addCodeAlert', TV_PLUG_PATH . 'views/js/addOrDeleteAlertCode.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-addCodeTv', TV_PLUG_PATH . 'views/js/addOrDeleteTvCode.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-alertTicker', TV_PLUG_PATH . 'views/js/alertTicker.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-scroll', TV_PLUG_PATH . 'views/js/scroll.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-confPass', TV_PLUG_PATH . 'views/js/confirmPass.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-showModal', TV_PLUG_PATH . 'views/js/modal.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-OneSignal', TV_PLUG_PATH . 'views/js/oneSignalPush.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-slideshow', TV_PLUG_PATH . 'views/js/slideshow.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-weather', TV_PLUG_PATH . 'views/js/weather.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-weathertime', TV_PLUG_PATH . 'views/js/weather_and_time.js', array('jquery'), '', true);
 }
 
 add_action('wp_enqueue_scripts', 'wpdocs_plugin_teleconnecteeAmu_scripts');

@@ -5,6 +5,7 @@ CSS de l'emploi du temps
 .shedule_tech{
     width: 50%;
 }
+
 /* TABLE */
 .errorNotRegister {
     font-weight: bold;
@@ -14,7 +15,6 @@ CSS de l'emploi du temps
 
 /* SLIDESHOW */
 .slideshow-container {
-    max-width: 1000px;
     position: relative;
     margin: auto;
 }

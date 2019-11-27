@@ -83,7 +83,7 @@ class R34ICS extends ControllerG
      * @param array $args Array d'option
      * @return string
      */
-    public function display_calendar($ics_url, $code, $args = array())
+    public function display_calendar($ics_url, $code, $allDay, $args = array())
     {
         $force_reload = true;
         // Get ICS file, from transient if possible
@@ -322,7 +322,7 @@ class R34ICS extends ControllerG
             $current_user = wp_get_current_user();
             $title = $current_user->user_login;
         }
-        return $this->view->displaySchedule($ics_data, $title);
+        return $this->view->displaySchedule($ics_data, $title, $allDay);
     }
 
     public function first_dow($date = null)

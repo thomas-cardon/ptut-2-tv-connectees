@@ -99,6 +99,17 @@ class InformationManager
         return $result;
     } //getListInformation()
 
+	/**
+	 * Return the list of event present in database
+	 * @return array|null|object
+	 */
+	public function getListInformationEvent()
+	{
+		global $wpdb;
+		$result = $wpdb->get_results("SELECT * FROM informations WHERE type = 'event' ORDER BY end_date", ARRAY_A);
+		return $result;
+	} //getListInformation()
+
     /**
      * Return the list of information created by an user
      * @param $user     int id
