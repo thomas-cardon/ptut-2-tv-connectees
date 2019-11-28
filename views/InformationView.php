@@ -104,19 +104,17 @@ class InformationView extends ViewG {
 				$func = explode( '(Do this(function:', $content[ $i ] );
 				$text = explode( '.', $func[0] );
 				foreach ( $text as $value ) {
-					echo '<p>' . $value . '</p>';
+					echo '<p class="info-text">' . $value . '</p>';
 				}
 				$func = explode( ')end)', $func[1] );
-				echo '<p class="content_info ' . $myclass . '">';
 				echo $func[0]();
-				echo '</p>';
 			} else if ( $types[ $i ] == 'text' ) {
 				$text = explode( '.', $content[ $i ] );
 				foreach ( $text as $value ) {
-					echo '<p>' . $value . '</p>';
+					echo '<p class="info-text">' . $value . '</p>';
 				}
 			} else {
-				echo '<p class="content_info ' . $myclass . '">' . $content[ $i ] . '</p>';
+				echo $content[ $i ];
 			}
 			echo '</div>';
 			$cpt ++;
@@ -125,6 +123,16 @@ class InformationView extends ViewG {
                </section>
              </li>';
 	} //displayInformationView()
+
+	public function displayStartSlideEvent() {
+		echo '
+            <div id="slideshow-container" class="slideshow-container">';
+	}
+
+	public function displaySlideBegin() {
+		echo '
+			<div class="mySlides event-slide">';
+	}
 
 	/**
 	 * @param $titleForm

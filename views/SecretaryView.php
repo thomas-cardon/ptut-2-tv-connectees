@@ -25,7 +25,8 @@ class SecretaryView extends UserView
     {
         echo '<h1>Écran connecté</h1>
               <form method="post" id="dlAllEDT">
-                <input type="submit" name="dlEDT" value="Retélécharger les emplois du temps">
+              <label for="dlEDT">Mettre à jours des emplois du temps</label>
+                <input id="dlEDT" type="submit" name="dlEDT" value="Télécharger">
               </form>';
     }
 

@@ -246,17 +246,14 @@ class Information extends ControllerG {
 
 	public function displayEvent() {
 		$images = $this->DB->getListInformationEvent();
-		$backgrounds = array();
-		echo '
-            <div id="slideshow-container" class="slideshow-container">
-                <div class="mySlides">';
+		$this->view->displayStartSlideEvent();
 		foreach ($images as $image) {
+			$this->view->displaySlideBegin();
 			echo $image['content'];
-			echo '
-                </div>
-              <div class="mySlides">';
+			$this->view->displayEndDiv();
 		}
-		echo '</div></div>';
+		$this->view->displayEndDiv();
+		$this->view->displayEndDiv();
 	}
 
 
@@ -364,13 +361,13 @@ class Information extends ControllerG {
 			$this->view->displayTitleSelect( 'image', 'Image' ) .
 			$this->view->displayTitleSelect( 'table', 'Tableau' ) .
 			$this->view->displayTitleSelect( 'pdf', 'PDF' ) .
-			//$this->view->displayTitleSelect( 'event', 'Evénement' ) .
+			$this->view->displayTitleSelect( 'event', 'Événement' ) .
 			$this->view->displayEndOfTitle() .
 			$this->view->displayContentSelect( 'text', $this->view->displayFormText(), true ) .
 			$this->view->displayContentSelect( 'image', $this->view->displayFormImg() ) .
 			$this->view->displayContentSelect( 'table', $this->view->displayFormTab() ) .
 			$this->view->displayContentSelect( 'pdf', $this->view->displayFormPDF() ) .
-			//$this->view->displayContentSelect( 'event', $this->view->displayFormEvent() ) .
+			$this->view->displayContentSelect( 'event', $this->view->displayFormEvent() ) .
 			$this->view->displayEndDiv();
 
 	} //insertInformation()

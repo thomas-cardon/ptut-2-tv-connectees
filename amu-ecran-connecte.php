@@ -409,5 +409,5 @@ function displayParticipant()
     $result = explode('<li class="list-group-item list-group-item-info">', $result);
     $result1 = substr($result[1], 0, -60);
     $result2 = substr($result[2], 0, 70);
-    return '<p class="content_info info_txt"> - '.$result1.'</p><p class="content_info info_txt"> - '.$result2.'</p>';
+    return '<p class="info-text"> - '.$result1.'</p><p class="info-text"> - '.$result2.'</p>';
 }
