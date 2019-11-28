@@ -40,7 +40,7 @@ class Television extends User implements Schedule
         	if(sizeof($codes) > 1) {
 		        if(get_theme_mod('ecran_connecte_schedule_scroll', 'vert') == 'vert') {
 			        $string .= '<div class="ticker1">
-							<div class="innerWrap">';
+							<div class="innerWrap tv-schedule">';
 			        foreach ($codes as $code) {
 				        $path = $this->getFilePath($code);
 				        if (file_exists($path)) {

@@ -8,6 +8,7 @@
 
 class TeacherModel extends UserModel
 {
+
     /**
      * Ajoute un enseignant à la base de données
      * @param $login    string login

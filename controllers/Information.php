@@ -247,12 +247,15 @@ class Information extends ControllerG {
 	public function displayEvent() {
 		$images = $this->DB->getListInformationEvent();
 		$this->view->displayStartSlideEvent();
-		foreach ($images as $image) {
+		foreach ( $images as $image ) {
 			$this->view->displaySlideBegin();
-			echo $image['content'];
-			$this->view->displayEndDiv();
+			if(substr($image['content'], 1, 3) == "pdf") {
+				echo do_shortcode($image['content']);
+			} else {
+				echo $image['content'];
+			}
+			echo $this->view->displayEndDiv();
 		}
-		$this->view->displayEndDiv();
 		$this->view->displayEndDiv();
 	}
 
@@ -284,7 +287,7 @@ class Information extends ControllerG {
 			$this->view->displayCreateValidate();
 		} elseif ( isset( $actionImg ) ) { // si c'est une création d'affiche
 			//upload le fichier avec un nom temporaire
-			$this->insertImg($title, $contentFile, $endDate, "img");
+			$this->insertImg( $title, $contentFile, $endDate, "img" );
 		} elseif ( isset( $actionTab ) ) { //si c'est une création d'un tableau de note
 			$result = $this->uploadFile( $contentFile, "create", "tab", 0, $title, $endDate );
 			if ( $result != 0 ) {
@@ -317,41 +320,18 @@ class Information extends ControllerG {
 
 				//modifie le contenu de l'information pour avoir le bon lien de l'image
 				$content = '[pdf-embedder url="' . TV_UPLOAD_PATH . $id . '.pdf"]';
-				//$content =  '<embed src="'.TV_PLUG_PATH.'views/media/' . $id . '.pdf'.'"pdf#toolbar=0&navpanes=0&scrollbar=0">';
-				//$content = '<img src="'.TV_PLUG_PATH.'views/media/'.$id.'.'.$extension_upload.'">';
 				$this->changeContentFile( $id, $content );
 				$this->view->displayCreateValidate();
 			}
 		} else if ( $actionEvent ) {
-			$type = "event";
-			$countfiles = count($_FILES['contentFile']['name']);
-
+			$type       = "event";
+			$countfiles = count( $_FILES['contentFile']['name'] );
+			$good_types = array( 'jpg', 'jpeg', 'gif', 'png', 'svg', "pdf" );
 			// Looping all files
-			for($i=0;$i<$countfiles;$i++){
-				$filename = $_FILES['contentFile']['name'][$i];
-				$id = "temporary";
-				$extension_upload = strtolower( substr( strrchr( $filename, '.' ), 1 ) );
-				$nom      = $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $id . "." . $extension_upload;
-				if($resultat = move_uploaded_file( $_FILES['contentFile']['tmp_name'][$i], $nom )) {
-					$result = $this->DB->addInformationDB( $title, "temporary content", $endDate, $type );
-				}
-
-				if ( $result != 0 ) {
-
-					$id = $result;
-					//récupère l'extension du fichier
-					$_FILES['file']   = $contentFile;
-					$extension_upload = strtolower( substr( strrchr( $filename, '.' ), 1 ) );
-
-					//renomme le fichier avec l'id de l'info
-					rename( $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . "temporary." . $extension_upload,
-						$_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $id . "." . $extension_upload );
-
-					//modifie le contenu de l'information pour avoir le bon lien de l'image
-					$content = '<img src="' . TV_UPLOAD_PATH . $id . '.' . $extension_upload . '">';
-					$this->changeContentFile( $id, $content );
-					$this->view->displayCreateValidate();
-				}
+			for ( $i = 0; $i < $countfiles; $i ++ ) {
+				$filename    = $_FILES['contentFile']['name'][ $i ];
+				$fileTmpName = $_FILES['contentFile']['tmp_name'][ $i ];
+				$this->insertInfo( $filename, $fileTmpName, $title, $endDate, $type );
 			}
 		}
 
@@ -372,21 +352,33 @@ class Information extends ControllerG {
 
 	} //insertInformation()
 
-	public function insertImg($title, $contentFile, $endDate, $type) {
-		$result = $this->uploadFile( $contentFile, "create", $type, 0, $title, $endDate );
+	public function insertInfo( $filename, $tmpName, $title, $endDate, $type ) {
+		$id               = "temporary";
+		$extension_upload = strtolower( substr( strrchr( $filename, '.' ), 1 ) );
+		$nom              = $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $id . "." . $extension_upload;
+		if ( $resultat = move_uploaded_file( $tmpName, $nom ) ) {
+			$result = $this->DB->addInformationDB( $title, "temporary content", $endDate, $type );
+		}
+
 		if ( $result != 0 ) {
-
 			$id = $result;
-			//récupère l'extension du fichier
-			$_FILES['file']   = $contentFile;
-			$extension_upload = strtolower( substr( strrchr( $_FILES['file']['name'], '.' ), 1 ) );
-
 			//renomme le fichier avec l'id de l'info
 			rename( $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . "temporary." . $extension_upload,
 				$_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $id . "." . $extension_upload );
 
-			//modifie le contenu de l'information pour avoir le bon lien de l'image
-			$content = '<img src="' . TV_UPLOAD_PATH . $id . '.' . $extension_upload . '">';
+			if ( $type == "img" || $type == "event" ) {
+				if ( in_array( $extension_upload, [ 'jpg', 'jpeg', 'gif', 'png', 'svg' ] ) ) {
+					$content = '<img src="' . TV_UPLOAD_PATH . $id . '.' . $extension_upload . '">';
+				}
+			}
+			if ( $type == "pdf" || $type == "event" ) {
+				if ( $extension_upload == "pdf" ) {
+					$content = '[pdf-embedder url="' . TV_UPLOAD_PATH . $id . '.pdf"]';
+				}
+			}
+			if ( $type == "tab" ) {
+
+			}
 			$this->changeContentFile( $id, $content );
 			$this->view->displayCreateValidate();
 		}
@@ -430,13 +422,13 @@ class Information extends ControllerG {
 //			echo "<p class='red'>Le fichier est trop volumineux.</p>";
 //		}
 
-		if ( $type == "img" || $type == "event") {
+		if ( $type == "img" || $type == "event" ) {
 			$extensions_valides = array( 'jpg', 'jpeg', 'gif', 'png', 'svg' );
 		}
-		if ( $type == "tab") {
+		if ( $type == "tab" ) {
 			$extensions_valides = array( 'xls', 'xlsx', 'ods' );
 		}
-		if ( $type == "pdf") {
+		if ( $type == "pdf" ) {
 			$extensions_valides = array( "pdf" );
 		}
 
@@ -460,7 +452,7 @@ class Information extends ControllerG {
 					echo "<p class='red'>Le type d'information n'est pas le bon.</p>";
 				}
 			} elseif ( $action == "modify" ) {
-				if ( $type == "img" || $type == "event") {
+				if ( $type == "img" || $type == "event" ) {
 					//renvoie le nouveau contenu de l'info
 					$content = '<img src="' . TV_UPLOAD_PATH . $id . '.' . $extension_upload . '" alt="' . $title . '">';
 

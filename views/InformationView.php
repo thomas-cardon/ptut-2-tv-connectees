@@ -98,7 +98,7 @@ class InformationView extends ViewG {
 			if ( $title[ $i ] != "Sans titre" ) {
 				echo '<h2 class="titleInfo">' . $title[ $i ] . '</h2>';
 			}
-			if ( $types[ $i ] == 'pdf' ) {
+			if ( $types[ $i ] == 'pdf') {
 				echo do_shortcode( $content[ $i ] );
 			} else if ( $types[ $i ] == 'special' ) {
 				$func = explode( '(Do this(function:', $content[ $i ] );

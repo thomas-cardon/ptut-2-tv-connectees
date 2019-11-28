@@ -7,13 +7,16 @@ showSlides();
 function showSlides() {
     let i;
     let slides = document.getElementsByClassName("mySlides");
+    console.log(slides[0]);
     for (i = 0; i < slides.length; i++) {
         slides[i].style.display = "none";
     }
-    slideIndex++;
-    if (slideIndex > slides.length - 1) {
-        slideIndex = 1
+    if (slideIndex === slides.length) {
+        slideIndex = 0;
+        console.log("Fin du diapo");
     }
-    slides[slideIndex - 1].style.display = "block";
+    console.log("Affiche diapo numéro " + slideIndex);
+    slides[slideIndex].style.display = "block";
+    slideIndex++;
     setTimeout(showSlides, 10000);
 }

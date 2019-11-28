@@ -6,6 +6,10 @@ CSS de l'emploi du temps
     width: 50%;
 }
 
+.tv-schedule {
+    width: 100%;
+}
+
 /* TABLE */
 .errorNotRegister {
     font-weight: bold;
