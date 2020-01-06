@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2b1d3d0f-72cd-429f-bd68-b89ebcd2831a" name="Default Changelist" comment="" />
+    <list default="true" id="c18ec22c-343d-4092-8408-39016058a6a3" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/plugin-ecran-connecte/amu-ecran-connecte.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/plugin-ecran-connecte/amu-ecran-connecte.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/plugin-ecran-connecte/views/InformationView.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/plugin-ecran-connecte/views/InformationView.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/plugin-ecran-connecte/views/css/information.css" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/plugin-ecran-connecte/views/css/information.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/plugin-ecran-connecte/views/css/schedule.css" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/plugin-ecran-connecte/views/css/schedule.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/plugin-ecran-connecte/views/js/slideshow.js" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/plugin-ecran-connecte/views/js/slideshow.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/themes/theme-ecran-connecte/front-page.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/themes/theme-ecran-connecte/front-page.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/themes/theme-ecran-connecte/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/themes/theme-ecran-connecte/functions.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/themes/theme-ecran-connecte/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/themes/theme-ecran-connecte/header.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/themes/theme-ecran-connecte/inc/customizer/custom_colors.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/themes/theme-ecran-connecte/inc/customizer/custom_colors.php" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,21 +23,47 @@
       <executable />
     </execution>
   </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="ROOT_SYNC" value="DONT_SYNC" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/wp-content/plugins/plugin-ecran-connecte" />
   </component>
-  <component name="PhpWorkspaceProjectConfiguration">
-    <include_path>
-      <path value="C:/wamp64/www/ecranconnecte" />
-    </include_path>
-  </component>
-  <component name="ProjectId" id="1SXyEMAfwR2LWhofAjsMGAtLuO2" />
+  <component name="ProjectId" id="1TmUDiLnSBXYGrckmoro2NtOKrz" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
-    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="true" />
-    <property name="last_opened_file_path" value="C:/Program Files/Git/bin/git.exe" />
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_package_manager_path" value="npm" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\wamp64\www\ecran_connecte\wp-content\plugins\plugin-ecran-connecte\views\js" />
+      <recent name="C:\wamp64\www\ecran_connecte\wp-content\plugins\plugin-ecran-connecte\views\images" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\wamp64\www\ecran_connecte\wp-content\plugins\plugin-ecran-connecte\views\js" />
+      <recent name="C:\wamp64\www\ecran_connecte\wp-content\plugins\plugin-ecran-connecte\views\js\utils" />
+      <recent name="C:\wamp64\www\ecran_connecte\wp-content\plugins\plugin-ecran-connecte\views\images" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -46,13 +82,26 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="2b1d3d0f-72cd-429f-bd68-b89ebcd2831a" name="Default Changelist" comment="" />
-      <created>1571724122404</created>
+      <changelist id="c18ec22c-343d-4092-8408-39016058a6a3" name="Default Changelist" comment="" />
+      <created>1574064646347</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1571724122404</updated>
-      <workItem from="1571724127548" duration="1063000" />
-      <workItem from="1571728441040" duration="1788000" />
+      <updated>1574064646347</updated>
+      <workItem from="1574064648122" duration="20584000" />
+      <workItem from="1574148362225" duration="24111000" />
+      <workItem from="1574234888542" duration="25425000" />
+      <workItem from="1574321552302" duration="24880000" />
+      <workItem from="1574407160517" duration="25317000" />
+      <workItem from="1574666007497" duration="57000" />
+      <workItem from="1574666125509" duration="21236000" />
+      <workItem from="1574752782391" duration="25604000" />
+      <workItem from="1574838936294" duration="24888000" />
+      <workItem from="1574925484271" duration="21896000" />
+      <workItem from="1575012446133" duration="23966000" />
+      <workItem from="1575297534845" duration="9000" />
+      <workItem from="1576769240014" duration="52000" />
+      <workItem from="1576826931371" duration="45000" />
+      <workItem from="1578295479924" duration="15832000" />
     </task>
     <servers />
   </component>
@@ -73,6 +122,6 @@
     </option>
   </component>
   <component name="WordPressConfiguration" enabled="true">
-    <wordpressPath>C:\wamp64\www\ecranconnecte</wordpressPath>
+    <wordpressPath>C:\wamp64\www\ecran_connecte</wordpressPath>
   </component>
 </project>
