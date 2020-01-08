@@ -1,0 +1,211 @@
+/*__Information main__*/
+#event {
+    background-color: black !important;
+}
+
+.mySlides {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.event-slide {
+    height: 100vh;
+    background-color: black;
+    position: relative;
+}
+.mySlides .pdfemb-viewer{
+
+}
+
+div.mySlides .event-slide div.pdfemb-viewer,
+div.mySlides .pdfemb-viewer div.pdfemb-pagescontainer,
+div.mySlides .pdfemb-viewer div.pdfemb-inner-div {
+    width: 100% !important;
+    height: auto !important;
+}
+
+div.mySlides .pdfemb-viewer canvas.pdfemb-the-canvas
+{
+    max-width: 100% !important;
+    max-height: 100% !important;
+    min-height: 50vh !important;
+    height: 100vh !important;
+    width: auto !important;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+/* width: 100vw !important;
+min-width: 70% !important;*/
+
+.mySlides img {
+    max-width: 100%;
+    max-height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    object-fit: contain;
+}
+
+.info_event img {
+    max-width: 100%;
+    object-fit: cover;
+}
+
+main#content-event {
+    margin: 0;
+    width: 100%;
+}
+
+#content-event section {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+/************/
+
+.slideshow-container {
+    height: 72vh;
+}
+.myInfoSlides {
+    display: none;
+}
+
+.carousel {
+    padding: 0;
+}
+
+.info-text {
+    font-size: 1.5rem;
+}
+
+
+div.myInfoSlides .event-slide div.pdfemb-viewer,
+div.myInfoSlides .pdfemb-viewer div.pdfemb-pagescontainer,
+div.myInfoSlides .pdfemb-viewer div.pdfemb-inner-div {
+    width: 100% !important;
+    height: auto !important;
+}
+
+div.myInfoSlides .pdfemb-viewer canvas.pdfemb-the-canvas
+{
+    border: none !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    width: auto !important;
+    height: auto !important;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.myInfoSlides img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    object-fit: contain;
+}
+
+div.pdfemb-viewer {
+    border: none !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+
+.myInfoSlides {
+    float: none !important;
+}
+
+.carousel, .carousel-item, .carousel-inner, .pdfemb-viewer, div.pdfemb-inner-div, .pdfemb-the-canvas, .pdfemb-pagescontainer {
+    position: static !important;
+}
+
+/*li.tv section article div p.content_info {*/
+/*    max-height: 65vh !important;*/
+/*    font-size: 1.5em;*/
+/*    text-align: center;*/
+/*    width: 100%;*/
+/*}*/
+
+/*p.content_info img {*/
+/*    max-width: 100% !important;*/
+/*    max-height: 65vh !important;*/
+/*}*/
+
+.red {
+    color: red;
+}
+
+/* PDF */
+.pdfemb-toolbar {
+    display: none !important;
+}
+
+td div.pdfemb-viewer {
+    width: 50px;
+    height: 50px;
+}
+
+@media (max-height: 1100px) {
+
+    .pdfemb-viewer {
+
+    }
+
+    .content_info {
+        width: 100%;
+        font-size: 1.5em;
+        text-align: center;
+    }
+
+    /*.content_info img{*/
+    /*    max-height:40ex;*/
+    /*}*/
+}
+
+@media (max-height: 800px) {
+
+    .content_info td {
+        height: 20px;
+    }
+
+    .content_info {
+        width: 100%;
+        font-size: 1.5em;
+        text-align: center;
+    }
+
+    div.pdfemb-viewer {
+        border: none !important;
+        width: auto !important;
+        max-height: none !important;
+    }
+
+    li.tv section article div .pdfemb-viewer, .content_info img {
+        font-size: 1.5em;
+        text-align: center;
+    }
+
+    .content_info img {
+        max-height: 100%;
+        width: auto;
+    }
+
+    .pdfemb-viewer {
+        max-height: 100%;
+        width: auto;
+    }
+
+    /*.content_info img{*/
+    /*    max-height:30ex;*/
+    /*}*/
+}
