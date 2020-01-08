@@ -1,0 +1,90 @@
+.red {
+    color: red;
+}
+
+.wp-block-tvconnecteeamu-test {
+    color: darkred;
+    background: #fcc;
+    border: 2px solid #c99;
+    padding: 20px;
+}
+
+.trente {
+    float: left;
+    width: 35%;
+}
+
+.sept {
+    float: left;
+    width: 65%;
+}
+
+input[type="submit"]:disabled {
+    background: #dddddd;
+}
+
+/* FORM */
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    margin: auto;
+}
+
+.form-admin {
+    width: 100%;
+    text-align: center;
+}
+
+.flex-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+}
+
+.flex-vertical {
+    display: flex;
+    flex-direction: row;
+}
+
+/* HIDE RADIO */
+.form-admin input[type=radio] {
+    display: none;
+}
+
+.input-hidden {
+    position: absolute;
+    left: -9999px;
+}
+
+input[type=radio]:checked + label>img {
+    opacity: 100%;
+    border: 1px solid #fff;
+    box-shadow: 0 0 2px 2px #00558a;
+}
+
+input[type=radio] + label>img {
+    opacity: 50%;
+    border: 1px solid #fff;
+    box-shadow: 0 0 2px 2px #00558a;
+}
+
+/* Stuff after this is only to make things more pretty */
+input[type=radio] + label>img {
+    border: 1px solid black;
+    transition: 500ms all;
+}
+
+.form-admin label {
+    float: left;
+    margin: 2%;
+    width: 45%;
+    height: auto;
+    cursor: pointer;
+}
+
+.input-center {
+    text-align: center;
+}
