@@ -53,7 +53,7 @@ class CodeAdeView extends ViewG
         $page = get_page_by_title('Modification code ADE');
         $linkModifyCode = get_permalink($page->ID);
         $tab = [$result['title'], $result['code'], $result['type']];
-        return $this->displayAll($row, 'code', $result['ID'], $tab) . '<td class="text-center"> <a href="' . $linkModifyCode . $result['ID'] . '" name="modifCode" type="submit">Modifier</a></td>
+        return $this->displayRowTable($row, 'code', $result['ID'], $tab) . '<td class="text-center"> <a href="' . $linkModifyCode . $result['ID'] . '" name="modifCode" type="submit">Modifier</a></td>
                 </tr>';
     }
 

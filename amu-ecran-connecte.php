@@ -18,7 +18,6 @@ define('TV_ICSFILE_PATH', '/wp-content/uploads/fileICS/');
 
 //On inclut tous les fichiers du plugin
 include_once 'install_DB_Tv.php';
-include_once 'recaptchalib.php';
 
 include_once 'controllers/ControllerG.php';
 include_once 'models/Model.php';
@@ -64,7 +63,7 @@ include_once 'views/StudyDirectorView.php';
 include_once 'widgets/WidgetWeather.php';
 
 include_once 'controllers/Information.php';
-include_once 'models/InformationManager.php';
+include_once 'models/InformationModel.php';
 include_once 'views/InformationView.php';
 include_once 'widgets/WidgetInformation.php';
 
@@ -102,7 +101,7 @@ include_once 'blocks/myAccountChoose/myAccountChoose.php';
 include_once 'blocks/inscription/inscription.php';
 include_once 'blocks/adminInterface/adminInterface.php';
 
-require('models/Excel/vendor/autoload.php');
+require( 'Excel/vendor/autoload.php' );
 
 /**
  * Create all directory
@@ -144,8 +143,7 @@ if (isset($dl)) {
     downloadFileICS_func();
 }
 
-function displaySchedule()
-{
+function displaySchedule() {
     $current_user = wp_get_current_user();
     if (in_array("enseignant", $current_user->roles)) {
         $controller = new Teacher();
@@ -178,8 +176,7 @@ function displaySchedule()
  * Fonction pour la Cron de WordPress
  * Cette fonction télécharge tous les fichiers ICS des codes ADE enregistrés dans la base de données
  */
-function downloadFileICS_func()
-{
+function downloadFileICS_func() {
     move_fileICS_schedule();
     $model = new CodeAdeManager();
     $allCodes = $model->getAllCode();
@@ -205,8 +202,7 @@ add_action('downloadFileICS', 'downloadFileICS_func');
  * Télécharge les emplois du temps des utilisateurs
  * @param $users    User[]
  */
-function dlSchedule($users)
-{
+function dlSchedule($users) {
     $controllerAde = new CodeAde();
     if (isset($users)) {
         foreach ($users as $user) {
@@ -241,38 +237,37 @@ function dlSchedule($users)
 /**
  * Déplace les fichier ICS afin d'avoir 3 jours de fichiers sauvegardés
  */
-function move_fileICS_schedule()
-{
-    if ($myfiles = scandir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3')) {
-        foreach ($myfiles as $myfile) {
-            if (is_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3/' . $myfile)) {
-                wp_delete_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3/' . $myfile);
+function move_fileICS_schedule() {
+    if ($myFiles = scandir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3')) {
+        foreach ($myFiles as $myFile) {
+            if (is_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3/' . $myFile)) {
+                wp_delete_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3/' . $myFile);
             }
         }
     }
-    if ($myfiles = scandir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2')) {
-        foreach ($myfiles as $myfile) {
-            if (is_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2/' . $myfile)) {
-                copy($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2/' . $myfile, $_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3/' . $myfile);
-                wp_delete_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2/' . $myfile);
-            }
-        }
-    }
-
-    if ($myfiles = scandir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1')) {
-        foreach ($myfiles as $myfile) {
-            if (is_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1/' . $myfile)) {
-                copy($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1/' . $myfile, $_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2/' . $myfile);
-                wp_delete_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1/' . $myfile);
+    if ($myFiles = scandir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2')) {
+        foreach ($myFiles as $myFile) {
+            if (is_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2/' . $myFile)) {
+                copy($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2/' . $myFile, $_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3/' . $myFile);
+                wp_delete_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2/' . $myFile);
             }
         }
     }
 
-    if ($myfiles = scandir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0')) {
-        foreach ($myfiles as $myfile) {
-            if (is_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0/' . $myfile)) {
-                copy($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0/' . $myfile, $_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1/' . $myfile);
-                wp_delete_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0/' . $myfile);
+    if ($myFiles = scandir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1')) {
+        foreach ($myFiles as $myFile) {
+            if (is_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1/' . $myFile)) {
+                copy($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1/' . $myFile, $_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2/' . $myFile);
+                wp_delete_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1/' . $myFile);
+            }
+        }
+    }
+
+    if ($myFiles = scandir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0')) {
+        foreach ($myFiles as $myFile) {
+            if (is_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0/' . $myFile)) {
+                copy($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0/' . $myFile, $_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1/' . $myFile);
+                wp_delete_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0/' . $myFile);
             }
         }
     }
@@ -281,42 +276,42 @@ function move_fileICS_schedule()
 /**
  * Inclut tous les fichiers CSS et les fichiers JS
  */
-function wpdocs_plugin_teleconnecteeAmu_scripts()
-{
+function wpdocs_plugin_ecran_connectee_scripts() {
 	//CSS
     wp_enqueue_style('plugin-bootstrap-style', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', array(), true);
-    wp_enqueue_style('weather-style', TV_PLUG_PATH . 'views/css/weather.css', array(), true);
-    wp_enqueue_style('style-style', TV_PLUG_PATH . 'views/css/style.css', array(), true);
-    wp_enqueue_style('alert-style', TV_PLUG_PATH . 'views/css/alert.css', array(), true);
-    wp_enqueue_style('info-style', TV_PLUG_PATH . 'views/css/information.css', array(), true);
-    wp_enqueue_style('schedule-style', TV_PLUG_PATH . 'views/css/schedule.css', array(), true);
+    wp_enqueue_style('weather-style', TV_PLUG_PATH . 'css/weather.css', array(), '1.0');
+    wp_enqueue_style('style-style', TV_PLUG_PATH . 'css/style.css', array(), '1.0');
+    wp_enqueue_style('alert-style', TV_PLUG_PATH . 'css/alert.css', array(), '1.0');
+    wp_enqueue_style('info-style', TV_PLUG_PATH . 'css/information.css', array(), '1.0');
+    wp_enqueue_style('schedule-style', TV_PLUG_PATH . 'css/schedule.css', array(), '1.0');
 
     // JQUERY
-	wp_enqueue_script('plugin-jquerymin', TV_PLUG_PATH . 'views/js/jquery.min.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-JqueryEzMin', TV_PLUG_PATH . 'views/js/jquery.easing.min.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-jqueryEzTic', TV_PLUG_PATH . 'views/js/jquery.easy-ticker.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-jqueryEzMinTic', TV_PLUG_PATH . 'views/js/jquery.easy-ticker.min.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-marquee', TV_PLUG_PATH . 'views/js/jquery.marquee.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-ticker', TV_PLUG_PATH . 'views/js/jquery.tickerNews.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-jquerymin', TV_PLUG_PATH . 'js/jquery.min.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-JqueryEzMin', TV_PLUG_PATH . 'js/jquery.easing.min.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-jqueryEzTic', TV_PLUG_PATH . 'js/jquery.easy-ticker.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-jqueryEzMinTic', TV_PLUG_PATH . 'js/jquery.easy-ticker.min.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-marquee', TV_PLUG_PATH . 'js/jquery.marquee.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-ticker', TV_PLUG_PATH . 'js/jquery.tickerNews.js', array('jquery'), '', true);
 
 	// SCRIPT
-	wp_enqueue_script('plugin-addCheckBox', TV_PLUG_PATH . 'views/js/addAllCheckBox.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-addCodeAlert', TV_PLUG_PATH . 'views/js/addOrDeleteAlertCode.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-addCodeTv', TV_PLUG_PATH . 'views/js/addOrDeleteTvCode.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-alertTicker', TV_PLUG_PATH . 'views/js/alertTicker.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-scroll', TV_PLUG_PATH . 'views/js/scroll.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-confPass', TV_PLUG_PATH . 'views/js/confirmPass.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-showModal', TV_PLUG_PATH . 'views/js/modal.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-OneSignal', TV_PLUG_PATH . 'views/js/oneSignalPush.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-slideshow', TV_PLUG_PATH . 'views/js/slideshow.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-weather', TV_PLUG_PATH . 'views/js/weather.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-weathertime', TV_PLUG_PATH . 'views/js/weather_and_time.js', array('jquery'), '', true);
+	wp_enqueue_script('pdf-js', 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.2.228/build/pdf.min.js', array(), '', false);
+	wp_enqueue_script('plugin-addCheckBox', TV_PLUG_PATH . 'js/addAllCheckBox.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('plugin-addCodeAlert', TV_PLUG_PATH . 'js/addOrDeleteAlertCode.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('plugin-addCodeTv', TV_PLUG_PATH . 'js/addOrDeleteTvCode.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('plugin-alertTicker', TV_PLUG_PATH . 'js/alertTicker.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-scroll', TV_PLUG_PATH . 'js/scroll.js', array('plugin-jquerymin', 'plugin-jqueryEzTic', 'plugin-jqueryEzMinTic', 'plugin-JqueryEzMin'), '', true);
+	wp_enqueue_script('plugin-confPass', TV_PLUG_PATH . 'js/confirmPass.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('plugin-showModal', TV_PLUG_PATH . 'js/modal.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('plugin-OneSignal', TV_PLUG_PATH . 'js/oneSignalPush.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-slideshow', TV_PLUG_PATH . 'js/slideshow.js', array('jquery'), '2.0', true);
+	wp_enqueue_script('plugin-weather', TV_PLUG_PATH . 'js/weather.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('plugin-weatherTime', TV_PLUG_PATH . 'js/weather_and_time.js', array('jquery'), '1.0', true);
 }
 
-add_action('wp_enqueue_scripts', 'wpdocs_plugin_teleconnecteeAmu_scripts');
+add_action('wp_enqueue_scripts', 'wpdocs_plugin_ecran_connectee_scripts');
 
-function manageStudent()
-{
+
+function manageStudent() {
     $current_user = wp_get_current_user();
     if (in_array('etudiant', $current_user->roles)) {
         $codes = unserialize($current_user->code);
@@ -342,8 +337,7 @@ function manageStudent()
     }
 }
 
-function selectSchedules($years, $groups, $halfgroups)
-{
+function selectSchedules($years, $groups, $halfgroups) {
     echo '
         <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
@@ -402,8 +396,7 @@ function selectSchedules($years, $groups, $halfgroups)
 
 add_action('check', 'manageStudent');
 
-function displayParticipant()
-{
+function displayParticipant() {
     $url = "https://www.nuitdelinfo.com/inscription/sites/55";
     $result = file_get_contents($url);
     $result = explode('<li class="list-group-item list-group-item-info">', $result);

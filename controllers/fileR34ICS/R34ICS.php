@@ -83,8 +83,7 @@ class R34ICS extends ControllerG
      * @param array $args Array d'option
      * @return string
      */
-    public function display_calendar($ics_url, $code, $allDay, $args = array())
-    {
+    public function display_calendar($ics_url, $code, $allDay, $args = array()) {
         $force_reload = true;
         // Get ICS file, from transient if possible
         $transient_name = __METHOD__ . '_' . sha1($ics_url);
@@ -316,7 +315,7 @@ class R34ICS extends ControllerG
         }
 
         $model = new CodeAdeManager();
-        $title = $model->getTitle($code);
+        $title = $model->getCodeTitle($code);
         if ($code == $title) {
             $this->addLogEvent("Code non enregistré: " . $code);
             $current_user = wp_get_current_user();

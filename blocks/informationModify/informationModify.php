@@ -1,18 +1,9 @@
 <?php
 
 function information_modify_render_callback() {
-    $information = new Information();
-    $model = new InformationManager();
-    $view = new InformationView();
     if(is_page()){
-        $id = $information->getMyIdUrl();
-        $result = $model->getInformationByID($id);
-        $title = $result['title'];
-        $content = $result['content'];
-        $endDate = date('Y-m-d',strtotime($result['end_date']));
-        $typeI = $result['type'];
-        $information->modifyInformation();
-        return $view->displayModifyInformationForm($title,$content,$endDate,$typeI);
+	    $information = new Information();
+        return $information->modifyInformation();
     }
 }
 

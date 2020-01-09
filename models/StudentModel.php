@@ -16,8 +16,7 @@ class StudentModel extends UserModel
      * @param $email    string email
      * @return bool
      */
-    public function insertStudent($login, $pwd, $email)
-    {
+    public function insertStudent($login, $pwd, $email) {
         $role = "etudiant";
         return $this->insertUser($login, $pwd, $role, $email);
     }

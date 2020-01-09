@@ -201,9 +201,9 @@ class Student extends User implements Schedule
                 $id = $result['ID'];
                 $login = $result['user_login'];
                 $code = unserialize($result['code']);
-                $year = $this->model->getTitle($code[0]);
-                $group = $this->model->getTitle($code[1]);
-                $halfgroup = $this->model->getTitle($code[2]);
+                $year = $this->model->getCodeTitle($code[0]);
+                $group = $this->model->getCodeTitle($code[1]);
+                $halfgroup = $this->model->getCodeTitle($code[2]);
                 $string .= $this->view->displayAllStudent($id, $login, $year, $group, $halfgroup, $row);
             }
             $string .= $this->view->displayEndTab();

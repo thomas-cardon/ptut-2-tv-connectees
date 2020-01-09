@@ -11,7 +11,6 @@ class ICSView extends ViewG {
 	 * @return bool         Renvoie vrai s'il y a des données
 	 */
 	public function displaySchedule( $ics_data, $title, $allDay ) {
-		//echo '<img src="/wp-content/plugins/plugin-ecran-connecte/views/images/Logo Shanty.svg">';
 		$current_user = wp_get_current_user();
 		if ( isset( $ics_data['events'] ) ) {
 			$string        = '<h1>' . $title . '</h1>';

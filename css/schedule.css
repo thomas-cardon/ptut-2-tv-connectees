@@ -24,7 +24,7 @@ CSS de l'emploi du temps
 }
 
 .mySlides {
-    display: none;
+    display: block;
 }
 
 .tabSchedule {

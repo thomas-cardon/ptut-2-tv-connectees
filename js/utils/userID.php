@@ -6,7 +6,7 @@
  * Time: 10:09
  */
 
-require_once("../../../../../../wp-load.php");
+require_once( "../../../../../wp-load.php" );
 
 $current_user = wp_get_current_user();
 $result = $current_user->user_login;
