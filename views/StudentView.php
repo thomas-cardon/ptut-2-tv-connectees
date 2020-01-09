@@ -96,9 +96,9 @@ class StudentView extends UserView
         $linkManageUser = get_permalink($page->ID);
         $code = unserialize($result->code);
         $model = new CodeAdeManager();
-        $titleYear = $model->getTitle($code[0]);
-        $titleGroup = $model->getTitle($code[1]);
-        $titleHalfgroup = $model->getTitle($code[2]);
+        $titleYear = $model->getCodeTitle($code[0]);
+        $titleGroup = $model->getCodeTitle($code[1]);
+        $titleHalfgroup = $model->getCodeTitle($code[2]);
         $string = '
          <form method="post">
             <h2>' . $result->user_login . '</h2>

@@ -55,8 +55,8 @@ class UserView extends ViewG
         $linkModifyUser = get_permalink($page->ID);
         $code = unserialize($result['code']);
         $tab = [$result['user_login'], $code[0]];
-        return $this->displayAll($row, $name, unserialize($result['ID']), $tab) .
-            '
+        return $this->displayRowTable($row, $name, unserialize($result['ID']), $tab) .
+               '
             <td class="text-center"> <a href="' . $linkModifyUser . $result['ID'] . '" name="modif" type="submit" value="Modifier">Modifier</a></td>
         </tr>';
     }
@@ -177,9 +177,9 @@ class UserView extends ViewG
     {
         $code = unserialize($result->code);
         $model = new CodeAdeManager();
-        $titleYear = $model->getTitle($code[0]);
-        $titleGroup = $model->getTitle($code[1]);
-        $titleHalfgroup = $model->getTitle($code[2]);
+        $titleYear = $model->getCodeTitle($code[0]);
+        $titleGroup = $model->getCodeTitle($code[1]);
+        $titleHalfgroup = $model->getCodeTitle($code[2]);
         $string = '
         <form method="post">
             <h2> Modifier mes groupes</h2>

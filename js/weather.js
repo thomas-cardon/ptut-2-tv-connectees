@@ -24,14 +24,14 @@ meteoRequest.onload = function () {
         weather.id = "weather";
         var imgTemp = document.createElement("IMG");
         imgTemp.id = "icon";
-        imgTemp.src = "/wp-content/plugins/plugin-ecran-connecte/views/imagesWeather/" + getIcon(json) + ".png";
+        imgTemp.src = "/wp-content/plugins/plugin-ecran-connecte/img/" + getIcon(json) + ".png";
         imgTemp.alt = getAlt(json);
         weather.appendChild(imgTemp);
         var wind = document.createElement("DIV");
         wind.innerHTML = vent + "<span class=\"kmh\">km/h</span>";
         wind.id = "wind";
         var imgVent = document.createElement("IMG");
-        imgVent.src = "/wp-content/plugins/plugin-ecran-connecte/views/imagesWeather/wind.png";
+        imgVent.src = "/wp-content/plugins/plugin-ecran-connecte/img/wind.png";
         imgVent.alt = "Img du vent";
         wind.appendChild(imgVent);
         div.appendChild(weather);

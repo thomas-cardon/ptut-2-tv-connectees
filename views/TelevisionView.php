@@ -100,8 +100,8 @@ class TelevisionView extends UserView
         $page = get_page_by_title('Modification utilisateur');
         $linkModifyUser = get_permalink($page->ID);
         $tab = [$login, $nbCode];
-        return $this->displayAll($row, 'tele', $id, $tab) .
-            '<td class="text-center"> <a href="' . $linkModifyUser . $id . '" name="modif" type="submit" value="Modifier">Modifier</a></td>
+        return $this->displayRowTable($row, 'tele', $id, $tab) .
+               '<td class="text-center"> <a href="' . $linkModifyUser . $id . '" name="modif" type="submit" value="Modifier">Modifier</a></td>
         </tr>';
     }
 

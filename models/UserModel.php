@@ -12,7 +12,7 @@ class UserModel extends Model
     protected function checkIfDoubleUserID($id)
     {
         $var = 0;
-        $req = $this->getDb()->prepare('SELECT * FROM code_delete_account WHERE ID_user =:ID_user');
+        $req = $this->getDbh()->prepare('SELECT * FROM code_delete_account WHERE ID_user =:ID_user');
         $req->bindValue(':ID_user', $id);
         $req->execute();
         while ($data = $req->fetch(PDO::FETCH_ASSOC)) {
@@ -36,7 +36,7 @@ class UserModel extends Model
     {
         if (!($this->checkIfDoubleUserID($userID))) {
 
-            $req = $this->getDb()->prepare('INSERT INTO code_delete_account (ID_user, Code) 
+            $req = $this->getDbh()->prepare('INSERT INTO code_delete_account (ID_user, Code) 
                                          VALUES (:ID_user, :code)');
 
             $code = wp_generate_password();
@@ -60,7 +60,7 @@ class UserModel extends Model
      */
     public function modifyCode($id_user)
     {
-        $req = $this->getDb()->prepare('UPDATE code_delete_account SET Code=:code WHERE ID_user=:id_user');
+        $req = $this->getDbh()->prepare('UPDATE code_delete_account SET Code=:code WHERE ID_user=:id_user');
         $code = wp_generate_password();
         $req->bindParam(':id_user', $id_user);
         $req->bindParam(':code', $code);
@@ -76,7 +76,7 @@ class UserModel extends Model
     public function getCode($userID)
     {
         $var = [];
-        $req = $this->getDb()->prepare('SELECT * FROM code_delete_account WHERE ID_user = :UserID');
+        $req = $this->getDbh()->prepare('SELECT * FROM code_delete_account WHERE ID_user = :UserID');
         $req->bindParam(':UserID', $userID);
         $req->execute();
         while ($data = $req->fetch(PDO::FETCH_ASSOC)) {
@@ -92,7 +92,7 @@ class UserModel extends Model
      */
     public function deleteCode($UserID)
     {
-        $req = $this->getDb()->prepare('DELETE FROM code_delete_account WHERE ID_user = :userID');
+        $req = $this->getDbh()->prepare('DELETE FROM code_delete_account WHERE ID_user = :userID');
         $req->bindValue(':userID', $UserID);
 
         $req->execute();
@@ -117,7 +117,7 @@ class UserModel extends Model
     protected function verifyTuple($login)
     {
         $var = 0;
-        $req = $this->getDb()->prepare('SELECT * FROM wp_users WHERE user_login =:login');
+        $req = $this->getDbh()->prepare('SELECT * FROM wp_users WHERE user_login =:login');
         $req->bindValue(':login', $login);
         $req->execute();
         while ($data = $req->fetch(PDO::FETCH_ASSOC)) {
@@ -139,7 +139,7 @@ class UserModel extends Model
     public function verifyMail($mail)
     {
         $var = 0;
-        $req = $this->getDb()->prepare('SELECT * FROM wp_users WHERE user_email =:mail');
+        $req = $this->getDbh()->prepare('SELECT * FROM wp_users WHERE user_email =:mail');
         $req->bindValue(':mail', $mail);
         $req->execute();
         while ($data = $req->fetch(PDO::FETCH_ASSOC)) {
@@ -162,7 +162,7 @@ class UserModel extends Model
     protected function verifyNoDouble($email, $login)
     {
         $var = 0;
-        $req = $this->getDb()->prepare('SELECT * FROM wp_users WHERE user_email =:mail OR user_login =:login');
+        $req = $this->getDbh()->prepare('SELECT * FROM wp_users WHERE user_email =:mail OR user_login =:login');
         $req->bindValue(':mail', $email);
         $req->bindValue(':login', $login);
         $req->execute();
@@ -189,7 +189,7 @@ class UserModel extends Model
     protected function insertUser($login, $pwd, $role, $email, $code = array())
     {
         if ($this->verifyNoDouble($email, $login)) {
-            $req = $this->getDb()->prepare('INSERT INTO wp_users (user_login, user_pass, code,
+            $req = $this->getDbh()->prepare('INSERT INTO wp_users (user_login, user_pass, code,
                                       user_nicename, user_email, user_url, user_registered, user_activation_key,
                                       user_status, display_name) 
                                          VALUES (:login, :pwd, :code, :name, :email, :url, NOW(), :key, :status, :displayname)');
@@ -214,9 +214,9 @@ class UserModel extends Model
             $size = strlen($role);
             $role = 'a:1:{s:' . $size . ':"' . $role . '";b:1;}';
 
-            $id = $this->getDb()->lastInsertId();
+            $id = $this->getDbh()->lastInsertId();
 
-            $req = $this->getDb()->prepare('INSERT INTO wp_usermeta(user_id, meta_key, meta_value) VALUES (:id, :capabilities, :role)');
+            $req = $this->getDbh()->prepare('INSERT INTO wp_usermeta(user_id, meta_key, meta_value) VALUES (:id, :capabilities, :role)');
 
             $req->bindParam(':id', $id);
             $req->bindParam(':capabilities', $capa);
@@ -226,7 +226,7 @@ class UserModel extends Model
 
             $level = "wp_user_level";
 
-            $req = $this->getDb()->prepare('INSERT INTO wp_usermeta(user_id, meta_key, meta_value) VALUES (:id, :level, :value)');
+            $req = $this->getDbh()->prepare('INSERT INTO wp_usermeta(user_id, meta_key, meta_value) VALUES (:id, :level, :value)');
 
             $req->bindParam(':id', $id);
             $req->bindParam(':level', $level);
@@ -247,10 +247,9 @@ class UserModel extends Model
      * @param $codes    array Codes ADE
      * @return bool
      */
-    protected function modifyUser($id, $login, $codes)
-    {
+    protected function modifyUser($id, $login, $codes) {
         if ($this->verifyTuple($login)) {
-            $req = $this->getDb()->prepare('UPDATE wp_users SET code = :codes
+            $req = $this->getDbh()->prepare('UPDATE wp_users SET code = :codes
                                             WHERE ID=:id');
             $serCode = serialize($codes);
             $req->bindParam(':id', $id);
@@ -269,9 +268,8 @@ class UserModel extends Model
      * @param $login    string login
      * @return array
      */
-    public function getUserByLogin($login)
-    {
-        $req = $this->getDb()->prepare('SELECT * FROM wp_users WHERE user_login = :login');
+    public function getUserByLogin($login) {
+        $req = $this->getDbh()->prepare('SELECT * FROM wp_users WHERE user_login = :login');
         $req->bindParam(':login', $login);
         $req->execute();
         while ($data = $req->fetch()) {

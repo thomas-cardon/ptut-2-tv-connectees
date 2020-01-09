@@ -3,9 +3,7 @@
  * Affiche un select avec les années - groupes et demi-groupes
  */
 
-include_once '../../../../../../wp-config.php';
-include_once '../../../models/Model.php';
-include_once '../../../models/CodeAdeManager.php';
+require_once( "../../../../../wp-load.php" );
 
 $model = new CodeAdeManager();
 $years = $model->getCodeYear();

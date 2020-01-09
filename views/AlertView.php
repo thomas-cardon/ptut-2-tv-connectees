@@ -168,7 +168,7 @@ class AlertView extends ViewG
         $page = get_page_by_title('Modification alerte');
         $linkManageAlert = get_permalink($page->ID);
         $tab = [$author, $content, $creationDate, $endDate];
-        return $this->displayAll($row, 'alert', $id, $tab) . '
+        return $this->displayRowTable($row, 'alert', $id, $tab) . '
           <td class="text-center"> <a href="' . $linkManageAlert . $id . '" name="modifetud" type="submit" value="Modifier">Modifier</a></td>
         </td>';
     } //displayAllAlert()
