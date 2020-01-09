@@ -7,11 +7,19 @@
  */
 
 class Information extends ControllerG {
+
+	/**
+	 * @var InformationModel
+	 */
 	private $model;
+
+	/**
+	 * @var InformationView
+	 */
 	private $view;
 
 	/**
-	 * Constructeur d'information, initialise le modèle et la vue.
+	 * Constructor of Information
 	 */
 	public function __construct() {
 		$this->model = new InformationModel();
@@ -19,9 +27,11 @@ class Information extends ControllerG {
 	}
 
 	/**
-	 * Display forms for create information and add it into the database
+	 * Create information and add it into the database
 	 *
 	 * @return string
+	 * @throws \PhpOffice\PhpSpreadsheet\Exception
+	 * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
 	 */
 	public function insertInformation() {
 
@@ -36,11 +46,9 @@ class Information extends ControllerG {
 		$actionEvent = $_POST['createEvent'];
 
 		// Variables
-		$title       = filter_input( INPUT_POST, 'titleInfo' );
-		$content     = filter_input( INPUT_POST, 'contentInfo' );
-		$endDate     = filter_input( INPUT_POST, 'endDateInfo' );
-		$contentFile = $_FILES['contentFile'];
-
+		$title        = filter_input( INPUT_POST, 'titleInfo' );
+		$content      = filter_input( INPUT_POST, 'contentInfo' );
+		$endDate      = filter_input( INPUT_POST, 'endDateInfo' );
 		$creationDate = date('Y-m-d');
 
 		// If the title is empty
@@ -96,6 +104,7 @@ class Information extends ControllerG {
 			}
 		}
 
+		// Return a selector with all forms
 		return
 			$this->view->displayStartMultiSelect() .
 			$this->view->displayTitleSelect('text','Texte', true) .
@@ -122,12 +131,13 @@ class Information extends ControllerG {
 	 * @param $type         string
 	 */
 	public function registerFile($filename, $tmpName, $type) {
+		$current_user = wp_get_current_user();
 		$id               = "temporary";
 		$extension_upload = strtolower(substr(strrchr($filename, '.'), 1));
-		$nom              = $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $id . "." . $extension_upload;
+		$name              = $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $id . "." . $extension_upload;
 
 		// Upload the file
-		if ($result = move_uploaded_file($tmpName, $nom)) {
+		if ($result = move_uploaded_file($tmpName, $name)) {
 			$this->model->setContent("temporary content");
 			if($this->model->getId() == null) {
 				$id = $this->model->insertInformation();
@@ -144,41 +154,23 @@ class Information extends ControllerG {
 
 			$this->model->setId($id);
 
-			// Change filename to the id in the database
-			rename( $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . "temporary." . $extension_upload,
-				$_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $id . "." . $extension_upload );
+			$md5Name = md5_file($name);
+			rename($name, $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH. $md5Name . '.' . $extension_upload);
 
-			// Put the good extension to the file
-			if ($type == "img" || $type == "event") {
-				if (in_array($extension_upload, [ 'jpg', 'jpeg', 'gif', 'png', 'svg' ])) {
-					$content = TV_UPLOAD_PATH . $id . '.' . $extension_upload;
-					//$content = '<img class="img-fluid" src="' . TV_UPLOAD_PATH . $id . '.' . $extension_upload . '">';
-				}
-			}
+			$content = $md5Name. '.' . $extension_upload;
 
-			if ($type == "pdf" || $type == "event") {
-				if ($extension_upload == "pdf") {
-					$content = TV_UPLOAD_PATH . $id. '.' . $extension_upload;
-					//$content = '[pdf-embedder url="' . TV_UPLOAD_PATH . $id . '.pdf"]';
-				}
-			}
-
-			if($type == "tab") {
-				$content = TV_UPLOAD_PATH . $id . $extension_upload;
-			}
-
-			if(isset($content)) {
-				$this->model->setContent($content);
-				$this->model->modifyInformation();
-				$this->view->displayCreateValidate();
-			}
+			$this->model->setContent($content);
+			$this->model->modifyInformation();
+			$this->view->displayCreateValidate();
 		}
 	}
 
 	/**
 	 * Modify the information
 	 *
-	 * @return string   The form
+	 * @return string
+	 * @throws \PhpOffice\PhpSpreadsheet\Exception
+	 * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
 	 */
 	public function modifyInformation() {
 
@@ -258,14 +250,14 @@ class Information extends ControllerG {
 	 *
 	 * @param $id int Code
 	 */
-	public function deleteFile( $id ) {
+	public function deleteFile($id) {
 		$this->model = $this->model->getInformation($id);
-		$source = $_SERVER['DOCUMENT_ROOT'] . $this->model->getContent();
+		$source = $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $this->model->getContent();
 		unlink($source);
 	}
 
 	/**
-	 * Affiche un tableau avec toutes les informations et des boutons de modification ainsi qu'un bouton de suppression.
+	 * Display a table with all informations from the database
 	 */
 	function informationManagement() {
 		$current_user = wp_get_current_user();
@@ -290,11 +282,11 @@ class Information extends ControllerG {
 
 			$this->endDateCheckInfo($id, $endDate);
 
-			// change l'affichage de la date en français (jour-mois-année)
-			$endDatefr      = date("d-m-Y", strtotime($endDate));
-			$creationDatefr = date("d-m-Y", strtotime($creationDate));
+			// Change the date (Day - Month - Year)
+			$endDateFr      = date("d-m-Y", strtotime($endDate));
+			$creationDateFr = date("d-m-Y", strtotime($creationDate));
 
-			$string .= $this->view->displayAllInformation($id, $title, $author, $content, $type, $creationDatefr, $endDatefr, ++$i);
+			$string .= $this->view->displayAllInformation($id, $title, $author, $content, $type, $creationDateFr, $endDateFr, ++$i);
 		}
 		$string .= $this->view->displayEndTab();
 
@@ -304,7 +296,8 @@ class Information extends ControllerG {
 
 
 	/**
-	 * Verifie si la date de fin est dépassée et supprime l'info si c'est le cas.
+	 * Check if the end date is today or less
+	 * And delete the file if the date is past
 	 *
 	 * @param $id
 	 * @param $endDate
@@ -318,59 +311,44 @@ class Information extends ControllerG {
 
 
 	/**
-	 * Affiche les informations sur la page principale (ou widget)
-	 * cf snippet Display Information
+	 * Display a slideshow
+	 * The slideshow display all the informations
+	 *
+	 * @throws \PhpOffice\PhpSpreadsheet\Exception
+	 * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
 	 */
 	public function informationMain() {
 
+		// Get all informations
 		$informations = $this->model->getListInformation();
-		$idList = $titleList = $contentList = $typeList = array();
-		foreach ($informations as $information) {
-			$id      = $information->getId();
-			$title   = $information->getTitle();
-			$content = $information->getContent();
-			$endDate = date( 'Y-m-d', strtotime($information->getEndDate()));
-			$type    = $information->getType();
-			array_push($typeList, $type);
-			$this->endDateCheckInfo($id, $endDate);
-			if ($type == 'tab') {
-				$source = $_SERVER['DOCUMENT_ROOT'] . $content;
-				if (! file_exists($source)) {
-					array_push($idList, $id);
-					array_push($titleList, $title);
-					array_push($contentList, 'Un beau tableau devrait être ici !');
-				} else {
-					$list = $this->readSpreadSheet($id);
+
+		// Slideshow
+		$this->view->displayStartSlideshow();
+		foreach ($informations as $information) { // Create a slide for each information
+			if ($information->getType() == 'tab') {
+					$list = $this->readSpreadSheet(TV_UPLOAD_PATH  . $information->getContent());
+					$content = "";
 					foreach ($list as $table) {
-						array_push($idList, $id);
-						array_push($titleList, $title);
-						array_push($contentList, $table);
+						$content .= $table;
 					}
-				}
-			} else {
-				if ($type == 'img') {
-					$source = home_url() . $content;
-					if (! @getimagesize($source)) {
-						array_push($idList, $id);
-						array_push($titleList, $title);
-						array_push($contentList, 'Une belle image devrait être ici !');
-					} else {
-						array_push($idList, $id);
-						array_push($titleList, $title);
-						array_push($contentList, $content);
-					}
-				} else {
-					array_push($idList, $id);
-					array_push($titleList, $title);
-					array_push($contentList, $content);
-				}
+					$information->setContent($content);
 			}
+			$endDate = date( 'Y-m-d', strtotime($information->getEndDate()));
+			$this->endDateCheckInfo($information->getId(), $endDate);
+			$this->view->displaySlide($information->getTitle(), $information->getContent(), $information->getType());
 		}
-		$this->view->displayInformationView($titleList, $contentList, $typeList);
+		$this->view->displayEndDiv();
 	} // informationMain()
 
+	/**
+	 *  Display a slideshow of event information in full screen
+	 */
 	public function displayEvent() {
+
+		// Get all event informations
 		$events = $this->model->getListInformationEvent();
+
+		// Slideshow
 		$this->view->displayStartSlideEvent();
 		foreach ($events as $event) {
 			$this->view->displaySlideBegin();
@@ -386,16 +364,23 @@ class Information extends ControllerG {
 		$this->view->displayEndDiv();
 	}
 
-	public function readSpreadSheet($id) {
+	/**
+	 * Read an Excel file
+	 *
+	 * @param $content
+	 *
+	 * @return array
+	 * @throws \PhpOffice\PhpSpreadsheet\Exception
+	 * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+	 */
+	public function readSpreadSheet($content) {
 
-		$file = glob($_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $id . "." . "*");
-		foreach ($file as $i) {
-			$filename = $i;
-		}
-		$extension = ucfirst(strtolower(end(explode(".", $filename ))));
+		$file = $_SERVER['DOCUMENT_ROOT'] . $content;
+
+		$extension = ucfirst(strtolower(end(explode(".", $file))));
 		$reader    = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($extension);
 		$reader->setReadDataOnly(true);
-		$spreadsheet = $reader->load($filename);
+		$spreadsheet = $reader->load($file);
 
 		$worksheet  = $spreadsheet->getActiveSheet();
 		$highestRow = $worksheet->getHighestRow();

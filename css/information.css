@@ -3,6 +3,14 @@
     background-color: black !important;
 }
 
+.canvas_pdf {
+    text-align: center;
+}
+
+.myInfoSlides {
+    background-color: white;
+}
+
 .mySlides {
     margin-right: auto;
     margin-left: auto;
@@ -13,8 +21,11 @@
     background-color: black;
     position: relative;
 }
-.mySlides .pdfemb-viewer{
 
+.pdf_renderer {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100% !important;
 }
 
 div.mySlides .event-slide div.pdfemb-viewer,

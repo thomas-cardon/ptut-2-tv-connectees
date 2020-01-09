@@ -31,20 +31,20 @@ class InformationModel extends Model {
     public function insertInformation() {
 
 	    // The request for insert the information
-	    $req = $this->getDb()->prepare('INSERT INTO informations (title, author, creation_date, end_date, content, type) 
+	    $sth = $this->getDbh()->prepare('INSERT INTO informations (title, author, creation_date, end_date, content, type) 
                                         VALUES (:title, :author, :creation_date, :end_date, :content, :type)');
 
 	    // Link the param with the value
-	    $req->bindParam(':title', $this->getTitle());
-	    $req->bindParam(':author', $this->getAuthor());
-	    $req->bindParam(':creation_date', $this->getCreationDate());
-	    $req->bindParam(':end_date', $this->getEndDate());
-	    $req->bindParam(':content', $this->getContent());
-	    $req->bindParam(':type', $this->getType());
+	    $sth->bindParam(':title', $this->getTitle());
+	    $sth->bindParam(':author', $this->getAuthor());
+	    $sth->bindParam(':creation_date', $this->getCreationDate());
+	    $sth->bindParam(':end_date', $this->getEndDate());
+	    $sth->bindParam(':content', $this->getContent());
+	    $sth->bindParam(':type', $this->getType());
 
-	    $req->execute();
+	    $sth->execute();
 
-	    return $this->getDb()->lastInsertId();
+	    return $this->getDbh()->lastInsertId();
 
     } //addInformationDB()
 
@@ -54,17 +54,19 @@ class InformationModel extends Model {
 	public function modifyInformation() {
 
 		// The request for update the information
-		$req = $this->getDb()->prepare('UPDATE informations 
+		$sth = $this->getDbh()->prepare('UPDATE informations 
 										SET title = :title, content = :content, end_date = :endDate
                                         WHERE ID_info = :id');
 
 		// Link the param with the value
-		$req->bindParam(':id', $this->getId());
-		$req->bindParam(':title', $this->getTitle());
-		$req->bindParam(':content', $this->getContent());
-		$req->bindParam(':endDate', $this->getEndDate());
+		$sth->bindParam(':id', $this->getId());
+		$sth->bindParam(':title', $this->getTitle());
+		$sth->bindParam(':content', $this->getContent());
+		$sth->bindParam(':endDate', $this->getEndDate());
 
-		$req->execute();
+		$sth->execute();
+
+		return $sth->rowCount();
 
 	} //modifyInformation()
 
@@ -72,11 +74,11 @@ class InformationModel extends Model {
      * Delete an information in the database
      */
     public function deleteInformation() {
-	    $result = $this->getDb()->prepare('DELETE FROM informations
-                                           WHERE ID_info = :id');
-	    $result->bindParam(':id', $this->getId());
-	    $result->execute();
-	    return $result->rowCount();
+	    $sth = $this->getDbh()->prepare('DELETE FROM informations
+                                         WHERE ID_info = :id');
+	    $sth->bindParam(':id', $this->getId());
+	    $sth->execute();
+	    return $sth->rowCount();
 
     } //deleteInformationDB()
 
@@ -85,12 +87,12 @@ class InformationModel extends Model {
      * @return array|null|object
      */
     public function getListInformation() {
-	    $result = $this->getDb()->prepare('SELECT * 
-                                           FROM informations JOIN wp_users ON informations.author = wp_users.ID
-                                           ORDER BY end_date DESC');
+	    $sth = $this->getDbh()->prepare('SELECT * 
+                                         FROM informations JOIN wp_users ON informations.author = wp_users.ID
+                                         ORDER BY end_date ASC');
 
-	    $result->execute();
-	    $results = $information = $result->fetchAll(PDO::FETCH_ASSOC);
+	    $sth->execute();
+	    $results = $sth->fetchAll(PDO::FETCH_ASSOC);
 
 	    return $this->setListInformations($results);
 
@@ -101,14 +103,13 @@ class InformationModel extends Model {
 	 * @return array|null|object
 	 */
 	public function getListInformationEvent() {
-		$result = $this->getDb()->prepare('SELECT * 
-                                           FROM informations JOIN wp_users ON informations.author = wp_users.ID
-                                           WHERE type = "event"
-                                           ORDER BY end_date DESC');
+		$sth = $this->getDbh()->prepare('SELECT * 
+                                         FROM informations JOIN wp_users ON informations.author = wp_users.ID
+                                         WHERE type = "event"
+                                         ORDER BY end_date ASC');
 
-
-		$result->execute();
-		$results = $result->fetchAll(PDO::FETCH_ASSOC);
+		$sth->execute();
+		$results = $sth->fetchAll(PDO::FETCH_ASSOC);
 
 		// Set the List
 		return $this->setListInformations($results);
@@ -120,15 +121,15 @@ class InformationModel extends Model {
      * @return array|null|object
      */
     public function getAuthorListInformation($authorId) {
-	    $result = $this->getDb()->prepare('SELECT * 
-                                           FROM informations JOIN wp_users ON informations.author = wp_users.ID
-                                           WHERE author = :authorId
-                                           ORDER BY end_date DESC');
+	    $sth = $this->getDbh()->prepare('SELECT * 
+                                    	 FROM informations JOIN wp_users ON informations.author = wp_users.ID
+                                         WHERE author = :authorId
+                                         ORDER BY end_date ASC');
 
-	    $result->bindParam(':authorId', $authorId);
+	    $sth->bindParam(':authorId', $authorId);
 
-	    $result->execute();
-	    $results = $result->fetchAll(PDO::FETCH_ASSOC);
+	    $sth->execute();
+	    $results = $sth->fetchAll(PDO::FETCH_ASSOC);
 
 	    // Set the List
 	    return $this->setListInformations($results);
@@ -144,7 +145,7 @@ class InformationModel extends Model {
 		$informations = array();
 		foreach ($results as $result) {
 			$information = new InformationModel();
-			$information->setModel($result['ID_info'], $result['title'], $result['author'], $result['creation_date'], $result['end_date'], $result['content'], $result['type']);
+			$information->setModel($result['ID_info'], $result['title'], $result['user_login'], $result['creation_date'], $result['end_date'], $result['content'], $result['type']);
 			$informations[] = $information;
 		}
 		return $informations;
@@ -156,23 +157,36 @@ class InformationModel extends Model {
      * @return InformationModel
      */
     public function getInformation($id) {
-	    $result = $this->getDb()->prepare('SELECT * 
-                                           FROM informations JOIN wp_users ON informations.author = wp_users.ID
+	    $sth = $this->getDbh()->prepare('SELECT * 
+                                           FROM informations
                                            WHERE ID_info = :id');
 
-	    $result->bindParam(':id', $id);
+	    $sth->bindParam(':id', $id);
 
-	    $result->execute();
-	    $information = $result->fetch(PDO::FETCH_ASSOC);
+	    $sth->execute();
+	    $information = $sth->fetch(PDO::FETCH_ASSOC);
 
 	    // Set the Model
-	    $this->setModel($information['ID_info'], $information['title'], $information['author'], $information['creation_date'], $information['end_date'], $information['content'], $information['type']);
+	    $this->setModel($information['ID_info'], $information['title'], $information['user_login'], $information['creation_date'], $information['end_date'], $information['content'], $information['type']);
 
 	    return $this;
 
     } //getInformationByID()
 
 
+	/**
+	 * Create an information
+	 *
+	 * @param $id
+	 * @param $title
+	 * @param $author
+	 * @param $creationDate
+	 * @param $endDate
+	 * @param $content
+	 * @param $type
+	 *
+	 * @return $this
+	 */
 	public function setModel($id, $title, $author, $creationDate, $endDate, $content, $type) {
 
 		$this->setId($id);

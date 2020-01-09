@@ -9,6 +9,8 @@
 class InformationView extends ViewG {
 
 	/**
+	 * Display the beginning of a form
+	 *
 	 * @param $title
 	 *
 	 * @return string
@@ -23,6 +25,8 @@ class InformationView extends ViewG {
 	}
 
 	/**
+	 * Display the end of a form
+	 *
 	 * @param $type
 	 * @param $endDate
 	 *
@@ -40,7 +44,7 @@ class InformationView extends ViewG {
 	}
 
 	/**
-	 * Affiche le formulaire de création de l'information en format texte
+	 * Display a form to create an information with text
 	 *
 	 * @param $title    string
 	 * @param $content  string
@@ -57,7 +61,7 @@ class InformationView extends ViewG {
 	}
 
 	/**
-	 * Affiche le formulaire de création d'information avec une image
+	 * Display a form to create an information with an image
 	 *
 	 * @param $title    string
 	 * @param $content  string
@@ -71,7 +75,7 @@ class InformationView extends ViewG {
 		if($content != null){
 			$string .= '
 		       	<figure>
-				  <img class="container-fluid" src="'.$content.'" alt="'.$title.'">
+				  <img class="container-fluid" src="'. TV_UPLOAD_PATH  .$content.'" alt="'.$title.'">
 				  <figcaption class="text-center">Image actuelle</figcaption>
 				</figure>';
 		}
@@ -86,14 +90,16 @@ class InformationView extends ViewG {
 	}
 
 	/**
-	 * Affiche le formulaire de création d'information avec un tableau
+	 * Display a form to create an information with a table
 	 *
-	 * @param $title    string
-	 * @param $content  string
-	 * @param $endDate  string
-	 * @param $type     string
+	 * @param null $title
+	 * @param null $content
+	 * @param null $endDate
+	 * @param string $type
 	 *
 	 * @return string
+	 * @throws \PhpOffice\PhpSpreadsheet\Exception
+	 * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
 	 */
 	public function displayFormTab($title = null, $content = null, $endDate = null, $type = "createTab") {
 
@@ -101,8 +107,7 @@ class InformationView extends ViewG {
 
 		if($content != null) {
 			$info = new Information();
-			$id = explode('.', $content);
-			$list = $info->readSpreadSheet( $id[0] );
+			$list = $info->readSpreadSheet($content);
 			foreach ( $list as $table ) {
 				$string .= $table;
 			}
@@ -121,7 +126,7 @@ class InformationView extends ViewG {
 	}
 
 	/**
-	 * Form pour créer une information sous pdf
+	 * Display a form to create an information with a PDF
 	 *
 	 * @param $title    string
 	 * @param $content  string
@@ -136,7 +141,7 @@ class InformationView extends ViewG {
 		if($content != null) {
 			$string .= '
 			<div class="embed-responsive embed-responsive-16by9">
-			  <iframe class="embed-responsive-item" src="'.$content.'" allowfullscreen></iframe>
+			  <iframe class="embed-responsive-item" src="'. TV_UPLOAD_PATH . $content . '" allowfullscreen></iframe>
 			</div>';
 		}
 
@@ -151,7 +156,7 @@ class InformationView extends ViewG {
 	}
 
 	/**
-	 * Form pour créer une information d'événement
+	 * Display a form to create an event information with images or PDFs
 	 *
 	 * @param $endDate  string
 	 * @param $type     string
@@ -171,14 +176,16 @@ class InformationView extends ViewG {
 	}
 
 	/**
-	 * Affiche le formulaire de modification d'information
+	 * Display a form to modify an information
 	 *
-	 * @param $title        string titre
-	 * @param $content      string contenu de l'information
-	 * @param $endDate      string date d'expirarion
-	 * @param $type     string type de l'information
+	 * @param $title
+	 * @param $content
+	 * @param $endDate
+	 * @param $type
 	 *
 	 * @return string
+	 * @throws \PhpOffice\PhpSpreadsheet\Exception
+	 * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
 	 */
 	public function displayModifyInformationForm($title, $content, $endDate, $type) {
 		if ($type == "text") {
@@ -190,7 +197,9 @@ class InformationView extends ViewG {
 		} elseif ($type == "pdf") {
 			return $this->displayFormPDF($title, $content, $endDate, "changePDF");
 		} elseif ($type == "event") {
-			if(substr($content, 0, 1) == "[") {
+			$extension = explode('.', $content);
+			$extension = $extension[1];
+			if($extension == "pdf") {
 				return $this->displayFormPDF($title, $content, $endDate, "changeEventPDF");
 			} else {
 				return $this->displayFormImg($title, $content, $endDate, "changeEventImg");
@@ -201,7 +210,7 @@ class InformationView extends ViewG {
 	} //displayModifyInformationForm()
 
 	/**
-	 * Affiche l'en-tête du tableau qui affiche toutes les informations créées
+	 * Display the header of the table who display all informations
 	 * @return string
 	 */
 	public function tabHeadInformation() {
@@ -211,115 +220,125 @@ class InformationView extends ViewG {
 	} //tabHeadInformation()
 
 	/**
-	 * Affiche une ligne du tableau des informations créées
+	 * Display an information in a line of a table
 	 *
-	 * @param $id               int id alerte
-	 * @param $title            string titre de l'information
+	 * @param $id               int id info
+	 * @param $title            string title of information
 	 * @param $author           string login de l'auteur
-	 * @param $content          string contenu de l'information
-	 * @param $type             string type de l'information (Pdf, img, tableau, texte)
-	 * @param $creationDate     string date de création de l'information
-	 * @param $endDate          string date d'expiration de l'information
-	 * @param $row              int numéro de ligne
+	 * @param $content          string content of the information
+	 * @param $type             string type of information (Pdf, img, tableau, texte)
+	 * @param $creationDate     string  creation date of the information
+	 * @param $endDate          string end date of the information
+	 * @param $row              int number of the line
 	 *
 	 * @return string
 	 */
-	public function displayAllInformation( $id, $title, $author, $content, $type, $creationDate, $endDate, $row ) {
+	public function displayAllInformation($id, $title, $author, $content, $type, $creationDate, $endDate, $row) {
+		// Get the link of the modification page
 		$page           = get_page_by_title('Modification information');
 		$linkModifyInfo = get_permalink($page->ID);
+
+		$source = $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $content;
 
 		if($type == "img" || $type == "event") {
 			$extension = explode('.', $content);
 			$extension = $extension[1];
 			$extensions = ['jpg', 'jpeg', 'gif', 'png', 'svg'];
-			if(in_array($extension, $extensions))
-			$content = '<img class="container_fluid" src="'.$content.'" alt="'.$title.'">';
+			if(in_array($extension, $extensions)) {
+				$content = '<img class="container-fluid" src="'. TV_UPLOAD_PATH .$content.'" alt="'.$title.'">';
+			}
 		}
 
 		if($type == "pdf" || $type == "event") {
 			$extension = explode('.', $content);
 			$extension = $extension[1];
 			if($extension == "pdf") {
-				$content = '[pdf-embedder url="'.$content.'"]';
+				$content = '[pdf-embedder url="' . TV_UPLOAD_PATH . $content . '"]';
 			}
 		}
 
-		$tab            = [$title, $author, $content, $creationDate, $endDate];
-		$string         = $this->displayAll( $row, 'info', $id, $tab );
+		if($type == "tab") {
+			$content = "<p>Tableau Excel</p>";
+		}
 
-		if ( $type == 'tab' ) {
-			$source = $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $content;
-			if ( ! file_exists( $source ) ) {
-				$string .= '<td class="text-center red"> Le ficier n\'exite pas';
+		$contents = [$title, $author, $content, $creationDate, $endDate];
+		$string   = $this->displayRowTable($row, 'info', $id, $contents);
+
+		if ($type == 'tab' || $type == 'img') {
+			if (! file_exists($source)) {
+				$string .= '<td class="text-center red"> Le fichier n\'exite pas';
 			} else {
 				$string .= '<td class="text-center">';
 			}
 		} else {
-			if ($type == 'img') {
-				$source = home_url() . $content;
-				if (! @getimagesize($source)) {
-					$string .= '<td class="text-center red"> Le fichier n\'existe pas ';
-				} else {
-					$string .= '<td class="text-center">';
-				}
-			} else {
-				$string .= '<td class="text-center">';
-			}
+			$string .= '<td class="text-center">';
 		}
+
 		$string .= '
-               <a href="' . $linkModifyInfo . $id . '" name="modifetud" type="submit" value="Modifier">Modifier</a></td>
+               <a href="' . $linkModifyInfo . $id . '" type="submit" value="Modifier">Modifier</a></td>
             </tr>';
 
 		return $string;
 	} // displayAllInformation()
 
+	/**
+	 * Display the begin of the slideshow
+	 */
+	public function displayStartSlideshow() {
+		echo '<div class="slideshow-container">';
+	}
 
 	/**
-	 * Affiche les informations sur la page principal avec un carousel
+	 * Display a slide for the slideshow
 	 *
-	 * @param $titles        array titres des informations
-	 * @param $contents      array contenus des informations
-	 * @param $types        array types des informations
+	 * @param $title
+	 * @param $content
+	 * @param $type
 	 */
-	public function displayInformationView($titles, $contents, $types) {
+	public function displaySlide($title, $content, $type) {
+		echo '<div class="myInfoSlides">';
 
-		echo '<div class="slideshow-container">';
-		for($i = 0; $i < sizeof($titles); ++ $i) {
-			echo '<div class="myInfoSlides">';
-			if ($titles[ $i ] != "Sans titre") {
-				echo '<h2 class="titleInfo">' . $titles[ $i ] . '</h2>';
-			}
-
-			$extension = explode('.', $contents[$i]);
-			$extension = $extension[1];
-			if ($types[$i] == 'pdf' || $types[$i] == "event" && $extension == "pdf") {
-				echo do_shortcode('[pdf-embedder url="'.$contents[$i].'"]');
-			} elseif ($types[$i] == "img" || $types[$i] == "event") {
-				echo '<img src="'.$contents[$i].'" alt="'.$titles[$i].'">';
-			}  else if ($types[ $i ] == 'text') {
-				echo '<p class="info-text">'.$contents[$i].'</p>';
-			} else if ($types[$i] == 'special') {
-				$func = explode('(Do this(function:', $contents[$i]);
-				$text = explode('.', $func[0]);
-				foreach ($text as $value) {
-					echo '<p class="info-text">' . $value . '</p>';
-				}
-				$func = explode(')end)', $func[1]);
-				echo $func[0]();
-			} else {
-				echo $contents[$i];
-			}
-			echo '</div>';
+		// If the title is empty
+		if ($title != "Sans titre") {
+			echo '<h2 class="titleInfo">' . $title . '</h2>';
 		}
-		echo '
-		</div>';
-	} //displayInformationView()
 
+		$extension = explode('.', $content);
+		$extension = $extension[1];
+		if ($type == 'pdf' || $type == "event" && $extension == "pdf") {    // Call the shortcode for using the plugin
+			echo '
+			<div class="canvas_pdf" id="'.$content.'">
+				<canvas id="the-canvas-'.$content.'"></canvas>
+			</div>';
+		} elseif ($type == "img" || $type == "event") {                     // Display an image
+			echo '<img src="'. TV_UPLOAD_PATH .$content.'" alt="'.$title.'">';
+		}  else if ($type == 'text') {
+			echo '<p class="info-text">'.$content.'</p>';
+		} else if ($type == 'special') {                                    // Call a function from the plugin
+			$func = explode('(Do this(function:', $content);
+			$text = explode('.', $func[0]);
+			foreach ($text as $value) {
+				echo '<p class="info-text">' . $value . '</p>';
+			}
+			$func = explode(')end)', $func[1]);
+			echo $func[0]();
+		} else {
+			echo $content;
+		}
+		echo '</div>';
+	}
+
+	/**
+	 * Start the slideshow
+	 */
 	public function displayStartSlideEvent() {
 		echo '
             <div id="slideshow-container" class="slideshow-container">';
 	}
 
+	/**
+	 * Start a slide
+	 */
 	public function displaySlideBegin() {
 		echo '
 			<div class="mySlides event-slide">';
@@ -327,7 +346,7 @@ class InformationView extends ViewG {
 
 
 	/**
-	 * Affiche un modal qui signal que l'inscription a été validé
+	 * Display a modal to validate the creation of an information
 	 */
 	public function displayCreateValidate() {
 		$page           = get_page_by_title( 'Gérer les informations' );
@@ -338,8 +357,8 @@ class InformationView extends ViewG {
 	}
 
 	/**
-	 * Affiche un message de validation dans un modal lorsque une information est modifiée
-	 * Redirige à la gestion des informations
+	 * Display a modal to validate the modification of an information
+	 * Redirect to manage page
 	 */
 	public function displayModifyValidate() {
 		$page           = get_page_by_title( 'Gérer les informations' );
@@ -349,6 +368,9 @@ class InformationView extends ViewG {
 		$this->displayEndModal( $linkManageInfo );
 	}
 
+	/**
+	 * Display a message if the insertion of the information doesn't work
+	 */
 	public function displayErrorInsertionInfo() {
 		echo '<p>Il y a eu une erreur durant l\'insertion de l\'information</p>';
 	}

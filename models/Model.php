@@ -9,24 +9,24 @@
 abstract class Model {
 
 
-    private static $db;
+    private static $dbh;
 
     /**
      * Set the db with PDO
      */
     private static function setDb() {
-        self::$db = new PDO('mysql:host=' . DB_HOST . '; dbname=' . DB_NAME, DB_USER, DB_PASSWORD);
-        self::$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+        self::$dbh = new PDO( 'mysql:host=' . DB_HOST . '; dbname=' . DB_NAME, DB_USER, DB_PASSWORD);
+        self::$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
     }
 
     /**
      * Return the db
      * @return mixed
      */
-    protected function getDb() {
-        if (self:: $db == null)
+    protected function getDbh() {
+        if ( self:: $dbh == null)
             self::setDb();
-        return self::$db;
+        return self::$dbh;
     }
 
     /**
@@ -36,7 +36,7 @@ abstract class Model {
      */
     protected function getAll($table) {
         $var = [];
-        $req = $this->getDb()->prepare('SELECT * FROM ' . $table . ' ORDER BY ID desc');
+        $req = $this->getDbh()->prepare( 'SELECT * FROM ' . $table . ' ORDER BY ID desc');
         $req->execute();
         while ($data = $req->fetch(PDO::FETCH_ASSOC)) {
             $var[] = $data;
@@ -51,7 +51,7 @@ abstract class Model {
      * @return array
      */
     public function getUsersByRole($role) {
-        $req = $this->getDb()->prepare('SELECT * FROM wp_users user, wp_usermeta meta WHERE user.ID = meta.user_id AND meta.meta_value =:role 
+        $req = $this->getDbh()->prepare('SELECT * FROM wp_users user, wp_usermeta meta WHERE user.ID = meta.user_id AND meta.meta_value =:role 
                                         ORDER BY user.code, user.user_login');
         $size = strlen($role);
         $role = 'a:1:{s:' . $size . ':"' . $role . '";b:1;}';
@@ -70,7 +70,7 @@ abstract class Model {
      * @return array
      */
     public function getTitleOfCode($code) {
-        $req = $this->getDb()->prepare('SELECT title FROM code_ade WHERE code = :code');
+        $req = $this->getDbh()->prepare('SELECT title FROM code_ade WHERE code = :code');
         $req->bindParam(':code', $code);
         $req->execute();
         while ($data = $req->fetch()) {
@@ -85,7 +85,7 @@ abstract class Model {
      * @return array
      */
     public function getCodeYear() {
-        $req = $this->getDb()->prepare('SELECT * FROM code_ade WHERE type = "Annee" ORDER BY title');
+        $req = $this->getDbh()->prepare('SELECT * FROM code_ade WHERE type = "Annee" ORDER BY title');
         $req->execute();
 		$data = $req->fetchAll();
         return $data;
@@ -96,7 +96,7 @@ abstract class Model {
      * @return array
      */
     public function getCodeGroup() {
-        $req = $this->getDb()->prepare('SELECT * FROM code_ade WHERE type = "Groupe" ORDER BY title');
+        $req = $this->getDbh()->prepare('SELECT * FROM code_ade WHERE type = "Groupe" ORDER BY title');
         $req->execute();
         while ($data = $req->fetch()) {
             $var[] = $data;
@@ -110,7 +110,7 @@ abstract class Model {
      * @return array
      */
     public function getCodeHalfgroup() {
-        $req = $this->getDb()->prepare('SELECT * FROM code_ade WHERE type = "Demi-Groupe" ORDER BY title');
+        $req = $this->getDbh()->prepare('SELECT * FROM code_ade WHERE type = "Demi-Groupe" ORDER BY title');
         $req->execute();
         while ($data = $req->fetch()) {
             $var[] = $data;
@@ -136,7 +136,7 @@ abstract class Model {
      * @param $id       int ID de la ligne à supprimer
      */
     protected function deleteTuple($table, $id) {
-        $req = $this->getDb()->prepare('DELETE FROM ' . $table . ' WHERE ID = :id');
+        $req = $this->getDbh()->prepare( 'DELETE FROM ' . $table . ' WHERE ID = :id');
         $req->bindValue(':id', $id);
 
         $req->execute();
@@ -148,7 +148,7 @@ abstract class Model {
      */
     public function deleteUser($id) {
         $this->deleteTuple('wp_users', $id);
-        $req = $this->getDb()->prepare('DELETE FROM wp_usermeta WHERE user_id = :id');
+        $req = $this->getDbh()->prepare('DELETE FROM wp_usermeta WHERE user_id = :id');
         $req->bindValue(':id', $id);
 
         $req->execute();
@@ -160,7 +160,7 @@ abstract class Model {
      * @return mixed    Renvoie les données concernant l'utilisateur
      */
     public function getById($id) {
-        $req = $this->getDb()->prepare('SELECT * FROM wp_users user, wp_usermeta meta WHERE user.ID = meta.user_id AND user.ID =:id 
+        $req = $this->getDbh()->prepare('SELECT * FROM wp_users user, wp_usermeta meta WHERE user.ID = meta.user_id AND user.ID =:id 
                                         ORDER BY user.code, user.user_login');
 
         $req->bindParam(':id', $id);

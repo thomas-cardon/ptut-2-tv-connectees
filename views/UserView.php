@@ -55,8 +55,8 @@ class UserView extends ViewG
         $linkModifyUser = get_permalink($page->ID);
         $code = unserialize($result['code']);
         $tab = [$result['user_login'], $code[0]];
-        return $this->displayAll($row, $name, unserialize($result['ID']), $tab) .
-            '
+        return $this->displayRowTable($row, $name, unserialize($result['ID']), $tab) .
+               '
             <td class="text-center"> <a href="' . $linkModifyUser . $result['ID'] . '" name="modif" type="submit" value="Modifier">Modifier</a></td>
         </tr>';
     }

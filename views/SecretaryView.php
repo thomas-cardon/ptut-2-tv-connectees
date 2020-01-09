@@ -50,7 +50,7 @@ class SecretaryView extends UserView
     public function displayAllSecretary($row, $id, $login)
     {
         $tab[] = $login;
-        return $this->displayAll($row, 'secre', $id, $tab);
+        return $this->displayRowTable($row, 'secre', $id, $tab);
     }
 
     /**

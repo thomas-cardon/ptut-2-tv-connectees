@@ -32,7 +32,7 @@ class TechnicianView extends UserView
     public function displayAllTechnicians($row, $id, $login)
     {
         $tab[] = $login;
-        return $this->displayAll($row, 'tech', $id, $tab);
+        return $this->displayRowTable($row, 'tech', $id, $tab);
     }
 
     public function displayDivSchedule() {

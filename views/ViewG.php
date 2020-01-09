@@ -12,8 +12,13 @@
  */
 abstract class ViewG
 {
+	/**
+	 * ViewG constructor.
+	 */
+	public function __construct() {
+	}
 
-    /**
+	/**
      * Affiche l'en-tête d'un tableau
      * @param $name
      * @param null $title Titre du tableau
@@ -82,21 +87,20 @@ abstract class ViewG
 
     /**
      * Affiche le contenu d'une ligne du tableau
-     * @param $row      int Numéro de ligne du tableau
+     * @param $number      int Numéro de ligne du tableau
      * @param $name
      * @param $id       int ID de l'objet mis dans le tableau, permet de pouvoir supprimer la ligne via des checkbox
-     * @param $tab      array Valeur à mettre par colonne
+     * @param $contents      array Valeur à mettre par colonne
      * @return string   Renvoie la ligne
      */
-    protected function displayAll($row, $name, $id, $tab)
-    {
+    protected function displayRowTable($number, $name, $id, $contents) {
         $string = '
         <tr>
-          <th scope="row" class="text-center">' . $row . '</th>
+          <th scope="row" class="text-center">' . $number . '</th>
           <td class="text-center"><input type="checkbox" name="checkboxstatus' . $name . '[]" value="' . $id . '"/></td>';
-        if (isset($tab)) {
-            foreach ($tab as $value) {
-                $string .= '<td class="text-center">' . $value . '</td>';
+        if (isset($contents)) {
+            foreach ($contents as $content) {
+                $string .= '<td class="text-center">' . $content . '</td>';
             }
         }
         return $string;
