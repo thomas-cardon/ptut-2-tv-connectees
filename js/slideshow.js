@@ -8,17 +8,25 @@ let numPage = 0; // Numéro de page courante
 let totalPage = null; // Nombre de pages
 let myCanvas = null;
 
-displayOrHide();
+infoSlideShow();
+scheduleSlideshow();
+
+function infoSlideShow() {
+    if(document.getElementsByClassName("myInfoSlides").length > 0) {
+        displayOrHide(document.getElementsByClassName("myInfoSlides"));
+    }
+}
+
+function scheduleSlideshow() {
+    if(document.getElementsByClassName("mySlides").length > 0) {
+        displayOrHide(document.getElementsByClassName("mySlides"));
+    }
+}
 
 /**
  * Display a slideshow
  */
-function displayOrHide() {
-
-    let slides = document.getElementsByClassName("myInfoSlides");
-    if(slides.length <= 0) {
-        slides = document.getElementsByClassName("mySlides");
-    }
+function displayOrHide(slides) {
 
     if(slides.length > 0) {
         for (let i = 0; i < slides.length; ++i) {
@@ -105,7 +113,7 @@ function displayOrHide() {
             }
         }
     }
-    setTimeout(displayOrHide, 8000);
+    setTimeout(function(){displayOrHide(slides)} , 10000);
 }
 
 
