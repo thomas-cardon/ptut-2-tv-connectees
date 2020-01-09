@@ -355,9 +355,13 @@ class Information extends ControllerG {
 			$extension = explode('.', $event->getContent());
 			$extension = $extension[1];
 			if($extension == "pdf") {
-				echo do_shortcode('[pdf-embedder url="'.$event->getContent().'"]');
+				echo '
+				<div class="canvas_pdf" id="'.$event->getContent().'">
+					<canvas id="the-canvas-'.$event->getContent().'"></canvas>
+				</div>';
+				//echo do_shortcode('[pdf-embedder url="'.$event->getContent().'"]');
 			} else {
-				echo '<img src="'.$event->getContent().'" alt="'.$event->getTitle().'"]';
+				echo '<img src="'. TV_UPLOAD_PATH . $event->getContent() . '" alt="'.$event->getTitle().'">';
 			}
 			echo $this->view->displayEndDiv();
 		}

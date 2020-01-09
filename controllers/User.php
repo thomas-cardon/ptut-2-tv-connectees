@@ -1,8 +1,7 @@
 <?php
 
 
-class User extends ControllerG
-{
+class User extends ControllerG {
 
     /**
      * @var UserModel
@@ -17,8 +16,7 @@ class User extends ControllerG
     /**
      * AdminModel constructor.
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->model = new UserModel();
         $this->view = new UserView();
     }
@@ -28,8 +26,7 @@ class User extends ControllerG
      * De même pour un secrétaire ou un administrateur, on supprime les alertes & informations postés par ces-derniers
      * @param $id   int ID de la personne a supprimer
      */
-    public function deleteUser($id)
-    {
+    public function deleteUser($id) {
         $user = $this->model->getById($id);
         $data = get_userdata($id);
         $this->model->deleteUser($id);
@@ -69,8 +66,7 @@ class User extends ControllerG
      * si son mot de passe est correcte, on envoie par mail un code qui doit rentrer
      * et si le code qui rentre est correct
      */
-    public function deleteAccount()
-    {
+    public function deleteAccount() {
         $action = $_POST['deleteMyAccount'];
         $actionDelete = $_POST['deleteAccount'];
         $current_user = wp_get_current_user();
@@ -121,8 +117,7 @@ class User extends ControllerG
      * Permet aussi d'accéder à la suppression de compte
      * @return string
      */
-    public function chooseModif()
-    {
+    public function chooseModif() {
         $current_user = wp_get_current_user();
         $string = $this->view->displayStartMultiSelect();
         if (in_array('etudiant', $current_user->roles)) {
@@ -148,8 +143,7 @@ class User extends ControllerG
      * Modifie le mot de passe de l'utilisateur
      * s'il rentre son mot de passe actuel
      */
-    public function modifyPwd()
-    {
+    public function modifyPwd() {
         $action = $_POST['modifyMyPwd'];
         $current_user = wp_get_current_user();
         if (isset($action)) {
@@ -170,8 +164,7 @@ class User extends ControllerG
      * @param $code     int Code ADE de l'emploi du temps
      * @return string|bool
      */
-    public function displaySchedule($code, $allDay = false)
-    {
+    public function displaySchedule($code, $allDay = false) {
         global $R34ICS;
         $R34ICS = new R34ICS();
 
@@ -194,8 +187,7 @@ class User extends ControllerG
      * Affiche l'emploi du temps d'une année en fonction de l'ID récupéré dans l'url
      * @return string
      */
-    function displayYearSchedule()
-    {
+    function displayYearSchedule() {
         $code = $this->getMyIdUrl(); // On récupère l'ID qui sert de code ADE
 	    $codes = array();
 	    $results = $this->model->getCodeYear();

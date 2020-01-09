@@ -1,7 +1,7 @@
 let slideIndex = 0;
 let slidePDF = 0;
 
-let urlUpload = "http://ecransconnectes/wp-content/uploads/media/";
+let urlUpload = "/wp-content/uploads/media/";
 
 let pdfUrl = null;
 let numPage = 0; // Numéro de page courante
@@ -40,17 +40,17 @@ function displayOrHide() {
                 for(i = 0; i < slides[slideIndex].childNodes.length; ++i) {
                     // If is a PDF
                     if(slides[slideIndex].childNodes[i].className === 'canvas_pdf') {
-
                         count = count + 1;
+
                         // Generate the url
-                        var pdfLink = slides[slideIndex].childNodes[i].id
+                        let pdfLink = slides[slideIndex].childNodes[i].id;
                         pdfUrl = urlUpload + pdfLink;
 
-                        var loadingTask = pdfjsLib.getDocument(pdfUrl);
+                        let loadingTask = pdfjsLib.getDocument(pdfUrl);
                         loadingTask.promise.then(function(pdf) {
                             totalPage = pdf.numPages;
                             ++numPage;
-                            if(totalPage > numPage) {
+                            if(totalPage >= numPage) {
                                 pdf.getPage(numPage).then(function(page) {
                                     var scale = 1.5;
                                     var viewport = page.getViewport({ scale: scale, });
@@ -65,10 +65,18 @@ function displayOrHide() {
                                         viewport: viewport
                                     };
 
-                                    canvas.style.maxHeight = "65vh";
-                                    canvas.style.maxWidth = "100%";
-                                    canvas.style.height = "auto";
-                                    canvas.style.width = "auto";
+                                    // Give the CSS to the canvas
+                                    if(slides === document.getElementsByClassName("mySlides")) {
+                                        canvas.style.maxHeight = "99vh";
+                                        canvas.style.maxWidth = "100%";
+                                        canvas.style.height = "99vh";
+                                        canvas.style.width = "auto";
+                                    } else {
+                                        canvas.style.maxHeight = "65vh";
+                                        canvas.style.maxWidth = "100%";
+                                        canvas.style.height = "auto";
+                                        canvas.style.width = "auto";
+                                    }
 
                                     page.render(renderContext);
                                     if (context) {
@@ -77,8 +85,10 @@ function displayOrHide() {
                                     }
                                 });
                             } else {
+                                // Reinitialise variables
                                 totalPage = null;
                                 numPage = 0;
+                                // Go to the next slide
                                 ++slideIndex;
                             }
                             //renderPDF(pdf);
