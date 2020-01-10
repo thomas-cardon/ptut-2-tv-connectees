@@ -26,9 +26,13 @@ function scheduleSlideshow() {
 function displayOrHide(slides, slideIndex) {
 
     if(slides.length > 0) {
-        for (let i = 0; i < slides.length; ++i) {
-            slides[i].style.display = "none";
+        console.log(slides.length);
+        if(slides.length > 1) {
+            for (let i = 0; i < slides.length; ++i) {
+                slides[i].style.display = "none";
+            }
         }
+
 
         if(slideIndex === slides.length - 1) {
             slideIndex = 0;
