@@ -68,7 +68,7 @@ include_once 'views/InformationView.php';
 include_once 'widgets/WidgetInformation.php';
 
 include_once 'controllers/Alert.php';
-include_once 'models/AlertManager.php';
+include_once 'models/AlertModel.php';
 include_once 'views/AlertView.php';
 include_once 'widgets/WidgetAlert.php';
 

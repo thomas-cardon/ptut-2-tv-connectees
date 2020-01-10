@@ -305,13 +305,18 @@ class InformationView extends ViewG {
 
 		$extension = explode('.', $content);
 		$extension = $extension[1];
-		if ($type == 'pdf' || $type == "event" && $extension == "pdf") {    // Call the shortcode for using the plugin
+		if ($type == 'pdf' || $type == "event" && $extension == "pdf") {    // Display a canvas with a div id with the name of the file
 			echo '
 			<div class="canvas_pdf" id="'.$content.'">
 				<canvas id="the-canvas-'.$content.'"></canvas>
 			</div>';
-		} elseif ($type == "img" || $type == "event") {                     // Display an image
-			echo '<img src="'. TV_UPLOAD_PATH .$content.'" alt="'.$title.'">';
+		} elseif ($type == "img" || $type == "event") { // Display an image
+			if ($title != "Sans titre") {
+				echo '<img class="img-with-title" src="'. TV_UPLOAD_PATH .$content.'" alt="'.$title.'">';
+			} else {
+				echo '<img class="img-without-title" src="'. TV_UPLOAD_PATH .$content.'" alt="'.$title.'">';
+			}
+
 		}  else if ($type == 'text') {
 			echo '<p class="info-text">'.$content.'</p>';
 		} else if ($type == 'special') {                                    // Call a function from the plugin

@@ -80,7 +80,7 @@ function displayOrHide(slides) {
                                         canvas.style.height = "99vh";
                                         canvas.style.width = "auto";
                                     } else {
-                                        canvas.style.maxHeight = "65vh";
+                                        canvas.style.maxHeight = "68vh";
                                         canvas.style.maxWidth = "100%";
                                         canvas.style.height = "auto";
                                         canvas.style.width = "auto";

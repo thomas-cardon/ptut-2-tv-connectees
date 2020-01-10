@@ -6,16 +6,14 @@
  * Time: 09:36
  */
 
-class CodeAdeManager extends Model
-{
+class CodeAdeManager extends Model {
 
     /**
      * Vérifie si un code identique existe déjà
      * @param $code     int Code ADE
      * @return bool     Renvoie vrai s'il y a un doublon
      */
-    protected function checkIfDoubleCode($code)
-    {
+    protected function checkIfDoubleCode($code) {
         $var = 0;
         $req = $this->getDbh()->prepare('SELECT * FROM code_ade WHERE code =:code');
         $req->bindValue(':code', $code);
@@ -36,8 +34,7 @@ class CodeAdeManager extends Model
      * @param $title    string Titre du code ADE
      * @return bool     Renvoie vrai s'il y a un doublon
      */
-    protected function checkIfDoubleTitle($title)
-    {
+    protected function checkIfDoubleTitle($title) {
         $var = 0;
         $req = $this->getDbh()->prepare('SELECT * FROM code_ade WHERE title =:title');
         $req->bindValue(':title', $title);
@@ -61,8 +58,7 @@ class CodeAdeManager extends Model
      * @param $code     int Code ADE
      * @return bool     Renvoie vrai si le code est enregistré
      */
-    public function addCode($type, $title, $code)
-    {
+    public function insertCode($type, $title, $code) {
         if (!($this->checkIfDoubleCode($code)) && !($this->checkIfDoubleTitle($title))) {
             $req = $this->getDbh()->prepare('INSERT INTO code_ade (type, title, code) 
                                          VALUES (:type, :title, :code)');

@@ -7,8 +7,7 @@
  * Ce controller permet de créer/modifier/supprimer des codes ADE
  */
 
-class CodeAde extends ControllerG
-{
+class CodeAde extends ControllerG {
     /**
      * Vue de CodeAde
      * @var CodeAdeView
@@ -24,8 +23,7 @@ class CodeAde extends ControllerG
     /**
      * Constructeur de CodeAde.
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->view = new CodeAdeView();
         $this->model = new CodeAdeManager();
     }
@@ -34,15 +32,14 @@ class CodeAde extends ControllerG
      * Ajoute le code ADE rentré dans la base de donnée si le code n'est pas déjà enregistré ou même le titre.
      * Si le code est enregistré, on ajoute ensuite le fichier ICS de l'emploi du temps dans le dossier fileICS
      */
-    public function insertCode()
-    {
+    public function insertCode() {
         $action = $_POST['addCode'];
         $code = filter_input(INPUT_POST, 'codeAde');
         $title = filter_input(INPUT_POST, 'titleAde');
         $type = filter_input(INPUT_POST, 'typeCode');
 
         if ($action == "Valider") {
-            if ($this->model->addCode($type, $title, $code)) {
+            if ($this->model->insertCode($type, $title, $code)) {
                 $this->addFile($code);
                 $this->view->refreshPage();
             } else {

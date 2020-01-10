@@ -37,7 +37,7 @@ class User extends ControllerG {
             }
         }
         if (in_array("enseignant", $data->roles) || in_array("secretaire", $data->roles) || in_array("administrator", $data->roles)) {
-            $modelAlert = new AlertManager();
+            $modelAlert = new AlertModel();
             $modelInfo = new InformationModel();
             $alerts = $modelAlert->getListAlertByAuthor($user[0]['user_login']);
             if (isset($alerts)) {
