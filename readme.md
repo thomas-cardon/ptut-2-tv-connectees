@@ -10,3 +10,5 @@ Pour avoir l'identifiant d'un emploi du temps :
   - Allez sur l'ADE 
   - Sélectionnez l'emploi du temps 
   - Cliquez sur la petite baguette - la suite un autre jours...
+
+Langages utilisés : HTML, CSS, PHP, JS, SQL
