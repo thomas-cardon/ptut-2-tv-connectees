@@ -176,7 +176,7 @@ class UserView extends ViewG
     public function displayModifyMyCodes($result, $years, $groups, $halfgroups)
     {
         $code = unserialize($result->code);
-        $model = new CodeAdeManager();
+        $model = new CodeAdeModel();
         $titleYear = $model->getCodeTitle($code[0]);
         $titleGroup = $model->getCodeTitle($code[1]);
         $titleHalfgroup = $model->getCodeTitle($code[2]);

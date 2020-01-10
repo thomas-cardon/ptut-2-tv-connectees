@@ -1,8 +1,5 @@
-let slideIndex = 0;
 let slidePDF = 0;
-
 let urlUpload = "/wp-content/uploads/media/";
-
 let pdfUrl = null;
 let numPage = 0; // Numéro de page courante
 let totalPage = null; // Nombre de pages
@@ -13,27 +10,27 @@ scheduleSlideshow();
 
 function infoSlideShow() {
     if(document.getElementsByClassName("myInfoSlides").length > 0) {
-        displayOrHide(document.getElementsByClassName("myInfoSlides"));
+        displayOrHide(document.getElementsByClassName("myInfoSlides"), 0);
     }
 }
 
 function scheduleSlideshow() {
     if(document.getElementsByClassName("mySlides").length > 0) {
-        displayOrHide(document.getElementsByClassName("mySlides"));
+        displayOrHide(document.getElementsByClassName("mySlides"), 0);
     }
 }
 
 /**
  * Display a slideshow
  */
-function displayOrHide(slides) {
+function displayOrHide(slides, slideIndex) {
 
     if(slides.length > 0) {
         for (let i = 0; i < slides.length; ++i) {
             slides[i].style.display = "none";
         }
 
-        if(slideIndex === slides.length) {
+        if(slideIndex === slides.length - 1) {
             slideIndex = 0;
         }
 
@@ -80,7 +77,7 @@ function displayOrHide(slides) {
                                         canvas.style.height = "99vh";
                                         canvas.style.width = "auto";
                                     } else {
-                                        canvas.style.maxHeight = "65vh";
+                                        canvas.style.maxHeight = "68vh";
                                         canvas.style.maxWidth = "100%";
                                         canvas.style.height = "auto";
                                         canvas.style.width = "auto";
@@ -113,7 +110,7 @@ function displayOrHide(slides) {
             }
         }
     }
-    setTimeout(function(){displayOrHide(slides)} , 10000);
+    setTimeout(function(){displayOrHide(slides, slideIndex)} , 10000);
 }
 
 

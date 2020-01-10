@@ -10,8 +10,7 @@
  * Permet de créer, modifier et afficher des étudiants
  * Class Student
  */
-class Student extends User implements Schedule
-{
+class Student extends User implements Schedule {
     /**
      * Vue de Student
      * @var StudentView
@@ -27,14 +26,12 @@ class Student extends User implements Schedule
     /**
      * Constructeur de Student.
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->view = new StudentView();
         $this->model = new StudentModel();
     }
 
-    public function displayMySchedule()
-    {
+    public function displayMySchedule() {
         $current_user = wp_get_current_user();
         $codes = unserialize($current_user->code); // On utilie cette fonction car les codes dans la base de données sont sérialisés
         if (file_exists($this->getFilePath($codes[2]))) {
@@ -48,59 +45,10 @@ class Student extends User implements Schedule
         }
     }
 
-    public function inscriptionStudent()
-    {
-
-        $action = $_POST['createEtu'];
-        $login = filter_input(INPUT_POST, 'loginEtu');
-        $pwd = filter_input(INPUT_POST, 'pwdEtu');
-        $pwdConf = filter_input(INPUT_POST, 'pwdConfirmEtu');
-        $email = filter_input(INPUT_POST, 'emailEtu');
-
-        $privatekey = '6LefDq4UAAAAAO0ky6FGIcPDbNJXR9ucTom3E9aO';
-
-        # the response from reCAPTCHA
-        $resp = null;
-        # the error code from reCAPTCHA, if any
-        $error = null;
-
-        if ($_POST["recaptcha_response_field"]) {
-            $resp = recaptcha_check_answer($privatekey,
-                $_SERVER["REMOTE_ADDR"],
-                $_POST["recaptcha_challenge_field"],
-                $_POST["recaptcha_response_field"]);
-
-            if ($resp->is_valid) {
-                echo "You got it!";
-                if ($pwd == $pwdConf) {
-                    $pwd = wp_hash_password($pwd);
-                    if ($this->model->insertStudent($login, $pwd, $email)) {
-                        $this->view->displayInsertValidate();
-                    } else {
-                        $this->view->displayErrorInsertion();
-                    }
-                } else {
-                    $this->view->displayBadPassword();
-                }
-            } else {
-                # set the error code so that we can display it
-                $error = $resp->error;
-            }
-        }
-        //echo recaptcha_get_html($publickey, $error);
-
-
-        if (isset($action)) {
-
-        }
-        return $this->view->displayFormInscription();
-    }
-
     /**
      * Ajoute tous les étudiants présent dans un fichier excel
      */
-    public function insertStudent()
-    {
+    public function insertStudent() {
         $actionStudent = $_POST['importEtu'];
         if ($actionStudent) {
             $allowed_extension = array("Xls", "Xlsx", "Csv");
@@ -247,8 +195,7 @@ class Student extends User implements Schedule
      * Modifie les codes de l'étudiant connecté
      * @return string
      */
-    public function modifyMyCodes()
-    {
+    public function modifyMyCodes() {
         //On récupère toutes les années, groupes et demi-groupes
         // pour pouvoir permettre à l'utilisateur de les sélectionner lors de la modification
         $current_user = wp_get_current_user();
@@ -269,4 +216,51 @@ class Student extends User implements Schedule
         }
         return $this->view->displayModifyMyCodes($current_user, $years, $groups, $halfgroups);
     }
+
+//	public function inscriptionStudent() {
+//
+//        $action = $_POST['createEtu'];
+//        $login = filter_input(INPUT_POST, 'loginEtu');
+//        $pwd = filter_input(INPUT_POST, 'pwdEtu');
+//        $pwdConf = filter_input(INPUT_POST, 'pwdConfirmEtu');
+//        $email = filter_input(INPUT_POST, 'emailEtu');
+//
+//        $privatekey = '6LefDq4UAAAAAO0ky6FGIcPDbNJXR9ucTom3E9aO';
+//
+//        # the response from reCAPTCHA
+//        $resp = null;
+//        # the error code from reCAPTCHA, if any
+//        $error = null;
+//
+//        if ($_POST["recaptcha_response_field"]) {
+//            $resp = recaptcha_check_answer($privatekey,
+//                $_SERVER["REMOTE_ADDR"],
+//                $_POST["recaptcha_challenge_field"],
+//                $_POST["recaptcha_response_field"]);
+//
+//            if ($resp->is_valid) {
+//                echo "You got it!";
+//                if ($pwd == $pwdConf) {
+//                    $pwd = wp_hash_password($pwd);
+//                    if ($this->model->insertStudent($login, $pwd, $email)) {
+//                        $this->view->displayInsertValidate();
+//                    } else {
+//                        $this->view->displayErrorInsertion();
+//                    }
+//                } else {
+//                    $this->view->displayBadPassword();
+//                }
+//            } else {
+//                # set the error code so that we can display it
+//                $error = $resp->error;
+//            }
+//        }
+//        //echo recaptcha_get_html($publickey, $error);
+//
+//
+//        if (isset($action)) {
+//
+//        }
+//        return $this->view->displayFormInscription();
+//    }
 }

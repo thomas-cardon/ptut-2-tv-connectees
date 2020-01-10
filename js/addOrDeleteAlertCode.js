@@ -7,7 +7,7 @@ function addButtonAlert() {
     }).done(function (data) {
         let div = $('<div >', {
             class: 'row'
-        }).appendTo('#creationAlert');
+        }).appendTo('#alert');
         let select = $('<select >', {
             id: counte,
             name: 'selectAlert[]',

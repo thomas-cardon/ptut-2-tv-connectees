@@ -38,7 +38,7 @@ class Information extends ControllerG {
 		// The current user who want to create the information
 		$current_user = wp_get_current_user();
 
-		// Les différents formulaires
+		// All forms
 		$actionText  = $_POST['createText'];
 		$actionImg   = $_POST['createImg'];
 		$actionTab   = $_POST['createTab'];
