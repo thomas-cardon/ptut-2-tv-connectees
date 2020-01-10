@@ -80,7 +80,7 @@ class InformationModel extends Model {
 	    $sth->execute();
 	    return $sth->rowCount();
 
-    } //deleteInformationDB()
+    } //deleteInformation()
 
     /**
      * Return the list of information present in database
@@ -158,8 +158,8 @@ class InformationModel extends Model {
      */
     public function getInformation($id) {
 	    $sth = $this->getDbh()->prepare('SELECT * 
-                                           FROM informations
-                                           WHERE ID_info = :id');
+                                         FROM informations JOIN wp_users ON informations.author = wp_users.ID 
+                                         WHERE ID_info = :id');
 
 	    $sth->bindParam(':id', $id);
 

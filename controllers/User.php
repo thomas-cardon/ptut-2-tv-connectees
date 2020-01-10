@@ -37,7 +37,7 @@ class User extends ControllerG {
             }
         }
         if (in_array("enseignant", $data->roles) || in_array("secretaire", $data->roles) || in_array("administrator", $data->roles)) {
-            $modelAlert = new AlertManager();
+            $modelAlert = new AlertModel();
             $modelInfo = new InformationModel();
             $alerts = $modelAlert->getListAlertByAuthor($user[0]['user_login']);
             if (isset($alerts)) {
@@ -248,7 +248,7 @@ class User extends ControllerG {
         }
 
         if (in_array("technicien", $current_user->roles)){
-            $model = new CodeAdeManager();
+            $model = new CodeAdeModel();
             $years = $model->getCodeYear();
             $row = 0;
             foreach ($years as $year){

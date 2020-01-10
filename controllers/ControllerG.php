@@ -13,8 +13,7 @@ abstract class ControllerG
      * On l'utilise pour récupérer un ID
      * @return mixed    Renvoie la dernière valeur d'une url
      */
-    public function getMyIdUrl()
-    {
+    public function getMyIdUrl() {
         $urlExpl = explode('/', $_SERVER['REQUEST_URI']);
         $size = sizeof($urlExpl);
         return $urlExpl[$size - 2];
@@ -25,8 +24,7 @@ abstract class ControllerG
      * Cela envoie dans un fichier.log la date et l'heure puis un message d'erreur
      * @param $event    string Événement de l'erreur
      */
-    public function addLogEvent($event)
-    {
+    public function addLogEvent($event) {
         $time = date("D, d M Y H:i:s");
         $time = "[" . $time . "] ";
         $event = $time . $event . "\n";
@@ -39,8 +37,7 @@ abstract class ControllerG
      * @param $code     Code ADE relié à l'emploi du temps voulu
      * @return string   Renvoie l'url du fichier ICS
      */
-    public function getUrl($code)
-    {
+    public function getUrl($code) {
         $str = strtotime("now");
         $str2 = strtotime(date("Y-m-d", strtotime('now')) . " +6 day");
         $start = date('Y-m-d', $str);
@@ -54,8 +51,7 @@ abstract class ControllerG
      * @param $code     int Code ADE de l'emploi du temps souhaité
      * @return string   Renvoie le chemin jusqu'au fichier ICS
      */
-    public function getFilePath($code)
-    {
+    public function getFilePath($code) {
         $filepath = ABSPATH . TV_ICSFILE_PATH;
         if (file_exists($filepath . "file0/" . $code) && filesize($filepath . "file0/" . $code) > 120) {
             $path = ABSPATH . TV_ICSFILE_PATH . "file0/" . $code;
@@ -79,8 +75,7 @@ abstract class ControllerG
      * Ajoute un fichier ICS via le code donné
      * @param $code     int Code ADE
      */
-    public function addFile($code)
-    {
+    public function addFile($code) {
         try {
             $path = ABSPATH . TV_ICSFILE_PATH . "file0/" . $code;
             $url = $this->getUrl($code);

@@ -2,12 +2,8 @@
 
 function code_modify_render_callback() {
     $code = new CodeAde();
-    $model = new CodeAdeManager();
-    $view = new CodeAdeView();
     if(is_page()){
-        $result = $model->getCode($code->getMyIdUrl());
-        $code->modifyCode();
-        return $view->displayModifyCode($result);
+    	return $code->modifyCode();
     }
 }
 

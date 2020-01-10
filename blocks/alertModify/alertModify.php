@@ -2,16 +2,8 @@
 
 function alert_modify_render_callback() {
     $alert = new Alert();
-    $model = new AlertManager();
-    $view = new AlertView();
     if(is_page()){
-        $id = $alert->getMyIdUrl();
-        $years = $model->getCodeYear();
-        $groups = $model->getCodeGroup();
-        $halfgroups = $model->getCodeHalfgroup();
-        $result = $model->getAlertByID($id);
-        $alert->modifyAlert();
-        return $view->displayModifyAlertForm($result,$years, $groups,$halfgroups);
+	    return $alert->modifyAlert();
     }
 }
 

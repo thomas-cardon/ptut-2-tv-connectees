@@ -30,7 +30,7 @@ class Technician extends User implements Schedule
 
     public function displayMySchedule()
     {
-        $modelCode = new CodeAdeManager();
+        $modelCode = new CodeAdeModel();
         $years = $modelCode->getCodeYear();
         $row = 0;
         $string = "";

@@ -314,7 +314,7 @@ class R34ICS extends ControllerG
             $ics_data['description'] = ($args['description'] == 'none') ? false : $args['description'];
         }
 
-        $model = new CodeAdeManager();
+        $model = new CodeAdeModel();
         $title = $model->getCodeTitle($code);
         if ($code == $title) {
             $this->addLogEvent("Code non enregistré: " . $code);

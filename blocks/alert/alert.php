@@ -7,14 +7,14 @@
  */
 function alert_render_callback() {
     $alert = new Alert();
-    $model = new AlertManager();
+    $model = new AlertModel();
     $view = new AlertView();
     if(is_page()){
         $years = $model->getCodeYear();
         $groups = $model->getCodeGroup();
         $halfgroups = $model->getCodeHalfgroup();
 
-        $alert->createAlert();
+        $alert->insertAlert();
         return $view->displayAlertCreationForm($years, $groups, $halfgroups);
     }
 }
