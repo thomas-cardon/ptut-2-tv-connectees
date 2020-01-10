@@ -9,28 +9,27 @@
 
 class CodeAde extends ControllerG {
     /**
-     * Vue de CodeAde
+     * View of CodeAde
      * @var CodeAdeView
      */
     private $view;
 
     /**
-     * Modèle de CodeAde
-     * @var CodeAdeManager
+     * Model of CodeAde
+     * @var CodeAdeModel
      */
     private $model;
 
     /**
-     * Constructeur de CodeAde.
+     * Constructor of CodeAde.
      */
     public function __construct() {
         $this->view = new CodeAdeView();
-        $this->model = new CodeAdeManager();
+        $this->model = new CodeAdeModel();
     }
 
     /**
-     * Ajoute le code ADE rentré dans la base de donnée si le code n'est pas déjà enregistré ou même le titre.
-     * Si le code est enregistré, on ajoute ensuite le fichier ICS de l'emploi du temps dans le dossier fileICS
+     * Insert a code Ade in the database and upload the schedule of this code
      */
     public function insertCode() {
         $action = $_POST['addCode'];
@@ -39,42 +38,88 @@ class CodeAde extends ControllerG {
         $type = filter_input(INPUT_POST, 'typeCode');
 
         if ($action == "Valider") {
-            if ($this->model->insertCode($type, $title, $code)) {
+        	$this->model->setType($type);
+        	$this->model->setTitle($title);
+        	$this->model->setCode($code);
+
+            if ($this->model->insertCode()) {
                 $this->addFile($code);
+                // @TODO Message validate creation
                 $this->view->refreshPage();
             } else {
                 $this->view->displayErrorDoubleCode();
             }
         }
+	    $badCodesYears = $this->model->codeNotBound(0);
+	    $badCodesGroups = $this->model->codeNotBound(1);
+	    $badCodesHalfGroups = $this->model->codeNotBound(2);
+	    $badCodes = [$badCodesYears, $badCodesGroups, $badCodesHalfGroups];
+
+	    $string = "";
+	    if(sizeof($badCodesYears) < 1 || sizeof($badCodesGroups) < 1 || sizeof($badCodesHalfGroups) < 1){
+		    $string .= $this->view->displayUnregisteredCode($badCodes);
+	    }
+	    return $this->view->displayFormAddCode().$string;
     }
 
-    /**
-     * Affiche tout les codes ADE enregistrés dans un tableau où on peut soit les supprimer soit les modifier
-     * Les codes sont ordonnés par ordre de type Année - Groupe - Demi-groupe, puis par ordre alphabétique
-     */
-    public function displayAllCodes()
-    {
-        $years = $this->model->getCodeYear();
-        $groups = $this->model->getCodeGroup();
-        $halfgroups = $this->model->getCodeHalfgroup();
+	/**
+	 * Modify code Ade
+	 */
+	public function modifyCode() {
+		$result = $codeAde = $this->model->getCodeAde($this->getMyIdUrl());
+
+		$action = $_POST['modifCodeValid'];
+		// Take new value
+		$title = filter_input(INPUT_POST, 'modifTitle');
+		$code = filter_input(INPUT_POST, 'modifCode');
+		$type = filter_input(INPUT_POST, 'modifType');
+
+		if ($action == "Valider") {
+			// Set new value
+			$codeAde->setTitle($title);
+			$codeAde->setCode($code);
+			$codeAde->setType($type);
+
+			if ($codeAde->modifyCodeAde()) {
+				// @TODO Message Validation
+				if ($result->getCode() != $code) {
+					$this->addFile($code);
+				}
+				$this->view->refreshPage();
+			} else {
+				$this->view->displayErrorDoubleCode();
+			}
+		}
+		return $this->view->displayModifyCode($codeAde->getTitle(), $codeAde->getType(), $codeAde->getCode());
+	}
+
+	/**
+	 * Display all codes Ade in a table
+	 *
+	 * @return string
+	 */
+    public function displayAllCodes() {
+        $years = $this->model->getCodeAdeListType("Annee");
+        $groups = $this->model->getCodeAdeListType("Groupe");
+        $halfGroups = $this->model->getCodeAdeListType("Demi-groupe");
         $string = $this->view->displayTableHeadCode();
         $row = 0;
         if (isset($years[0])) {
             foreach ($years as $year) {
                 $row = $row + 1;
-                $string .= $this->view->displayAllCode($year, $row);
+                $string .= $this->view->displayAllCode($year->getId(), $year->getTitle(), $year->getType(), $year->getCode(), $row);
             }
         }
         if (isset($groups[0])) {
             foreach ($groups as $group) {
                 $row = $row + 1;
-                $string .= $this->view->displayAllCode($group, $row);
+                $string .= $this->view->displayAllCode($group->getId(), $group->getTitle(), $group->getType(), $group->getCode(), $row);
             }
         }
-        if (isset($halfgroups[0])) {
-            foreach ($halfgroups as $halfgroup) {
+        if (isset($halfGroups[0])) {
+            foreach ($halfGroups as $halfGroup) {
                 $row = $row + 1;
-                $string .= $this->view->displayAllCode($halfgroup, $row);
+                $string .= $this->view->displayAllCode($halfGroup->getId(), $halfGroup->getTitle(), $halfGroup->getType(), $halfGroup->getCode(), $row);
             }
         }
         $string .= $this->view->displayEndTab();
@@ -82,49 +127,18 @@ class CodeAde extends ControllerG {
     }
 
     /**
-     * Supprime tout les codes qui sont sélectionnés
-     * @param $action       Bouton de validation
+     * Delete codes
      */
-    public function deleteCodes()
-    {
-        $model = new CodeAdeManager();
+    public function deleteCodes() {
         $actionDelete = $_POST['Delete'];
         if (isset($actionDelete)) {
             if (isset($_REQUEST['checkboxstatuscode'])) {
                 $checked_values = $_REQUEST['checkboxstatuscode'];
                 foreach ($checked_values as $val) {
-                    $oldCode = $model->getCode($val);
-                    $this->deleteFile($oldCode[0]['code']);
-                    $model->deleteCode($val);
+	                $this->model = $this->model->getCodeAde($val);
+                    $this->model->deleteCode();
                     $this->view->refreshPage();
                 }
-            }
-        }
-    }
-
-    /**
-     * On récupère l'ID dans l'url puis on modifie le code relié à cet ID
-     * Si le code a été modifié, on supprime son fichier ICS et on installe le nouveau
-     */
-    public function modifyCode()
-    {
-        $result = $this->model->getCode($this->getMyIdUrl());
-        //$this->view->displayModifyCode($result);
-
-        $action = $_POST['modifCodeValid'];
-        $title = filter_input(INPUT_POST, 'modifTitle');
-        $code = filter_input(INPUT_POST, 'modifCode');
-        $type = filter_input(INPUT_POST, 'modifType');
-
-        if ($action == "Valider") {
-            if ($this->model->checkModify($result, $this->getMyIdUrl(), $title, $code, $type)) {
-                if ($result[0]['code'] != $code) {
-                    $this->deleteFile($result[0]['code']);
-                    $this->addFile($code);
-                }
-                $this->view->refreshPage();
-            } else {
-                $this->view->displayErrorDoubleCode();
             }
         }
     }

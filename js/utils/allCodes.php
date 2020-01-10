@@ -5,7 +5,7 @@
 
 require_once( "../../../../../wp-load.php" );
 
-$model = new CodeAdeManager();
+$model = new CodeAdeModel();
 $years = $model->getCodeYear();
 $groups = $model->getCodeGroup();
 $halfgroups = $model->getCodeHalfgroup();

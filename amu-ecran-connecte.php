@@ -16,7 +16,7 @@ define('TV_PLUG_PATH', '/wp-content/plugins/plugin-ecran-connecte/');
 define('TV_UPLOAD_PATH', '/wp-content/uploads/media/');
 define('TV_ICSFILE_PATH', '/wp-content/uploads/fileICS/');
 
-//On inclut tous les fichiers du plugin
+// Include all files
 include_once 'install_DB_Tv.php';
 
 include_once 'controllers/ControllerG.php';
@@ -33,7 +33,7 @@ include_once 'models/UserModel.php';
 include_once 'views/UserView.php';
 
 include_once 'controllers/CodeAde.php';
-include_once 'models/CodeAdeManager.php';
+include_once 'models/CodeAdeModel.php';
 include_once 'views/CodeAdeView.php';
 
 include_once 'controllers/Student.php';
@@ -138,11 +138,14 @@ add_action('init', function () {
     }
 });
 
+
+// Upload schedules
 $dl = $_POST['dlEDT'];
 if (isset($dl)) {
     downloadFileICS_func();
 }
 
+// Display schedule
 function displaySchedule() {
     $current_user = wp_get_current_user();
     if (in_array("enseignant", $current_user->roles)) {
@@ -173,20 +176,20 @@ function displaySchedule() {
 }
 
 /**
- * Fonction pour la Cron de WordPress
- * Cette fonction télécharge tous les fichiers ICS des codes ADE enregistrés dans la base de données
+ * Function for WPCron
+ * Upload schedules
  */
 function downloadFileICS_func() {
     move_fileICS_schedule();
-    $model = new CodeAdeManager();
-    $allCodes = $model->getAllCode();
+    $model = new CodeAdeModel();
+    $codesAde = $model->getCodeAdeList();
     $controllerAde = new CodeAde();
-    foreach ($allCodes as $code) {
-        $path = $controllerAde->getFilePath($code['code']);
-        $controllerAde->addFile($code['code']);
+    foreach ($codesAde as $codeAde) {
+        $path = $controllerAde->getFilePath($codeAde->getCode());
+        $controllerAde->addFile($codeAde->getCode());
         if (file_exists($path)) {
             if (filesize($path) < 200) {
-                $controllerAde->addFile($code['code']);
+                $controllerAde->addFile($codeAde->getCode());
             }
         }
     }
@@ -199,7 +202,7 @@ function downloadFileICS_func() {
 add_action('downloadFileICS', 'downloadFileICS_func');
 
 /**
- * Télécharge les emplois du temps des utilisateurs
+ * Upload the schedule of users
  * @param $users    User[]
  */
 function dlSchedule($users) {
@@ -235,7 +238,7 @@ function dlSchedule($users) {
 }
 
 /**
- * Déplace les fichier ICS afin d'avoir 3 jours de fichiers sauvegardés
+ * Change place of file
  */
 function move_fileICS_schedule() {
     if ($myFiles = scandir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3')) {
@@ -274,9 +277,9 @@ function move_fileICS_schedule() {
 }
 
 /**
- * Inclut tous les fichiers CSS et les fichiers JS
+ * Include all scripts
  */
-function wpdocs_plugin_ecran_connectee_scripts() {
+function wpDocs_plugin_ecran_connectee_scripts() {
 	//CSS
     wp_enqueue_style('plugin-bootstrap-style', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', array(), true);
     wp_enqueue_style('weather-style', TV_PLUG_PATH . 'css/weather.css', array(), '1.0');
@@ -308,9 +311,12 @@ function wpdocs_plugin_ecran_connectee_scripts() {
 	wp_enqueue_script('plugin-weatherTime', TV_PLUG_PATH . 'js/weather_and_time.js', array('jquery'), '1.0', true);
 }
 
-add_action('wp_enqueue_scripts', 'wpdocs_plugin_ecran_connectee_scripts');
+add_action('wp_enqueue_scripts', 'wpDocs_plugin_ecran_connectee_scripts');
 
-
+/**
+ * Check if the student have a group
+ * If not, ask to select some groups
+ */
 function manageStudent() {
     $current_user = wp_get_current_user();
     if (in_array('etudiant', $current_user->roles)) {
@@ -337,7 +343,14 @@ function manageStudent() {
     }
 }
 
-function selectSchedules($years, $groups, $halfgroups) {
+/**
+ * Display a list of groups for the inscription of the student
+ *
+ * @param $years
+ * @param $groups
+ * @param $halfGroups
+ */
+function selectSchedules($years, $groups, $halfGroups) {
     echo '
         <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
@@ -375,12 +388,12 @@ function selectSchedules($years, $groups, $halfgroups) {
     <select class="form-control firstSelect" name="selectHalfgroups" required="">
     <option value="0">Aucun</option>
           <optgroup label="Demi groupe">';
-    if (is_array($halfgroups)) {
-        foreach ($halfgroups as $halfgroup) {
+    if (is_array($halfGroups)) {
+        foreach ($halfGroups as $halfgroup) {
             echo '<option value="' . $halfgroup['code'] . '">' . $halfgroup['title'] . '</option>';
         }
     } else {
-        echo '<option value="' . $halfgroups['code'] . '">' . $halfgroups['title'] . '</option>';
+        echo '<option value="' . $halfGroups['code'] . '">' . $halfGroups['title'] . '</option>';
     }
     echo '</optgroup>
                 </select>
@@ -396,6 +409,12 @@ function selectSchedules($years, $groups, $halfgroups) {
 
 add_action('check', 'manageStudent');
 
+/**
+ * Function for "Nuit de l'info"
+ * Give numbers of participant
+ *
+ * @return string
+ */
 function displayParticipant() {
     $url = "https://www.nuitdelinfo.com/inscription/sites/55";
     $result = file_get_contents($url);

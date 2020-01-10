@@ -248,7 +248,7 @@ class User extends ControllerG {
         }
 
         if (in_array("technicien", $current_user->roles)){
-            $model = new CodeAdeManager();
+            $model = new CodeAdeModel();
             $years = $model->getCodeYear();
             $row = 0;
             foreach ($years as $year){

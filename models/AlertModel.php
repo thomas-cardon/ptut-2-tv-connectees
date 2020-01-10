@@ -51,8 +51,8 @@ class AlertModel extends Model {
 	public function modifyAlert() {
 		// The request for update the information
 		$sth = $this->getDbh()->prepare('UPDATE alerts 
-										SET text = :text, end_date = :endDate, codes = :codes
-                                        WHERE ID_alert = :id');
+										 SET text = :text, end_date = :endDate, codes = :codes
+                                         WHERE ID_alert = :id');
 
 		$codes = serialize($this->getCodes());
 		$this->setCodes($codes);
