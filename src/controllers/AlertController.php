@@ -213,7 +213,7 @@ class AlertController extends Controller
         $current_user = wp_get_current_user();
 
         $alertsUser = $this->model->getForUser($current_user->ID);
-	    $alertsUser = array_unique($alertsUser); // Delete duplicate
+	    //$alertsUser = array_unique($alertsUser); // Delete duplicate
 
 	    foreach ($this->model->getForEveryone() as $alert) {
 	    	$alertsUser[] = $alert;
