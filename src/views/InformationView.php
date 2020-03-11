@@ -6,6 +6,13 @@ namespace Views;
 use Controllers\InformationController;
 use Models\Information;
 
+/**
+ * Class InformationView
+ *
+ * All view for Information (Forms, tables, messages)
+ *
+ * @package Views
+ */
 class InformationView extends View
 {
 
@@ -98,7 +105,7 @@ class InformationView extends View
 	{
 		$dateMin = date('Y-m-d', strtotime("+1 day"));
 
-		$string = '<form method="post" enctype="multipart/form-data">
+		$form = '<form method="post" enctype="multipart/form-data">
 						<div class="form-group">
 			                <label for="titleInfo">Titre <span class="text-muted">(Optionnel)</span></label>
 			                <input id="titleInfo" class="form-control" type="text" name="titleInfo" placeholder="Inserer un titre" maxlength="60" value="'.$title.'">
@@ -108,11 +115,11 @@ class InformationView extends View
 			$info = new InformationController();
 			$list = $info->readSpreadSheet(TV_UPLOAD_PATH.$content);
 			foreach ($list as $table) {
-				$string .= $table;
+				$form .= $table;
 			}
 		}
 
-		$string .= '
+		$form .= '
 			<div class="form-group">
                 <label for="contentFile">Ajout du fichier Xls (ou xlsx)</label>
                 <input class="form-control-file" id="contentFile" type="file" name="contentFile" />
@@ -126,7 +133,7 @@ class InformationView extends View
 			</div>
 			<input class="btn btn-primary" type="submit" value="creer" name="' . $type . '">
 		</form>';
-		return $string;
+		return $form;
 	}
 
 	/**
@@ -249,7 +256,7 @@ class InformationView extends View
 
 		$title = 'Informations';
 		$name = 'info';
-		$header = ['Contenu', 'Auteur', 'Date de création', 'Date d\'expiration', 'Modifier'];
+		$header = ['Contenu', 'Auteur', 'Type', 'Date de création', 'Date d\'expiration', 'Modifier'];
 
 		$imgExtension = ['jpg', 'jpeg', 'gif', 'png', 'svg'];
 
@@ -269,11 +276,24 @@ class InformationView extends View
 				$content = $information->getContent();
 			}
 
+			$type = $information->getType();
+			if($information->getType() === 'img') {
+				$type = 'Image';
+			} else if ($information->getType() === 'pdf') {
+				$type = 'PDF';
+			} else if ($information->getType() === 'event') {
+				$type = 'Événement';
+			} else if ($information->getType() === 'text') {
+				$type = 'Texte';
+			} else if ($information->getType() === 'tab') {
+				$type = 'Table Excel';
+			}
+
 			++$count;
-			$row[] = [$count, $this->buildCheckbox($name, $information->getId()), $content, $information->getAuthor()->getLogin(), $information->getCreationDate(), $information->getEndDate(), $this->buildLinkForModify($linkModifyInfo.'/'.$information->getId())];
+			$row[] = [$count, $this->buildCheckbox($name, $information->getId()), $content, $information->getAuthor()->getLogin(), $type, $information->getCreationDate(), $information->getEndDate(), $this->buildLinkForModify($linkModifyInfo.'/'.$information->getId())];
 		}
 
-		return $this->displayAll($name, $title, $header, $row);
+		return $this->displayAll($name, $title, $header, $row, 'info');
 	} // displayAllInformation()
 
 	/**
@@ -303,12 +323,11 @@ class InformationView extends View
 		$extension = explode('.', $content);
 		$extension = $extension[1];
 
-		if ($type == 'pdf' || $type == "event" && $extension == "pdf") {    // Display a canvas with a div id with the name of the file
+		if ($type == 'pdf' || $type == "event" && $extension == "pdf") {
 			echo '
 			<div class="canvas_pdf" id="'.$content.'">
-				<canvas id="the-canvas-'.$content.'"></canvas>
 			</div>';
-		} elseif ($type == "img" || $type == "event") { // Display an image
+		} elseif ($type == "img" || $type == "event") {
 			if ($title != "Sans titre") {
 				echo '<img class="img-with-title" src="'. TV_UPLOAD_PATH .$content.'" alt="'.$title.'">';
 			} else {
@@ -317,7 +336,7 @@ class InformationView extends View
 
 		}  else if ($type == 'text') {
 			echo '<p class="info-text">'.$content.'</p>';
-		} else if ($type == 'special') {                                    // Call a function from the plugin
+		} else if ($type == 'special') {
 			$func = explode('(Do this(function:', $content);
 			$text = explode('.', $func[0]);
 			foreach ($text as $value) {

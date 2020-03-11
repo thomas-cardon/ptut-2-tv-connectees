@@ -1,17 +1,25 @@
 <?php
 
 use Controllers\InformationController;
-use Views\InformationView;
 
-function information_render_callback() {
-    $information = new InformationController();
-    $view = new InformationView();
-    if(is_page()){
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function information_render_callback()
+{
+    if(is_page()) {
+	    $information = new InformationController();
         return $information->insertInformation();
     }
 }
 
-function block_information() {
+/**
+ * Build a block
+ */
+function block_information()
+{
     wp_register_script(
         'information-script',
         plugins_url( 'block.js', __FILE__ ),

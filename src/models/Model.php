@@ -27,6 +27,7 @@ class Model
     {
         self::$database = new PDO( 'mysql:host=' . DB_HOST . '; dbname=' . DB_NAME, DB_USER, DB_PASSWORD);
         self::$database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+        //self::$database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
     }
 
 	/**

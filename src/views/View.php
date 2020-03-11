@@ -12,21 +12,36 @@ namespace Views;
  */
 class View
 {
-	public function displayAll($name, $title, $dataHeader, $dataList)
+
+	/**
+	 * Display a table, showing all element from a database
+	 *
+	 * @param $name
+	 * @param $title
+	 * @param $dataHeader
+	 * @param $dataList
+	 * @param string $idTable
+	 *
+	 * @return string
+	 */
+	public function displayAll($name, $title, $dataHeader, $dataList, $idTable = '')
 	{
 		$name = '\''.$name.'\'';
 		$table = '
+		<input type="text" id="key'.$idTable.'" name="key" onkeyup="search(\''.$idTable.'\')" placeholder="Search">
 		<form method="post">
 			<h2>' . $title . '</h2>
 			<div class="table-responsive">
-				<table class="table">
+				<table class="table" id="table'.$idTable.'">
 					<thead>
 						<tr class="text-center">
-							<th scope="col" width="5%" class="text-center">#</th>
+							<th width="5%" class="text-center">#</th>
 		                    <th scope="col" width="5%" class="text-center"><input type="checkbox" onClick="toggle(this, ' . $name . ')" /></th>';
 
+		$count = 0;
 		foreach ($dataHeader as $data) {
-			$table .= '<th scope="col" class="text-center">'.$data.'</th>';
+			++$count;
+			$table .= '<th scope="col" class="text-center" onclick="sortTable('.$count.', \''.$idTable.'\')">'.$data.'</th>';
 		}
 
 		$table .= '
@@ -52,18 +67,34 @@ class View
 		return $table;
 	}
 
+	/**
+	 * Create a link for modify an element
+	 *
+	 * @param $link
+	 *
+	 * @return string
+	 */
 	public function buildLinkForModify($link)
 	{
 		return '<a href="' . $link . '">Modifier</a>';
 	}
 
+	/**
+	 * Create a checkbox
+	 *
+	 * @param $name
+	 * @param $id
+	 *
+	 * @return string
+	 */
 	public function buildCheckbox($name, $id)
 	{
 		return '<input type="checkbox" name="checkboxstatus' . $name . '[]" value="' . $id . '"/>';
 	}
 
     /**
-     * Affiche le début de la sélection multiple
+     * Create the begin of a multi select
+     *
      * @return string
      */
     public function displayStartMultiSelect()
@@ -73,7 +104,8 @@ class View
     }
 
     /**
-     * Affiche le titre d'un onglet
+     * Create one tab for the multi select
+     *
      * @param $id           string id de l'onglet
      * @param $title        string titre de l'onglet
      * @param $active       bool affiche l'onglet (si c'est à true) lors du chargement de la page
@@ -88,7 +120,8 @@ class View
     }
 
     /**
-     * Affiche la fin des titres des onglets
+     * Close the creation of new tab
+     *
      * @return string
      */
     public function displayEndOfTitle()
@@ -101,10 +134,12 @@ class View
     }
 
     /**
-     * Affiche le contenu d'un onglet
-     * @param $id           string id de l'onglet
-     * @param $content      string contenu de l'onglet
-     * @param $active       bool affiche l'onglet (si c'est à true) lors du chargement de la page
+     * Create the content for one tab
+     *
+     * @param $id           string
+     * @param $content      string
+     * @param $active       bool
+     *
      * @return string
      */
     public function displayContentSelect($id, $content, $active = false)
@@ -116,7 +151,7 @@ class View
     }
 
     /**
-     * Relance la page
+     * Refresh the page
      */
     public function refreshPage()
     {
@@ -124,76 +159,9 @@ class View
     }
 
     /**
-     * Affiche les codes non enregistrées dans un tableau
-     * @param $badCodes array Codes non enregistrés dans un tableau de trois colonnes Année - Groupe - Demi-groupe
-     * @return string   Renvoie le tableau
-     */
-    public function displayUnregisteredCode($badCodes)
-    {
-        if (!is_null($badCodes[0]) || !is_null($badCodes[1]) || !is_null($badCodes[2])) {
-            $string = '
-        <h3> Ces codes ne sont pas encore enregistrés ! </h3>
-        <table class="table text-center"> 
-                <thead>
-                    <tr class="text-center">
-                        <th scope="col" width="33%" class="text-center">Année</th>
-                        <th scope="col" width="33%" class="text-center">Groupe</th>
-                        <th scope="col" width="33%" class="text-center">Demi-Groupe</th>
-                        </tr>
-                </thead>
-                <tbody>';
-            if (is_null($badCodes[0])) {
-                $sizeYear = 0;
-            } else {
-                $sizeYear = sizeof($badCodes[0]);
-            }
-            if (is_null($badCodes[1])) {
-                $sizeGroup = 0;
-            } else {
-                $sizeGroup = sizeof($badCodes[1]);
-            }
-            if (is_null($badCodes[2])) {
-                $sizeHalfgroup = 0;
-            } else {
-                $sizeHalfgroup = sizeof($badCodes[2]);
-            }
-            $size = 0;
-            if ($sizeYear >= $sizeGroup && $sizeYear >= $sizeHalfgroup) $size = $sizeYear;
-            if ($sizeGroup >= $sizeYear && $sizeGroup >= $sizeHalfgroup) $size = $sizeGroup;
-            if ($sizeHalfgroup >= $sizeYear && $sizeHalfgroup >= $sizeGroup) $size = $sizeHalfgroup;
-            for ($i = 0; $i < $size; ++$i) {
-                $string .= '<tr>
-                    <td class="text-center">';
-                if ($sizeYear > $i)
-                    $string .= $badCodes[0][$i];
-                else
-                    $string .= ' ';
-                $string .= '</td>
-            <td class="text-center">';
-                if ($sizeGroup > $i)
-                    $string .= $badCodes[1][$i];
-                else
-                    $string .= ' ';
-                $string .= '</td>
-            <td class="text-center">';
-                if ($sizeHalfgroup > $i)
-                    $string .= $badCodes[2][$i];
-                else
-                    $string .= ' ';
-                $string .= '</td>
-                  </tr>';
-            }
-            $string .= '
-                </tbody>
-        </table>
-        ';
-            return $string;
-        }
-    }
-
-    /**
-     * Affiche le début d'un modal
-     * @param $title    string Titre du modal
+     * Create the beginning of a modal
+     *
+     * @param $title    string
      */
     public function displayStartModal($title)
     {
@@ -208,8 +176,9 @@ class View
     }
 
     /**
-     * Fin du modal
-     * @param null $redirect Redirection lorsqu'on clique si Fermer
+     * End of the modal
+     *
+     * @param null $redirect
      */
     public function displayEndModal($redirect = null)
     {
@@ -231,36 +200,21 @@ class View
     }
 
     /**
-     * Texte pour dire qu'il y a un test
-     */
-    public function displayTest()
-    {
-        echo '<p class="alert alert-danger"> Cette fonctionnalitée est en test ! </p>';
-    }
-
-    /**
-     * Prévient s'il n'y a pas d'utilisateur du rôle demandé inscrit
-     */
-    public function displayEmpty()
-    {
-        return "<p> Il n'y pas d'utilisateur de ce rôle inscrit!</p>";
-    }
-
-    /**
-     * Affiche un modal signalant les personnes n'ont enregistrés du à un email ou login déjà utilisé
+     * Display a message if an user already exist
+     *
      * @param $doubles  array de login
      */
     public function displayErrorDouble($doubles)
     {
         $this->displayStartModal('Erreur durant l\'incription ');
         foreach ($doubles as $double) {
-            echo "<p class='alert alert-danger'>$double a rencontré un problème lors de l'enregistrement, vérifié son login et son email ! </p>";
+            echo '<p class="alert alert-danger">'.$double. ' a rencontré un problème lors de l\'enregistrement, vérifié son login et son email ! </p>';
         }
         $this->displayEndModal();
     }
 
     /**
-     * Affiche un modal, signalant le succès de l'inscription
+     * Display a message if the inscription is a success
      */
     public function displayInsertValidate()
     {
@@ -270,7 +224,7 @@ class View
     }
 
     /**
-     * Affiche un modal, signalant que le fichier à une mauvaise extension
+     * Display a message if the extension of the file is wrong
      */
     public function displayWrongExtension()
     {
@@ -280,7 +234,7 @@ class View
     }
 
     /**
-     * Affiche un modal, signalant que ce n'est pas le bon fichier excel
+     * Display a message if the file isn't a good file
      */
     public function displayWrongFile()
     {
@@ -290,7 +244,7 @@ class View
     }
 
     /**
-     * Affiche un modal signalant que la modification à été réussie
+     * Display a message if the modification is a success
      */
     public function displayModificationValidate($redirect = null)
     {
@@ -300,7 +254,7 @@ class View
     }
 
     /**
-     * Affiche un modal signalant que l'inscription d'un/des utilisateur(s) a échouée
+     * Display a message if the creation of an user has failed
      */
     public function displayErrorInsertion()
     {
@@ -310,16 +264,8 @@ class View
     }
 
     /**
-     * Ajoute une ligne
-     * @return string
-     */
-    public function displayRow()
-    {
-        return '<div class="flex-content">';
-    }
-
-    /**
-     * Ferme une div
+     * Close a div
+     *
      * @return string
      */
     public function displayEndDiv()
@@ -328,7 +274,7 @@ class View
     }
 
     /**
-     * Affiche un modal qui signal que la confirmation de mot de passe lors de l'inscription a échoué
+     * Display a message if the two password are different
      */
     public function displayBadPassword()
     {

@@ -236,7 +236,10 @@ class AlertController extends Controller
     } // alertMain()
 
 
-    // ONESIGNAL NOTIFICATIONS PUSH
+    /**
+     * ONESIGNAL NOTIFICATIONS PUSH
+     *
+     */
     public function sendAlert($id)
     {
         $alert = $this->model->get($id);

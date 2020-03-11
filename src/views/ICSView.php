@@ -5,16 +5,25 @@ namespace Views;
 
 use WP_User;
 
-class ICSView extends View {
+/**
+ * Class ICSView
+ *
+ * Display the schedule
+ *
+ * @package Views
+ */
+class ICSView extends View
+{
 	/**
-	 * Affiche l'emploi du temps d'un fichier ICS
+	 * ADisplay the schedule
 	 *
-	 * @param $ics_data     array Toutes les données du fichier ICS
-	 * @param $title        string Titre de l'emploi du temps
+	 * @param $ics_data     array
+	 * @param $title        string
 	 *
-	 * @return bool         Renvoie vrai s'il y a des données
+	 * @return bool
 	 */
-	public function displaySchedule( $ics_data, $title, $allDay ) {
+	public function displaySchedule($ics_data, $title, $allDay)
+	{
 		$current_user = wp_get_current_user();
 		if (isset($ics_data['events'])) {
 			$string        = '<h1>' . $title . '</h1>';
@@ -24,7 +33,7 @@ class ICSView extends View {
 					$month = $m < 10 ? '0' . $m : '' . $m;
 					foreach ((array) $ics_data['events'][ $year ][ $month ] as $day => $day_events) {
 
-						// EN-TÊTE
+						// HEADER
 						if ($current_study > 9) {
 							break;
 						}
@@ -42,7 +51,7 @@ class ICSView extends View {
 						}
 						foreach ($day_events as $day_event => $events) {
 							foreach ($events as $event) {
-								// CONTENU
+								// CONTENT
 								if ($allDay) {
 									if ($day == date('j')) {
 										if ($current_study > 9) {
@@ -90,7 +99,7 @@ class ICSView extends View {
 								}
 							}
 						}
-						// FIN TABLEAU
+						// FOOTER
 						if (in_array( 'television', $current_user->roles) || in_array('technicien', $current_user->roles)) {
 							if ($day == date( 'j')) {
 								$string .= $this->displayEndSchedule();
@@ -101,7 +110,7 @@ class ICSView extends View {
 					}
 				}
 			}
-			// SI IL N 'Y A PAS COURS
+			// IF NO SCHEDULE
 			if ($current_study < 1) {
 				return $this->displayNoSchedule($title, $current_user);
 			}
@@ -113,7 +122,7 @@ class ICSView extends View {
 	}
 
 	/**
-	 * Affiche le début de l'emploi du temps
+	 * Display the header
 	 *
 	 * @param $current_user     WP_User
 	 *
@@ -138,17 +147,15 @@ class ICSView extends View {
 		return $string;
 	}
 
-//	public function displayAllSchedule() {
-//	if ( date( 'j' ) != $day ) {
-//			 $this->displayLigneSchedule( [
-//				$duration,
-//				$label,
-//				$description,
-//				$event['location']
-//			] );
-//		}
-//	}
-
+	/**
+	 * Give the date of the schedule
+	 *
+	 * @param $day
+	 * @param $month
+	 * @param $year
+	 *
+	 * @return string
+	 */
 	public function giveDate($day, $month, $year)
 	{
 		$day_of_week = $day + 1;
@@ -156,6 +163,14 @@ class ICSView extends View {
 		return '<h2>' . date_i18n( 'l j F', mktime( 0, 0, 0, $month, $day_of_week, $year ) ) . '</h2>';
 	}
 
+	/**
+	 * Give the content of an event
+	 *
+	 * @param $event
+	 * @param int $day
+	 *
+	 * @return bool|string
+	 */
 	public function getContent($event, $day = 0)
 	{
 		if ($day == 0) {
@@ -185,6 +200,14 @@ class ICSView extends View {
 		return false;
 	}
 
+	/**
+	 * Create a line for the schedule
+	 *
+	 * @param $datas
+	 * @param bool $active
+	 *
+	 * @return string
+	 */
 	public function displayLineSchedule($datas, $active = false)
 	{
 		if ($active) {
@@ -200,7 +223,8 @@ class ICSView extends View {
 	}
 
 	/**
-	 * Affiche la fin de l'emploi du temps
+	 * Display the footer of the schedule
+	 *
 	 * @return string
 	 */
 	public
@@ -213,10 +237,10 @@ class ICSView extends View {
 
 
 	/**
-	 * Affiche un message qu'il n'y a pas cours
+	 * Display an message if there is no lesson
 	 *
-	 * @param $title            string titre de l'emploi du temps
-	 * @param $current_user     WP_User utilisateur connecté
+	 * @param $title            string
+	 * @param $current_user     WP_User
 	 *
 	 * @return bool|string
 	 */

@@ -4,11 +4,13 @@ namespace Controllers;
 
 use Models\User;
 use Views\TeacherView;
-use WP_User;
 
 /**
- * Permet de créer, modifier et afficher des enseignants
  * Class TeacherController
+ *
+ * Manage teacher (Create, update, delete, display)
+ *
+ * @package Controllers
  */
 class TeacherController extends UserController implements Schedule
 {

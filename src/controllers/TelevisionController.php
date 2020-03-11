@@ -54,17 +54,19 @@ class TelevisionController extends UserController implements Schedule
 	        $passwordConfirm = filter_input(INPUT_POST, 'pwdConfirmTv');
 	        $codes = $_POST['selectTv'];
 
-        	if(is_string($login) && strlen($login) >= 4 && strlen($login) <= 25 &&
-	           is_string($password) && strlen($password) >= 8 && strlen($password) <= 25 &&
-	           $password == $passwordConfirm) {
+	        if(is_string($login) && strlen($login) >= 4 && strlen($login) <= 25 &&
+	        	is_string($password) && strlen($password) >= 8 && strlen($password) <= 25 &&
+	            $password !== $passwordConfirm) {
 
 		        $codesAde = array();
 		        foreach ($codes as $code) {
-		        	if(is_null($codeAde->getByCode($code)->getId())) {
-		        		return 'error';
-		        	} else {
-		        		$codesAde[] = $codeAde->getByCode($code);
-		        	}
+		        	if(is_numeric($code) && $code > 0) {
+				        if(is_null($codeAde->getByCode($code)->getId())) {
+					        return 'error';
+				        } else {
+					        $codesAde[] = $codeAde->getByCode($code);
+				        }
+			        }
 		        }
 
 		        $password = wp_hash_password($password);
@@ -81,6 +83,8 @@ class TelevisionController extends UserController implements Schedule
 		        } else {
 			        $this->view->displayErrorLogin();
 		        }
+	        } else {
+        		echo 'erreur mince';
 	        }
         }
 

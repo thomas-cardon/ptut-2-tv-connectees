@@ -5,12 +5,11 @@ namespace Controllers;
 use Models\CodeAde;
 use Models\User;
 use Views\StudentView;
-use WP_User;
 
 /**
  * Class StudentController
  *
- * Manage users (Create, update, delete, display)
+ * Manage student (Create, update, delete, display)
  *
  * @package Controllers
  */
@@ -42,12 +41,13 @@ class StudentController extends UserController implements Schedule
      */
     public function insert()
     {
-        $actionStudent = $_POST['importEtu'];
+        $actionStudent = filter_input(INPUT_POST, 'importEtu');
 
         if ($actionStudent) {
             $allowed_extension = array("Xls", "Xlsx", "Csv");
             $extension = ucfirst(strtolower(end(explode(".", $_FILES["excelEtu"]["name"]))));
-            // On vérifie si l'extension est correct
+
+            // Check if it's a good extension
             if (in_array($extension, $allowed_extension)) {
                 $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($extension);
                 $reader->setReadDataOnly(TRUE);
@@ -58,6 +58,7 @@ class StudentController extends UserController implements Schedule
 
                 $row = $worksheet->getRowIterator(1, 1);
                 $cells = [];
+
                 foreach ($row as $value) {
                     $cellIterator = $value->getCellIterator();
                     $cellIterator->setIterateOnlyExistingCells(FALSE);
@@ -65,7 +66,8 @@ class StudentController extends UserController implements Schedule
                         $cells[] = $cell->getValue();
                     }
                 }
-                // On vérifie s'il s'agit bien du bon fichier excel
+
+                // Check if it's the good file
                 if ($cells[0] == "Identifiant Ent" && $cells[1] == "Adresse mail") {
                     $doubles = array();
                     for ($i = 2; $i < $highestRow + 1; ++$i) {
@@ -81,9 +83,10 @@ class StudentController extends UserController implements Schedule
                         $hashpass = wp_hash_password($pwd);
                         $login = $cells[0];
                         $email = $cells[1];
-                        //Si le login et le l'email sont indiqués, on inscrit l'utilisateur
+
+
                         if (isset($login) && isset($email)) {
-                            //On vérifie que le login et l'adresse mail ne sont pas déjà enregistrés
+
 	                        $this->model->setLogin($login);
 	                        $this->model->setPassword($hashpass);
 	                        $this->model->setEmail($email);
@@ -92,7 +95,7 @@ class StudentController extends UserController implements Schedule
                             if (!$this->checkDuplicateUser($this->model) &&
                                 $this->model->create()) {
 
-                                //On envoie un email pour chaque étudiant inscrit, le mail contient le login et le mot de passe
+                            	// Generate Mail
                                 $to = $email;
                                 $subject = "Inscription à la télé-connecté";
                                 $message = '

@@ -67,7 +67,7 @@ class AlertView extends View
 		$codes = $alert->getCodes();
 
 		$count = 1;
-		$string = '
+		$form = '
         <form id="alert" method="post">
         <div class="form-group">
             <label for="contentInfo">Contenu</label>
@@ -80,11 +80,11 @@ class AlertView extends View
 
 		foreach ($codes as $code) {
 			if ($count == 1) {
-				$string .= '
+				$form .= '
 				<label for="selectId' . $count . '">Année, groupe, demi-groupes concernés</label>'.
 				           $this->buildSelectCode($years, $groups, $halfGroups, $code, $count);
 			} else {
-				$string .= '
+				$form .= '
 				<div class="row">'.
 				        $this->buildSelectCode($years, $groups, $halfGroups, $code, $count)
 				           . '<input type="button" id="selectId' . $count . '" onclick="deleteRowAlert(this.id)" class="selectbtn" value="Supprimer">
@@ -93,12 +93,12 @@ class AlertView extends View
 			$count = $count + 1;
 		}
 
-		$string .= '<input type="button" onclick="addButtonAlert()" value="+">    
+		$form .= '<input type="button" onclick="addButtonAlert()" value="+">    
                     <input type="submit" name="validateChange" value="Valider" ">
                     <a href="' . $linkManageAlert . '">Annuler</a>
                  </form>';
 
-		return $string;
+		return $form;
 	} //displayModifyAlertForm()
 
     /**
@@ -129,9 +129,11 @@ class AlertView extends View
 
     /**
      * Display alerts
+     *
      * @param $texts      array
      */
-    public function displayAlertMain($texts) {
+    public function displayAlertMain($texts)
+    {
         echo '
         <div class="alerts" id="alert">
              <div class="ti_wrapper">
@@ -193,7 +195,8 @@ class AlertView extends View
     /**
      * Display modal for validate the creation of an alert
      */
-    public function displayAddValidate() {
+    public function displayAddValidate()
+    {
         $page = get_page_by_title('Gérer les alertes');
         $linkManageAlert = get_permalink($page->ID);
         $this->displayStartModal("Ajout d'alerte");
@@ -204,7 +207,8 @@ class AlertView extends View
     /**
      * Display modal for validate the modification of an alert
      */
-    public function displayModifyValidate() {
+    public function displayModifyValidate()
+    {
         $page = get_page_by_title('Gérer les alertes');
         $linkManageAlert = get_permalink($page->ID);
         $this->displayStartModal("Ajout d'alerte");

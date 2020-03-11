@@ -41,8 +41,7 @@ class TechnicianController extends UserController implements Schedule
      */
     public function insert()
     {
-        //$this->view->displayFormTechnician();
-        $action = $_POST['createTech'];
+        $action = filter_input(INPUT_POST, 'createTech');
 
         if (isset($action)) {
 
@@ -86,6 +85,11 @@ class TechnicianController extends UserController implements Schedule
         return $this->view->displayAllTechnicians($users);
     }
 
+	/**
+	 * Display the schedule of all students
+	 *
+	 * @return mixed|string
+	 */
 	public function displayMySchedule()
 	{
 		$codeAde = new CodeAde();

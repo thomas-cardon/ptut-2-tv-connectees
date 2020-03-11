@@ -3,16 +3,26 @@
 use Controllers\UserController;
 use Views\UserView;
 
-function password_modify_render_callback() {
-    $myAccount = new UserController();
-    $view = new UserView();
-    if(is_page()){
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function password_modify_render_callback()
+{
+    if(is_page()) {
+	    $myAccount = new UserController();
+	    $view = new UserView();
         $myAccount->modifyPwd();
         return $view->displayModifyPassword();
     }
 }
 
-function block_password_modify() {
+/**
+ * Build a block
+ */
+function block_password_modify()
+{
     wp_register_script(
         'pass_modify-script',
         plugins_url( 'block.js', __FILE__ ),

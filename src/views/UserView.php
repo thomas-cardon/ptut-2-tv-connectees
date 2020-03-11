@@ -10,33 +10,43 @@ class UserView extends View
 {
 
     /**
-     * Affiche un formulaire classique
-     * @param $name     string Nom du rôle à inscrire
-     * @return string   Renvoie le formulaire
+     * Display a creation form
+     *
+     * @param $name     string
+     *
+     * @return string
      */
     protected function displayBaseForm($name)
     {
-        $string = '
+	    return '
             <form method="post" class="cadre">
-                <label for="login' . $name . '">Login</label>
-                <input minlength="4" type="text" name="login' . $name . '" placeholder="Login" required="">
-                <label for="email' . $name . '">Email</label>
-                <input type="email" name="email' . $name . '" placeholder="Email" required="">
-                <label for="pwd' . $name . '">Mot de passe</label>
-                <input minlength="4" type="password" id="pwd' . $name . '" name="pwd' . $name . '" placeholder="Mot de passe" required="" onkeyup=checkPwd("' . $name . '")>
-                <input minlength="4" type="password" id="pwdConf' . $name . '" name="pwdConfirm' . $name . '" placeholder="Confirmer le Mot de passe" required="" onkeyup=checkPwd("' . $name . '")>
+            	<div class="form-group">
+                	<label for="login' . $name . '">Login</label>
+                	<input class="form-control" minlength="4" type="text" name="login' . $name . '" placeholder="Login" required="">
+                	<small id="passwordHelpBlock" class="form-text text-muted">Votre login doit contenir entre 4 et 25 caractère</small>
+                </div>
+                <div class="form-group">
+                	<label for="email' . $name . '">Email</label>
+                	<input class="form-control" type="email" name="email' . $name . '" placeholder="Email" required="">
+                </div>
+                <div class="form-group">
+                	<label for="pwd' . $name . '">Mot de passe</label>
+                	<input class="form-control" minlength="8" maxlength="25" type="password" id="pwd' . $name . '" name="pwd' . $name . '" placeholder="Mot de passe" minlength="8" maxlength="25" required="" onkeyup=checkPwd("' . $name . '")>
+                    <input class="form-control" minlength="8" maxlength="25" type="password" id="pwdConf' . $name . '" name="pwdConfirm' . $name . '" placeholder="Confirmer le Mot de passe" minlength="8" maxlength="25" required="" onkeyup=checkPwd("' . $name . '")>
+                	<small id="passwordHelpBlock" class="form-text text-muted">Votre mot de passe doit contenir entre 8 et 25 caractère</small>
+                </div>
                 <input type="submit" id="valid' . $name . '" name="create' . $name . '">
             </form>';
-        return $string;
     }
 
     /**
-     * Fin de formulaire pour modifier son mot de passe
-     * @return string   Renvoie la fin du formulaire
+     * Form for modify the password
+     *
+     * @return string
      */
     public function displayModifyPassword()
     {
-        return '
+    	return '
             <form id="check" method="post">
                 <h2>Modifier le mot de passe</h2>
                 <label for="verifPwd">Votre mot de passe actuel</label>
@@ -48,8 +58,9 @@ class UserView extends View
     }
 
     /**
-     * Fin de formulaire pour envoyer un code de suppression de compte
-     * @return string   Renvoie la fin de formulaire
+     * Form to generate a code to delete the account
+     *
+     * @return string
      */
     public function displayDeleteAccount()
     {
@@ -63,8 +74,9 @@ class UserView extends View
     }
 
     /**
-     * Formulaire pour supprimer son compte
-     * @return string   Renvoie le formulaire
+     * Form to delete the account
+     *
+     * @return string
      */
     public function displayEnterCode()
     {
@@ -77,7 +89,7 @@ class UserView extends View
     }
 
     /**
-     * Affiche un modal signalant le succès de la modification de mot de passe
+     * Display a message for the modification of the password
      */
     public function displayModificationPassValidate()
     {
@@ -87,7 +99,7 @@ class UserView extends View
     }
 
     /**
-     * Affiche un modal signalant que le mot de passe entré est incorrect
+     * Display a message if the password is wrong
      */
     public function displayWrongPassword()
     {
@@ -97,7 +109,7 @@ class UserView extends View
     }
 
     /**
-     * Affiche un modal signalant qu'un email a été envoyé
+     * Display a message if the
      */
     public function displayMailSend()
     {
@@ -107,7 +119,7 @@ class UserView extends View
     }
 
     /**
-     * Affiche le bouton d'abonnement aux notifications
+     * Display the subscription button
      */
     public function displayButtonSubscription()
     {
@@ -181,13 +193,16 @@ class UserView extends View
     }
 
     /**
-     * Message indiquant de choisir un emploi du temps
+     * Display a message to select a schedule
      */
     public function displaySelectSchedule()
     {
         return '<p>Veuillez choisir un emploi du temps.</p>';
     }
 
+	/**
+	 * Display the welcome page
+	 */
     public function displayHome()
     {
         echo '<article>
@@ -196,7 +211,13 @@ class UserView extends View
               </article>';
     }
 
-    public function displayNoStudy() {
+	/**
+	 * Display to user, no lesson today
+	 *
+	 * @return string
+	 */
+    public function displayNoStudy()
+    {
         return '<p>Vous n\'avez pas cours! </p>';
     }
 }

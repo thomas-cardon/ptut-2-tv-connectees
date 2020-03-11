@@ -42,6 +42,11 @@ include_once 'wordpress/widgets/WidgetSchedule.php';
 
 include_once 'vendor/R34ICS/R34ICS.php';
 
+include 'database/install_DB_Tv.php';
+
+createDatabase();
+createRoles();
+
 
 /**
  * Create all directory
@@ -86,12 +91,12 @@ function wpDocs_plugin_ecran_connectee_scripts()
 	wp_enqueue_style('schedule-style', TV_PLUG_PATH . 'public/css/schedule.css', array(), '1.0');
 
 	// JQUERY
-	wp_enqueue_script('plugin-jquerymin', TV_PLUG_PATH . 'public/js/jquery.min.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-JqueryEzMin', TV_PLUG_PATH . 'public/js/jquery.easing.min.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-jqueryEzTic', TV_PLUG_PATH . 'public/js/jquery.easy-ticker.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-jqueryEzMinTic', TV_PLUG_PATH . 'public/js/jquery.easy-ticker.min.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-marquee', TV_PLUG_PATH . 'public/js/jquery.marquee.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-ticker', TV_PLUG_PATH . 'public/js/jquery.tickerNews.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-jquerymin', TV_PLUG_PATH . 'public/js/vendor/jquery.min.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-JqueryEzMin', TV_PLUG_PATH . 'public/js/vendor/jquery.easing.min.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-jqueryEzTic', TV_PLUG_PATH . 'public/js/vendor/jquery.easy-ticker.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-jqueryEzMinTic', TV_PLUG_PATH . 'public/js/vendor/jquery.easy-ticker.min.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-marquee', TV_PLUG_PATH . 'public/js/vendor/jquery.marquee.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-ticker', TV_PLUG_PATH . 'public/js/vendor/jquery.tickerNews.js', array('jquery'), '', true);
 
 	// SCRIPT
 	wp_enqueue_script('pdf-js', 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.2.228/build/pdf.min.js', array(), '', false);
@@ -106,6 +111,8 @@ function wpDocs_plugin_ecran_connectee_scripts()
 	wp_enqueue_script('plugin-slideshow', TV_PLUG_PATH . 'public/js/slideshow.js', array('jquery'), '2.0', true);
 	wp_enqueue_script('plugin-weather', TV_PLUG_PATH . 'public/js/weather.js', array('jquery'), '1.0', true);
 	wp_enqueue_script('plugin-weatherTime', TV_PLUG_PATH . 'public/js/weather_and_time.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('plugin-sortTable', TV_PLUG_PATH . 'public/js/sortTable.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('plugin-search', TV_PLUG_PATH . 'public/js/search.js', array('jquery'), '1.0', true);
 }
 
 add_action('wp_enqueue_scripts', 'wpDocs_plugin_ecran_connectee_scripts');

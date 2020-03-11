@@ -2,15 +2,25 @@
 
 use Controllers\InformationController;
 
-function information_management_render_callback() {
-    $information = new InformationController();
-    if(is_page()){
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function information_management_render_callback()
+{
+    if(is_page()) {
+	    $information = new InformationController();
         $information->deleteInformations();
         return $information->informationManagement();
     }
 }
 
-function block_information_management() {
+/**
+ * Build a block
+ */
+function block_information_management()
+{
     wp_register_script(
         'information_manage-script',
         plugins_url( 'block.js', __FILE__ ),

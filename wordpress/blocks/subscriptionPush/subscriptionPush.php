@@ -3,21 +3,23 @@
 use Views\UserView;
 
 /**
- * Fonction qui est reliée au bloc
- * Affiche le bouton d'abonnement aux notifications
- * @return string Return la vue du formulaire
+ * Function of the block
+ *
+ * @return string
  */
-function subscription_render_callback() {
-    $view = new UserView();
-    if(is_page()){
+function subscription_render_callback()
+{
+    if(is_page()) {
+	    $view = new UserView();
         return $view->displayButtonSubscription();
     }
 }
 
 /**
- * Bloc qui permet de créer une alerte
+ * Build a block
  */
-function block_subscription() {
+function block_subscription()
+{
     wp_register_script(
         'subscription-script',
         plugins_url( 'block.js', __FILE__ ),

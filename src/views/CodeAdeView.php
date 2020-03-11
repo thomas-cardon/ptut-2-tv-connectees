@@ -88,17 +88,6 @@ class CodeAdeView extends View
 	}
 
     /**
-     * Header of table
-     *
-     * @return string
-     */
-    public function displayTableHeadCode()
-    {
-        $tab = ["Titre", "Code ADE", "Type"];
-        return $this->displayStartTab('code', $tab);
-    }
-
-    /**
      * Display all informations of a code ade
      *
      * @param $years        CodeAde[]
@@ -135,7 +124,7 @@ class CodeAdeView extends View
 		    }
 	    }
 
-	    return $this->displayAll($name, $title, $header, $row);
+	    return $this->displayAll($name, $title, $header, $row, 'code');
     }
 
 	/**
@@ -148,6 +137,9 @@ class CodeAdeView extends View
 	    $this->displayEndModal();
     }
 
+	/**
+	 * Display a success message for the modification of a code ADE
+	 */
 	public function successModification()
 	{
 		$page = get_page_by_title('Gestion codes ADE');
@@ -157,6 +149,9 @@ class CodeAdeView extends View
 		$this->displayEndModal($linkManageCode);
 	}
 
+	/**
+	 * Display an error message for the creation of a code ADE
+	 */
 	public function errorCreation()
 	{
 		$this->displayStartModal('Erreur lors de l\'ajout du code ADE');
@@ -164,6 +159,9 @@ class CodeAdeView extends View
 		$this->displayEndModal();
 	}
 
+	/**
+	 * Display an error message for the modification of a code ADE
+	 */
 	public function errorModification()
 	{
 		$this->displayStartModal('Erreur lors de la modification du code ADE');
@@ -179,6 +177,9 @@ class CodeAdeView extends View
         echo '<p class="alert alert-danger"> Ce code ou ce titre existe déjà</p>';
     }
 
+	/**
+	 * Display an message if there is nothing
+	 */
 	public function errorNobody()
 	{
 		$page = get_page_by_title('Gestion codes ADE');

@@ -1,19 +1,25 @@
 <?php
 
 use Controllers\CodeAdeController;
-use Models\CodeAde;
-use Views\CodeAdeView;
 
-function code_ade_render_callback() {
-    $codeAde = new CodeAdeController();
-    $model = new CodeAde();
-    $view = new CodeAdeView();
-    if(is_page()){
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function code_ade_render_callback()
+{
+    if(is_page()) {
+	    $codeAde = new CodeAdeController();
         return $codeAde->insert();
     }
 }
 
-function block_code_ade() {
+/**
+ * Build a block
+ */
+function block_code_ade()
+{
     wp_register_script(
         'code_ade-script',
         plugins_url( 'block.js', __FILE__ ),

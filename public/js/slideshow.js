@@ -1,21 +1,31 @@
-let slidePDF = 0;
 let urlUpload = "/wp-content/uploads/media/";
 let pdfUrl = null;
 let numPage = 0; // Numéro de page courante
 let totalPage = null; // Nombre de pages
-let myCanvas = null;
+let endPage = false;
+let stop = false;
 
 infoSlideShow();
 scheduleSlideshow();
 
-function infoSlideShow() {
+/**
+ * Begin a slideshow if there is some informations
+ */
+function infoSlideShow()
+{
     if(document.getElementsByClassName("myInfoSlides").length > 0) {
+        console.log("-Début du diaporama");
         displayOrHide(document.getElementsByClassName("myInfoSlides"), 0);
     }
 }
 
-function scheduleSlideshow() {
+/**
+ * Begin a slideshow if there is some informations
+ */
+function scheduleSlideshow()
+{
     if(document.getElementsByClassName("mySlides").length > 0) {
+        console.log("-Début du diaporama");
         displayOrHide(document.getElementsByClassName("mySlides"), 0);
     }
 }
@@ -23,8 +33,8 @@ function scheduleSlideshow() {
 /**
  * Display a slideshow
  */
-function displayOrHide(slides, slideIndex) {
-
+function displayOrHide(slides, slideIndex)
+{
     if(slides.length > 0) {
         if(slides.length > 1) {
             for (let i = 0; i < slides.length; ++i) {
@@ -33,20 +43,26 @@ function displayOrHide(slides, slideIndex) {
         }
 
         if(slideIndex === slides.length) {
+            console.log("-Fin du diaporama - On recommence");
             slideIndex = 0;
         }
 
         // Check if the slide exist
         if(slides[slideIndex] !== undefined) {
+
+            console.log("--Slide n°"+ slideIndex);
             // Display the slide
             slides[slideIndex].style.display = "block";
             // Check child
             if(slides[slideIndex].childNodes) {
                 var count = 0;
                 // Try to find if it's a PDF
-                for(i = 0; i < slides[slideIndex].childNodes.length; ++i) {
+                for(let i = 0; i < slides[slideIndex].childNodes.length; ++i) {
                     // If is a PDF
                     if(slides[slideIndex].childNodes[i].className === 'canvas_pdf') {
+
+                        console.log("--Lecture de PDF");
+
                         count = count + 1;
 
                         // Generate the url
@@ -55,19 +71,45 @@ function displayOrHide(slides, slideIndex) {
 
                         let loadingTask = pdfjsLib.getDocument(pdfUrl);
                         loadingTask.promise.then(function(pdf) {
+
                             totalPage = pdf.numPages;
                             ++numPage;
-                            if(totalPage >= numPage) {
-                                pdf.getPage(numPage).then(function(page) {
-                                    var scale = 1.5;
-                                    var viewport = page.getViewport({ scale: scale, });
 
-                                    var canvas = document.getElementById('the-canvas-' + pdfLink);
-                                    var context = canvas.getContext('2d');
+                            let div = document.getElementById(pdfLink);
+                            let scale = 1.5;
+
+                            if(stop === false) {
+                                if(document.getElementById('the-canvas-' + pdfLink + '-page' + (numPage-1)) != null) {
+                                    console.log('----Supression page n°'+ (numPage-1));
+                                    document.getElementById('the-canvas-' + pdfLink + '-page' + (numPage-1)).remove();
+                                }
+                            }
+
+                            if(totalPage >= numPage && stop === false) {
+                                pdf.getPage(numPage).then(function(page) {
+
+                                    console.log(slides.length);
+                                    console.log(totalPage);
+                                    if(slides.length === 1 && totalPage === 1 || totalPage === null && slides.length === 1) {
+                                        stop = true;
+                                    }
+
+                                    console.log(stop);
+
+                                    console.log("---Page du PDF n°"+numPage);
+
+                                    let viewport = page.getViewport({ scale: scale, });
+
+                                    $('<canvas >', {
+                                        id: 'the-canvas-'+ pdfLink + '-page' + numPage,
+                                    }).appendTo(div).fadeOut(0).fadeIn(2000);
+
+                                    let canvas = document.getElementById('the-canvas-' + pdfLink + '-page' + numPage);
+                                    let context = canvas.getContext('2d');
                                     canvas.height = viewport.height;
                                     canvas.width = viewport.width;
 
-                                    var renderContext = {
+                                    let renderContext = {
                                         canvasContext: context,
                                         viewport: viewport
                                     };
@@ -86,23 +128,28 @@ function displayOrHide(slides, slideIndex) {
                                     }
 
                                     page.render(renderContext);
-                                    if (context) {
-                                        context.clearRect(0, 0, canvas.width, canvas.height);
-                                        context.beginPath();
-                                    }
                                 });
-                            } else {
-                                // Reinitialise variables
-                                totalPage = null;
-                                numPage = 0;
-                                // Go to the next slide
-                                ++slideIndex;
+
+                                if(numPage === totalPage) {
+                                    // Reinitialise variables
+                                    if(stop === false) {
+                                        if(document.getElementById('the-canvas-' + pdfLink + '-page' + (totalPage)) != null) {
+                                            document.getElementById('the-canvas-' + pdfLink + '-page' + (totalPage)).remove();
+                                        }
+                                    }
+                                    console.log("--Fin du PDF");
+                                    totalPage = null;
+                                    numPage = 0;
+                                    endPage = true;
+                                    ++slideIndex;
+                                    // Go to the next slide
+                                }
                             }
-                            //renderPDF(pdf);
                         });
                     }
                 }
                 if(count === 0) {
+                    console.log("--Lecture image");
                     // Go to the next slide
                     ++slideIndex;
                 }
@@ -112,77 +159,8 @@ function displayOrHide(slides, slideIndex) {
             }
         }
     }
-    setTimeout(function(){displayOrHide(slides, slideIndex)} , 3000);
-}
 
-
-
-// Display a pdf
-function renderPDF(pdf) {
-
-    // Take the number of pages
-    if(totalPage == null) {
-        totalPage = pdf.numPages;
+     if(slides.length !== 1 || totalPage !== 1) {
+        setTimeout(function(){displayOrHide(slides, slideIndex)} , 10000);
     }
-
-    console.log(totalPage);
-
-    // Display each page
-    if(numPage <= totalPage) {
-        pdf.getPage(numPage).then(renderPage);
-        ++numPage;
-        setTimeout(function() { renderPDF(pdf); }, 8000);
-    } else {
-        // Reinitialise variables
-        totalPage = null;
-        numPage = 1;
-        ++slidePDF;
-    }
-}
-
-// Display a page in a canvas
-function renderPage(page) {
-
-    // Delete the previous Canvas
-    if(myCanvas) {
-        myCanvas.remove();
-    }
-
-    // Take the div link to the canvas
-    var div = document.getElementsByClassName('canvas_pdf');
-    if(div.length === slidePDF) {
-        slidePDF = 0;
-    }
-
-    // Initiate the canvas
-    var scale = 1;
-    var viewport = page.getViewport(scale);
-
-    // Build the canvas
-    var canvas = document.createElement('canvas');
-    canvas.id = 'pdf_renderer_' + numPage;
-
-    console.log(canvas);
-
-    console.log(div[slidePDF]);
-    div[slidePDF].append(canvas);
-    myCanvas = canvas;
-
-    var context = canvas.getContext('2d');
-    // Size of the canvas (useless but needed)
-    canvas.height = viewport.height;
-    canvas.width = viewport.width;
-
-    // Build the context
-    var renderContext = {
-        canvasContext: context,
-        viewport: viewport
-    };
-
-    // Real size of the canvas
-    canvas.setAttribute("class", "container_fluid");
-
-
-    // Display the canvas / Page of the PDF
-    page.render(renderContext);
 }

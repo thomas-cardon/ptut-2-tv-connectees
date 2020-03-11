@@ -56,14 +56,14 @@ class User extends Model implements Entity
 		$nul = " ";
 		$zero = "0";
 
-		$request->bindValue(':login', $this->getLogin());
-		$request->bindValue(':password', $this->getPassword());
-		$request->bindValue(':name', $this->getLogin());
-		$request->bindValue(':email', $this->getEmail());
+		$request->bindValue(':login', $this->getLogin(), PDO::PARAM_STR);
+		$request->bindValue(':password', $this->getPassword(), PDO::PARAM_STR);
+		$request->bindValue(':name', $this->getLogin(), PDO::PARAM_STR);
+		$request->bindValue(':email', $this->getEmail(), PDO::PARAM_STR);
 		$request->bindParam(':url', $nul);
 		$request->bindParam(':key', $nul);
-		$request->bindParam(':status', $zero);
-		$request->bindValue(':display_name', $this->getLogin());
+		$request->bindParam(':status', $zero, PDO::PARAM_INT);
+		$request->bindValue(':display_name', $this->getLogin(), PDO::PARAM_STR);
 
 		$request->execute();
 
@@ -74,9 +74,9 @@ class User extends Model implements Entity
 
 		$request = $this->getDatabase()->prepare('INSERT INTO wp_usermeta(user_id, meta_key, meta_value) VALUES (:id, :capabilities, :role)');
 
-		$request->bindParam(':id', $id);
-		$request->bindParam(':capabilities', $capabilities);
-		$request->bindParam(':role', $role);
+		$request->bindParam(':id', $id, PDO::PARAM_INT);
+		$request->bindParam(':capabilities', $capabilities, PDO::PARAM_STR);
+		$request->bindParam(':role', $role, PDO::PARAM_STR);
 
 		$request->execute();
 
@@ -84,9 +84,9 @@ class User extends Model implements Entity
 
 		$request = $this->getDatabase()->prepare('INSERT INTO wp_usermeta(user_id, meta_key, meta_value) VALUES (:id, :level, :value)');
 
-		$request->bindParam(':id', $id);
-		$request->bindParam(':level', $level);
-		$request->bindParam(':value', $zero);
+		$request->bindParam(':id', $id, PDO::PARAM_INT);
+		$request->bindParam(':level', $level, PDO::PARAM_STR);
+		$request->bindParam(':value', $zero, PDO::PARAM_STR);
 
 		$request->execute();
 
@@ -96,8 +96,8 @@ class User extends Model implements Entity
 
 				$request = $this->getDatabase()->prepare('INSERT INTO code_user (id_user, id_code_ade) VALUES (:id_user, :id_code_ade)');
 
-				$request->bindParam(':id_user', $id);
-				$request->bindValue(':id_code_ade', $code->getId());
+				$request->bindParam(':id_user', $id, PDO::PARAM_INT);
+				$request->bindValue(':id_code_ade', $code->getId(), PDO::PARAM_INT);
 
 				$request->execute();
 			}
@@ -113,8 +113,8 @@ class User extends Model implements Entity
 
 			$request = $this->getDatabase()->prepare('INSERT INTO code_user (id_user, id_code_ade) VALUES (:id_user, :id_code_ade)');
 
-			$request->bindParam(':id_user', $id);
-			$request->bindValue(':id_code_ade', $idCode);
+			$request->bindParam(':id_user', $id, PDO::PARAM_INT);
+			$request->bindValue(':id_code_ade', $idCode, PDO::PARAM_INT);
 
 			$request->execute();
 		}
@@ -126,8 +126,8 @@ class User extends Model implements Entity
 	{
 		$request = $this->getDatabase()->prepare('UPDATE wp_users SET user_pass = :password WHERE ID = :id');
 
-		$request->bindValue(':id', $this->getId());
-		$request->bindValue(':password', $this->getPassword());
+		$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
+		$request->bindValue(':password', $this->getPassword(), PDO::PARAM_STR);
 
 		$request->execute();
 
@@ -140,7 +140,7 @@ class User extends Model implements Entity
 			if(sizeof($codes) > 0) {
 				$request = $this->getDatabase()->prepare('DELETE FROM code_user WHERE id_user = :id');
 
-				$request->bindValue(':id', $this->getId());
+				$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
 
 				$request->execute();
 			}
@@ -150,8 +150,8 @@ class User extends Model implements Entity
 				if($code instanceof CodeAde && !is_null($code->getId())) {
 					$request = $this->getDatabase()->prepare('INSERT INTO code_user (id_user, id_code_ade) VALUES (:id_user, :id_code_ade)');
 
-					$request->bindValue(':id_user', $this->getId());
-					$request->bindValue(':id_code_ade', $code->getId());
+					$request->bindValue(':id_user', $this->getId(), PDO::PARAM_INT);
+					$request->bindValue(':id_code_ade', $code->getId(), PDO::PARAM_INT);
 
 					$request->execute();
 				}
@@ -170,21 +170,21 @@ class User extends Model implements Entity
 
 		$request = $this->getDatabase()->prepare('DELETE FROM wp_users WHERE ID = :id');
 
-		$request->bindValue(':id', $this->getId());
+		$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
 
 		$request->execute();
 		$count = $request->rowCount();
 
 		$request = $this->getDatabase()->prepare('DELETE FROM wp_usermeta WHERE user_id = :id');
 
-		$request->bindValue(':id', $this->getId());
+		$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
 
 		$request->execute();
 
 		if(is_null($this->getUserLinkToCode()[0])) {
 			$request = $this->getDatabase()->prepare('DELETE FROM code_user WHERE id_user = :id');
 
-			$request->bindValue(':id', $this->getId());
+			$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
 
 			$request->execute();
 
@@ -207,7 +207,7 @@ class User extends Model implements Entity
 	{
 		$request = $this->getDatabase()->prepare('SELECT * FROM wp_users WHERE ID = :id');
 
-		$request->bindParam(':id', $id);
+		$request->bindParam(':id', $id, PDO::PARAM_INT);
 
 		$request->execute();
 
@@ -240,7 +240,7 @@ class User extends Model implements Entity
 		$size = strlen($role);
 		$role = 'a:1:{s:' . $size . ':"' . $role . '";b:1;}';
 
-		$request->bindParam(':role', $role);
+		$request->bindParam(':role', $role, PDO::PARAM_STR);
 
 		$request->execute();
 
@@ -259,8 +259,8 @@ class User extends Model implements Entity
 	{
 		$request = $this->getDatabase()->prepare('SELECT * FROM wp_users WHERE user_login = :login OR user_email = :email');
 
-		$request->bindParam(':login', $login);
-		$request->bindParam(':email', $email);
+		$request->bindParam(':login', $login, PDO::PARAM_STR);
+		$request->bindParam(':email', $email, PDO::PARAM_STR);
 
 		$request->execute();
 
@@ -276,11 +276,55 @@ class User extends Model implements Entity
 	{
 		$request = $this->getDatabase()->prepare('SELECT * FROM code_user JOIN wp_users ON code_user.id_user = wp_users.ID WHERE id_user = :id_user');
 
-		$request->bindValue(':id_user', $this->getId());
+		$request->bindValue(':id_user', $this->getId(), PDO::PARAM_INT);
 
 		$request->execute();
 
 		return $this->setListEntity($request->fetchAll());
+	}
+
+	public function createCode($code)
+	{
+		$request = $this->getDatabase()->prepare('INSERT INTO code_delete_account (user_id, code) VALUES (:user_id, :code)');
+
+		$request->bindValue(':user_id', $this->getId(), PDO::PARAM_INT);
+		$request->bindParam(':code', $code, PDO::PARAM_STR);
+
+		$request->execute();
+	}
+
+	public function updateCode($code)
+	{
+		$request = $this->getDatabase()->prepare('UPDATE code_delete_account SET code = :code WHERE user_id = :id');
+
+		$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
+		$request->bindParam(':code', $code, PDO::PARAM_STR);
+
+		$request->execute();
+	}
+
+	public function deleteCode()
+	{
+		$request = $this->getDatabase()->prepare('DELETE FROM code_delete_account WHERE user_id = :id');
+
+		$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
+
+		$request->execute();
+
+		return $request->rowCount();
+	}
+
+	public function getCodeDeleteAccount()
+	{
+		$request = $this->getDatabase()->prepare('SELECT * FROM code_delete_account WHERE user_id = :id');
+
+		$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
+
+		$request->execute();
+
+		$result = $request->fetch();
+
+		return $result['code'];
 	}
 
 	/**
@@ -291,6 +335,7 @@ class User extends Model implements Entity
 		$entity = new User();
 
 		$entity->setId($data['ID']);
+
 		$entity->setLogin($data['user_login']);
 		$entity->setPassword($data['user_pass']);
 		$entity->setEmail($data['user_email']);

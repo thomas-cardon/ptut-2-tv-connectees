@@ -1,3 +1,6 @@
+/**
+ * Get the date in french format
+ */
 function dateFr() {
     // les noms de jours / mois
     let jours = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
@@ -13,11 +16,14 @@ function dateFr() {
         document.getElementById("Date").innerHTML = message;
 }
 
+/**
+ * Get the time
+ */
 function heure() {
     let date = new Date();
     let heure = date.getHours();
     let minutes = date.getMinutes();
-    let seconds = date.getSeconds()
+    let seconds = date.getSeconds();
     if (minutes < 10)
         minutes = "0" + minutes;
     if (seconds < 10)

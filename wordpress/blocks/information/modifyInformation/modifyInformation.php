@@ -2,14 +2,24 @@
 
 use Controllers\InformationController;
 
-function information_modify_render_callback() {
-    if(is_page()){
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function information_modify_render_callback()
+{
+    if(is_page()) {
 	    $information = new InformationController();
         return $information->modifyInformation();
     }
 }
 
-function block_information_modify() {
+/**
+ * Build a block
+ */
+function block_information_modify()
+{
     wp_register_script(
         'information_modify-script',
         plugins_url( 'block.js', __FILE__ ),

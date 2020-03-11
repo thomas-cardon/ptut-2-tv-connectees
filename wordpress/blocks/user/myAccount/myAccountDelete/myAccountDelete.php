@@ -3,16 +3,26 @@
 use Controllers\UserController;
 use Views\UserView;
 
-function delete_account_render_callback() {
-    $myAccount = new UserController();
-    $view = new UserView();
-    if(is_page()){
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function delete_account_render_callback()
+{
+    if(is_page()) {
+	    $myAccount = new UserController();
+	    $view = new UserView();
         $myAccount->deleteAccount();
         return $view->displayDeleteAccount().$view->displayEnterCode();
     }
 }
 
-function block_delete_account() {
+/**
+ * Build a block
+ */
+function block_delete_account()
+{
     wp_register_script(
         'delete_account-script',
         plugins_url( 'block.js', __FILE__ ),

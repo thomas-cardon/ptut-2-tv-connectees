@@ -2,14 +2,22 @@
 
 namespace Views;
 
+use Models\User;
 
+/**
+ * Class SecretaryView
+ *
+ * All view for secretary (Forms, tables, messages)
+ *
+ * @package Views
+ */
 class SecretaryView extends UserView
 {
 
     /**
-     * Affiche un formulaire d'inscription pour les secretaires
+     * Display the creation form
      *
-     * @return string   Renvoie le formulaire
+     * @return string
      */
     public function displayFormSecretary()
     {
@@ -17,7 +25,7 @@ class SecretaryView extends UserView
     }
 
     /**
-     * Souhaite la bienvenue à l'utilisateur
+     * Display a button for download all schedules
      */
     public function displayWelcomeAdmin()
     {
@@ -29,9 +37,11 @@ class SecretaryView extends UserView
     }
 
     /**
-     * Affiche une ligne avec le login d'un secrétaire
+     * Display all secretary
      *
-     * @return string   Renvoie la ligne
+     * @param $users    User[]
+     *
+     * @return string
      */
     public function displayAllSecretary($users)
     {
@@ -46,11 +56,11 @@ class SecretaryView extends UserView
 		    $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin()];
 	    }
 
-	    return $this->displayAll($name, $title, $header, $row);
+	    return $this->displayAll($name, $title, $header, $row, 'secre');
     }
 
     /**
-     * Demande de sélectionner un utilisateur
+     * Ask to the user to choose an user
      */
     public function displaynoUser()
     {

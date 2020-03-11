@@ -1,19 +1,23 @@
 <?php
 
 use Controllers\UserController;
-use Models\User;
-use Views\UserView;
 
-function choose_account_render_callback() {
-    $myAccount = new UserController();
-    $model = new User();
-    $view = new UserView();
-    $current_user = wp_get_current_user();
-    if(is_page()){
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function choose_account_render_callback()
+{
+    if(is_page()) {
+	    $myAccount = new UserController();
         return $myAccount->chooseModif();
     }
 }
 
+/**
+ * Build a block
+ */
 function block_choose_account() {
     wp_register_script(
         'choose_account-script',

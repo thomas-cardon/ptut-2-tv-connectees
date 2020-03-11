@@ -36,6 +36,9 @@ class SecretaryController extends UserController
 	}
 
 
+	/**
+	 * Display the magic button to dl schedule
+	 */
 	public function displayMySchedule()
     {
         return $this->view->displayWelcomeAdmin();
@@ -46,8 +49,6 @@ class SecretaryController extends UserController
      */
     public function insert()
     {
-        //$this->view->displayFormSecretary();
-
         $action = $_POST['createSecre'];
 
         if (isset($action)) {
@@ -205,6 +206,11 @@ class SecretaryController extends UserController
         }
     }
 
+	/**
+	 * Delete an user
+	 *
+	 * @param $id
+	 */
 	private function deleteUser($id)
 	{
 		$user = $this->model->get($id);
