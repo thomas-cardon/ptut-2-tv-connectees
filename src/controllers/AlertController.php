@@ -127,10 +127,10 @@ class AlertController extends Controller
 			// Get value
 			$content = filter_input(INPUT_POST, 'contentInfo');
 			$endDate = filter_input(INPUT_POST, 'endDateInfo');
-			$codes = $_POST['selectAlert'];
+			$codes   = $_POST['selectAlert'];
 
-			$endDateString = strtotime($endDate);
-			$creationDateString    = strtotime(date('Y-m-d',time()));
+			$endDateString      = strtotime($endDate);
+			$creationDateString = strtotime(date('Y-m-d',time()));
 
 			if(is_string($content) && strlen($content) >= 4 && strlen($content) <= 280 &&
 			   $this->isRealDate($endDate) && $creationDateString < $endDateString) {
@@ -236,37 +236,32 @@ class AlertController extends Controller
     } // alertMain()
 
 
-    // ONESIGNAL NOTIFICATIONS PUSH
+    /**
+     * ONESIGNAL NOTIFICATIONS PUSH
+     *
+     */
     public function sendAlert($id)
     {
         $alert = $this->model->get($id);
-        $message = $alert['text'];
-        $listCodesAlerts = $this->model->getAll();
-        $listCodesAlert = array();
-        foreach ($listCodesAlerts as $listCodes) {
-            $listCodesAlert .= unserialize($listCodes->getCodes());
-        }
+        $message = $alert->getContent();
 
-        if (in_array("all", $listCodesAlert)) {
+        if ($alert->isForEveryone()) {
             $this->sendMessage("all", $message);
         } else {
         	$user = new User();
             $students = $user->getUsersByRole("etudiant");
-            $studentCodesList = array();
             $studentLoginListToSend = array();
             foreach ($students as $student) {
-                $studentCodesList = unserialize($student['code']);
-
-                foreach ($listCodesAlert as $j) {
-                    if (in_array($j, $studentCodesList)) {
-                        array_push($studentLoginListToSend, $student['user_login']);
+                foreach ($alert->getCodes() as $code) {
+                    if (in_array($code, $student->getCodes())) {
+                        array_push($studentLoginListToSend, $student->getLogin());
                     }
                 }
             }
             $studentLoginListToSend = array_unique($studentLoginListToSend);
 
-            foreach ($studentLoginListToSend as $i) {
-                $this->sendMessage($i, $message);
+            foreach ($studentLoginListToSend as $login) {
+                $this->sendMessage($login, $message);
             }
         }
     }

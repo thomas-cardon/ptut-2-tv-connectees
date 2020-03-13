@@ -5,11 +5,19 @@ namespace Views;
 
 use Models\User;
 
+/**
+ * Class TechnicianView
+ *
+ * Contain all view for technician (Forms, tables)
+ *
+ * @package Views
+ */
 class TechnicianView extends UserView
 {
 
     /**
-     * Formulaire pour inscrire un utilisateur
+     * Display a creation form
+     *
      * @return string
      */
     public function displayFormTechnician()
@@ -37,10 +45,6 @@ class TechnicianView extends UserView
 		    $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin()];
 	    }
 
-	    return $this->displayAll($name, $title, $header, $row);
-    }
-
-    public function displayDivSchedule() {
-    	return '<div class="shedule_tech">';
+	    return $this->displayAll($name, $title, $header, $row, 'tech');
     }
 }

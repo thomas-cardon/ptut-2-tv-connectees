@@ -2,6 +2,11 @@
 
 use Controllers\AlertController;
 
+/**
+ * Function of the block
+ *
+ * @return string
+ */
 function alert_modify_render_callback()
 {
     if(is_page()) {
@@ -10,6 +15,9 @@ function alert_modify_render_callback()
     }
 }
 
+/**
+ * Build a block
+ */
 function block_alert_modify()
 {
     wp_register_script(

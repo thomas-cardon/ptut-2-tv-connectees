@@ -2,15 +2,25 @@
 
 use Controllers\AlertController;
 
-function alert_management_render_callback() {
-    $alert = new AlertController();
-    if(is_page()){
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function alert_management_render_callback()
+{
+    if(is_page()) {
+	    $alert = new AlertController();
         $alert->deleteAlert();
         return $alert->alertsManagement();
     }
 }
 
-function block_alert_management() {
+/**
+ * Build a block
+ */
+function block_alert_management()
+{
     wp_register_script(
         'alert_manage-script',
         plugins_url( 'block.js', __FILE__ ),

@@ -1,5 +1,5 @@
 /**
- * Ferme un modal
+ * Close a modal
  */
 function closeModal() {
     $('#myModal').hide();

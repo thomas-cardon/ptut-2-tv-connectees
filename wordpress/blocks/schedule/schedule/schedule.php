@@ -6,9 +6,13 @@ use Controllers\StudyDirectorController;
 use Controllers\TeacherController;
 use Controllers\TechnicianController;
 use Controllers\TelevisionController;
-use Views\SecretaryView;
 use Views\UserView;
 
+/**
+ * Function of the block
+ *
+ * @return string
+ */
 function schedule_render_callback()
 {
     if (is_page()) {
@@ -38,6 +42,9 @@ function schedule_render_callback()
     }
 }
 
+/**
+ * Build a block
+ */
 function block_schedule()
 {
     wp_register_script(

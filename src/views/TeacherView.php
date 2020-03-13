@@ -5,11 +5,18 @@ namespace Views;
 
 use Models\User;
 
+/**
+ * Class TeacherView
+ *
+ * Contain all view for teacher (Forms, tables)
+ *
+ * @package Views
+ */
 class TeacherView extends UserView
 {
 
     /**
-     * Affiche un formulaire pour inscrire des enseignants via fichier excel
+     * Display a creation form
      */
     public function displayInsertImportFileTeacher()
     {
@@ -70,6 +77,6 @@ class TeacherView extends UserView
 			$row[] = [$count, $this->buildCheckbox($name, $teacher->getId()), $teacher->getLogin(), $teacher->getCodes()[0]->getCode(), $this->buildLinkForModify($linkManageUser.'/'.$teacher->getId())];
 		}
 
-		return $this->displayAll($name, $title, $header, $row);
+		return $this->displayAll($name, $title, $header, $row, 'teacher');
 	}
 }

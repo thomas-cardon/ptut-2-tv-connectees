@@ -11,6 +11,7 @@ interface Schedule
 {
     /**
      * Display the schedule of the code
+     *
      * @param $code int Code ADE
      * @param $allDay bool
      */

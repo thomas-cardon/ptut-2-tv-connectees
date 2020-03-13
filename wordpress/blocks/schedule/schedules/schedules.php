@@ -2,14 +2,24 @@
 
 use Controllers\UserController;
 
-function schedules_render_callback() {
-    $schedule = new UserController();
-    if(is_page()){
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function schedules_render_callback()
+{
+    if(is_page()) {
+	    $schedule = new UserController();
         return $schedule->displayYearSchedule();
     }
 }
 
-function block_schedules() {
+/**
+ * Build a block
+ */
+function block_schedules()
+{
     wp_register_script(
         'schedules-script',
         plugins_url( 'block.js', __FILE__ ),

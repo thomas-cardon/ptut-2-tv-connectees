@@ -3,15 +3,25 @@
 
 use Controllers\SecretaryController;
 
-function management_user_render_callback() {
-    if(is_page()){
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function management_user_render_callback()
+{
+    if(is_page()) {
 	    $manageUser = new SecretaryController();
         $manageUser->deleteUsers();
         return $manageUser->displayUsers();
     }
 }
 
-function block_management_user() {
+/**
+ * Build a block
+ */
+function block_management_user()
+{
     wp_register_script(
         'management_user-script',
         plugins_url( 'block.js', __FILE__ ),

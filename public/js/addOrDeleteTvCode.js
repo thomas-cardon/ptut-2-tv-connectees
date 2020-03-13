@@ -1,7 +1,7 @@
 let count = 0;
 
 /**
- * Ajoute un select pour ajouter un emploi du temps à une télévision
+ * Create a new select to add a new group for the television
  */
 function addButtonTv() {
     count = count + 1;
@@ -27,8 +27,9 @@ function addButtonTv() {
 }
 
 /**
- *  Supprime la ligne sélectionnée
- * @param id    ID de la ligne
+ * Delete the select
+ *
+ * @param id
  */
 function deleteRow(id) {
     let dele = document.getElementById(id);

@@ -2,14 +2,24 @@
 
 use Controllers\StudentController;
 
-function inscr_student_render_callback() {
-    $student = new StudentController();
-    if(is_page()){
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function inscr_student_render_callback()
+{
+    if(is_page()) {
+	    $student = new StudentController();
         return $student->inscriptionStudent();
     }
 }
 
-function block_inscr_student() {
+/**
+ * Build a block
+ */
+function block_inscr_student()
+{
     wp_register_script(
         'inscr_student-script',
         plugins_url( 'block.js', __FILE__ ),

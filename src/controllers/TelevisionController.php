@@ -54,17 +54,19 @@ class TelevisionController extends UserController implements Schedule
 	        $passwordConfirm = filter_input(INPUT_POST, 'pwdConfirmTv');
 	        $codes = $_POST['selectTv'];
 
-        	if(is_string($login) && strlen($login) >= 4 && strlen($login) <= 25 &&
-	           is_string($password) && strlen($password) >= 8 && strlen($password) <= 25 &&
-	           $password == $passwordConfirm) {
+	        if(is_string($login) && strlen($login) >= 4 && strlen($login) <= 25 &&
+	        	is_string($password) && strlen($password) >= 8 && strlen($password) <= 25 &&
+	            $password === $passwordConfirm) {
 
 		        $codesAde = array();
 		        foreach ($codes as $code) {
-		        	if(is_null($codeAde->getByCode($code)->getId())) {
-		        		return 'error';
-		        	} else {
-		        		$codesAde[] = $codeAde->getByCode($code);
-		        	}
+		        	if(is_numeric($code) && $code > 0) {
+				        if(is_null($codeAde->getByCode($code)->getId())) {
+					        return 'error';
+				        } else {
+					        $codesAde[] = $codeAde->getByCode($code);
+				        }
+			        }
 		        }
 
 		        $password = wp_hash_password($password);
@@ -81,6 +83,8 @@ class TelevisionController extends UserController implements Schedule
 		        } else {
 			        $this->view->displayErrorLogin();
 		        }
+	        } else {
+        		$this->view->displayErrorCreation();
 	        }
         }
 
@@ -100,8 +104,6 @@ class TelevisionController extends UserController implements Schedule
 	 */
 	public function modify($user)
 	{
-		$current_user = wp_get_current_user();
-
 		$page = get_page_by_title('Gestion des utilisateurs');
 		$linkManageUser = get_permalink($page->ID);
 
@@ -179,12 +181,13 @@ class TelevisionController extends UserController implements Schedule
 					$path = $this->getFilePath($code->getCode());
 					if (file_exists($path)) {
 						if($this->displaySchedule($code->getCode())) {
-							$string .= $this->displaySchedule($code->getCode());
 							$string .= $this->view->displayMidSlide();
+							$string .= $this->displaySchedule($code->getCode());
+							$string .= $this->view->displayEndDiv();
 						}
 					}
 				}
-				$string .= $this->view->displayEndSlide();
+				$string .= $this->view->displayEndDiv();
 			}
 		} else {
 			$string .= $this->displaySchedule($this->model->getCodes()[0]->getCode());

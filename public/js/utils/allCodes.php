@@ -1,6 +1,6 @@
 <?php
 /**
- * Affiche un select avec les années - groupes et demi-groupes
+ * Create a select with all codes ADE (Year, Groups, HalfGroups)
  */
 
 use Models\CodeAde;

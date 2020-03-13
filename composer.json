@@ -10,8 +10,6 @@
   ],
   "require": {
     "ext-pdo": "*",
-    "robmorgan/phinx": "^0.11.4",
-    "fzaninotto/faker": "^1.9",
     "twbs/bootstrap": "^4.4",
     "components/jquery": "^3.4",
     "phpoffice/phpspreadsheet": "^1.6"

@@ -1,34 +1,30 @@
 <?php
 
 /**
- * Installe toutes les base de données si elles n'existent pas
- * Créé tous les rôles que nous avons besoin : Étudiant, Enseignant, Secretaire, Technicien et Télévision
+ * Script for the creation of the database
  */
+function createDatabase()
+{
+	global $wpdb;
+	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
-global $wpdb;
-require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
+	$charset_collate = $wpdb->get_charset_collate();
 
-$charset_collate = $wpdb->get_charset_collate();
-$commissions_table_name = 'alert';
-
-$query = "CREATE TABLE IF NOT EXISTS $commissions_table_name (
+	$query = "CREATE TABLE IF NOT EXISTS alert (
 			`id` INT(10) NOT NULL AUTO_INCREMENT,
 			`content` VARCHAR (280) NOT NULL ,
 			`author` INT(10) NOT NULL ,
 			`creation_date` date NOT NULL,
 			`end_date` date NOT NULL,
+			`for_everyone` INT(1) NOT NULL,
 			PRIMARY KEY (id)
 			) $charset_collate;";
 
-dbDelta($query);
+	dbDelta($query);
 
-$sql = "ALTER TABLE `" . $commissions_table_name . "` AUTO_INCREMENT = 2;";
-$wpdb->query($sql);
 
-$commissions_table_name = 'code_ade';
-
-$query = "CREATE TABLE IF NOT EXISTS $commissions_table_name (
+	$query = "CREATE TABLE IF NOT EXISTS code_ade (
 			`id` INT(11) NOT NULL AUTO_INCREMENT,
 			`type` VARCHAR( 255 ) NOT NULL ,
 			`title` VARCHAR ( 255 ) NOT NULL ,
@@ -36,17 +32,34 @@ $query = "CREATE TABLE IF NOT EXISTS $commissions_table_name (
 			PRIMARY KEY (id)
 			) $charset_collate;";
 
-dbDelta($query);
+	dbDelta($query);
 
-$sql = "ALTER TABLE `" . $commissions_table_name . "` AUTO_INCREMENT = 2;";
-$wpdb->query($sql);
+	$query = "CREATE TABLE IF NOT EXISTS code_alert (
+			`id_alert` INT(10) NOT NULL ,
+			`id_code_ade` INT(10) NOT NULL ,
+			PRIMARY KEY (id_alert, id_code_ade)
+			) $charset_collate;";
 
-$sql = "ALTER TABLE `" . $commissions_table_name . "` AUTO_INCREMENT = 2;";
-$wpdb->query($sql);
+	dbDelta($query);
 
-$commissions_table_name = 'informations';
+	$query = "CREATE TABLE IF NOT EXISTS code_user (
+			`id_user` INT(10) NOT NULL ,
+			`id_code_ade` INT(10) NOT NULL ,
+			PRIMARY KEY (id_user, id_code_ade)
+			) $charset_collate;";
 
-$query = "CREATE TABLE IF NOT EXISTS $commissions_table_name (
+	dbDelta($query);
+
+	$query = "CREATE TABLE IF NOT EXISTS code_delete_account (
+			`id` INT(10) NOT NULL AUTO_INCREMENT,
+			`user_id` INT(10) NOT NULL ,
+			`code` VARCHAR(20) NOT NULL ,
+			PRIMARY KEY (id)
+			) $charset_collate;";
+
+	dbDelta($query);
+
+	$query = "CREATE TABLE IF NOT EXISTS informations (
 			`ID_info` INT(20) NOT NULL AUTO_INCREMENT,
 			`title` VARCHAR ( 255 ) NOT NULL ,
 			`author` VARCHAR ( 255 ) NOT NULL ,
@@ -57,67 +70,71 @@ $query = "CREATE TABLE IF NOT EXISTS $commissions_table_name (
 			PRIMARY KEY  (ID_info)
 			) $charset_collate;";
 
-dbDelta($query);
+	dbDelta($query);
+}
 
-$sql = "ALTER TABLE `" . $commissions_table_name . "` AUTO_INCREMENT = 2;";
-$wpdb->query($sql);
+/**
+ * Create all roles
+ */
+function createRoles()
+{
+	$result = add_role(
+		'secretaire',
+		__('Secretaire'),
+		array(
+			'read' => true,  // true allows this capability
+			'edit_posts' => true,
+			'delete_posts' => false, // Use false to explicitly deny
+		)
+	);
 
-$result = add_role(
-    'secretaire',
-    __('Secretaire'),
-    array(
-        'read' => true,  // true allows this capability
-        'edit_posts' => true,
-        'delete_posts' => false, // Use false to explicitly deny
-    )
-);
+	$result = add_role(
+		'television',
+		__('Television'),
+		array(
+			'read' => true,  // true allows this capability
+			'edit_posts' => true,
+			'delete_posts' => false, // Use false to explicitly deny
+		)
+	);
 
-$result = add_role(
-    'television',
-    __('Television'),
-    array(
-        'read' => true,  // true allows this capability
-        'edit_posts' => true,
-        'delete_posts' => false, // Use false to explicitly deny
-    )
-);
+	$result = add_role(
+		'etudiant',
+		__('Etudiant'),
+		array(
+			'read' => true,  // true allows this capability
+			'edit_posts' => true,
+			'delete_posts' => false, // Use false to explicitly deny
+		)
+	);
 
-$result = add_role(
-    'etudiant',
-    __('Etudiant'),
-    array(
-        'read' => true,  // true allows this capability
-        'edit_posts' => true,
-        'delete_posts' => false, // Use false to explicitly deny
-    )
-);
+	$result = add_role(
+		'enseignant',
+		__('Enseignant'),
+		array(
+			'read' => true,  // true allows this capability
+			'edit_posts' => true,
+			'delete_posts' => false, // Use false to explicitly deny
+		)
+	);
 
-$result = add_role(
-    'enseignant',
-    __('Enseignant'),
-    array(
-        'read' => true,  // true allows this capability
-        'edit_posts' => true,
-        'delete_posts' => false, // Use false to explicitly deny
-    )
-);
+	$result = add_role(
+		'technicien',
+		__('Technicien'),
+		array(
+			'read' => true,  // true allows this capability
+			'edit_posts' => true,
+			'delete_posts' => false, // Use false to explicitly deny
+		)
+	);
 
-$result = add_role(
-    'technicien',
-    __('Technicien'),
-    array(
-        'read' => true,  // true allows this capability
-        'edit_posts' => true,
-        'delete_posts' => false, // Use false to explicitly deny
-    )
-);
-
-$result = add_role(
-    'directeuretude',
-    __('Directeur etude'),
-    array(
-        'read' => true,  // true allows this capability
-        'edit_posts' => true,
-        'delete_posts' => false, // Use false to explicitly deny
-    )
-);
+	$result = add_role(
+		'directeuretude',
+		__('Directeur etude'),
+		array(
+			'read' => true,  // true allows this capability
+			'edit_posts' => true,
+			'delete_posts' => false, // Use false to explicitly deny
+		)
+	);
+}

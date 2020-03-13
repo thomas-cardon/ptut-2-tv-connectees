@@ -1,9 +1,12 @@
 <?php
 
 use Controllers\StudentController;
-use Models\User;
-use Views\StudentView;
 
+/**
+ * Function of the block
+ *
+ * @return string
+ */
 function code_account_render_callback()
 {
     $current_user = wp_get_current_user();
@@ -13,6 +16,9 @@ function code_account_render_callback()
     }
 }
 
+/**
+ * Build a block
+ */
 function block_code_account()
 {
     wp_register_script(

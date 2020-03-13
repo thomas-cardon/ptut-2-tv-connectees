@@ -2,14 +2,24 @@
 
 use Controllers\SecretaryController;
 
-function creation_user_render_callback() {
-    if(is_page()){
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function creation_user_render_callback()
+{
+    if(is_page()) {
 	    $manageUser = new SecretaryController();
         return $manageUser->createUsers();
     }
 }
 
-function block_creation_user() {
+/**
+ * Build a block
+ */
+function block_creation_user()
+{
     wp_register_script(
         'creation_user-script',
         plugins_url( 'block.js', __FILE__ ),

@@ -39,6 +39,7 @@ class Controller
 
     /**
      * Get the url to upload a ics file
+     *
      * @param $code     int
      *
      * @return string
@@ -55,6 +56,7 @@ class Controller
 
     /**
      * Get the path of a code
+     *
      * @param $code     int
      *
      * @return string
@@ -82,6 +84,7 @@ class Controller
 
     /**
      * Upload a ics file
+     *
      * @param $code     int Code ADE
      */
     public function addFile($code)
@@ -110,7 +113,14 @@ class Controller
         }
     }
 
-	function isRealDate($date)
+	/**
+	 * Check if the input is a date
+	 *
+	 * @param $date
+	 *
+	 * @return bool
+	 */
+	public function isRealDate($date)
 	{
 		if (false === strtotime($date)) {
 			return false;

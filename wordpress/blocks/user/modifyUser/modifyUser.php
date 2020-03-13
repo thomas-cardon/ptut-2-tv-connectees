@@ -2,15 +2,24 @@
 
 use Controllers\SecretaryController;
 
+/**
+ * Function of the block
+ *
+ * @return string
+ */
 function user_modify_render_callback()
 {
-    if(is_page()){
+    if(is_page()) {
 	    $user = new SecretaryController();
         return $user->modifyUser();
     }
 }
 
-function block_user_modify() {
+/**
+ * Build a block
+ */
+function block_user_modify()
+{
     wp_register_script(
         'user_modify-script',
         plugins_url( 'block.js', __FILE__ ),

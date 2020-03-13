@@ -1,3 +1,6 @@
+/**
+ * Scroll all schedule from the bottom to the top
+ */
 $('.ticker1').easyTicker({
     direction: 'up',
     easing: 'swing',

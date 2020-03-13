@@ -2,14 +2,24 @@
 
 use Controllers\CodeAdeController;
 
-function code_modify_render_callback() {
-    $code = new CodeAdeController();
-    if(is_page()){
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function code_modify_render_callback()
+{
+    if(is_page()) {
+	    $code = new CodeAdeController();
     	return $code->modify();
     }
 }
 
-function block_code_modify() {
+/**
+ * Build a block
+ */
+function block_code_modify()
+{
     wp_register_script(
         'code_modify-script',
         plugins_url( 'block.js', __FILE__ ),

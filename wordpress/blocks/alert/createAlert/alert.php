@@ -10,9 +10,7 @@ use Controllers\AlertController;
 function alert_render_callback()
 {
 	if(is_page()) {
-
 		$alert = new AlertController();
-
 		return $alert->insert();
 	}
 }

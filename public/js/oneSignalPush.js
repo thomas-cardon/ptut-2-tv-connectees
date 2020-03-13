@@ -1,5 +1,7 @@
 var OneSignal = window.OneSignal || [];
 
+console.log("non");
+
 OneSignal.push(function () {
     OneSignal.init({
         appId: "d7c7a01c-6e25-4b81-8bf7-5af2a55210d7",
@@ -87,13 +89,14 @@ OneSignal.push(function () {
     if (!OneSignal.isPushNotificationsSupported()) {
         return;
     }
+
     updateMangeWebPushSubscriptionButton(buttonSelector);
 
     OneSignal.on("subscriptionChange", function (isSubscribed) {
         /* If the user's subscription state changes during the page's session, update the button text */
         updateMangeWebPushSubscriptionButton(buttonSelector);
         $.ajax({
-            url: '/wp-content/plugins/TeleConnecteeAmu/views/js/utils/userID.php',
+            url: '/wp-content/plugins/plugin-ecran-connecte/public/js/utils/userID.php',
             method: 'get'
         })
             .done(function (data) {
@@ -104,4 +107,3 @@ OneSignal.push(function () {
             .fail(errorMessage);
     });
 });
-

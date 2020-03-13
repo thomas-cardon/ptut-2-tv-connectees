@@ -24,15 +24,25 @@ class StudyDirectorView extends UserView
         return '
                 <form class="cadre" method="post">
                     <h2> Compte directeur d\'études</h2>
-                    <label for="loginDirec">Login</label>
-                    <input minlength="4" type="text" class="form-control text-center modal-sm" name="loginDirec" placeholder="Login" required="">
-                    <label for="emailDirec">Email</label>
-                    <input type="email" class="form-control text-center modal-sm" name="emailDirec" placeholder="Email" required="">
-                    <label for="pwdDirec">Mot de passe</label>
-                    <input minlength="4" type="password" class="form-control text-center modal-sm" id="pwdDirec" name="pwdDirec" placeholder="Mot de passe" required="" onkeyup=checkPwd("Direc")>
-                    <input minlength="4" type="password" class="form-control text-center modal-sm" id="pwdConfDirec" name="pwdConfirmDirec" placeholder="Confirmer le Mot de passe" required="" onkeyup=checkPwd("Direc")>
-                    <label for="codeADEDirec"> Code ADE</label>
-                    <input type="text" class="form-control text-center modal-sm" placeholder="Code ADE" name="codeDirec" required="">
+                    <div class="form-group">
+                    	<label for="loginDirec">Login</label>
+                    	<input minlength="4" type="text" class="form-control" name="loginDirec" placeholder="Login" required="">
+                    	<small id="passwordHelpBlock" class="form-text text-muted">Votre login doit contenir entre 4 et 25 caractère</small>
+                    </div>
+                    <div class="form-group">
+                    	<label for="emailDirec">Email</label>
+                    	<input type="email" class="form-control" name="emailDirec" placeholder="Email" required="">
+                    </div>
+                    <div class="form-group">
+                    	<label for="pwdDirec">Mot de passe</label>
+                    	<input type="password" class="form-control" id="pwdDirec" name="pwdDirec" minlength="8" maxlength="25" placeholder="Mot de passe" required="" onkeyup=checkPwd("Direc")>
+                    	<input type="password" class="form-control" id="pwdConfDirec" name="pwdConfirmDirec" minlength="8" maxlength="25" placeholder="Confirmer le Mot de passe" required="" onkeyup=checkPwd("Direc")>
+                    	<small id="passwordHelpBlock" class="form-text text-muted">Votre mot de passe doit contenir entre 8 et 25 caractère</small>
+                    </div>
+                    <div class="form-group">
+                    	<label for="codeADEDirec"> Code ADE</label>
+                    	<input type="text" class="form-control" placeholder="Code ADE" name="codeDirec" required="">
+                    </div>
                     <input type="submit" id="validDirec" name="createDirec" value="Créer">
                 </form>';
     }
@@ -60,7 +70,7 @@ class StudyDirectorView extends UserView
 			$row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), $user->getCodes()[0]->getCode(), $this->buildLinkForModify($linkManageUser.'/'.$user->getId())];
 		}
 
-		return $this->displayAll($name, $title, $header, $row);
+		return $this->displayAll($name, $title, $header, $row, 'director');
 	}
 
     /**

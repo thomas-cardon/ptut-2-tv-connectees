@@ -1,5 +1,8 @@
 let counte = 0;
 
+/**
+ * Create a new select to add a new group for the alert
+ */
 function addButtonAlert() {
     counte = counte + 1;
     $.ajax({
@@ -23,6 +26,11 @@ function addButtonAlert() {
     });
 }
 
+/**
+ * Delete the select
+ *
+ * @param id
+ */
 function deleteRowAlert(id) {
     let dele = document.getElementById(id);
     dele.remove();
