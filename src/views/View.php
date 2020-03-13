@@ -28,17 +28,17 @@ class View
 	{
 		$name = '\''.$name.'\'';
 		$table = '
-		<input type="text" id="key'.$idTable.'" name="key" onkeyup="search(\''.$idTable.'\')" placeholder="Search">
+		<input type="text" id="key'.$idTable.'" name="key" onkeyup="search(\''.$idTable.'\')" placeholder="Recherche...">
 		<form method="post">
 			<h2>' . $title . '</h2>
 			<div class="table-responsive">
 				<table class="table" id="table'.$idTable.'">
 					<thead>
 						<tr class="text-center">
-							<th width="5%" class="text-center">#</th>
+							<th width="5%" class="text-center" onclick="sortTable(0, \''.$idTable.'\')">#</th>
 		                    <th scope="col" width="5%" class="text-center"><input type="checkbox" onClick="toggle(this, ' . $name . ')" /></th>';
 
-		$count = 0;
+		$count = 1;
 		foreach ($dataHeader as $data) {
 			++$count;
 			$table .= '<th scope="col" class="text-center" onclick="sortTable('.$count.', \''.$idTable.'\')">'.$data.'</th>';

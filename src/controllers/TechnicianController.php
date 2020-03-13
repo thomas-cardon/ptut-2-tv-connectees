@@ -68,7 +68,7 @@ class TechnicianController extends UserController implements Schedule
                     $this->view->displayErrorInsertion();
                 }
             } else {
-                $this->view->displayBadPassword();
+	            $this->view->displayErrorCreation();
             }
         }
         return $this->view->displayFormTechnician();

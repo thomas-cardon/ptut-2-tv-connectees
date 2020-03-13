@@ -194,7 +194,12 @@ class ICSView extends View
 		}
 		$description = substr( $event['description'], 0, - 29 );
 		if (!( date("H:i", strtotime($event['fin'])) <= $time) ||  $day != date('j')) {
-			return $this->displayLineSchedule([ $duration, $label, $description, $event['location'] ], $active);
+			$current_user = wp_get_current_user();
+			if (in_array( "technicien", $current_user->roles)) {
+				return $this->displayLineSchedule([$duration, $event['location'] ], $active);
+			} else {
+				return $this->displayLineSchedule([$duration, $label, $description, $event['location'] ], $active);
+			}
 		}
 
 		return false;

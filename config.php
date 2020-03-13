@@ -38,7 +38,6 @@ include_once 'wordpress/blocks/user/inscription/inscription.php';
 include_once 'wordpress/widgets/WidgetAlert.php';
 include_once 'wordpress/widgets/WidgetInformation.php';
 include_once 'wordpress/widgets/WidgetWeather.php';
-include_once 'wordpress/widgets/WidgetSchedule.php';
 
 include_once 'vendor/R34ICS/R34ICS.php';
 
@@ -107,7 +106,7 @@ function wpDocs_plugin_ecran_connectee_scripts()
 	wp_enqueue_script('plugin-scroll', TV_PLUG_PATH . 'public/js/scroll.js', array('plugin-jquerymin', 'plugin-jqueryEzTic', 'plugin-jqueryEzMinTic', 'plugin-JqueryEzMin'), '', true);
 	wp_enqueue_script('plugin-confPass', TV_PLUG_PATH . 'public/js/confirmPass.js', array('jquery'), '1.0', true);
 	wp_enqueue_script('plugin-showModal', TV_PLUG_PATH . 'public/js/modal.js', array('jquery'), '1.0', true);
-	wp_enqueue_script('plugin-OneSignal', TV_PLUG_PATH . 'public/js/oneSignalPush.js', array('jquery'), '', true);
+	wp_enqueue_script('plugin-oneSignal', TV_PLUG_PATH . 'public/js/oneSignalPush.js', array('jquery'), '', true);
 	wp_enqueue_script('plugin-slideshow', TV_PLUG_PATH . 'public/js/slideshow.js', array('jquery'), '2.0', true);
 	wp_enqueue_script('plugin-weather', TV_PLUG_PATH . 'public/js/weather.js', array('jquery'), '1.0', true);
 	wp_enqueue_script('plugin-weatherTime', TV_PLUG_PATH . 'public/js/weather_and_time.js', array('jquery'), '1.0', true);

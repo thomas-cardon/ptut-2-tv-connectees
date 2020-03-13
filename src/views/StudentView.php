@@ -167,7 +167,7 @@ class StudentView extends UserView
 	            <h5 class="modal-title"> Choix des emplois du temps</h5>
 	          </div>
 	          <div class="modal-body">
-		          <p>Bienvenue sur l\'écran connecté, sélectionner vos emplois du temps afin de pouvoir utiliser ce site</p>
+		          <p>Bienvenue sur l\'écran connecté, sélectionnez vos emplois du temps afin de pouvoir utiliser ce site</p>
 		          <form method="post">
 		            <label for="selectYears">Sélectionne ton année</label>
 		            <select class="form-control firstSelect" id="selectYears" name="selectYears">

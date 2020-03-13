@@ -40,16 +40,16 @@ class StudyDirectorController extends UserController implements Schedule
 	 *
 	 * @return bool|mixed|string
 	 */
-    public function displayMySchedule()
-    {
-        $current_user = wp_get_current_user();
-        $codes = unserialize($current_user->code);
-        if($this->displaySchedule($codes[0])) {
-            return $this->displaySchedule($codes[0]);
-        } else {
-            return $this->view->displayNoStudy();
-        }
-    }
+	public function displayMySchedule()
+	{
+		$current_user = wp_get_current_user();
+		$user = $this->model->get($current_user->ID);
+		if($this->displaySchedule($user->getCodes()[0]->getCode())) {
+			return $this->displaySchedule($user->getCodes()[0]->getCode());
+		} else {
+			return $this->view->displayNoStudy();
+		}
+	}
 
     /**
      * Insert a study director in the database
@@ -88,7 +88,7 @@ class StudyDirectorController extends UserController implements Schedule
                     $this->view->displayErrorInsertion();
                 }
             } else {
-                $this->view->displayBadPassword();
+	            $this->view->displayErrorCreation();
             }
         }
         return $this->view->displayCreateDirector();

@@ -4,53 +4,123 @@
  * @param n
  * @param idTable
  */
-function sortTable(n, idTable = '') {
+
+let reverse = false;
+let oldN;
+function sortTable(n, idTable = '')
+{
+    var table;
+    if(oldN === n) {
+        reverse = !reverse;
+    } else {
+        oldN = n;
+    }
+    table = document.getElementById("table"+idTable);
+    quickSort(table.rows, 1, table.rows.length - 1, n, table);
+
+    for (var i = 1; i < table.rows.length - 1; ++i) {
+        if(reverse) {
+            if(table.rows[i].getElementsByTagName("TD")[n].innerHTML.toLowerCase() < table.rows[i + 1].getElementsByTagName("TD")[n].innerHTML.toLowerCase()) {
+                quickSort(table.rows, 1, table.rows.length - 1, n, table);
+            }
+        } else {
+            if(table.rows[i].getElementsByTagName("TD")[n].innerHTML.toLowerCase() > table.rows[i + 1].getElementsByTagName("TD")[n].innerHTML.toLowerCase()) {
+                quickSort(table.rows, 1, table.rows.length - 1, n, table);
+            }
+        }
+    }
+}
+
+function swap(items, leftIndex, rightIndex)
+{
+    items[leftIndex].parentNode.insertBefore(items[rightIndex], items[leftIndex]);
+    items[rightIndex].parentNode.insertBefore(items[leftIndex], items[rightIndex]);
+}
+
+
+function partition(items, left, right, n)
+{
+    var pivot   = items[Math.floor((right + left) / 2)],
+        i       = left, //left pointer
+        j       = right; //right pointer
+    while (i <= j) {
+        if(reverse) {
+            while (items[i].getElementsByTagName("TD")[n].innerHTML.toLowerCase() > pivot.getElementsByTagName("TD")[n].innerHTML.toLowerCase()) {
+                i++;
+            }
+            while (items[j].getElementsByTagName("TD")[n].innerHTML.toLowerCase() < pivot.getElementsByTagName("TD")[n].innerHTML.toLowerCase()) {
+                j--;
+            }
+        } else {
+            while (items[i].getElementsByTagName("TD")[n].innerHTML.toLowerCase() < pivot.getElementsByTagName("TD")[n].innerHTML.toLowerCase()) {
+                i++;
+            }
+            while (items[j].getElementsByTagName("TD")[n].innerHTML.toLowerCase() > pivot.getElementsByTagName("TD")[n].innerHTML.toLowerCase()) {
+                j--;
+            }
+        }
+        if (i <= j) {
+            swap(items, i, j);
+            i++;
+            j--;
+        }
+    }
+    return i;
+}
+
+function quickSort(items, left, right, n)
+{
+    var index;
+    if (items.length > 1) {
+        index = partition(items, left, right, n);
+        if (left < index - 1) {
+            quickSort(items, left, index - 1, n);
+        }
+        if (index < right) {
+            quickSort(items, index, right, n);
+        }
+    }
+    return items;
+}
+
+/*
+function sortTable(n, idTable = '')
+{
     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
     table = document.getElementById("table"+idTable);
     switching = true;
-    // Set the sorting direction to ascending:
     dir = "asc";
-    /* Make a loop that will continue until
-    no switching has been done: */
+
     while (switching) {
-        // Start by saying: no switching is done:
         switching = false;
         rows = table.rows;
-        /* Loop through all table rows (except the
-        first, which contains table headers): */
-        for (i = 1; i < (rows.length - 1); i++) {
-            // Start by saying there should be no switching:
+
+        for (i = 1; i < (rows.length - 1); ++i) {
             shouldSwitch = false;
-            /* Get the two elements you want to compare,
-            one from current row and one from the next: */
+
             x = rows[i].getElementsByTagName("TD")[n];
             y = rows[i + 1].getElementsByTagName("TD")[n];
-            /* Check if the two rows should switch place,
-            based on the direction, asc or desc: */
+
+            console.log(x.innerHTML);
+            console.log(y.innerHTML);
+
             if (dir == "asc") {
                 if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                    // If so, mark as a switch and break the loop:
                     shouldSwitch = true;
                     break;
                 }
             } else if (dir == "desc") {
                 if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                    // If so, mark as a switch and break the loop:
                     shouldSwitch = true;
                     break;
                 }
             }
         }
         if (shouldSwitch) {
-            /* If a switch has been marked, make the switch
-            and mark that a switch has been done: */
             rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
             switching = true;
-            // Each time a switch is done, increase this count by 1:
             switchcount ++;
         } else {
-            /* If no switching has been done AND the direction is "asc",
-            set the direction to "desc" and run the while loop again. */
             if (switchcount == 0 && dir == "asc") {
                 dir = "desc";
                 switching = true;
@@ -58,3 +128,4 @@ function sortTable(n, idTable = '') {
         }
     }
 }
+ */

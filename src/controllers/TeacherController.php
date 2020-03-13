@@ -43,9 +43,9 @@ class TeacherController extends UserController implements Schedule
     public function displayMySchedule()
     {
         $current_user = wp_get_current_user();
-        $codes = unserialize($current_user->code);
-        if($this->displaySchedule($codes[0])) {
-            return $this->displaySchedule($codes[0]);
+        $user = $this->model->get($current_user->ID);
+        if($this->displaySchedule($user->getCodes()[0]->getCode())) {
+            return $this->displaySchedule($user->getCodes()[0]->getCode());
         } else {
             return $this->view->displayNoStudy();
         }
@@ -56,7 +56,7 @@ class TeacherController extends UserController implements Schedule
      */
     public function insert()
     {
-        $actionTeacher = $_POST['importProf'];
+        $actionTeacher = filter_input(INPUT_POST, 'importProf');
         if ($actionTeacher) {
             $allowed_extension = array("Xls", "Xlsx", "Csv");
             $extension = ucfirst(strtolower(end(explode(".", $_FILES["excelProf"]["name"]))));
@@ -84,7 +84,7 @@ class TeacherController extends UserController implements Schedule
 		            }
 	            }
 
-                //On vérifie si le fichier est le bon
+                // Check if it's a good file
                 if ($cells[0] == "Identifiant Ent" && $cells[1] == "Adresse mail" && $cells[2] == "Code") {
                     $doubles = array();
                     for ($i = 2; $i < $highestRow + 1; ++$i) {
@@ -112,36 +112,33 @@ class TeacherController extends UserController implements Schedule
 
 	                        $this->model->setCodes($code);
 
-                            if (!$this->checkDuplicateUser($this->model) &&
-                                $this->model->create()) {
+                            if (!$this->checkDuplicateUser($this->model) && $this->model->create()) {
                             	$path = $this->getFilePath($code);
                             	if (!file_exists($path)) {
 		                            $this->addFile($code);
 	                            }
 
-
-                                //Envoie un email à l'enseignant inscrit avec son login et son mot de passe
+                                //Send mail to the new user
                                 $to = $email;
                                 $subject = "Inscription à la télé-connecté";
                                 $message = '
-                                 <html>
-                                  <head>
-                                   <title>Inscription à la télé-connecté</title>
-                                  </head>
-                                  <body>
-                                   <p>Bonjour, vous avez été inscrit sur le site de la Télé Connecté de votre département en tant qu\'enseignant</p>
-                                   <p> Sur ce site, vous aurez accès à votre emploie du temps, aux informations concernant votre scolarité et vous pourrez poster des alertes.</p>
-                                   <p> Votre identifiant est ' . $login . ' et votre mot de passe est ' . $pwd . '.</p>
-                                   <p> Veuillez changer votre mot de passe lors de votre première connexion pour plus de sécurité !</p>
-                                   <p> Pour vous connecter, rendez-vous sur le site : <a href="' . home_url() . '">.</p>
-                                   <p> Nous vous souhaitons une bonne expérience sur notre site.</p>
-                                  </body>
-                                 </html>
-                                 ';
+	                            <html>
+	                             	<head>
+	                               		<title>Inscription à la télé-connecté</title>
+	                              	</head>
+	                              	<body>
+	                               		<p>Bonjour, vous avez été inscrit sur le site de la Télé Connecté de votre département en tant qu\'enseignant</p>
+	                               		<p> Sur ce site, vous aurez accès à votre emploie du temps, aux informations concernant votre scolarité et vous pourrez poster des alertes.</p>
+	                               		<p> Votre identifiant est ' . $login . ' et votre mot de passe est ' . $password . '.</p>
+	                               		<p> Veuillez changer votre mot de passe lors de votre première connexion pour plus de sécurité !</p>
+	                               		<p> Pour vous connecter, rendez-vous sur le site : <a href="' . home_url() . '"> ' . home_url() . ' </a>.</p>
+	                               		<p> Nous vous souhaitons une bonne expérience sur notre site.</p>
+	                              	</body>
+	                            </html>';
 
                                 $headers = array('Content-Type: text/html; charset=UTF-8');
 
-                                wp_mail($to, $subject, $message, $headers);
+                                mail($to, $subject, $message, $headers);
                             } else {
                                 array_push($doubles, $cells[0]);
                             }

@@ -60,8 +60,8 @@ class SecretaryController extends UserController
 
             if (is_string($login) && strlen($login) >= 4 && strlen($login) <= 25 &&
                 is_string($password) && strlen($password) >= 8 && strlen($password) <= 25 &&
-            	$password === $passwordConfirm &&
-                is_email($email)) {
+            	$password === $passwordConfirm && is_email($email)) {
+
 	            $password = wp_hash_password($password);
 
 	            $this->model->setLogin($login);
@@ -75,7 +75,7 @@ class SecretaryController extends UserController
                     $this->view->displayErrorInsertion();
                 }
             } else {
-                $this->view->displayBadPassword();
+	            $this->view->displayErrorCreation();
             }
         }
         return $this->view->displayFormSecretary();
@@ -180,10 +180,10 @@ class SecretaryController extends UserController
                 $controller = new TelevisionController();
                 return $controller->modify($user);
             } else {
-                return $this->view->displaynoUser();
+                return $this->view->displayNoUser();
             }
         } else {
-            return $this->view->displaynoUser();
+            return $this->view->displayNoUser();
         }
     }
 

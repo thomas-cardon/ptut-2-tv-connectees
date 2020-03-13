@@ -114,9 +114,9 @@ class StudentController extends UserController implements Schedule
                                     </body>
                                  </html>';
 
-                                $headers = array('Content-Type: text/html; charset=UTF-8');
+                                $headers = 'Content-Type: text/html; charset=UTF-8';
 
-                                wp_mail($to, $subject, $message, $headers);
+                                mail($to, $subject, $message, $headers);
                             } else {
                                 array_push($doubles, $login);
                             }
@@ -242,8 +242,11 @@ class StudentController extends UserController implements Schedule
 
 			$year = filter_input(INPUT_POST, 'selectYears');
 			$group = filter_input(INPUT_POST, 'selectGroups');
-			$halfGroup = filter_input(INPUT_POST, 'selectHalfGroups');
+			$halfGroup = filter_input(INPUT_POST, 'selectHalfgroups');
 
+			echo 'year '.$year;
+			echo 'group '.$group;
+			echo 'halfGroup '.$halfGroup;
 			if(is_numeric($year) && is_numeric($group) && is_numeric($halfGroup)) {
 
 				$codes = [$year, $group, $halfGroup];
@@ -269,6 +272,7 @@ class StudentController extends UserController implements Schedule
 
 				$user->setCodes($codesAde);
 				$user->update();
+				$this->view->refreshPage();
 			}
 		}
 	}

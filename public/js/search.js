@@ -3,16 +3,17 @@
  *
  * @param idTable
  */
-function search(idTable) {
-    // Declare variables
+function search(idTable)
+{
     let input, filter, table, tr, td, allTd, j, i, txtValue, hide;
     input = document.getElementById("key"+idTable);
     filter = input.value.toUpperCase();
     table = document.getElementById("table"+idTable);
     tr = table.getElementsByTagName("tr");
 
-    // Loop through all table rows, and hide those who don't match the search query
-    for (i = 0; i < tr.length; ++i) {
+    console.log(tr);
+
+    for (i = 1; i < tr.length - 1; ++i) {
         allTd = tr[i].getElementsByTagName("td");
         for(j = 0; j < allTd.length; ++j) {
             td = allTd[j];

@@ -118,12 +118,22 @@ class UserView extends View
         $this->displayEndModal();
     }
 
+	/**
+	 * Message to prevent a login already exist
+	 */
+	public function displayErrorCreation()
+	{
+		$this->displayStartModal('Inscription échouée');
+		echo '<div class="alert alert-danger">Il y a eu une erreur dans le formulaire, veuillez vérifier vos information et réessayer</div>';
+		$this->displayEndModal();
+	}
+
     /**
      * Display the subscription button
      */
     public function displayButtonSubscription()
     {
-        //return '<a href="#" id="my-notification-button" class="btn btn-danger">recevoirNotifications</a></br>';
+        return '<a href="#" id="my-notification-button" class="btn btn-danger">recevoirNotifications</a></br>';
     }
 
     /**

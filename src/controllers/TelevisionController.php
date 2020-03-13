@@ -56,7 +56,7 @@ class TelevisionController extends UserController implements Schedule
 
 	        if(is_string($login) && strlen($login) >= 4 && strlen($login) <= 25 &&
 	        	is_string($password) && strlen($password) >= 8 && strlen($password) <= 25 &&
-	            $password !== $passwordConfirm) {
+	            $password === $passwordConfirm) {
 
 		        $codesAde = array();
 		        foreach ($codes as $code) {
@@ -84,7 +84,7 @@ class TelevisionController extends UserController implements Schedule
 			        $this->view->displayErrorLogin();
 		        }
 	        } else {
-        		echo 'erreur mince';
+        		$this->view->displayErrorCreation();
 	        }
         }
 
