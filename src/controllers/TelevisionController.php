@@ -104,8 +104,6 @@ class TelevisionController extends UserController implements Schedule
 	 */
 	public function modify($user)
 	{
-		$current_user = wp_get_current_user();
-
 		$page = get_page_by_title('Gestion des utilisateurs');
 		$linkManageUser = get_permalink($page->ID);
 
@@ -183,12 +181,13 @@ class TelevisionController extends UserController implements Schedule
 					$path = $this->getFilePath($code->getCode());
 					if (file_exists($path)) {
 						if($this->displaySchedule($code->getCode())) {
-							$string .= $this->displaySchedule($code->getCode());
 							$string .= $this->view->displayMidSlide();
+							$string .= $this->displaySchedule($code->getCode());
+							$string .= $this->view->displayEndDiv();
 						}
 					}
 				}
-				$string .= $this->view->displayEndSlide();
+				$string .= $this->view->displayEndDiv();
 			}
 		} else {
 			$string .= $this->displaySchedule($this->model->getCodes()[0]->getCode());

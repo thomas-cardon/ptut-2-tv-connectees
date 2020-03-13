@@ -228,9 +228,7 @@ class TelevisionView extends UserView
      */
     public function displayStartSlide()
     {
-        return '
-            <div id="slideshow-container" class="slideshow-container">
-                <div class="mySlides">';
+        return '<div id="slideshow-container" class="slideshow-container">';
     }
 
     /**
@@ -240,19 +238,6 @@ class TelevisionView extends UserView
      */
     public function displayMidSlide()
     {
-        return '
-                </div>
-              <div class="mySlides">';
-    }
-
-    /**
-     * Close the slideshow
-     *
-     * @return string
-     */
-    public function displayEndSlide()
-    {
-        return '</div>
-           </div>';
+        return '<div class="mySlides">';
     }
 }
