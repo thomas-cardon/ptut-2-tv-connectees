@@ -40,15 +40,16 @@ class UserController extends Controller
 
     /**
      * Delete an user
+     *
      * @param $id   int
      */
     public function delete($id)
     {
         $user = $this->model->get($id);
-        $data = get_userdata($id);
+        $userData = get_userdata($id);
 	    $user->delete();
-        if (in_array("enseignant", $data->roles) || in_array("secretaire", $data->roles) ||
-            in_array("administrator", $data->roles) || in_array("directeuretude", $data->roles)) {
+        if (in_array("enseignant", $userData->roles) || in_array("secretaire", $userData->roles) ||
+            in_array("administrator", $userData->roles) || in_array("directeuretude", $userData->roles)) {
             $modelAlert = new Alert();
             $alerts = $modelAlert->getAuthorListAlert($user->getLogin());
             foreach ($alerts as $alert) {
@@ -56,8 +57,8 @@ class UserController extends Controller
             }
         }
 
-	    if (in_array("secretaire", $data->roles) || in_array("administrator", $data->roles) ||
-	        in_array("directeuretude", $data->roles)) {
+	    if (in_array("secretaire", $userData->roles) || in_array("administrator", $userData->roles) ||
+	        in_array("directeuretude", $userData->roles)) {
 		    $modelInfo = new Information();
 		    $infos = $modelInfo->getAuthorListInformation($user->getId());
 		    foreach ($infos as $info) {
@@ -76,29 +77,35 @@ class UserController extends Controller
      */
     public function deleteAccount()
     {
-        $action = $_POST['deleteMyAccount'];
-        $actionDelete = $_POST['deleteAccount'];
+        $action = filter_input(INPUT_POST, 'deleteMyAccount');
+        $actionDelete = filter_input(INPUT_POST, 'deleteAccount');
         $current_user = wp_get_current_user();
+	    $user = $this->model->get($current_user->ID);
         if (isset($action)) {
-            $pwd = filter_input(INPUT_POST, 'verifPwd');
-            if (wp_check_password($pwd, $current_user->user_pass)) {
-                $code = $this->model->createRandomCode($current_user->ID);
+            $password = filter_input(INPUT_POST, 'verifPwd');
+            if (wp_check_password($password, $current_user->user_pass)) {
 
-                //Le mail en html et utf8
+            	$code = wp_generate_password();
+            	if(!empty($user->getCodeDeleteAccount())) {
+		            $user->updateCode($code);
+	            } else {
+		            $user->createCode($code);
+	            }
+
+                //Build Mail
                 $to = $current_user->user_email;
                 $subject = "Désinscription à la télé-connecté";
-                $message = '     <!DOCTYPE html>
-                                 <html lang="fr">
-                                  <head>
-                                   <title>Désnscription à la télé-connecté</title>
-                                  </head>
-                                  <body>
-                                   <p>Bonjour, vous avez décidé de vous désinscrire sur le site de la Télé Connecté</p>
-                                   <p> Votre code de désinscription est : ' . $code . '.</p>
-                                   <p> Pour vous désinscrire, rendez-vous sur le site : <a href="' . home_url() . '/mon-compte/"> Tv Connectée.</p>
-                                  </body>
-                                 </html>
-                                 ';
+                $message = ' <!DOCTYPE html>
+                             <html lang="fr">
+                             	<head>
+                               		<title>Désnscription à la télé-connecté</title>
+                              	</head>
+                              	<body>
+                               		<p>Bonjour, vous avez décidé de vous désinscrire sur le site de la Télé Connecté</p>
+                               		<p> Votre code de désinscription est : ' . $code . '.</p>
+                               		<p> Pour vous désinscrire, rendez-vous sur le site : <a href="' . home_url() . '/mon-compte/"> Tv Connectée.</p>
+                              	</body>
+                             </html>';
 
                 $headers = array('Content-Type: text/html; charset=UTF-8');
 
@@ -108,14 +115,15 @@ class UserController extends Controller
                 $this->view->displayWrongPassword();
             }
         } elseif (isset($actionDelete)) {
-            $code = $_POST['codeDelete'];
-            $userCode = $this->model->getCodeDeleteAccount($current_user->ID);
-            if ($code == $userCode[0]['Code']) {
-                $this->model->deleteCode($current_user->ID);
-	            $user = $this->model->get($current_user->ID);
+            $code = filter_input(INPUT_POST, 'codeDelete');
+            $userCode = $user->getCodeDeleteAccount();
+            if ($code == $userCode) {
+	            $user->deleteCode();
 	            $user->delete();
                 $this->view->displayModificationValidate();
             } else {
+            	echo 'Code '.$code;
+            	echo 'User code '.$userCode;
                 $this->view->displayWrongPassword();
             }
         }

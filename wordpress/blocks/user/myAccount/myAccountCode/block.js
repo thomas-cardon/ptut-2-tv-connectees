@@ -1,3 +1,6 @@
+/**
+ * Build the block
+ */
 ( function( blocks, element, data  ) {
 
     var el = element.createElement;

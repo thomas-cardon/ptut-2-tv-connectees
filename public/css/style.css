@@ -2,11 +2,23 @@
     color: red;
 }
 
-.wp-block-tvconnecteeamu-test {
-    color: darkred;
-    background: #fcc;
-    border: 2px solid #c99;
-    padding: 20px;
+.add_icon {
+    width: 100px !important;
+    height: auto;
+}
+
+.icon:hover, .icon:focus {
+    color: white;
+}
+
+.btn_list {
+    margin-top: 5px;
+}
+
+.card {
+    position: static !important;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .trente {

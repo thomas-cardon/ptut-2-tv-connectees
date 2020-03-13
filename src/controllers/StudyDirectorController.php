@@ -2,12 +2,16 @@
 
 namespace Controllers;
 
-
-use Models\StudyDirector;
 use Models\User;
 use Views\StudyDirectorView;
-use WP_User;
 
+/**
+ * Class StudyDirectorController
+ *
+ * Manage study director (Create, update, delete, display)
+ *
+ * @package Controllers
+ */
 class StudyDirectorController extends UserController implements Schedule
 {
 
@@ -31,16 +35,21 @@ class StudyDirectorController extends UserController implements Schedule
         $this->view = new StudyDirectorView();
     }
 
-    public function displayMySchedule()
-    {
-        $current_user = wp_get_current_user();
-        $codes = unserialize($current_user->code);
-        if($this->displaySchedule($codes[0])) {
-            return $this->displaySchedule($codes[0]);
-        } else {
-            return $this->view->displayNoStudy();
-        }
-    }
+	/**
+	 * Display the schedule of the study director
+	 *
+	 * @return bool|mixed|string
+	 */
+	public function displayMySchedule()
+	{
+		$current_user = wp_get_current_user();
+		$user = $this->model->get($current_user->ID);
+		if($this->displaySchedule($user->getCodes()[0]->getCode())) {
+			return $this->displaySchedule($user->getCodes()[0]->getCode());
+		} else {
+			return $this->view->displayNoStudy();
+		}
+	}
 
     /**
      * Insert a study director in the database
@@ -79,7 +88,7 @@ class StudyDirectorController extends UserController implements Schedule
                     $this->view->displayErrorInsertion();
                 }
             } else {
-                $this->view->displayBadPassword();
+	            $this->view->displayErrorCreation();
             }
         }
         return $this->view->displayCreateDirector();

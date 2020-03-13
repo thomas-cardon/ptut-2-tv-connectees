@@ -85,19 +85,34 @@ class InformationController extends Controller
 			$this->model->setType($type);
 			$filename    = $_FILES['contentFile']['name'];
 			$fileTmpName = $_FILES['contentFile']['tmp_name'];
-			$this->registerFile($filename, $fileTmpName, $type);
+			$explodeName = explode('.', $filename);
+			$goodExtension = ['jpg', 'jpeg', 'gif', 'png', 'svg'];
+			if(in_array(end($explodeName), $goodExtension)) {
+				$this->registerFile($filename, $fileTmpName);
+			} else {
+				echo 'image non valide';
+			}
 		} elseif ($actionTab) { // If the information is a table
 			$type = "tab";
 			$this->model->setType($type);
 			$filename    = $_FILES['contentFile']['name'];
 			$fileTmpName = $_FILES['contentFile']['tmp_name'];
-			$this->registerFile($filename, $fileTmpName, $type);
+			$explodeName = explode('.', $filename);
+			$goodExtension = ['xls', 'xlsx', 'ods'];
+			if(in_array(end($explodeName), $goodExtension)) {
+				$this->registerFile($filename, $fileTmpName);
+			}
 		} else if ($actionPDF) {
 			$type = "pdf";
 			$this->model->setType($type);
 			$filename    = $_FILES['contentFile']['name'];
-			$fileTmpName = $_FILES['contentFile']['tmp_name'];
-			$this->registerFile($filename, $fileTmpName, $type);
+			$explodeName = explode('.', $filename);
+			if(end($explodeName) == 'pdf') {
+				$fileTmpName = $_FILES['contentFile']['tmp_name'];
+				$this->registerFile($filename, $fileTmpName);
+			} else {
+				echo 'PDF non valide';
+			}
 		} else if ($actionEvent) {
 			$type       = "event";
 			$this->model->setType($type);
@@ -108,7 +123,11 @@ class InformationController extends Controller
 				$this->model->setId(null);
 				$filename    = $_FILES['contentFile']['name'][$i];
 				$fileTmpName = $_FILES['contentFile']['tmp_name'][$i];
-				$this->registerFile( $filename, $fileTmpName, $type );
+				$explodeName = explode('.', $filename);
+				$goodExtension = ['jpg', 'jpeg', 'gif', 'png', 'svg', 'pdf'];
+				if(in_array(end($explodeName), $goodExtension)) {
+					$this->registerFile($filename, $fileTmpName);
+				}
 			}
 		}
 
@@ -136,9 +155,8 @@ class InformationController extends Controller
 	 *
 	 * @param $filename     string
 	 * @param $tmpName      string
-	 * @param $type         string
 	 */
-	public function registerFile($filename, $tmpName, $type)
+	public function registerFile($filename, $tmpName)
 	{
 		$current_user = wp_get_current_user();
 		$id               = "temporary";
@@ -163,7 +181,7 @@ class InformationController extends Controller
 
 			$this->model->setId($id);
 
-			$md5Name = md5_file($name);
+			$md5Name = $id.md5_file($name);
 			rename($name, $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH. $md5Name . '.' . $extension_upload);
 
 			$content = $md5Name. '.' . $extension_upload;
@@ -209,13 +227,37 @@ class InformationController extends Controller
 				$this->model->setEndDate($endDate);
 			} else {
 
-				$this->model->setTitle($title);
+					$this->model->setTitle($title);
 				$this->model->setEndDate($endDate);
 
 				// Change the content
 				if ($_FILES["contentFile"]['size'] != 0 ) { // If it's a new file
-					$this->deleteFile($this->model->getId());   //$_SERVER['DOCUMENT_ROOT'].$this->model->getContent()
-					$this->registerFile($_FILES["contentFile"]['name'], $_FILES["contentFile"]['tmp_name'], $this->model->getType());
+
+					$filename = $_FILES["contentFile"]['name'];
+
+					if($this->model->getType() == 'img') {
+						$explodeName = explode('.', $filename);
+						$goodExtension = ['jpg', 'jpeg', 'gif', 'png', 'svg'];
+						if(in_array(end($explodeName), $goodExtension)) {
+							$this->deleteFile($this->model->getId());   //$_SERVER['DOCUMENT_ROOT'].$this->model->getContent()
+							$this->registerFile($filename, $_FILES["contentFile"]['tmp_name']);
+						}
+
+					} else if($this->model->getType() == 'pdf') {
+						$explodeName = explode('.', $filename);
+						if(end($explodeName) == 'pdf') {
+							$this->deleteFile($this->model->getId());   //$_SERVER['DOCUMENT_ROOT'].$this->model->getContent()
+							$this->registerFile($filename, $_FILES["contentFile"]['tmp_name']);
+						}
+
+					} else if($this->model->getType() == 'tab') {
+						$explodeName = explode('.', $filename);
+						$goodExtension = ['xls', 'xlsx', 'ods'];
+						if(in_array(end($explodeName), $goodExtension)) {
+							$this->deleteFile($this->model->getId());   //$_SERVER['DOCUMENT_ROOT'].$this->model->getContent()
+							$this->registerFile($filename, $_FILES["contentFile"]['tmp_name']);
+						}
+					}
 				}
 			}
 
@@ -293,9 +335,9 @@ class InformationController extends Controller
 	public function endDateCheckInfo($id, $endDate)
 	{
 		if ($endDate <= date("Y-m-d")) {
-			$this->model = $this->model->get($id);
-			$this->model->delete();
+			$information = $this->model->get($id);
 			$this->deleteFile($id);
+			$information->delete();
 		}
 	} //endDateCheckInfo()
 
@@ -347,7 +389,6 @@ class InformationController extends Controller
 			if($extension == "pdf") {
 				echo '
 				<div class="canvas_pdf" id="'.$event->getContent().'">
-					<canvas id="the-canvas-'.$event->getContent().'"></canvas>
 				</div>';
 				//echo do_shortcode('[pdf-embedder url="'.$event->getContent().'"]');
 			} else {

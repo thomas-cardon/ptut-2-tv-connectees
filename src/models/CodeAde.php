@@ -41,9 +41,9 @@ class CodeAde extends Model implements Entity
 	{
 		$request = $this->getDatabase()->prepare('INSERT INTO code_ade (type, title, code) VALUES (:type, :title, :code)');
 
-		$request->bindParam(':title', $this->getTitle());
-		$request->bindParam(':code', $this->getCode());
-		$request->bindParam(':type', $this->getType());
+		$request->bindParam(':title', $this->getTitle(), PDO::PARAM_STR);
+		$request->bindParam(':code', $this->getCode(), PDO::PARAM_STR);
+		$request->bindParam(':type', $this->getType(), PDO::PARAM_STR);
 
 		$request->execute();
 
@@ -57,10 +57,10 @@ class CodeAde extends Model implements Entity
 	{
 		$request = $this->getDatabase()->prepare('UPDATE code_ade SET title = :title, code = :code, type = :type WHERE id = :id');
 
-		$request->bindParam(':id', $this->getId());
-		$request->bindParam(':title', $this->getTitle());
-		$request->bindParam(':code', $this->getCode());
-		$request->bindParam(':type', $this->getType());
+		$request->bindParam(':id', $this->getId(), PDO::PARAM_INT);
+		$request->bindParam(':title', $this->getTitle(), PDO::PARAM_STR);
+		$request->bindParam(':code', $this->getCode(), PDO::PARAM_STR);
+		$request->bindParam(':type', $this->getType(), PDO::PARAM_STR);
 
 		$request->execute();
 
@@ -74,7 +74,7 @@ class CodeAde extends Model implements Entity
 	{
 		$request = $this->getDatabase()->prepare( 'DELETE FROM code_ade WHERE id = :id');
 
-		$request->bindValue(':id', $this->getId());
+		$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
 
 		$request->execute();
 
@@ -88,7 +88,7 @@ class CodeAde extends Model implements Entity
 	{
 		$request = $this->getDatabase()->prepare('SELECT * FROM code_ade WHERE id = :id');
 
-		$request->bindParam(':id', $id);
+		$request->bindParam(':id', $id, PDO::PARAM_INT);
 
 		$request->execute();
 
@@ -134,12 +134,20 @@ class CodeAde extends Model implements Entity
 		return $listEntity;
 	}
 
+	/**
+	 * Check if a code ADE already exist with this title or with this code
+	 *
+	 * @param $title
+	 * @param $code
+	 *
+	 * @return array|mixed
+	 */
 	public function checkCode($title, $code)
 	{
 		$request = $this->getDatabase()->prepare('SELECT * FROM code_ade WHERE title = :title OR code = :code');
 
-		$request->bindParam(':title', $title);
-		$request->bindParam(':code', $code);
+		$request->bindParam(':title', $title, PDO::PARAM_STR);
+		$request->bindParam(':code', $code, PDO::PARAM_STR);
 
 		$request->execute();
 
@@ -157,29 +165,43 @@ class CodeAde extends Model implements Entity
     {
 	    $request = $this->getDatabase()->prepare('SELECT * FROM code_ade WHERE type = :type ORDER BY id DESC');
 
-	    $request->bindParam(':type', $type);
+	    $request->bindParam(':type', $type, PDO::PARAM_STR);
 
 	    $request->execute();
 
 	    return $this->setListEntity($request->fetchAll(PDO::FETCH_ASSOC));
     }
 
+	/**
+	 * Get a code ADE thanks his code
+	 *
+	 * @param $code
+	 *
+	 * @return mixed|CodeAde
+	 */
 	public function getByCode($code)
 	{
 		$request = $this->getDatabase()->prepare('SELECT * FROM code_ade WHERE code = :code');
 
-		$request->bindParam(':code', $code);
+		$request->bindParam(':code', $code, PDO::PARAM_STR);
 
 		$request->execute();
 
 		return $this->setEntity($request->fetch(PDO::FETCH_ASSOC));
 	}
 
+	/**
+	 *
+	 *
+	 * @param $id
+	 *
+	 * @return array|mixed
+	 */
 	public function getByAlert($id)
 	{
 		$request = $this->getDatabase()->prepare('SELECT * FROM code_ade JOIN code_alert ON code_ade.id = code_alert.id_code_ade WHERE id_alert = :id');
 
-		$request->bindParam(':id', $id);
+		$request->bindParam(':id', $id, PDO::PARAM_INT);
 
 		$request->execute();
 

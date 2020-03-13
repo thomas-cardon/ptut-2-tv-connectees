@@ -70,7 +70,7 @@ class StudentView extends UserView
 	    	$row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), $codesTitle[0], $codesTitle[1], $codesTitle[2], $this->buildLinkForModify($linkManageUser.'/'.$user->getId())];
 	    }
 
-	    return $this->displayAll($name, $title, $header, $row);
+	    return $this->displayAll($name, $title, $header, $row, 'student');
     }
 
 	/**
@@ -91,8 +91,9 @@ class StudentView extends UserView
         $form = '
          <form method="post">
             <h2>' . $user->getLogin() . '</h2>
-            <label for="modifYear">Année</label>
-            <select id="modifYear" class="form-control" name="modifYear">';
+            <div class="form-group">
+            	<label for="modifYear">Année</label>
+            	<select id="modifYear" class="form-control" name="modifYear">';
 
         if($user->getCodes()[0] instanceof CodeAde) {
         	$form .= '<option value="' . $user->getCodes()[0]->getCode() . '">' . $user->getCodes()[0]->getTitle() . '</option>';
@@ -105,10 +106,12 @@ class StudentView extends UserView
 	        $form .= '<option value="' . $year->getCode() . '">' . $year->getTitle() . '</option >';
         }
 	    $form .= '
-            </optgroup>
-        </select>
-        <label for="modifGroup">Groupe</label>
-        <select id="modifGroup" class="form-control" name="modifGroup">';
+            	</optgroup>
+        	</select>
+        </div>
+        <div class="form-group">
+        	<label for="modifGroup">Groupe</label>
+        	<select id="modifGroup" class="form-control" name="modifGroup">';
 
         if($user->getCodes()[1] instanceof CodeAde) {
         	$form .= '<option value="' . $user->getCodes()[1]->getCode() . '">' . $user->getCodes()[1]->getTitle() . '</option>';
@@ -120,10 +123,12 @@ class StudentView extends UserView
 	        $form .= '<option value="' . $group->getCode() . '">' . $group->getTitle() . '</option>';
         }
 	    $form .= '
-            </optgroup>
-        </select>
-        <label for="modifHalfgroup">Demi-groupe</label>
-        <select id="modifHalfgroup" class="form-control" name="modifHalfgroup">';
+            	</optgroup>
+        	</select>
+        </div>
+        <div class="form-group">
+        	<label for="modifHalfgroup">Demi-groupe</label>
+        	<select id="modifHalfgroup" class="form-control" name="modifHalfgroup">';
 
         if($user->getCodes()[2] instanceof CodeAde) {
         	$form .= '<option value="' . $user->getCodes()[2]->getCode() . '">' . $user->getCodes()[2]->getTitle() . '</option>';
@@ -135,8 +140,9 @@ class StudentView extends UserView
 	        $form .= '<option value="' . $halfGroup->getCode() . '">' . $halfGroup->getTitle() . '</option>';
         }
 	    $form .= '
-	        	</optgroup>
-	        </select>
+	        		</optgroup>
+	        	</select>
+	        </div>
 	        <input name="modifvalider" type="submit" value="Valider">
 	    	<a href="' . $linkManageUser . '">Annuler</a>
 	    </form>';
@@ -161,7 +167,7 @@ class StudentView extends UserView
 	            <h5 class="modal-title"> Choix des emplois du temps</h5>
 	          </div>
 	          <div class="modal-body">
-		          <p>Bienvenue sur l\'écran connecté, sélectionner vos emplois du temps afin de pouvoir utiliser ce site</p>
+		          <p>Bienvenue sur l\'écran connecté, sélectionnez vos emplois du temps afin de pouvoir utiliser ce site</p>
 		          <form method="post">
 		            <label for="selectYears">Sélectionne ton année</label>
 		            <select class="form-control firstSelect" id="selectYears" name="selectYears">

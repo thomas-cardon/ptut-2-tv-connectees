@@ -55,6 +55,7 @@ add_action('downloadFileICS', 'downloadFileICS_func');
 
 /**
  * Upload the schedule of users
+ *
  * @param $users    User[]
  */
 function downloadSchedule($users)

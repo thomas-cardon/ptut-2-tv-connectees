@@ -57,11 +57,11 @@ class Alert extends Model implements Entity
     {
 	    $request = $this->getDatabase()->prepare('INSERT INTO alert (author, content, creation_date, end_date, for_everyone) VALUES (:author, :content, :creation_date, :end_date, :for_everyone)');
 
-	    $request->bindValue(':author', $this->getAuthor());
-	    $request->bindValue(':content', $this->getContent());
-	    $request->bindValue(':creation_date', $this->getCreationDate());
-	    $request->bindValue(':end_date', $this->getEndDate());
-	    $request->bindValue(':for_everyone', $this->isForEveryone());
+	    $request->bindValue(':author', $this->getAuthor(), PDO::PARAM_INT);
+	    $request->bindValue(':content', $this->getContent(), PDO::PARAM_STR);
+	    $request->bindValue(':creation_date', $this->getCreationDate(), PDO::PARAM_STR);
+	    $request->bindValue(':end_date', $this->getEndDate(), PDO::PARAM_STR);
+	    $request->bindValue(':for_everyone', $this->isForEveryone(), PDO::PARAM_INT);
 
 	    $request->execute();
 
@@ -72,8 +72,8 @@ class Alert extends Model implements Entity
 	    	if($code !== 'all' || $code !== 0) {
 			    $request = $this->getDatabase()->prepare('INSERT INTO code_alert (id_alert, id_code_ade) VALUES (:idAlert, :idCodeAde)');
 
-			    $request->bindParam(':idAlert', $id);
-			    $request->bindValue(':idCodeAde', $code->getId());
+			    $request->bindParam(':idAlert', $id, PDO::PARAM_INT);
+			    $request->bindValue(':idCodeAde', $code->getId(), PDO::PARAM_INT);
 
 			    $request->execute();
 		    }
@@ -89,17 +89,17 @@ class Alert extends Model implements Entity
 	{
 		$request = $this->getDatabase()->prepare('UPDATE alert SET content = :content, end_date = :endDate, for_everyone = :for_everyone WHERE id = :id');
 
-		$request->bindValue(':id', $this->getId());
-		$request->bindValue(':content', $this->getContent());
-		$request->bindValue(':endDate', $this->getEndDate());
-		$request->bindValue(':for_everyone', $this->isForEveryone());
+		$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
+		$request->bindValue(':content', $this->getContent(), PDO::PARAM_STR);
+		$request->bindValue(':endDate', $this->getEndDate(), PDO::PARAM_STR);
+		$request->bindValue(':for_everyone', $this->isForEveryone(), PDO::PARAM_INT);
 
 		$request->execute();
 
 		if(!is_null($this->getAlertLinkToCode()[0])) {
 			$request = $this->getDatabase()->prepare('DELETE FROM code_alert WHERE id_alert = :id_alert');
 
-			$request->bindValue(':id_alert', $this->getId());
+			$request->bindValue(':id_alert', $this->getId(), PDO::PARAM_INT);
 
 			$request->execute();
 		}
@@ -109,8 +109,8 @@ class Alert extends Model implements Entity
 			if($code->getCode() !== 'all' || $code->getCode() !== 0) {
 				$request = $this->getDatabase()->prepare('INSERT INTO code_alert (id_alert, id_code_ade) VALUES (:idAlert, :idCodeAde)');
 
-				$request->bindValue(':idAlert', $this->getId());
-				$request->bindValue(':idCodeAde', $code->getId());
+				$request->bindValue(':idAlert', $this->getId(), PDO::PARAM_INT);
+				$request->bindValue(':idCodeAde', $code->getId(), PDO::PARAM_INT);
 
 				$request->execute();
 			}
@@ -126,14 +126,14 @@ class Alert extends Model implements Entity
 	{
 		$request = $this->getDatabase()->prepare('DELETE FROM alert WHERE id = :id');
 
-		$request->bindValue(':id', $this->getId());
+		$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
 
 		$request->execute();
 
 		if(!is_null($this->getAlertLinkToCode()[0])) {
 			$request = $this->getDatabase()->prepare('DELETE FROM code_alert WHERE id_alert = :id');
 
-			$request->bindValue(':id', $this->getId());
+			$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
 
 			$request->execute();
 		}
@@ -155,7 +155,7 @@ class Alert extends Model implements Entity
 															JOIN wp_users ON alert.author = wp_users.ID 
 															WHERE alert.id = :id');
 
-		$request->bindParam(':id', $id);
+		$request->bindParam(':id', $id, PDO::PARAM_INT);
 
 		$request->execute();
 
@@ -187,7 +187,7 @@ class Alert extends Model implements Entity
     {
 	    $request = $this->getDatabase()->prepare('SELECT * FROM alert JOIN wp_users ON alert.author = wp_users.ID WHERE author = :author ORDER BY end_date ASC');
 
-	    $request->bindParam(':author', $author);
+	    $request->bindParam(':author', $author, PDO::PARAM_INT);
 
 	    $request->execute();
 
@@ -210,7 +210,7 @@ class Alert extends Model implements Entity
 															JOIN code_user ON code_ade.id = code_user.id_code_ade
 															WHERE code_user.id_user = :id ORDER BY end_date ASC');
 
-		$request->bindParam(':id', $id);
+		$request->bindParam(':id', $id, PDO::PARAM_INT);
 
 		$request->execute();
 
@@ -224,18 +224,23 @@ class Alert extends Model implements Entity
 	{
 		$request = $this->getDatabase()->prepare('SELECT * FROM alert WHERE for_everyone = 1 ORDER BY end_date ASC');
 
-		$request->bindParam(':id', $id);
+		$request->bindParam(':id', $id, PDO::PARAM_INT);
 
 		$request->execute();
 
 		return $this->setListEntity($request->fetchAll(PDO::FETCH_ASSOC));
 	}
 
+	/**
+	 * Get all link between the alert and the codes ADE
+	 *
+	 * @return array|Alert
+	 */
 	public function getAlertLinkToCode()
 	{
 		$request = $this->getDatabase()->prepare('SELECT * FROM code_alert JOIN alert ON code_alert.id_alert = alert.id WHERE id_alert = :id_alert');
 
-		$request->bindValue(':id_alert', $this->getId());
+		$request->bindValue(':id_alert', $this->getId(), PDO::PARAM_INT);
 
 		$request->execute();
 

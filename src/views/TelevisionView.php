@@ -6,17 +6,24 @@ namespace Views;
 use Models\CodeAde;
 use Models\User;
 
+/**
+ * Class TelevisionView
+ *
+ * Contain all view for television (Forms, tables)
+ *
+ * @package Views
+ */
 class TelevisionView extends UserView
 {
 
     /**
-     * Affiche un select permettant de choisir une année un groupe ou un demi-groupe déjà enregistré
+     * Display a select of code ADE
      *
-     * @param $years        CodeAde[] Années enregistrées dans la base de données
-     * @param $groups       CodeAde[] Groupes enregistrés dans la base de données
-     * @param $halfgroups   CodeAde[] Demi-groupes enregistrés dans la base de données
+     * @param $years        CodeAde[]
+     * @param $groups       CodeAde[]
+     * @param $halfgroups   CodeAde[]
      *
-     * @return string       Renvoie le select
+     * @return string
      */
     public function displaySelect($years, $groups, $halfgroups)
     {
@@ -59,15 +66,23 @@ class TelevisionView extends UserView
         $form = '
         <form method="post" id="registerTvForm">
             <h2> Compte télévision</h2>
-            <label for="loginTv">Login</label>
-            <input type="text" class="form-control text-center modal-sm" name="loginTv" placeholder="Nom de compte" required="">
-            <label for="pwdTv">Mot de passe</label>
-            <input type="password" class="form-control text-center modal-sm" id="pwdTv" name="pwdTv" placeholder="Mot de passe" required="" onkeyup=checkPwd("Tv")>
-            <input type="password" class="form-control text-center modal-sm" id="pwdConfTv" name="pwdConfirmTv" placeholder="Confirmer le Mot de passe" required="" onkeyup=checkPwd("Tv")>
-            <label>Premier emploi du temps</label>'.
-            $this->buildSelectCode($years, $groups, $halfGroups) .'
+            <div class="form-group">
+            	<label for="loginTv">Login</label>
+            	<input type="text" class="form-control" name="loginTv" placeholder="Nom de compte" required="">
+            	<small id="passwordHelpBlock" class="form-text text-muted">Votre login doit contenir entre 4 et 25 caractère</small>
+            </div>
+            <div class="form-group">
+            	<label for="pwdTv">Mot de passe</label>
+            	<input type="password" class="form-control" id="pwdTv" name="pwdTv" placeholder="Mot de passe" minlength="8" maxlength="25" required="" onkeyup=checkPwd("Tv")>
+            	<input type="password" class="form-control" id="pwdConfTv" name="pwdConfirmTv" placeholder="Confirmer le Mot de passe" minlength="8" maxlength="25" required="" onkeyup=checkPwd("Tv")>
+            	<small id="passwordHelpBlock" class="form-text text-muted">Votre mot de passe doit contenir entre 8 et 25 caractère</small>
+            </div>
+            <div class="form-group">
+            	<label>Premier emploi du temps</label>'.
+                $this->buildSelectCode($years, $groups, $halfGroups) .'
+            </div>
             <input type="button" onclick="addButtonTv()" value="Ajouter des emplois du temps">
-            <input type="submit" id="validTv" name="createTv" value="Créer">
+            <button type="submit" id="validTv" name="createTv">Créer</button>
         </form>';
 
 	    return $form;
@@ -96,7 +111,7 @@ class TelevisionView extends UserView
 		    $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), sizeof($user->getCodes()), $this->buildLinkForModify($linkManageUser.'/'.$user->getId())];
 	    }
 
-	    return $this->displayAll($name, $title, $header, $row);
+	    return $this->displayAll($name, $title, $header, $row, 'tele');
     }
 
     /**
@@ -115,7 +130,7 @@ class TelevisionView extends UserView
         $string = '
          <form method="post" id="registerTvForm">
             <h2>' . $user->getLogin() . '</h2>
-            <label> Emploi du temps</label>';
+            <label id="selectId1"> Emploi du temps</label>';
 
         foreach ($user->getCodes() as $code) {
             $count = $count + 1;
@@ -213,9 +228,7 @@ class TelevisionView extends UserView
      */
     public function displayStartSlide()
     {
-        return '
-            <div id="slideshow-container" class="slideshow-container">
-                <div class="mySlides">';
+        return '<div id="slideshow-container" class="slideshow-container">';
     }
 
     /**
@@ -225,19 +238,6 @@ class TelevisionView extends UserView
      */
     public function displayMidSlide()
     {
-        return '
-                </div>
-              <div class="mySlides">';
-    }
-
-    /**
-     * Close the slideshow
-     *
-     * @return string
-     */
-    public function displayEndSlide()
-    {
-        return '</div>
-           </div>';
+        return '<div class="mySlides">';
     }
 }

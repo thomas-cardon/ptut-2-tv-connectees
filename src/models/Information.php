@@ -58,12 +58,12 @@ class Information extends Model implements Entity
     {
 	    $request = $this->getDatabase()->prepare('INSERT INTO informations (title, author, creation_date, end_date, content, type) VALUES (:title, :author, :creation_date, :end_date, :content, :type)');
 
-	    $request->bindParam(':title', $this->getTitle());
-	    $request->bindParam(':author', $this->getAuthor());
-	    $request->bindParam(':creation_date', $this->getCreationDate());
-	    $request->bindParam(':end_date', $this->getEndDate());
-	    $request->bindParam(':content', $this->getContent());
-	    $request->bindParam(':type', $this->getType());
+	    $request->bindParam(':title', $this->getTitle(), PDO::PARAM_STR);
+	    $request->bindParam(':author', $this->getAuthor(), PDO::PARAM_INT);
+	    $request->bindParam(':creation_date', $this->getCreationDate(), PDO::PARAM_STR);
+	    $request->bindParam(':end_date', $this->getEndDate(), PDO::PARAM_STR);
+	    $request->bindParam(':content', $this->getContent(), PDO::PARAM_STR);
+	    $request->bindParam(':type', $this->getType(), PDO::PARAM_STR);
 
 	    $request->execute();
 
@@ -77,10 +77,10 @@ class Information extends Model implements Entity
 	{
 		$request = $this->getDatabase()->prepare('UPDATE informations SET title = :title, content = :content, end_date = :endDate WHERE ID_info = :id');
 
-		$request->bindParam(':id', $this->getId());
-		$request->bindParam(':title', $this->getTitle());
-		$request->bindParam(':content', $this->getContent());
-		$request->bindParam(':endDate', $this->getEndDate());
+		$request->bindParam(':id', $this->getId(), PDO::PARAM_INT);
+		$request->bindParam(':title', $this->getTitle(), PDO::PARAM_STR);
+		$request->bindParam(':content', $this->getContent(), PDO::PARAM_STR);
+		$request->bindParam(':endDate', $this->getEndDate(), PDO::PARAM_STR);
 
 		$request->execute();
 
@@ -94,7 +94,7 @@ class Information extends Model implements Entity
     {
 	    $request = $this->getDatabase()->prepare('DELETE FROM informations WHERE ID_info = :id');
 
-	    $request->bindValue(':id', $this->getId());
+	    $request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
 
 	    $request->execute();
 
@@ -138,7 +138,7 @@ class Information extends Model implements Entity
     {
 	    $request = $this->getDatabase()->prepare( 'SELECT * FROM informations JOIN wp_users ON informations.author = wp_users.ID WHERE author = :author ORDER BY end_date');
 
-	    $request->bindParam(':author', $author);
+	    $request->bindParam(':author', $author, PDO::PARAM_INT);
 
 	    $request->execute();
 
@@ -156,7 +156,7 @@ class Information extends Model implements Entity
     {
 	    $request = $this->getDatabase()->prepare('SELECT * FROM informations JOIN wp_users ON informations.author = wp_users.ID WHERE ID_info = :id');
 
-	    $request->bindParam(':id', $id);
+	    $request->bindParam(':id', $id, PDO::PARAM_INT);
 
 	    $request->execute();
 

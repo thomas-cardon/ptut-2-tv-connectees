@@ -4,7 +4,7 @@ var latitude = 43.5156;
 var url = "https://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&lang=fr&APPID=ae546c64c1c36e47123b3d512efa723e";
 
 /**
- * Affiche la météo
+ * Display the weather
  */
 function refreshWeather() {
     meteoRequest.open('GET', url, true);
@@ -40,6 +40,7 @@ meteoRequest.onload = function () {
     }
 };
 
+/** Getter **/
 function getAlt(json) {
     return json["weather"][0]["description"];
 }

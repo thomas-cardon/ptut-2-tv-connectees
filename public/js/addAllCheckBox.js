@@ -1,5 +1,6 @@
 /**
- * Active toutes les checkbox
+ * Valid all checkbox
+ *
  * @param source
  * @param name
  */
