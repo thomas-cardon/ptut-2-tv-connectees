@@ -24,28 +24,52 @@ class AlertView extends View
 	 *
 	 * @return string
 	 */
-	public function createForm($years, $groups, $halfGroups)
+	public function creationForm($years, $groups, $halfGroups)
 	{
 		$dateMin = date('Y-m-d', strtotime("+1 day")); // Fix the date min to the next day
 
 		return '
-        <form id="alert" method="post">
+        <form method="post">
             <div class="form-group">
                 <label for="content">Contenu</label>
-                <input class="form-control" type="text" id="content" name="content" required maxlength="280" required>
+                <input class="form-control" type="text" id="content" name="content" placeholder="280 caractères au maximum" minlength="4" maxlength="280" required>
 			</div>
             <div class="form-group">
-                <label for="endDateAlert">Date d\'expiration</label>
-                <input class="form-control" type="date" id="endDateAlert" name="endDateAlert" min="' . $dateMin . '" required>
-            </div>
+				<label>Date d\'expiration</label>
+				<input type="date" class="form-control" id="expirationDate" name="expirationDate" min="'.$dateMin.'" required>
+			</div>
             <div class="form-group">
                 <label for="selectAlert">Année, groupe, demi-groupes concernés</label>
                 ' . $this->buildSelectCode($years, $groups, $halfGroups) . '
             </div>
             <input type="button" onclick="addButtonAlert()" value="+">
-            <button type="submit" name="submit">Publier</button>
-        </form>';
-	} //displayCreationForm();
+            <button type="submit" class="btn button_ecran" name="submit">Valider</button>
+        </form>
+        <a href="'.esc_url(get_permalink(get_page_by_title('Gérer les alertes'))).'">Voir les alertes</a>'.$this->contextCreateAlert();
+	}
+
+    /**
+     * Explain how the alert's display
+     *
+     * @return string
+     */
+    public function contextCreateAlert()
+    {
+        return '
+		<hr class="half-rule">
+		<div>
+			<h2>Les alertes</h2>
+			<p class="lead">Lors de la création de votre alerte, celle-ci sera posté le lendemain sur tous les téléviseurs qui utilisent le projet de l\'écran connecté.</p>
+			<p class="lead">Les alertes que vous créez seront affichées avec les alertes déjà présentes.</p>
+			<p class="lead">Les alertes sont affichées les un après les autres défilant à la chaîne en bas des téléviseurs.</p>
+			<div class="text-center">
+				<figure class="figure">
+					<img src="'.TV_PLUG_PATH.'public/img/presentation.png" class="figure-img img-fluid rounded" alt="Représentation d\'un téléviseur">
+					<figcaption class="figure-caption">Représentation d\'un téléviseur</figcaption>
+				</figure>
+			</div>
+		</div>';
+    }
 
 	/**
 	 * Display form for modify alert
@@ -59,30 +83,26 @@ class AlertView extends View
 	 */
 	public function modifyForm($alert, $years, $groups, $halfGroups)
 	{
-		$page = get_page_by_title('Gérer les alertes');
-		$linkManageAlert = get_permalink($page->ID);
-
 		$dateMin = date('Y-m-d', strtotime("+1 day"));
 		$endDate = date('Y-m-d', strtotime($alert->getEndDate()));
 		$codes = $alert->getCodes();
 
 		$count = 1;
 		$form = '
-        <form id="alert" method="post">
-        <div class="form-group">
-            <label for="contentInfo">Contenu</label>
-            <input class="form-control" id="contentInfo" type="text" name="contentInfo" value="' . $alert->getContent() . '" maxlength="280">
-        </div>
-        <div class="form-group">
-            <label for="endDateInfo">Date d\'expiration</label>
-            <input class="form-control" id="endDateInfo" type="date" name="endDateInfo" min="' . $dateMin . '" value = "' . $endDate . '" required >
-        </div>';
+        <a href="'.esc_url(get_permalink(get_page_by_title('Gérer les alertes'))).'">< Retour</a>
+        <form method="post">
+            <div class="form-group">
+                <label for="content">Contenu</label>
+                <input type="text" class="form-control" id="content" name="content" value="'.$alert->getContent().'" placeholder="280 caractères au maximum" minlength="4" maxlength="280" required>
+            </div>
+            <div class="form-group">
+                <label for="expirationDate">Date d\'expiration</label>
+                <input type="date" class="form-control" id="expirationDate" name="expirationDate" min="' . $dateMin . '" value = "' . $endDate . '" required>
+            </div>';
 
 		foreach ($codes as $code) {
 			if ($count == 1) {
-				$form .= '
-				<label for="selectId' . $count . '">Année, groupe, demi-groupes concernés</label>'.
-				           $this->buildSelectCode($years, $groups, $halfGroups, $code, $count);
+				$form .= '<label for="selectId' . $count . '">Année, groupe, demi-groupes concernés</label>'.$this->buildSelectCode($years, $groups, $halfGroups, $code, $count);
 			} else {
 				$form .= '
 				<div class="row">'.
@@ -94,12 +114,22 @@ class AlertView extends View
 		}
 
 		$form .= '<input type="button" onclick="addButtonAlert()" value="+">    
-                    <input type="submit" name="validateChange" value="Valider" ">
-                    <a href="' . $linkManageAlert . '">Annuler</a>
-                 </form>';
+                  <button type="submit" class="btn button_ecran" name="submit">Valider</button>
+                  <button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer le(s) élément(s) sélectionné(s) ?\');">Supprimer</button>
+                </form>'.$this->contextModify();
 
 		return $form;
-	} //displayModifyAlertForm()
+	}
+
+    public function contextModify()
+    {
+        return '
+		<hr class="half-rule">
+		<div>
+			<p class="lead">La modification d\'une alerte prend effet comme pour la création, le lendemain.</p>
+			<p class="lead">Vous pouvez donc prolonger le temps d\'expiration ou bien modifier le contenu de votre alerte.</p>
+		</div>';
+    }
 
     /**
      * Display the information of the alert
@@ -125,7 +155,24 @@ class AlertView extends View
 	    }
 
 	    return $this->displayAll($name, $title, $header, $row);
-    } //displayAllAlert()
+    }
+
+    public function contextDisplayAll()
+    {
+        return '
+		<div class="row">
+			<div class="col-6 mx-auto col-md-6 order-md-2">
+				<img src="'.TV_PLUG_PATH.'public/img/alert.png" alt="Logo alerte" class="img-fluid mb-3 mb-md-0">
+			</div>
+			<div class="col-md-6 order-md-1 text-center text-md-left pr-md-5">
+				<p class="lead">Vous pouvez retrouver ici toutes les alertes qui ont été créées sur ce site.</p>
+				<p class="lead mb-4">Les alertes sont triées de la plus vieille à la plus récente.</p>
+				<p class="lead mb-4">Vous pouvez modifier une alerte en cliquant sur "Modifier" à la ligne correspondante à l\'alerte.</p>
+				<p class="lead mb-4">Vous souhaitez supprimer une / plusieurs alerte(s) ? Cochez les cases des alertes puis cliquez sur "Supprimer" le bouton ce situe en bas du tableau.</p>
+			</div>
+		</div>
+		<hr class="half-rule">';
+    }
 
     /**
      * Display alerts
@@ -192,6 +239,17 @@ class AlertView extends View
 		return $select;
 	}
 
+    public function noAlert()
+    {
+        return '
+		<a href="'.esc_url(get_permalink(get_page_by_title('Gérer les alertes'))).'">< Retour</a>
+		<div>
+			<h3>Alerte non trouvée</h3>
+			<p>Cette alerte n\'éxiste pas, veuillez bien vérifier d\'avoir bien cliqué sur une alerte.</p>
+			<a href="'.esc_url(get_permalink(get_page_by_title('Créer une alerte'))).'">Créer une alerte</a>
+		</div>';
+    }
+
     /**
      * Display modal for validate the creation of an alert
      */
@@ -199,9 +257,7 @@ class AlertView extends View
     {
         $page = get_page_by_title('Gérer les alertes');
         $linkManageAlert = get_permalink($page->ID);
-        $this->displayStartModal("Ajout d'alerte");
-        echo '<div class="alert alert-success"> Votre alerte a été envoyée ! </div>';
-        $this->displayEndModal($linkManageAlert);
+        $this->buildModal('Ajout d\'alerte', '<div class="alert alert-success"> Votre alerte a été envoyée !</div>', $linkManageAlert);
     }
 
     /**
@@ -211,8 +267,6 @@ class AlertView extends View
     {
         $page = get_page_by_title('Gérer les alertes');
         $linkManageAlert = get_permalink($page->ID);
-        $this->displayStartModal("Ajout d'alerte");
-        echo '<div class="alert alert-success"> Votre alerte a été modifiée ! </div>';
-        $this->displayEndModal($linkManageAlert);
+        $this->buildModal('Ajout d\'alerte', '<div class="alert alert-success"> Votre alerte a été modifiée ! </div>', $linkManageAlert);
     }
 }

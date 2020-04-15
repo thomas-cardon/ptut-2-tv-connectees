@@ -39,7 +39,7 @@ class Drawing extends WriterPart
         $objWriter->writeAttribute('xmlns:xdr', 'http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing');
         $objWriter->writeAttribute('xmlns:a', 'http://schemas.openxmlformats.org/drawingml/2006/main');
 
-        // Loop through images and write drawings
+        // Loop through media and write drawings
         $i = 1;
         $iterator = $pWorksheet->getDrawingCollection()->getIterator();
         while ($iterator->valid()) {
@@ -285,7 +285,7 @@ class Drawing extends WriterPart
     }
 
     /**
-     * Write VML header/footer images to XML format.
+     * Write VML header/footer media to XML format.
      *
      * @param \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $pWorksheet
      *
@@ -306,7 +306,7 @@ class Drawing extends WriterPart
         // XML header
         $objWriter->startDocument('1.0', 'UTF-8', 'yes');
 
-        // Header/footer images
+        // Header/footer media
         $images = $pWorksheet->getHeaderFooter()->getImages();
 
         // xml
@@ -422,7 +422,7 @@ class Drawing extends WriterPart
 
         $objWriter->endElement();
 
-        // Loop through images
+        // Loop through media
         foreach ($images as $key => $value) {
             $this->writeVMLHeaderFooterImage($objWriter, $key, $value);
         }
@@ -489,7 +489,7 @@ class Drawing extends WriterPart
         // Loop through PhpSpreadsheet
         $sheetCount = $spreadsheet->getSheetCount();
         for ($i = 0; $i < $sheetCount; ++$i) {
-            // Loop through images and add to array
+            // Loop through media and add to array
             $iterator = $spreadsheet->getSheet($i)->getDrawingCollection()->getIterator();
             while ($iterator->valid()) {
                 $aDrawings[] = $iterator->current();

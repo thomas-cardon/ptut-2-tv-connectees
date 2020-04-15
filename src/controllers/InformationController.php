@@ -68,7 +68,7 @@ class InformationController extends Controller
 		$this->model->setTitle($title);
 		$this->model->setAuthor($current_user->ID);
 		$this->model->setCreationDate($creationDate);
-		$this->model->setEndDate($endDate);
+		$this->model->setExpirationDate($endDate);
 
 		if ($actionText) {   // If the information is a text
 			$this->model->setContent($content);
@@ -145,7 +145,8 @@ class InformationController extends Controller
 			$this->view->displayContentSelect('table', $this->view->displayFormTab()) .
 			$this->view->displayContentSelect('pdf', $this->view->displayFormPDF()) .
 			$this->view->displayContentSelect('event', $this->view->displayFormEvent()) .
-			$this->view->displayEndDiv();
+			$this->view->displayEndDiv().
+            $this->view->contextCreateInformation();
 
 	} //insertInformation()
 
@@ -202,39 +203,28 @@ class InformationController extends Controller
 	public function modifyInformation()
 	{
 		// Id of the information
-		$id = $this->getMyIdUrl();
-		if(!is_numeric($id)) {
-			return;
+        $id = $this->getPartOfUrl()[2];
+		if(!is_numeric($id) && !$this->model->get($id)) {
+			return $this->view->noInformation();
 		}
-
 		$this->model  = $this->model->get($id);
-		if(is_null($this->model->getId())) {
-			return;
-		}
 
 		$action = filter_input(INPUT_POST, 'submit');
-
 		if ($action) {
-
 			$title   = filter_input(INPUT_POST, 'titleInfo');
 			$content = filter_input(INPUT_POST, 'contentInfo');
-			$endDate = $_POST['endDateInfo'];
+			$endDate = filter_input(INPUT_POST, 'endDateInfo');
+
+            $this->model->setTitle($title);
+            $this->model->setExpirationDate($endDate);
 
 			if($this->model->getType() === 'text') {
 				// Set new information
-				$this->model->setTitle($title);
 				$this->model->setContent($content);
-				$this->model->setEndDate($endDate);
 			} else {
-
-					$this->model->setTitle($title);
-				$this->model->setEndDate($endDate);
-
 				// Change the content
 				if ($_FILES["contentFile"]['size'] != 0 ) { // If it's a new file
-
 					$filename = $_FILES["contentFile"]['name'];
-
 					if($this->model->getType() == 'img') {
 						$explodeName = explode('.', $filename);
 						$goodExtension = ['jpg', 'jpeg', 'gif', 'png', 'svg'];
@@ -242,14 +232,12 @@ class InformationController extends Controller
 							$this->deleteFile($this->model->getId());   //$_SERVER['DOCUMENT_ROOT'].$this->model->getContent()
 							$this->registerFile($filename, $_FILES["contentFile"]['tmp_name']);
 						}
-
 					} else if($this->model->getType() == 'pdf') {
 						$explodeName = explode('.', $filename);
 						if(end($explodeName) == 'pdf') {
 							$this->deleteFile($this->model->getId());   //$_SERVER['DOCUMENT_ROOT'].$this->model->getContent()
 							$this->registerFile($filename, $_FILES["contentFile"]['tmp_name']);
 						}
-
 					} else if($this->model->getType() == 'tab') {
 						$explodeName = explode('.', $filename);
 						$goodExtension = ['xls', 'xlsx', 'ods'];
@@ -265,35 +253,9 @@ class InformationController extends Controller
 
 			$this->view->displayModifyValidate();
 		}
-
 		// Display the view / the form
-		return $this->view->displayModifyInformationForm($this->model->getTitle(), $this->model->getContent(), $this->model->getEndDate(), $this->model->getType());
+		return $this->view->displayModifyInformationForm($this->model->getTitle(), $this->model->getContent(), $this->model->getExpirationDate(), $this->model->getType());
 	} //modifyInformation()
-
-
-	/**
-	 * Delete the information
-	 */
-	public function deleteInformations()
-	{
-		$actionDelete = $_POST['Delete'];
-		if ($actionDelete) {
-			if (isset($_REQUEST['checkboxstatusinfo'])) {
-				// Take all checkbox
-				$checked_values = $_REQUEST['checkboxstatusinfo'];
-				foreach ($checked_values as $id) {
-					$this->model = $this->model->get($id);
-					$type  = $this->model->getType();
-					$types = ["img", "pdf", "tab", "event"];
-					if (in_array($type, $types)) {
-						$this->deleteFile($id);
-					}
-					$this->model->delete();
-				}
-			}
-			$this->view->refreshPage();
-		}
-	} //deleteInformations()
 
 	/**
 	 * Delete the file who's link to the id
@@ -307,21 +269,55 @@ class InformationController extends Controller
 		wp_delete_file($source);
 	}
 
-	/**
-	 * Display a table with all informations from the database
-	 */
-	function informationManagement()
-	{
-		$current_user = wp_get_current_user();
-		$user         = $current_user->ID;
-		if (in_array( "administrator", $current_user->roles)) {
-			$informations = $this->model->getAll();
-		} else {
-			$informations = $this->model->getAuthorListInformation($user);
-		}
+    public function displayAll()
+    {
+        $numberAllEntity = $this->model->countAll();
+        $url = $this->getPartOfUrl();
+        $number = filter_input(INPUT_GET, 'number');
+        $pageNumber = 1;
+        if(sizeof($url) >= 2 && is_numeric($url[1])) {
+            $pageNumber = $url[1];
+        }
+        if(isset($number) && !is_numeric($number) || empty($number)) {
+            $number = 25;
+        }
+        $begin = ($pageNumber - 1) * $number;
+        $maxPage = ceil($numberAllEntity / $number);
+        if($maxPage <= $pageNumber && $maxPage >= 1) {
+            $pageNumber = $maxPage;
+        }
+        $informationList = $this->model->getList($begin, $number);
 
-		return $this->view->displayAllInformation($informations);
-	} // informationManagement()
+        $name = 'Info';
+        $header = ['Titre', 'Contenu', 'Date de création', 'Date d\'expiration', 'Auteur', 'Type', 'Modifier'];
+        $dataList = [];
+        $row = $begin;
+        foreach ($informationList as $information) {
+            ++$row;
+            $dataList[] = [$row, $this->view->buildCheckbox($name, $information->getId()), $information->getTitle(), $information->getContent(), $information->getCreationDate(), $information->getExpirationDate(), $information->getAuthor()->getLogin(), $information->getType(), $this->view->buildLinkForModify(esc_url(get_permalink(get_page_by_title('Modification information'))).'/'.$information->getId())];
+        }
+
+        $submit = filter_input(INPUT_POST, 'delete');
+        if(isset($submit)) {
+            if (isset($_REQUEST['checkboxStatusInfo'])) {
+                $checked_values = $_REQUEST['checkboxStatusInfo'];
+                foreach ($checked_values as $id) {
+                    $entity = $this->model->get($id);
+                    $type  = $entity->getType();
+                    $types = ["img", "pdf", "tab", "event"];
+                    if (in_array($type, $types)) {
+                        $this->deleteFile($id);
+                    }
+                    $entity->delete();
+                }
+            }
+        }
+        $returnString = "";
+        if($pageNumber === 1) {
+            $returnString = $this->view->contextDisplayAll();
+        }
+        return $returnString.$this->view->displayAll($name, 'Informations', $header, $dataList).$this->view->pageNumber($maxPage, $pageNumber, esc_url(get_permalink(get_page_by_title('Gestion des informations'))), $number);
+    }
 
 
 

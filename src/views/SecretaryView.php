@@ -29,60 +29,64 @@ class SecretaryView extends UserView
      */
     public function displayWelcomeAdmin()
     {
-	    $page = get_page_by_title('Création des comptes');
-	    $linkCreateAccount = get_permalink($page->ID);
-
-	    $page = get_page_by_title('Gestion des utilisateurs');
-	    $linkManageUser = get_permalink($page->ID);
-
-	    $page = get_page_by_title('Créer une alerte');
-	    $linkCreateAlert = get_permalink($page->ID);
-
-	    $page = get_page_by_title('Gérer les alertes');
-	    $linkManageAlert = get_permalink($page->ID);
-
-	    $page = get_page_by_title('Créer une information');
-	    $linkCreateInfo = get_permalink($page->ID);
-
-	    $page = get_page_by_title('Gérer les informations');
-	    $linkManageInfo = get_permalink($page->ID);
-
-
-        echo '<h1>Écran connecté</h1>
-              <form method="post" id="dlAllEDT">
-              	<label for="dlEDT">Mettre à jours les emplois du temps</label>
-              	<input id="dlEDT" type="submit" name="dlEDT" value="Télécharger">
-              </form>
-              <h2 class="text-center">Gestion</h2>
-              <div class="card-group text-center">
-			  	<div class="card">
-					<a href="'.$linkCreateAccount.'"><img class="card-img-top add_icon" src="'.TV_PLUG_PATH.'public/img/addUser.png" alt="Ajouter un Utilisateur"></a>
-				    <div class="card-body">
-				      <a href="'.$linkCreateAccount.'"><h5 class="card-title">Ajouter un utilisateur</h5></a>
-				      <p class="card-text">Vous pouvez inscire un ou plusieurs utilisateurs (Etudiant, Enseignant, Directeur d\'études, Secrétaire, technicien, télévision).</p>
-				      <a href="'.$linkCreateAccount.'" class="btn btn-primary text-white">Ajouter un utilisateur</a><br/>
-				      <a href="'.$linkManageUser.'" class="btn btn-primary text-white btn_list">Liste des utilisateurs</a>
-				    </div>
-				</div>
-				<div class="card">
-					<a href="'.$linkCreateInfo.'"><img class="card-img-top add_icon" src="'.TV_PLUG_PATH.'public/img/information.png" alt="Ajouter une information"></a>
-				    <div class="card-body">
-				      <a href="'.$linkCreateInfo.'"><h5 class="card-title">Ajouter une information</h5></a>
-				      <p class="card-text">Vous pouvez créer une information (Du texte, une image, un tableau, un PDF), cette information sera affiché à coté de l\'emploi du temps.</p>
-				      <a href="'.$linkCreateInfo.'" class="btn btn-primary text-white">Ajouter une information</a><br/>
-				   	  <a href="'.$linkManageInfo.'" class="btn btn-primary text-white btn_list">Liste des informations</a>
-				    </div>
-				</div>
-				<div class="card">
-					<a href="'.$linkCreateAlert.'"><img class="card-img-top add_icon" src="'.TV_PLUG_PATH.'public/img/alert.png" alt="Ajouter une alerte"></a>
-				    <div class="card-body">
-				      <a href="'.$linkCreateAlert.'"><h5 class="card-title">Ajouter une alerte</h5></a>
-				      <p class="card-text">Vous pouvez afficher une alerte, l\'alerte sera affiché en dessous de l\'emploi du temps dans une zone rouge.</p>
-				      <a href="'.$linkCreateAlert.'" class="btn btn-primary text-white">Ajouter une alerte</a><br/>
-				      <a href="'.$linkManageAlert.'" class="btn btn-primary text-white btn_list">Liste des alertes</a>
-				    </div>
-				</div>
-			  </div>';
+	    return '
+        <div class="row">
+                <div class="col-6 mx-auto col-md-6 order-md-1">
+                    <img src="'.TV_PLUG_PATH.'/public/img/background.png" alt="Logo Amu" class="img-fluid mb-3 mb-md-0">
+                </div>
+                <div class="col-md-6 order-md-2 text-center text-md-left pr-md-5">
+                    <h1 class="mb-3 bd-text-purple-bright">'.get_bloginfo("name").'</h1>
+                    <p class="lead">
+                        Créer des informations pour toutes les télévisions connectées, les informations seront affichées sur chaque télévisions en plus des informations déjà publiées.
+                        Les informations des télévisions peuvent contenir du texte, des images et même des pdf.
+                    </p>
+                    <p class="lead mb-4">Vous pouvez faire de même avec les alertes des télévisions connectées.</p>
+                    <p class="lead mb-4">Les informations seront affichés dans la partie de droite des télévisions et les alertes dans la partie rouge en bas des téléviseurs.</p>
+                    <div class="row mx-n2">
+                        <div class="col-md px-2">
+                            <a href="'.esc_url(get_permalink(get_page_by_title("Créer une information"))).'" class="btn btn-lg button_presentation_ecran w-100 mb-3">Créer une information</a>
+                        </div>
+                        <div class="col-md px-2">
+                            <a href="'.esc_url(get_permalink(get_page_by_title("Créer une alerte"))).'" class="btn btn-lg button_presentation_ecran w-100 mb-3">Créer une alerte</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="masthead-followup row m-0 border border-white">
+                <div class="col-md-6 p-3 p-md-5 bg-light border border-white">
+                    <h3><img src="'.TV_PLUG_PATH.'/public/img/+.png" alt="Ajouter une information/alerte" class="logo">Ajouter</h3>
+                    <p>Ajouter une information ou une alerte. Elles seront affichées le lendemain sur toutes les télévisions</p>
+                    <a href="'.esc_url(get_permalink(get_page_by_title("Créer une information"))).'" class="btn btn-lg button_presentation_ecran w-100 mb-3">Créer une information</a>
+                    <hr class="half-rule">
+                    <a href="'.esc_url(get_permalink(get_page_by_title("Créer une alerte"))).'" class="btn btn-lg button_presentation_ecran w-100 mb-3">Créer une alerte</a>
+                </div>
+                <div class="col-md-6 p-3 p-md-5 bg-light border border-white">
+                    <h3><img src="'.TV_PLUG_PATH.'/public/img/gestion.png" alt="voir les informations/alertes" class="logo">Gérer</h3>
+                    <p>Voir toutes les informations et alertes déjà publiées. Vous pouvez les supprimers, les modifiers ou bien juste les regarder</p>
+                    <a href="'.esc_url(get_permalink(get_page_by_title("Gérer les informations"))).'" class="btn btn-lg button_presentation_ecran w-100 mb-3">Voir mes informations</a>
+                    <hr class="half-rule">
+                    <a href="'.esc_url(get_permalink(get_page_by_title("Gérer les alertes"))).'" class="btn btn-lg button_presentation_ecran w-100 mb-3">Voir mes alertes</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 mx-auto col-md-6 order-md-2">
+                    <img src="'.TV_PLUG_PATH.'/public/img/user.png" alt="Logo utilisateur" class="img-fluid mb-3 mb-md-0">
+                </div>
+                <div class="col-md-6 order-md-1 text-center text-md-left pr-md-5">
+                    <h2 class="mb-3 bd-text-purple-bright">Les utilisateurs</h2>
+                    <p class="lead">Vous pouvez ajouter des utilisateurs qui pourront à leur tour ajouter des informations et des alertes.</p>
+                    <p class="lead mb-4">Ils pourront aussi gérer leurs informations et leurs alertes.</p>
+                    <div class="row mx-n2">
+                        <div class="col-md px-2">
+                            <a href="'.esc_url(get_permalink(get_page_by_title("Création des comptes"))).'" class="btn btn-lg button_presentation_ecran w-100 mb-3">Créer un utilisateur</a>
+                        </div>
+                        <div class="col-md px-2">
+                            <a href="'.esc_url(get_permalink(get_page_by_title("Gestion des utilisateurs"))).'" class="btn btn-lg button_presentation_ecran w-100 mb-3">Voir les utilisateurs</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>';
     }
 
     /**

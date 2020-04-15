@@ -98,13 +98,13 @@ class CodeAde extends Model implements Entity
 	/**
 	 * @inheritDoc
 	 */
-    public function getAll()
+    public function getList()
     {
 	    $request = $this->getDatabase()->prepare('SELECT * FROM code_ade ORDER BY id DESC');
 
 	    $request->execute();
 
-	    return $this->setListEntity($request->fetchAll(PDO::FETCH_ASSOC));
+	    return $this->setEntityList($request->fetchAll(PDO::FETCH_ASSOC));
     }
 
 	/**
@@ -125,7 +125,7 @@ class CodeAde extends Model implements Entity
 	/**
 	 * @inheritDoc
 	 */
-	public function setListEntity($dataList)
+	public function setEntityList($dataList)
 	{
 		$listEntity = array();
 		foreach ($dataList as $data) {
@@ -151,7 +151,7 @@ class CodeAde extends Model implements Entity
 
 		$request->execute();
 
-		return $this->setListEntity($request->fetchAll(PDO::FETCH_ASSOC));
+		return $this->setEntityList($request->fetchAll(PDO::FETCH_ASSOC));
 	}
 
 	/**
@@ -169,7 +169,7 @@ class CodeAde extends Model implements Entity
 
 	    $request->execute();
 
-	    return $this->setListEntity($request->fetchAll(PDO::FETCH_ASSOC));
+	    return $this->setEntityList($request->fetchAll(PDO::FETCH_ASSOC));
     }
 
 	/**
@@ -205,7 +205,7 @@ class CodeAde extends Model implements Entity
 
 		$request->execute();
 
-		return $this->setListEntity($request->fetchAll(PDO::FETCH_ASSOC));
+		return $this->setEntityList($request->fetchAll(PDO::FETCH_ASSOC));
 	}
 
 	/**

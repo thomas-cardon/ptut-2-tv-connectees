@@ -24,15 +24,13 @@ class StudentView extends UserView
     public function displayInsertImportFileStudent()
     {
 	    return '
-        <div class="cadre">
-        	<h2>Compte étudiant</h2>
-            <a href="' . TV_PLUG_PATH . 'public/files/Ajout Etus.xlsx"
-                download="Ajout Etus.xlsx">Télécharger le fichier excel ! </a>
-            <form id="etu" method="post" enctype="multipart/form-data">
-				<input type="file" name="excelEtu" class="inpFil" required=""/>
-				<button type="submit" name="importEtu" value="Importer">Importer le fichier</button>
-			</form>
-		</div>';
+        <h2>Compte étudiant</h2>
+        <a href="' . TV_PLUG_PATH . 'public/files/Ajout Etus.xlsx"
+            download="Ajout Etus.xlsx">Télécharger le fichier excel ! </a>
+        <form id="etu" method="post" enctype="multipart/form-data">
+            <input type="file" name="excelEtu" class="inpFil" required=""/>
+            <button type="submit" name="importEtu" value="Importer">Importer le fichier</button>
+        </form>';
     }
 
 	/**

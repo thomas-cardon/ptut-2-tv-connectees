@@ -144,7 +144,7 @@ class HeaderFooter
     private $alignWithMargins = true;
 
     /**
-     * Header/footer images.
+     * Header/footer media.
      *
      * @var HeaderFooterDrawing[]
      */
@@ -429,7 +429,7 @@ class HeaderFooter
     }
 
     /**
-     * Set header/footer images.
+     * Set header/footer media.
      *
      * @param HeaderFooterDrawing[] $images
      *
@@ -443,7 +443,7 @@ class HeaderFooter
     }
 
     /**
-     * Get header/footer images.
+     * Get header/footer media.
      *
      * @return HeaderFooterDrawing[]
      */

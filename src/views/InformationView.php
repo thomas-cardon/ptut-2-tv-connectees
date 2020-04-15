@@ -30,21 +30,22 @@ class InformationView extends View
 	{
 		$dateMin = date('Y-m-d', strtotime("+1 day"));
 
-		return '<form method="post">
-					<div class="form-group">
-		                <label for="titleInfo">Titre <span class="text-muted">(Optionnel)</span></label>
-		                <input id="titleInfo" class="form-control" type="text" name="titleInfo" placeholder="Inserer un titre" maxlength="60" value="'.$title.'">
-		            </div>
-		            <div class="form-group">
-	                	<label for="contentInfo">Contenu</label>
-	                	<textarea class="form-control" id="contentInfo" name="contentInfo" maxlength="1000" rows="3">'.$content.'</textarea>
-	                </div>
-					<div class="form-group">
-			            <label for="endDateInfo">Date d\'expiration</label>
-			            <input id="endDateInfo" class="form-control" type="date" name="endDateInfo" min="' . $dateMin . '" value="'.$endDate.'" required >
-			        </div>
-			        <input class="btn btn-primary" type="submit" value="creer" name="' . $type . '">
-			    </form>';
+		return '
+        <form method="post">
+            <div class="form-group">
+                <label for="titleInfo">Titre <span class="text-muted">(Optionnel)</span></label>
+                <input id="titleInfo" class="form-control" type="text" name="titleInfo" minlength="4" maxlength="40" placeholder="Titre..." value="'.$title.'">
+            </div>
+            <div class="form-group">
+                <label for="contentInfo">Contenu</label>
+                <textarea class="form-control" id="contentInfo" name="contentInfo" rows="3" placeholder="280 caractères au maximum" maxlength="280" minlength="4" required>'.$content.'</textarea>
+            </div>
+            <div class="form-group">
+                <label for="endDateInfo">Date d\'expiration</label>
+                <input id="endDateInfo" class="form-control" type="date" name="endDateInfo" min="' . $dateMin . '" value="'.$endDate.'" required >
+            </div>
+            <button class="btn button_ecran" type="submit" name="'.$type.'">Créer</button>
+        </form>';
 	}
 
 	/**
@@ -83,7 +84,7 @@ class InformationView extends View
 				<label for="endDateInfo">Date d\'expiration</label>
 				<input id="endDateInfo" class="form-control" type="date" name="endDateInfo" min="' . $dateMin . '" value="'.$endDate.'" required >
 			</div>
-			<input class="btn btn-primary" type="submit" value="creer" name="' . $type . '">
+			<button class="btn button_ecran" type="submit" name="'.$type.'">Créer</button>
 		</form>';
 
 		return $form;
@@ -131,7 +132,7 @@ class InformationView extends View
 				<label for="endDateInfo">Date d\'expiration</label>
 				<input id="endDateInfo" class="form-control" type="date" name="endDateInfo" min="' . $dateMin . '" value="'.$endDate.'" required >
 			</div>
-			<input class="btn btn-primary" type="submit" value="creer" name="' . $type . '">
+			<button class="btn button_ecran" type="submit" name="'.$type.'">Créer</button>
 		</form>';
 		return $form;
 	}
@@ -173,14 +174,14 @@ class InformationView extends View
 				<label for="endDateInfo">Date d\'expiration</label>
 				<input id="endDateInfo" class="form-control" type="date" name="endDateInfo" min="' . $dateMin . '" value="'.$endDate.'" required >
 			</div>
-			<input class="btn btn-primary" type="submit" value="creer" name="' . $type . '">
+			<button class="btn button_ecran" type="submit" name="'.$type.'">Créer</button>
 		</form>';
 
 		return $form;
 	}
 
 	/**
-	 * Display a form to create an event information with images or PDFs
+	 * Display a form to create an event information with media or PDFs
 	 *
 	 * @param $endDate  string
 	 * @param $type     string
@@ -202,9 +203,32 @@ class InformationView extends View
 				<label for="endDateInfo">Date d\'expiration</label>
 				<input id="endDateInfo" class="form-control" type="date" name="endDateInfo" min="' . $dateMin . '" value="'.$endDate.'" required >
 			</div>
-			<input class="btn btn-primary" type="submit" value="creer" name="' . $type . '">
+			<button class="btn button_ecran" type="submit" name="'.$type.'">Créer</button>
 		</form>';
 	}
+
+    /**
+     * Explain how the information's display
+     *
+     * @return string
+     */
+    public function contextCreateInformation()
+    {
+        return '
+		<hr class="half-rule">
+		<div>
+			<h2>Les informations</h2>
+			<p class="lead">Lors de la création de votre information, celle-ci sera posté le lendemain sur tous les téléviseurs qui utilisent le projet de l\'écran connecté.</p>
+			<p class="lead">Les informations que vous créez seront affichées avec les informations déjà présentes.</p>
+			<p class="lead">Les informations sont affichées dans un diaporama défilant les informations une par une sur la partie droite des téléviseurs.</p>
+			<div class="text-center">
+				<figure class="figure">
+					<img src="'.TV_PLUG_PATH.'public/img/presentation.png" class="figure-img img-fluid rounded" alt="Représentation d\'un téléviseur">
+					<figcaption class="figure-caption">Représentation d\'un téléviseur</figcaption>
+				</figure>
+			</div>
+		</div>';
+    }
 
 	/**
 	 * Display a form to modify an information
@@ -221,20 +245,20 @@ class InformationView extends View
 	public function displayModifyInformationForm($title, $content, $endDate, $type)
 	{
 		if ($type == "text") {
-			return $this->displayFormText($title, $content, $endDate, 'submit');
+			return '<a href="'.esc_url(get_permalink(get_page_by_title('Gérer les informations'))).'">< Retour</a>'.$this->displayFormText($title, $content, $endDate, 'submit');
 		} elseif ($type == "img") {
-			return $this->displayFormImg($title, $content, $endDate, 'submit');
+			return '<a href="'.esc_url(get_permalink(get_page_by_title('Gérer les informations'))).'">< Retour</a>'.$this->displayFormImg($title, $content, $endDate, 'submit');
 		} elseif ($type == "tab") {
-			return $this->displayFormTab($title, $content, $endDate, 'submit');
+			return '<a href="'.esc_url(get_permalink(get_page_by_title('Gérer les informations'))).'">< Retour</a>'.$this->displayFormTab($title, $content, $endDate, 'submit');
 		} elseif ($type == "pdf") {
-			return $this->displayFormPDF($title, $content, $endDate, 'submit');
+			return '<a href="'.esc_url(get_permalink(get_page_by_title('Gérer les informations'))).'">< Retour</a>'.$this->displayFormPDF($title, $content, $endDate, 'submit');
 		} elseif ($type == "event") {
 			$extension = explode('.', $content);
 			$extension = $extension[1];
 			if($extension == "pdf") {
-				return $this->displayFormPDF($title, $content, $endDate, 'submit');
+				return '<a href="'.esc_url(get_permalink(get_page_by_title('Gérer les informations'))).'">< Retour</a>'.$this->displayFormPDF($title, $content, $endDate, 'submit');
 			} else {
-				return $this->displayFormImg($title, $content, $endDate, 'submit');
+				return '<a href="'.esc_url(get_permalink(get_page_by_title('Gérer les informations'))).'">< Retour</a>'.$this->displayFormImg($title, $content, $endDate, 'submit');
 			}
 		} else {
 			return '<p>Désolé, une erreur semble être survenue.</p>';
@@ -350,6 +374,34 @@ class InformationView extends View
 		echo '</div>';
 	}
 
+    public function contextDisplayAll()
+    {
+        return '
+		<div class="row">
+			<div class="col-6 mx-auto col-md-6 order-md-2">
+				<img src="'.TV_PLUG_PATH.'public/img/info.png" alt="Logo information" class="img-fluid mb-3 mb-md-0">
+			</div>
+			<div class="col-md-6 order-md-1 text-center text-md-left pr-md-5">
+				<p class="lead">Vous pouvez retrouver ici toutes les informations qui ont été créées sur ce site.</p>
+				<p class="lead">Les informations sont triées de la plus vieille à la plus récente.</p>
+				<p class="lead">Vous pouvez modifier une information en cliquant sur "Modifier" à la ligne correspondante à l\'information.</p>
+				<p class="lead">Vous souhaitez supprimer une / plusieurs information(s) ? Cochez les cases des informations puis cliquez sur "Supprimer" le bouton ce situe en bas du tableau.</p>
+			</div>
+		</div>
+		<hr class="half-rule">';
+    }
+
+    public function noInformation()
+    {
+        return '
+		<a href="'.esc_url(get_permalink(get_page_by_title('Gérer les informations'))).'">< Retour</a>
+		<div>
+			<h3>Information non trouvée</h3>
+			<p>Cette information n\'éxiste pas, veuillez bien vérifier d\'avoir bien cliqué sur une information.</p>
+			<a href="'.esc_url(get_permalink(get_page_by_title('Créer une information'))).'">Créer une information</a>
+		</div>';
+    }
+
 	/**
 	 * Start the slideshow
 	 */
@@ -374,11 +426,9 @@ class InformationView extends View
 	 */
 	public function displayCreateValidate()
 	{
-		$page           = get_page_by_title( 'Gérer les informations' );
-		$linkManageInfo = get_permalink( $page->ID );
-		$this->displayStartModal( "Ajout d'information validé" );
-		echo '<p class="alert alert-success"> L\'information a été ajoutée </p>';
-		$this->displayEndModal( $linkManageInfo );
+		$page           = get_page_by_title('Gérer les informations');
+		$linkManageInfo = get_permalink($page->ID);
+        $this->buildModal('Ajout d\'information validé', '<p class="alert alert-success"> L\'information a été ajoutée </p>', $linkManageInfo);
 	}
 
 	/**
@@ -389,9 +439,7 @@ class InformationView extends View
 	{
 		$page           = get_page_by_title( 'Gérer les informations' );
 		$linkManageInfo = get_permalink( $page->ID );
-		$this->displayStartModal( "Modification d'information validée" );
-		echo '<p class="alert alert-success"> L\'information a été modifiée </p>';
-		$this->displayEndModal( $linkManageInfo );
+		$this->buildModal('Modification d\'information validée', '<p class="alert alert-success"> L\'information a été modifiée </p>', $linkManageInfo);
 	}
 
 	/**

@@ -1,102 +1,19 @@
-.red {
-    color: red;
-}
-
-.add_icon {
-    width: 100px !important;
-    height: auto;
-}
-
-.icon:hover, .icon:focus {
+.button_ecran {
+    background-color: #00558b;
     color: white;
 }
 
-.btn_list {
-    margin-top: 5px;
+.delete_button_ecran {
+    background-color: #8e2525;
+    color: white;
 }
 
-.card {
-    position: static !important;
-    margin-left: 10px;
-    margin-right: 10px;
+thead {
+    background-color: #00558b;
+    color: white;
 }
 
-.trente {
-    float: left;
-    width: 35%;
-}
-
-.sept {
-    float: left;
-    width: 65%;
-}
-
-input[type="submit"]:disabled {
-    background: #dddddd;
-}
-
-/* FORM */
-.flex-column {
-    display: flex;
-    flex-direction: column;
-    width: 70%;
-    margin: auto;
-}
-
-.form-admin {
-    width: 100%;
-    text-align: center;
-}
-
-.flex-center {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    text-align: center;
-}
-
-.flex-vertical {
-    display: flex;
-    flex-direction: row;
-}
-
-/* HIDE RADIO */
-.form-admin input[type=radio] {
-    display: none;
-}
-
-.input-hidden {
-    position: absolute;
-    left: -9999px;
-}
-
-input[type=radio]:checked + label>img {
-    opacity: 100%;
-    border: 1px solid #fff;
-    box-shadow: 0 0 2px 2px #00558a;
-}
-
-input[type=radio] + label>img {
-    opacity: 50%;
-    border: 1px solid #fff;
-    box-shadow: 0 0 2px 2px #00558a;
-}
-
-/* Stuff after this is only to make things more pretty */
-input[type=radio] + label>img {
-    border: 1px solid black;
-    transition: 500ms all;
-}
-
-.form-admin label {
-    float: left;
-    margin: 2%;
-    width: 45%;
-    height: auto;
-    cursor: pointer;
-}
-
-.input-center {
-    text-align: center;
+.active_ecran .page-link {
+    background-color: #00558b;
+    color: white;
 }

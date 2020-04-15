@@ -89,46 +89,6 @@ class UserView extends View
     }
 
     /**
-     * Display a message for the modification of the password
-     */
-    public function displayModificationPassValidate()
-    {
-        $this->displayStartModal('Modification du mot de passe');
-        echo '<div class="alert alert-success" role="alert">La modification à été réussie !</div>';
-        $this->displayEndModal(home_url());
-    }
-
-    /**
-     * Display a message if the password is wrong
-     */
-    public function displayWrongPassword()
-    {
-        $this->displayStartModal('Mot de passe incorrect');
-        echo '<div class="alert alert-danger"> Mauvais mot de passe </div>';
-        $this->displayEndModal();
-    }
-
-    /**
-     * Display a message if the
-     */
-    public function displayMailSend()
-    {
-        $this->displayStartModal('Mail envoyé');
-        echo '<div class="alert alert-success"> Un mail a été envoyé à votre adresse mail, merci de bien vouloir entrer le code reçu</div>';
-        $this->displayEndModal();
-    }
-
-	/**
-	 * Message to prevent a login already exist
-	 */
-	public function displayErrorCreation()
-	{
-		$this->displayStartModal('Inscription échouée');
-		echo '<div class="alert alert-danger">Il y a eu une erreur dans le formulaire, veuillez vérifier vos information et réessayer</div>';
-		$this->displayEndModal();
-	}
-
-    /**
      * Display the subscription button
      */
     public function displayButtonSubscription()
@@ -212,13 +172,56 @@ class UserView extends View
 
 	/**
 	 * Display the welcome page
+     *
+     * @return string
 	 */
     public function displayHome()
     {
-        echo '<article>
-                <h1>' . get_bloginfo("name") . '</h1>
-                <p>Retrouvez ici votre emploi du temps</p>
-              </article>';
+        return '
+        <div>
+            <h1>' . get_bloginfo("name") . '</h1>
+            <p>Retrouvez ici votre emploi du temps</p>
+        </div>';
+    }
+
+    /**
+     * Display a message for the modification of the password
+     */
+    public function displayModificationPassValidate()
+    {
+        $this->buildModal('Modification du mot de passe', '<div class="alert alert-success" role="alert">La modification à été réussie !</div>',home_url());
+    }
+
+    /**
+     * Display a message if the password is wrong
+     */
+    public function displayWrongPassword()
+    {
+        $this->buildModal('Mot de passe incorrect', '<div class="alert alert-danger">Mauvais mot de passe</div>');
+    }
+
+    /**
+     * Display a message if the
+     */
+    public function displayMailSend()
+    {
+        $this->buildModal('Mail envoyé', '<div class="alert alert-success"> Un mail a été envoyé à votre adresse mail, merci de bien vouloir entrer le code reçu</div>');
+    }
+
+    /**
+     * Message to prevent a login already exist
+     */
+    public function displayErrorCreation()
+    {
+        $this->buildModal('Inscription échouée', '<div class="alert alert-danger">Il y a eu une erreur dans le formulaire, veuillez vérifier vos information et réessayer</div>');
+    }
+
+    /**
+     * Message to prevent a login already exist
+     */
+    public function displayErrorLogin()
+    {
+        $this->buildModal('Inscription échouée', '<div class="alert alert-danger"> Le login est déjà utilisé ! </div>');
     }
 
 	/**
@@ -228,6 +231,6 @@ class UserView extends View
 	 */
     public function displayNoStudy()
     {
-        return '<p>Vous n\'avez pas cours! </p>';
+        return '<p>Vous n\'avez pas cours!</p>';
     }
 }

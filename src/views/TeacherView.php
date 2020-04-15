@@ -21,15 +21,13 @@ class TeacherView extends UserView
     public function displayInsertImportFileTeacher()
     {
 	    return '
-        <div class="cadre">
-        	<h2>Compte enseignant</h2>
-            <a href="' . TV_PLUG_PATH . 'public/files/Ajout Profs.xlsx"
-                download="Ajout Prof.xlsx">Télécharger le fichier excel ! </a>
-            <form id="Prof" method="post" enctype="multipart/form-data">
-				<input type="file" name="excelProf" class="inpFil" required=""/>
-				<button type="submit" name="importProf" value="Importer">Importer le fichier</button>
-			</form>
-		</div>';
+        <h2>Compte enseignant</h2>
+        <a href="' . TV_PLUG_PATH . 'public/files/Ajout Profs.xlsx"
+            download="Ajout Prof.xlsx">Télécharger le fichier excel ! </a>
+        <form id="Prof" method="post" enctype="multipart/form-data">
+            <input type="file" name="excelProf" class="inpFil" required=""/>
+            <button type="submit" name="importProf" value="Importer">Importer le fichier</button>
+        </form>';
     }
 
 	/**

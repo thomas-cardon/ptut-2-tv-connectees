@@ -15,43 +15,6 @@ use Models\User;
  */
 class TelevisionView extends UserView
 {
-
-    /**
-     * Display a select of code ADE
-     *
-     * @param $years        CodeAde[]
-     * @param $groups       CodeAde[]
-     * @param $halfgroups   CodeAde[]
-     *
-     * @return string
-     */
-    public function displaySelect($years, $groups, $halfgroups)
-    {
-        $string = '<option value="0">Aucun</option>
-                        <optgroup label="Année">';
-
-        foreach ($years as $year) {
-        	$string .= '<option value="' . $year->getCode() . '">' . $year->getTitle() . '</option >';
-        }
-
-        $string .= '</optgroup>
-                        <optgroup label="Groupe">';
-
-        foreach ($groups as $group) {
-        	$string .= '<option value="' . $group->getCode() . '">' . $group->getTitle() . '</option>';
-        }
-        $string .= '</optgroup>
-                        <optgroup label="Demi groupe">';
-
-        foreach ($halfgroups as $halfgroup) {
-        	$string .= '<option value="' . $halfgroup->getCode() . '">' . $halfgroup->getTitle() . '</option>';
-        }
-
-        $string .= '</optgroup>
-                </select>';
-        return $string;
-    }
-
     /**
      * Display a form to create a television
      *
@@ -209,16 +172,6 @@ class TelevisionView extends UserView
             <input  minlength="4" type="password" class="form-control text-center modal-sm" id="pwdConfTv" name="pwdConfirmTv" placeholder="Confirmer le nouveau mot de passe" onkeyup=checkPwd("Tv")>
 		</form>';
 
-    }
-
-    /**
-     * Message to prevent a login already exist
-     */
-    public function displayErrorLogin()
-    {
-        $this->displayStartModal('Inscription échouée');
-        echo '<div class="alert alert-danger"> Le login est déjà utilisé ! </div>';
-        $this->displayEndModal();
     }
 
     /**

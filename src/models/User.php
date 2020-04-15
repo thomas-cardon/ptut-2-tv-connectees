@@ -145,7 +145,6 @@ class User extends Model implements Entity
 				$request->execute();
 			}
 
-
 			foreach ($this->getCodes() as $code) {
 				if($code instanceof CodeAde && !is_null($code->getId())) {
 					$request = $this->getDatabase()->prepare('INSERT INTO code_user (id_user, id_code_ade) VALUES (:id_user, :id_code_ade)');
@@ -181,18 +180,6 @@ class User extends Model implements Entity
 
 		$request->execute();
 
-		if(is_null($this->getUserLinkToCode()[0])) {
-			$request = $this->getDatabase()->prepare('DELETE FROM code_user WHERE id_user = :id');
-
-			$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
-
-			$request->execute();
-
-			if(in_array('enseignant', $user_info->roles) && in_array('directeuretude', $user_info->roles)) {
-				$this->getCodes()[0]->delete();
-			}
-		}
-
 		return $count;
 	}
 
@@ -217,13 +204,13 @@ class User extends Model implements Entity
 	/**
 	 * @inheritDoc
 	 */
-	public function getAll()
+	public function getList()
 	{
 		$request = $this->getDatabase()->prepare('SELECT * FROM wp_users user JOIN wp_usermeta meta ON user.ID = meta.user_id');
 
 		$request->execute();
 
-		return $this->setListEntity($request->fetchAll());
+		return $this->setEntityList($request->fetchAll());
 	}
 
 	/**
@@ -244,7 +231,7 @@ class User extends Model implements Entity
 
 		$request->execute();
 
-		return $this->setListEntity($request->fetchAll());
+		return $this->setEntityList($request->fetchAll());
 	}
 
 	/**
@@ -264,7 +251,7 @@ class User extends Model implements Entity
 
 		$request->execute();
 
-		return $this->setListEntity($request->fetchAll(PDO::FETCH_ASSOC));
+		return $this->setEntityList($request->fetchAll(PDO::FETCH_ASSOC));
 	}
 
 	/**
@@ -280,7 +267,7 @@ class User extends Model implements Entity
 
 		$request->execute();
 
-		return $this->setListEntity($request->fetchAll());
+		return $this->setEntityList($request->fetchAll());
 	}
 
 	public function createCode($code)
@@ -349,7 +336,7 @@ class User extends Model implements Entity
 
 		$codeAde = new CodeAde();
 
-		$codes = $codeAde->setListEntity($request->fetchAll());
+		$codes = $codeAde->setEntityList($request->fetchAll());
 
 		$entity->setCodes($codes);
 
@@ -378,7 +365,7 @@ class User extends Model implements Entity
 	/**
 	 * @inheritDoc
 	 */
-	public function setListEntity($dataList)
+	public function setEntityList($dataList)
 	{
 		$listEntity = array();
 		foreach ($dataList as $data) {

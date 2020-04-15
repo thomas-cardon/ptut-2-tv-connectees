@@ -30,6 +30,16 @@ class Model
         self::$database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
     }
 
+    /**
+     * Connect to the database
+     */
+    private static function setDatabaseViewer()
+    {
+        self::$database = new PDO( 'mysql:host=' . DB_HOST_VIEWER . '; dbname=' . DB_NAME_VIEWER, DB_USER_VIEWER, DB_PASSWORD_VIEWER);
+        //self::$database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+        self::$database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+    }
+
 	/**
 	 * Return the connection
 	 *
@@ -39,6 +49,18 @@ class Model
     {
         if (self:: $database == null)
             self::setDatabase();
+        return self::$database;
+    }
+
+    /**
+     * Return the connection
+     *
+     * @return PDO
+     */
+    protected function getDatabaseViewer()
+    {
+        if (self:: $database == null)
+            self::setDatabaseViewer();
         return self::$database;
     }
 }

@@ -450,7 +450,7 @@ to find the codes for header/footer.
 ```php
 $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\HeaderFooterDrawing();
 $drawing->setName('PhpSpreadsheet logo');
-$drawing->setPath('./images/PhpSpreadsheet_logo.png');
+$drawing->setPath('./media/PhpSpreadsheet_logo.png');
 $drawing->setHeight(36);
 $spreadsheet->getActiveSheet()->getHeaderFooter()->addImage($drawing, \PhpOffice\PhpSpreadsheet\Worksheet\HeaderFooter::IMAGE_HEADER_LEFT);
 ```

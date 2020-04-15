@@ -132,9 +132,7 @@ class CodeAdeView extends View
 	 */
     public function successCreation()
     {
-	    $this->displayStartModal('Ajout du code ADE');
-    	echo '<p>Le code ADE a bien été ajouté</p>';
-	    $this->displayEndModal();
+	    $this->buildModal('Ajout du code ADE', '<p>Le code ADE a bien été ajouté</p>');
     }
 
 	/**
@@ -144,9 +142,7 @@ class CodeAdeView extends View
 	{
 		$page = get_page_by_title('Gestion codes ADE');
 		$linkManageCode = get_permalink($page->ID);
-		$this->displayStartModal('Modification du code ADE');
-		echo '<p>Le code ADE a bien été modifié</p>';
-		$this->displayEndModal($linkManageCode);
+		$this->buildModal('Modification du code ADE', '<p>Le code ADE a bien été modifié</p>', $linkManageCode);
 	}
 
 	/**
@@ -154,9 +150,7 @@ class CodeAdeView extends View
 	 */
 	public function errorCreation()
 	{
-		$this->displayStartModal('Erreur lors de l\'ajout du code ADE');
-		echo '<p>Le code ADE a rencontré une erreur lors de son ajout</p>';
-		$this->displayEndModal();
+		$this->buildModal('Erreur lors de l\'ajout du code ADE', '<p>Le code ADE a rencontré une erreur lors de son ajout</p>');
 	}
 
 	/**
@@ -164,9 +158,7 @@ class CodeAdeView extends View
 	 */
 	public function errorModification()
 	{
-		$this->displayStartModal('Erreur lors de la modification du code ADE');
-		echo '<p>Le code ADE a rencontré une erreur lors de sa modification</p>';
-		$this->displayEndModal();
+		$this->buildModal('Erreur lors de la modification du code ADE', '<p>Le code ADE a rencontré une erreur lors de sa modification</p>');
 	}
 
     /**

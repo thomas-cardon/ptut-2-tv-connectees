@@ -35,7 +35,7 @@ class TechnicianView extends UserView
     public function displayAllTechnicians($users)
     {
 	    $title = 'Techniciens';
-	    $name = 'tech';
+	    $name = 'Tech';
 	    $header = ['Login'];
 
 	    $row = array();
@@ -45,6 +45,6 @@ class TechnicianView extends UserView
 		    $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin()];
 	    }
 
-	    return $this->displayAll($name, $title, $header, $row, 'tech');
+	    return $this->displayAll($name, $title, $header, $row, $name);
     }
 }

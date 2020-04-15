@@ -49,7 +49,7 @@ class Html extends BaseWriter
     private $imagesRoot = '';
 
     /**
-     * embed images, or link to images.
+     * embed media, or link to media.
      *
      * @var bool
      */
@@ -615,7 +615,7 @@ class Html extends BaseWriter
         // Construct HTML
         $html = '';
 
-        // Write images
+        // Write media
         foreach ($pSheet->getDrawingCollection() as $drawing) {
             if ($drawing instanceof Drawing) {
                 if ($drawing->getCoordinates() == $coordinates) {
@@ -626,7 +626,7 @@ class Html extends BaseWriter
                         $filename = substr($filename, 1);
                     }
 
-                    // Prepend images root
+                    // Prepend media root
                     $filename = $this->getImagesRoot() . $filename;
 
                     // Strip off eventual '.'
@@ -675,7 +675,7 @@ class Html extends BaseWriter
                 //  Because of the nature of tables, width is more important than height.
                 //  max-width: 100% ensures that image doesnt overflow containing cell
                 //  width: X sets width of supplied image.
-                //  As a result, images bigger than cell will be contained and images smaller will not get stretched
+                //  As a result, media bigger than cell will be contained and media smaller will not get stretched
                 $html .= '<img src="' . $dataUri . '" style="max-width:100%;width:' . $drawing->getWidth() . 'px;" />';
             }
         }
@@ -1418,7 +1418,7 @@ class Html extends BaseWriter
     }
 
     /**
-     * Get images root.
+     * Get media root.
      *
      * @return string
      */
@@ -1428,7 +1428,7 @@ class Html extends BaseWriter
     }
 
     /**
-     * Set images root.
+     * Set media root.
      *
      * @param string $pValue
      *
@@ -1442,7 +1442,7 @@ class Html extends BaseWriter
     }
 
     /**
-     * Get embed images.
+     * Get embed media.
      *
      * @return bool
      */
@@ -1452,7 +1452,7 @@ class Html extends BaseWriter
     }
 
     /**
-     * Set embed images.
+     * Set embed media.
      *
      * @param bool $pValue
      *
