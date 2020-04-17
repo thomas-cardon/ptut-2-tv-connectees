@@ -30,22 +30,27 @@ class InformationView extends View
 	{
 		$dateMin = date('Y-m-d', strtotime("+1 day"));
 
-		return '
+		$form = '
         <form method="post">
             <div class="form-group">
-                <label for="titleInfo">Titre <span class="text-muted">(Optionnel)</span></label>
-                <input id="titleInfo" class="form-control" type="text" name="titleInfo" minlength="4" maxlength="40" placeholder="Titre..." value="'.$title.'">
+                <label for="title">Titre <span class="text-muted">(Optionnel)</span></label>
+                <input id="info" class="form-control" type="text" name="title" minlength="4" maxlength="40" placeholder="Titre..." value="'.$title.'">
             </div>
             <div class="form-group">
-                <label for="contentInfo">Contenu</label>
-                <textarea class="form-control" id="contentInfo" name="contentInfo" rows="3" placeholder="280 caractères au maximum" maxlength="280" minlength="4" required>'.$content.'</textarea>
+                <label for="content">Contenu</label>
+                <textarea class="form-control" id="content" name="content" rows="3" placeholder="280 caractères au maximum" maxlength="280" minlength="4" required>'.$content.'</textarea>
             </div>
             <div class="form-group">
-                <label for="endDateInfo">Date d\'expiration</label>
-                <input id="endDateInfo" class="form-control" type="date" name="endDateInfo" min="' . $dateMin . '" value="'.$endDate.'" required >
+                <label for="expirationDate">Date d\'expiration</label>
+                <input id="expirationDate" class="form-control" type="date" name="expirationDate" min="' . $dateMin . '" value="'.$endDate.'" required >
             </div>
-            <button class="btn button_ecran" type="submit" name="'.$type.'">Créer</button>
-        </form>';
+            <button class="btn button_ecran" type="submit" name="'.$type.'">Valider</button>';
+
+        if($type == 'submit') {
+            $form .= '<button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
+        }
+
+        return $form.'</form>';
 	}
 
 	/**
@@ -64,8 +69,8 @@ class InformationView extends View
 
 		$form = '<form method="post" enctype="multipart/form-data">
 					<div class="form-group">
-		                <label for="titleInfo">Titre <span class="text-muted">(Optionnel)</span></label>
-		                <input id="titleInfo" class="form-control" type="text" name="titleInfo" placeholder="Inserer un titre" maxlength="60" value="'.$title.'">
+		                <label for="title">Titre <span class="text-muted">(Optionnel)</span></label>
+		                <input id="title" class="form-control" type="text" name="title" placeholder="Inserer un titre" maxlength="60" value="'.$title.'">
 		            </div>';
 		if($content != null){
 			$form .= '
@@ -81,13 +86,16 @@ class InformationView extends View
 		        <input type="hidden" name="MAX_FILE_SIZE" value="5000000"/>
 	        </div>
 	        <div class="form-group">
-				<label for="endDateInfo">Date d\'expiration</label>
-				<input id="endDateInfo" class="form-control" type="date" name="endDateInfo" min="' . $dateMin . '" value="'.$endDate.'" required >
+				<label for="expirationDate">Date d\'expiration</label>
+				<input id="expirationDate" class="form-control" type="date" name="expirationDate" min="' . $dateMin . '" value="'.$endDate.'" required >
 			</div>
-			<button class="btn button_ecran" type="submit" name="'.$type.'">Créer</button>
-		</form>';
+			<button class="btn button_ecran" type="submit" name="'.$type.'">Valider</button>';
 
-		return $form;
+        if($type == 'submit') {
+            $form .= '<button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
+        }
+
+		return $form.'</form>';
 	}
 
 	/**
@@ -108,8 +116,8 @@ class InformationView extends View
 
 		$form = '<form method="post" enctype="multipart/form-data">
 						<div class="form-group">
-			                <label for="titleInfo">Titre <span class="text-muted">(Optionnel)</span></label>
-			                <input id="titleInfo" class="form-control" type="text" name="titleInfo" placeholder="Inserer un titre" maxlength="60" value="'.$title.'">
+			                <label for="title">Titre <span class="text-muted">(Optionnel)</span></label>
+			                <input id="title" class="form-control" type="text" name="title" placeholder="Inserer un titre" maxlength="60" value="'.$title.'">
 			            </div>';
 
 		if($content != null) {
@@ -129,12 +137,16 @@ class InformationView extends View
                 <small id="tabHelp" class="form-text text-muted">Nous vous conseillons également de ne pas mettre trop de contenu dans une cellule.</small>
             </div>
             <div class="form-group">
-				<label for="endDateInfo">Date d\'expiration</label>
-				<input id="endDateInfo" class="form-control" type="date" name="endDateInfo" min="' . $dateMin . '" value="'.$endDate.'" required >
+				<label for="expirationDate">Date d\'expiration</label>
+				<input id="expirationDate" class="form-control" type="date" name="expirationDate" min="' . $dateMin . '" value="'.$endDate.'" required >
 			</div>
-			<button class="btn button_ecran" type="submit" name="'.$type.'">Créer</button>
-		</form>';
-		return $form;
+			<button class="btn button_ecran" type="submit" name="'.$type.'">Valider</button>';
+
+        if($type == 'submit') {
+            $form .= '<button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
+        }
+
+		return $form.'</form>';
 	}
 
 	/**
@@ -153,8 +165,8 @@ class InformationView extends View
 
 		$form = '<form method="post" enctype="multipart/form-data">
 					<div class="form-group">
-		                <label for="titleInfo">Titre <span class="text-muted">(Optionnel)</span></label>
-		                <input id="titleInfo" class="form-control" type="text" name="titleInfo" placeholder="Inserer un titre" maxlength="60" value="'.$title.'">
+		                <label for="title">Titre <span class="text-muted">(Optionnel)</span></label>
+		                <input id="title" class="form-control" type="text" name="title" placeholder="Inserer un titre" maxlength="60" value="'.$title.'">
 		            </div>';
 
 		if($content != null) {
@@ -171,13 +183,16 @@ class InformationView extends View
                 <input type="hidden" name="MAX_FILE_SIZE" value="5000000"/>
             </div>
             <div class="form-group">
-				<label for="endDateInfo">Date d\'expiration</label>
-				<input id="endDateInfo" class="form-control" type="date" name="endDateInfo" min="' . $dateMin . '" value="'.$endDate.'" required >
+				<label for="expirationDate">Date d\'expiration</label>
+				<input id="expirationDate" class="form-control" type="date" name="expirationDate" min="' . $dateMin . '" value="'.$endDate.'" required >
 			</div>
-			<button class="btn button_ecran" type="submit" name="'.$type.'">Créer</button>
-		</form>';
+			<button class="btn button_ecran" type="submit" name="'.$type.'">Valider</button>';
 
-		return $form;
+        if($type == 'submit') {
+            $form .= '<button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
+        }
+
+		return $form.'</form>';
 	}
 
 	/**
@@ -191,7 +206,7 @@ class InformationView extends View
 	public function displayFormEvent($endDate = null, $type = "createEvent")
 	{
 		$dateMin = date('Y-m-d', strtotime("+1 day"));
-		return '
+		$form = '
 		<form method="post" enctype="multipart/form-data">
 			<div class="form-group">
                 <label>Sélectionner les fichiers</label>
@@ -200,11 +215,17 @@ class InformationView extends View
                 <small id="fileHelp" class="form-text text-muted">Images ou PDF</small>
         	</div>
         	<div class="form-group">
-				<label for="endDateInfo">Date d\'expiration</label>
-				<input id="endDateInfo" class="form-control" type="date" name="endDateInfo" min="' . $dateMin . '" value="'.$endDate.'" required >
+				<label for="expirationDate">Date d\'expiration</label>
+				<input id="expirationDate" class="form-control" type="date" name="expirationDate" min="' . $dateMin . '" value="'.$endDate.'" required >
 			</div>
-			<button class="btn button_ecran" type="submit" name="'.$type.'">Créer</button>
-		</form>';
+			<button class="btn button_ecran" type="submit" name="'.$type.'">Valider</button>';
+
+		if($type == 'submit') {
+		    $form .= '<button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
+        }
+		$form .= '</form>';
+
+		return $form;
 	}
 
     /**
@@ -245,23 +266,21 @@ class InformationView extends View
 	public function displayModifyInformationForm($title, $content, $endDate, $type)
 	{
 		if ($type == "text") {
-			return '<a href="'.esc_url(get_permalink(get_page_by_title('Gérer les informations'))).'">< Retour</a>'.$this->displayFormText($title, $content, $endDate, 'submit');
+			return '<a href="'.esc_url(get_permalink(get_page_by_title('Gestion des informations'))).'">< Retour</a>'.$this->displayFormText($title, $content, $endDate, 'submit');
 		} elseif ($type == "img") {
-			return '<a href="'.esc_url(get_permalink(get_page_by_title('Gérer les informations'))).'">< Retour</a>'.$this->displayFormImg($title, $content, $endDate, 'submit');
+			return '<a href="'.esc_url(get_permalink(get_page_by_title('Gestion des informations'))).'">< Retour</a>'.$this->displayFormImg($title, $content, $endDate, 'submit');
 		} elseif ($type == "tab") {
-			return '<a href="'.esc_url(get_permalink(get_page_by_title('Gérer les informations'))).'">< Retour</a>'.$this->displayFormTab($title, $content, $endDate, 'submit');
+			return '<a href="'.esc_url(get_permalink(get_page_by_title('Gestion des informations'))).'">< Retour</a>'.$this->displayFormTab($title, $content, $endDate, 'submit');
 		} elseif ($type == "pdf") {
-			return '<a href="'.esc_url(get_permalink(get_page_by_title('Gérer les informations'))).'">< Retour</a>'.$this->displayFormPDF($title, $content, $endDate, 'submit');
+			return '<a href="'.esc_url(get_permalink(get_page_by_title('Gestion des informations'))).'">< Retour</a>'.$this->displayFormPDF($title, $content, $endDate, 'submit');
 		} elseif ($type == "event") {
 			$extension = explode('.', $content);
 			$extension = $extension[1];
 			if($extension == "pdf") {
-				return '<a href="'.esc_url(get_permalink(get_page_by_title('Gérer les informations'))).'">< Retour</a>'.$this->displayFormPDF($title, $content, $endDate, 'submit');
+				return '<a href="'.esc_url(get_permalink(get_page_by_title('Gestion des informations'))).'">< Retour</a>'.$this->displayFormPDF($title, $content, $endDate, 'submit');
 			} else {
-				return '<a href="'.esc_url(get_permalink(get_page_by_title('Gérer les informations'))).'">< Retour</a>'.$this->displayFormImg($title, $content, $endDate, 'submit');
+				return '<a href="'.esc_url(get_permalink(get_page_by_title('Gestion des informations'))).'">< Retour</a>'.$this->displayFormImg($title, $content, $endDate, 'submit');
 			}
-		} else {
-			return '<p>Désolé, une erreur semble être survenue.</p>';
 		}
 	} //displayModifyInformationForm()
 
@@ -275,7 +294,7 @@ class InformationView extends View
 	public function displayAllInformation($informations)
 	{
 		// Get the link of the modification page
-		$page           = get_page_by_title('Modification information');
+		$page           = get_page_by_title('Modifier une information');
 		$linkModifyInfo = get_permalink($page->ID);
 
 		$title = 'Informations';
@@ -353,18 +372,18 @@ class InformationView extends View
 			</div>';
 		} elseif ($type == "img" || $type == "event") {
 			if ($title != "Sans titre") {
-				echo '<img class="img-with-title" src="'. TV_UPLOAD_PATH .$content.'" alt="'.$title.'">';
+				echo '<img class="img-thumbnail" src="'. TV_UPLOAD_PATH .$content.'" alt="'.$title.'">';
 			} else {
-				echo '<img class="img-without-title" src="'. TV_UPLOAD_PATH .$content.'" alt="'.$title.'">';
+				echo '<img class="img-thumbnail" src="'. TV_UPLOAD_PATH .$content.'" alt="'.$title.'">';
 			}
 
 		}  else if ($type == 'text') {
-			echo '<p class="info-text">'.$content.'</p>';
+			echo '<p class="lead">'.$content.'</p>';
 		} else if ($type == 'special') {
 			$func = explode('(Do this(function:', $content);
 			$text = explode('.', $func[0]);
 			foreach ($text as $value) {
-				echo '<p class="info-text">' . $value . '</p>';
+				echo '<p class="lead">' . $value . '</p>';
 			}
 			$func = explode(')end)', $func[1]);
 			echo $func[0]();
@@ -388,13 +407,14 @@ class InformationView extends View
 				<p class="lead">Vous souhaitez supprimer une / plusieurs information(s) ? Cochez les cases des informations puis cliquez sur "Supprimer" le bouton ce situe en bas du tableau.</p>
 			</div>
 		</div>
+		<a href="'.esc_url(get_permalink(get_page_by_title('Créer une information'))).'">Créer une information</a>
 		<hr class="half-rule">';
     }
 
     public function noInformation()
     {
         return '
-		<a href="'.esc_url(get_permalink(get_page_by_title('Gérer les informations'))).'">< Retour</a>
+		<a href="'.esc_url(get_permalink(get_page_by_title('Gestion des informations'))).'">< Retour</a>
 		<div>
 			<h3>Information non trouvée</h3>
 			<p>Cette information n\'éxiste pas, veuillez bien vérifier d\'avoir bien cliqué sur une information.</p>
@@ -426,7 +446,7 @@ class InformationView extends View
 	 */
 	public function displayCreateValidate()
 	{
-		$page           = get_page_by_title('Gérer les informations');
+		$page           = get_page_by_title('Gestion des informations');
 		$linkManageInfo = get_permalink($page->ID);
         $this->buildModal('Ajout d\'information validé', '<p class="alert alert-success"> L\'information a été ajoutée </p>', $linkManageInfo);
 	}
@@ -437,8 +457,8 @@ class InformationView extends View
 	 */
 	public function displayModifyValidate()
 	{
-		$page           = get_page_by_title( 'Gérer les informations' );
-		$linkManageInfo = get_permalink( $page->ID );
+		$page           = get_page_by_title('Gestion des informations');
+		$linkManageInfo = get_permalink($page->ID);
 		$this->buildModal('Modification d\'information validée', '<p class="alert alert-success"> L\'information a été modifiée </p>', $linkManageInfo);
 	}
 

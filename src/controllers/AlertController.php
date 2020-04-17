@@ -58,7 +58,8 @@ class AlertController extends Controller
 			foreach ($codes as $code) {
 				if($code != 'all' && $code != 0) {
 					if(is_null($codeAde->getByCode($code)->getId())) {
-						return 'error';
+					    $this->view->errorMessageInvalidForm();
+						return;
 					} else {
 						$codesAde[] = $codeAde->getByCode($code);
 					}
@@ -74,15 +75,19 @@ class AlertController extends Controller
 				$this->model->setAuthor($current_user->ID);
 				$this->model->setContent($content);
 				$this->model->setCreationDate($creationDate);
-				$this->model->setEndDate($endDate);
+				$this->model->setExpirationDate($endDate);
 				$this->model->setCodes($codesAde);
 
 				// Insert
-				if($id = $this->model->create()) {
+				if($id = $this->model->insert()) {
 					$this->view->displayAddValidate();
 					//$this->sendAlert($id);
-				}
-			}
+				} else {
+                    $this->view->errorMessageCantAdd();
+                }
+			} else {
+                $this->view->errorMessageInvalidForm();
+            }
 		}
 
 		$years      = $codeAde->getAllFromType('year');
@@ -90,7 +95,7 @@ class AlertController extends Controller
 		$halfGroups = $codeAde->getAllFromType('halfGroup');
 
 		return $this->view->creationForm($years, $groups, $halfGroups);
-	} //createAlert()
+	}
 
 	/**
 	 * Modify an alert
@@ -101,8 +106,12 @@ class AlertController extends Controller
         if(!is_numeric($id) || !$this->model->get($id)) {
             return $this->view->noAlert();
 		}
+        $current_user = wp_get_current_user();
+        $alert = $this->model->get($id);
+        if(!in_array('administrator', $current_user->roles) && !in_array('secretaire', $current_user->roles) && $alert->getAuthor()->getId() != $current_user->ID) {
+            return $this->view->noAlert();
+        }
 
-		$alert = $this->model->get($id);
 		$codeAde    = new CodeAde();
 
         $submit = filter_input(INPUT_POST, 'submit');
@@ -112,43 +121,38 @@ class AlertController extends Controller
             $expirationDate = filter_input(INPUT_POST, 'expirationDate');
 			$codes   = $_POST['selectAlert'];
 
-            $expirationDateString      = strtotime($expirationDate);
-			$creationDateString = strtotime(date('Y-m-d',time()));
+            $alert->setForEveryone(0);
 
-			if(is_string($content) && strlen($content) >= 4 && strlen($content) <= 280 && $this->isRealDate($expirationDate) && $creationDateString < $expirationDateString) {
-				$alert->setForEveryone(0);
-
-				$codesAde = array();
-				foreach ($codes as $code) {
-					if($code != 'all' && $code != 0) {
-						if(is_null($codeAde->getByCode($code)->getId())) {
-							return 'error';
-						} else {
-							$codesAde[] = $codeAde->getByCode($code);
-						}
-					} else if($code == 'all') {
-						$alert->setForEveryone(1);
-					}
-				}
-
-				// Set the alert
-				$alert->setContent($content);
-				$alert->setEndDate($expirationDate);
-				$alert->setCodes($codesAde);
-
-				if($alert->update()) {
-					$this->view->displayModifyValidate();
-				} else {
-
+            $codesAde = array();
+            foreach ($codes as $code) {
+                if($code != 'all' && $code != 0) {
+                    if(is_null($codeAde->getByCode($code)->getId())) {
+                        $this->view->errorMessageInvalidForm();
+                        return;
+                    } else {
+                        $codesAde[] = $codeAde->getByCode($code);
+                    }
+                } else if($code == 'all') {
+                    $alert->setForEveryone(1);
                 }
-			} else {
+            }
 
+            // Set the alert
+            $alert->setContent($content);
+            $alert->setExpirationDate($expirationDate);
+            $alert->setCodes($codesAde);
+
+            if($alert->update()) {
+                $this->view->displayModifyValidate();
+            } else {
+                $this->view->errorMessageCantAdd();
             }
 		}
 
         $delete = filter_input(INPUT_POST, 'delete');
         if(isset($delete)) {
             $alert->delete();
+            $this->view->displayModifyValidate();
         }
 
 		$years      = $codeAde->getAllFromType('year');
@@ -176,14 +180,19 @@ class AlertController extends Controller
         if($maxPage <= $pageNumber && $maxPage >= 1) {
             $pageNumber = $maxPage;
         }
-        $alertList = $this->model->getList($begin, $number);
+        $current_user = wp_get_current_user();
+        if(in_array('administrator', $current_user->roles) || in_array('secretaire', $current_user->roles)) {
+            $alertList = $this->model->getList($begin, $number);
+        } else {
+            $alertList = $this->model->getAuthorListAlert($current_user->ID, $begin, $number);
+        }
         $name = 'Alert';
         $header = ['Contenu', 'Date de création', 'Date d\'expiration', 'Auteur', 'Modifier'];
         $dataList = [];
         $row = $begin;
         foreach ($alertList as $alert) {
             ++$row;
-            $dataList[] = [$row, $this->view->buildCheckbox($name, $alert->getId()), $alert->getContent(), $alert->getCreateDate(), $alert->getExpirationDate(), $alert->getAuthor()->getLogin(), $this->view->buildLinkForModify(esc_url(get_permalink(get_page_by_title('Modifier une alerte'))).$alert->getId())];
+            $dataList[] = [$row, $this->view->buildCheckbox($name, $alert->getId()), $alert->getContent(), $alert->getCreationDate(), $alert->getExpirationDate(), $alert->getAuthor()->getLogin(), $this->view->buildLinkForModify(esc_url(get_permalink(get_page_by_title('Modifier une alerte'))).$alert->getId())];
         }
 
         $submit = filter_input(INPUT_POST, 'delete');
@@ -194,10 +203,10 @@ class AlertController extends Controller
                     $entity = $this->model->get($id);
                     $entity->delete();
                 }
+                $this->view->refreshPage();
             }
         }
-        $returnString = "";
-        if($pageNumber === 1) {
+        if($pageNumber == 1) {
             $returnString = $this->view->contextDisplayAll();
         }
         return $returnString.$this->view->displayAll($name, 'Alertes', $header, $dataList).$this->view->pageNumber($maxPage, $pageNumber, esc_url(get_permalink(get_page_by_title('Gestion des alertes'))), $number);
@@ -231,6 +240,40 @@ class AlertController extends Controller
             $this->view->displayAlertMain($contentList);
         }
     } // alertMain()
+
+    public function registerNewAlert()
+    {
+        $informationList = $this->model->getFromAdminWebsite();
+        $myInformationList = $this->model->getAdminWebsiteAlert();
+        foreach ($myInformationList as $information) {
+            if($adminInfo = $this->model->getAlertFromAdminSite($information->getId())) {
+                if($information->getTitle() != $adminInfo->getTitle()) {
+                    $information->setTitle($adminInfo->getTitle());
+                }
+                if($information->getContent() != $adminInfo->getContent()) {
+                    $information->setContent($adminInfo->getContent());
+                }
+                if($information->getExpirationDate() != $adminInfo->getExpirationDate()) {
+                    $information->setExpirationDate($adminInfo->getExpirationDate());
+                }
+                $information->update();
+            } else {
+                $information->delete();
+            }
+        }
+        foreach ($informationList as $information) {
+            $exist = 0;
+            foreach ($myInformationList as $myInformation) {
+                if($information->getId() == $myInformation->getAdminId()) {
+                    ++$exist;
+                }
+            }
+            if($exist == 0) {
+                $information->setAdminId($information->getId());
+                $information->insert();
+            }
+        }
+    }
 
 
     /**

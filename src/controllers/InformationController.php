@@ -41,7 +41,7 @@ class InformationController extends Controller
 	 * @throws \PhpOffice\PhpSpreadsheet\Exception
 	 * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
 	 */
-	public function insertInformation() {
+	public function create() {
 
 		// The current user who want to create the information
 		$current_user = wp_get_current_user();
@@ -54,9 +54,9 @@ class InformationController extends Controller
 		$actionEvent = $_POST['createEvent'];
 
 		// Variables
-		$title        = filter_input( INPUT_POST, 'titleInfo' );
-		$content      = filter_input( INPUT_POST, 'contentInfo' );
-		$endDate      = filter_input( INPUT_POST, 'endDateInfo' );
+		$title        = filter_input(INPUT_POST, 'title');
+		$content      = filter_input(INPUT_POST, 'content');
+		$endDate      = filter_input(INPUT_POST, 'expirationDate');
 		$creationDate = date('Y-m-d');
 
 		// If the title is empty
@@ -69,18 +69,20 @@ class InformationController extends Controller
 		$this->model->setAuthor($current_user->ID);
 		$this->model->setCreationDate($creationDate);
 		$this->model->setExpirationDate($endDate);
+        $this->model->setAdminId(null);
 
-		if ($actionText) {   // If the information is a text
+		if (isset($actionText)) {   // If the information is a text
 			$this->model->setContent($content);
 			$this->model->setType("text");
 
 			// Try to insert the information
-			if($this->model->create()) {
+			if($this->model->insert()) {
 				$this->view->displayCreateValidate();
 			} else {
 				$this->view->displayErrorInsertionInfo();
 			}
-		} elseif ($actionImg) {  // If the information is an image
+		}
+		if (isset($actionImg)) {  // If the information is an image
 			$type = "img";
 			$this->model->setType($type);
 			$filename    = $_FILES['contentFile']['name'];
@@ -92,7 +94,8 @@ class InformationController extends Controller
 			} else {
 				echo 'image non valide';
 			}
-		} elseif ($actionTab) { // If the information is a table
+		}
+		if (isset($actionTab)) { // If the information is a table
 			$type = "tab";
 			$this->model->setType($type);
 			$filename    = $_FILES['contentFile']['name'];
@@ -102,7 +105,8 @@ class InformationController extends Controller
 			if(in_array(end($explodeName), $goodExtension)) {
 				$this->registerFile($filename, $fileTmpName);
 			}
-		} else if ($actionPDF) {
+		}
+		if (isset($actionPDF)) {
 			$type = "pdf";
 			$this->model->setType($type);
 			$filename    = $_FILES['contentFile']['name'];
@@ -113,12 +117,13 @@ class InformationController extends Controller
 			} else {
 				echo 'PDF non valide';
 			}
-		} else if ($actionEvent) {
-			$type       = "event";
+		}
+		if (isset($actionEvent)) {
+			$type = 'event';
 			$this->model->setType($type);
-
 			// Register all files
-			$countFiles = count( $_FILES['contentFile']['name'] );
+			$countFiles = count($_FILES['contentFile']['name']);
+			echo $countFiles;
 			for ( $i = 0; $i < $countFiles; $i ++ ) {
 				$this->model->setId(null);
 				$filename    = $_FILES['contentFile']['name'][$i];
@@ -130,7 +135,6 @@ class InformationController extends Controller
 				}
 			}
 		}
-
 		// Return a selector with all forms
 		return
 			$this->view->displayStartMultiSelect() .
@@ -147,8 +151,7 @@ class InformationController extends Controller
 			$this->view->displayContentSelect('event', $this->view->displayFormEvent()) .
 			$this->view->displayEndDiv().
             $this->view->contextCreateInformation();
-
-	} //insertInformation()
+	}
 
 
 	/**
@@ -159,16 +162,15 @@ class InformationController extends Controller
 	 */
 	public function registerFile($filename, $tmpName)
 	{
-		$current_user = wp_get_current_user();
-		$id               = "temporary";
+		$id               = 'temporary';
 		$extension_upload = strtolower(substr(strrchr($filename, '.'), 1));
-		$name              = $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $id . "." . $extension_upload;
+		$name              = $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $id . '.' . $extension_upload;
 
 		// Upload the file
 		if ($result = move_uploaded_file($tmpName, $name)) {
-			$this->model->setContent("temporary content");
+			$this->model->setContent('temporary content');
 			if($this->model->getId() == null) {
-				$id = $this->model->create();
+				$id = $this->model->insert();
 			} else {
 				$this->model->update();
 				$id = $this->model->getId();
@@ -176,10 +178,8 @@ class InformationController extends Controller
 		} else {
 			$this->view->displayErrorInsertionInfo();
 		}
-
 		// If the file upload and the upload of the information in the database works
 		if ($id != 0) {
-
 			$this->model->setId($id);
 
 			$md5Name = $id.md5_file($name);
@@ -188,8 +188,11 @@ class InformationController extends Controller
 			$content = $md5Name. '.' . $extension_upload;
 
 			$this->model->setContent($content);
-			$this->model->update();
-			$this->view->displayCreateValidate();
+			if($this->model->update()) {
+                $this->view->displayCreateValidate();
+            } else {
+                $this->view->errorMessageCantAdd();
+            }
 		}
 	}
 
@@ -200,62 +203,73 @@ class InformationController extends Controller
 	 * @throws \PhpOffice\PhpSpreadsheet\Exception
 	 * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
 	 */
-	public function modifyInformation()
+	public function modify()
 	{
 		// Id of the information
         $id = $this->getPartOfUrl()[2];
-		if(!is_numeric($id) && !$this->model->get($id)) {
+		if(empty($id) || is_numeric($id) && !$this->model->get($id)) {
 			return $this->view->noInformation();
 		}
-		$this->model  = $this->model->get($id);
+        $current_user = wp_get_current_user();
+        $information = $this->model->get($id);
+        if(!in_array('administrator', $current_user->roles) && !in_array('secretaire', $current_user->roles) && $information->getAuthor()->getId() != $current_user->ID) {
+            return $this->view->noInformation();
+        }
 
-		$action = filter_input(INPUT_POST, 'submit');
-		if ($action) {
-			$title   = filter_input(INPUT_POST, 'titleInfo');
-			$content = filter_input(INPUT_POST, 'contentInfo');
-			$endDate = filter_input(INPUT_POST, 'endDateInfo');
+		$submit = filter_input(INPUT_POST, 'submit');
+		if (isset($submit)) {
+			$title   = filter_input(INPUT_POST, 'title');
+			$content = filter_input(INPUT_POST, 'content');
+			$endDate = filter_input(INPUT_POST, 'expirationDate');
 
-            $this->model->setTitle($title);
-            $this->model->setExpirationDate($endDate);
+            $information->setTitle($title);
+            $information->setExpirationDate($endDate);
 
-			if($this->model->getType() === 'text') {
+			if($information->getType() == 'text') {
 				// Set new information
-				$this->model->setContent($content);
+                $information->setContent($content);
 			} else {
 				// Change the content
 				if ($_FILES["contentFile"]['size'] != 0 ) { // If it's a new file
 					$filename = $_FILES["contentFile"]['name'];
-					if($this->model->getType() == 'img') {
+					if($information->getType() == 'img') {
 						$explodeName = explode('.', $filename);
 						$goodExtension = ['jpg', 'jpeg', 'gif', 'png', 'svg'];
 						if(in_array(end($explodeName), $goodExtension)) {
-							$this->deleteFile($this->model->getId());   //$_SERVER['DOCUMENT_ROOT'].$this->model->getContent()
+							$this->deleteFile($information->getId());   //$_SERVER['DOCUMENT_ROOT'].$this->model->getContent()
 							$this->registerFile($filename, $_FILES["contentFile"]['tmp_name']);
 						}
-					} else if($this->model->getType() == 'pdf') {
+					} else if($information->getType() == 'pdf') {
 						$explodeName = explode('.', $filename);
 						if(end($explodeName) == 'pdf') {
-							$this->deleteFile($this->model->getId());   //$_SERVER['DOCUMENT_ROOT'].$this->model->getContent()
+							$this->deleteFile($information->getId());   //$_SERVER['DOCUMENT_ROOT'].$this->model->getContent()
 							$this->registerFile($filename, $_FILES["contentFile"]['tmp_name']);
 						}
-					} else if($this->model->getType() == 'tab') {
+					} else if($information->getType() == 'tab') {
 						$explodeName = explode('.', $filename);
 						$goodExtension = ['xls', 'xlsx', 'ods'];
 						if(in_array(end($explodeName), $goodExtension)) {
-							$this->deleteFile($this->model->getId());   //$_SERVER['DOCUMENT_ROOT'].$this->model->getContent()
+							$this->deleteFile($information->getId());   //$_SERVER['DOCUMENT_ROOT'].$this->model->getContent()
 							$this->registerFile($filename, $_FILES["contentFile"]['tmp_name']);
 						}
 					}
 				}
 			}
 
-			$this->model->update();
-
-			$this->view->displayModifyValidate();
+			if($information->update()) {
+                $this->view->displayModifyValidate();
+            } else {
+			    $this->view->errorMessageCantAdd();
+			}
 		}
-		// Display the view / the form
-		return $this->view->displayModifyInformationForm($this->model->getTitle(), $this->model->getContent(), $this->model->getExpirationDate(), $this->model->getType());
-	} //modifyInformation()
+
+		$delete = filter_input(INPUT_POST, 'delete');
+		if(isset($delete)) {
+            $information->delete();
+            $this->view->displayModifyValidate();
+        }
+		return $this->view->displayModifyInformationForm($information->getTitle(), $information->getContent(), $information->getExpirationDate(), $information->getType());
+	}
 
 	/**
 	 * Delete the file who's link to the id
@@ -286,15 +300,46 @@ class InformationController extends Controller
         if($maxPage <= $pageNumber && $maxPage >= 1) {
             $pageNumber = $maxPage;
         }
-        $informationList = $this->model->getList($begin, $number);
+        $current_user = wp_get_current_user();
+        if(in_array('administrator', $current_user->roles) || in_array('secretaire', $current_user->roles)) {
+            $informationList = $this->model->getList($begin, $number);
+        } else {
+            $informationList = $this->model->getAuthorListInformation($current_user->ID, $begin, $number);
+        }
 
         $name = 'Info';
         $header = ['Titre', 'Contenu', 'Date de création', 'Date d\'expiration', 'Auteur', 'Type', 'Modifier'];
         $dataList = [];
         $row = $begin;
+        $imgExtension = ['jpg', 'jpeg', 'gif', 'png', 'svg'];
         foreach ($informationList as $information) {
             ++$row;
-            $dataList[] = [$row, $this->view->buildCheckbox($name, $information->getId()), $information->getTitle(), $information->getContent(), $information->getCreationDate(), $information->getExpirationDate(), $information->getAuthor()->getLogin(), $information->getType(), $this->view->buildLinkForModify(esc_url(get_permalink(get_page_by_title('Modification information'))).'/'.$information->getId())];
+
+            $content = explode('.', $information->getContent());
+
+            if(in_array($content[1], $imgExtension)) {
+                $content = '<img class="img-thumbnail" src="' . TV_UPLOAD_PATH . $information->getContent() . '" alt="'.$information->getTitle().'">';
+            } else if($content[1] === 'pdf') {
+                $content = '[pdf-embedder url="' . TV_UPLOAD_PATH . $information->getContent() . '"]';
+            } else if($information->getType() === 'tab') {
+                $content = 'Tableau Excel';
+            } else {
+                $content = $information->getContent();
+            }
+
+            $type = $information->getType();
+            if($information->getType() === 'img') {
+                $type = 'Image';
+            } else if ($information->getType() === 'pdf') {
+                $type = 'PDF';
+            } else if ($information->getType() === 'event') {
+                $type = 'Événement';
+            } else if ($information->getType() === 'text') {
+                $type = 'Texte';
+            } else if ($information->getType() === 'tab') {
+                $type = 'Table Excel';
+            }
+            $dataList[] = [$row, $this->view->buildCheckbox($name, $information->getId()), $information->getTitle(), $content, $information->getCreationDate(), $information->getExpirationDate(), $information->getAuthor()->getLogin(), $type, $this->view->buildLinkForModify(esc_url(get_permalink(get_page_by_title('Modifier une information'))).'/'.$information->getId())];
         }
 
         $submit = filter_input(INPUT_POST, 'delete');
@@ -303,17 +348,20 @@ class InformationController extends Controller
                 $checked_values = $_REQUEST['checkboxStatusInfo'];
                 foreach ($checked_values as $id) {
                     $entity = $this->model->get($id);
-                    $type  = $entity->getType();
-                    $types = ["img", "pdf", "tab", "event"];
-                    if (in_array($type, $types)) {
-                        $this->deleteFile($id);
+                    if(in_array('administrator', $current_user->roles) || in_array('secretaire', $current_user->roles) || $entity->getAuthor()->getId() == $current_user->ID) {
+                        $type  = $entity->getType();
+                        $types = ["img", "pdf", "tab", "event"];
+                        if (in_array($type, $types)) {
+                            $this->deleteFile($id);
+                        }
+                        $entity->delete();
                     }
-                    $entity->delete();
                 }
+                $this->view->refreshPage();
             }
         }
         $returnString = "";
-        if($pageNumber === 1) {
+        if($pageNumber == 1) {
             $returnString = $this->view->contextDisplayAll();
         }
         return $returnString.$this->view->displayAll($name, 'Informations', $header, $dataList).$this->view->pageNumber($maxPage, $pageNumber, esc_url(get_permalink(get_page_by_title('Gestion des informations'))), $number);
@@ -335,7 +383,7 @@ class InformationController extends Controller
 			$this->deleteFile($id);
 			$information->delete();
 		}
-	} //endDateCheckInfo()
+	}
 
 
 	/**
@@ -347,12 +395,9 @@ class InformationController extends Controller
 	 */
 	public function informationMain()
 	{
-		// Get all informations
-		$informations = $this->model->getAll();
-
-		// Slideshow
+		$informations = $this->model->getList();
 		$this->view->displayStartSlideshow();
-		foreach ($informations as $information) { // Create a slide for each information
+		foreach ($informations as $information) {
 			if ($information->getType() == 'tab') {
 					$list = $this->readSpreadSheet(TV_UPLOAD_PATH  . $information->getContent());
 					$content = "";
@@ -361,22 +406,53 @@ class InformationController extends Controller
 					}
 					$information->setContent($content);
 			}
-			$endDate = date( 'Y-m-d', strtotime($information->getEndDate()));
+			$endDate = date( 'Y-m-d', strtotime($information->getExpirationDate()));
 			$this->endDateCheckInfo($information->getId(), $endDate);
 			$this->view->displaySlide($information->getTitle(), $information->getContent(), $information->getType());
 		}
 		$this->view->displayEndDiv();
-	} // informationMain()
+	}
+
+	public function registerNewInformation()
+    {
+        $informationList = $this->model->getFromAdminWebsite();
+        $myInformationList = $this->model->getAdminWebsiteInformation();
+        foreach ($myInformationList as $information) {
+            if($adminInfo = $this->model->getInformationFromAdminSite($information->getId())) {
+                if($information->getTitle() != $adminInfo->getTitle()) {
+                    $information->setTitle($adminInfo->getTitle());
+                }
+                if($information->getContent() != $adminInfo->getContent()) {
+                    $information->setContent($adminInfo->getContent());
+                }
+                if($information->getExpirationDate() != $adminInfo->getExpirationDate()) {
+                    $information->setExpirationDate($adminInfo->getExpirationDate());
+                }
+                $information->update();
+            } else {
+                $information->delete();
+            }
+        }
+        foreach ($informationList as $information) {
+            $exist = 0;
+            foreach ($myInformationList as $myInformation) {
+                if($information->getId() == $myInformation->getAdminId()) {
+                    ++$exist;
+                }
+            }
+            if($exist == 0) {
+                $information->setAdminId($information->getId());
+                $information->insert();
+            }
+        }
+    }
 
 	/**
 	 *  Display a slideshow of event information in full screen
 	 */
 	public function displayEvent()
 	{
-		// Get all event informations
 		$events = $this->model->getListInformationEvent();
-
-		// Slideshow
 		$this->view->displayStartSlideEvent();
 		foreach ($events as $event) {
 			$this->view->displaySlideBegin();
@@ -384,8 +460,7 @@ class InformationController extends Controller
 			$extension = $extension[1];
 			if($extension == "pdf") {
 				echo '
-				<div class="canvas_pdf" id="'.$event->getContent().'">
-				</div>';
+				<div class="canvas_pdf" id="'.$event->getContent().'"></div>';
 				//echo do_shortcode('[pdf-embedder url="'.$event->getContent().'"]');
 			} else {
 				echo '<img src="'. TV_UPLOAD_PATH . $event->getContent() . '" alt="'.$event->getTitle().'">';
@@ -419,7 +494,6 @@ class InformationController extends Controller
 		$contentList = array();
 		$content     = "";
 		$mod         = 0;
-
 		for ($i = 0; $i < $highestRow; ++ $i) {
 			$mod = $i % 10;
 			if ($mod == 0) {
@@ -446,7 +520,6 @@ class InformationController extends Controller
 			$content .= '</table>';
 			array_push($contentList, $content);
 		}
-
 		return $contentList;
 	}
 }

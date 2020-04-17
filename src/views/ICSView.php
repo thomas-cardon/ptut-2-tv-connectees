@@ -115,7 +115,7 @@ class ICSView extends View
 				return $this->displayNoSchedule($title, $current_user);
 			}
 		} else {
-			return $this->displayNoSchedule( $title, $current_user );
+			return $this->displayNoSchedule($title, $current_user);
 		}
 
 		return $string;

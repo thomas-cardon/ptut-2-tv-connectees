@@ -223,9 +223,9 @@ class View
 		      </div>
 		      <div class="modal-footer">';
         if (empty($redirect)) {
-            $modal .= '<button type="button" onclick="$(\'#myModal\').hide();">Fermer</button>';
+            $modal .= '<button type="button" class="btn button_ecran" onclick="$(\'#myModal\').hide();">Fermer</button>';
         } else {
-            $modal .= '<button type="button" onclick="document.location.href =\' ' . $redirect . ' \'">Fermer</button>';
+            $modal .= '<button type="button" class="btn button_ecran" onclick="document.location.href =\' ' . $redirect . ' \'">Fermer</button>';
         }
         $modal .='</div>
 		    </div>
@@ -309,5 +309,15 @@ class View
     public function displayErrorInsertion()
     {
         $this->buildModal('Erreur lors de l\'inscription', '<p class="alert alert-danger"> Le login ou l\'adresse mail est déjà utilisé(e) </p>');
+    }
+
+    public function errorMessageInvalidForm()
+    {
+        $this->buildModal('Le formulaire n\'a pas été correctement remplie', '<p class="alert alert-danger">Le formulaire a été mal remplie, veuillez revoir les données rentrées et réessayez.</p>');
+    }
+
+    public function errorMessageCantAdd()
+    {
+        $this->buildModal('L\'ajout a échoué', '<p class="alert alert-danger">Une erreur s\'est produite lors de l\'envoie du formulaire, veuillez réessayer après avoir vérifié vos informations.</p>');
     }
 }

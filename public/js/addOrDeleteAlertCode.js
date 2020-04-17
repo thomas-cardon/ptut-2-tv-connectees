@@ -4,6 +4,7 @@ let counte = 0;
  * Create a new select to add a new group for the alert
  */
 function addButtonAlert() {
+    console.log(counte);
     counte = counte + 1;
     $.ajax({
         url: '/wp-content/plugins/plugin-ecran-connecte/public/js/utils/allCodes.php',

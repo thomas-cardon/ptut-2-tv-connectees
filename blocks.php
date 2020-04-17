@@ -222,7 +222,7 @@ function information_render_callback()
 {
     if(is_page()) {
         $information = new InformationController();
-        return $information->insertInformation();
+        return $information->create();
     }
 }
 
@@ -285,7 +285,7 @@ function information_modify_render_callback()
 {
     if(is_page()) {
         $information = new InformationController();
-        return $information->modifyInformation();
+        return $information->modify();
     }
 }
 

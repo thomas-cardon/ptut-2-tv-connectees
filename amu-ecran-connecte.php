@@ -13,6 +13,7 @@
  */
 
 use Controllers\CodeAdeController;
+use Controllers\InformationController;
 use Models\CodeAde;
 use Models\User;
 
@@ -31,8 +32,8 @@ include 'config.php';
 include 'blocks.php';
 
 // Upload schedules
-$download = filter_input(INPUT_POST, 'dlEDT');
-if (isset($download)) {
+$submit = filter_input(INPUT_POST, 'updatePluginEcranConnecte');
+if(isset($submit)) {
     downloadFileICS_func();
 }
 
@@ -47,16 +48,13 @@ function downloadFileICS_func()
 	$controllerAde = new CodeAdeController();
     $model = new CodeAde();
 
-    $codesAde = $model->getAll();
+    $codesAde = $model->getList();
     foreach ($codesAde as $codeAde) {
         $controllerAde->addFile($codeAde->getCode());
     }
 
-    $user = new User();
-    $teachers = $user->getUsersByRole('enseignant');
-    downloadSchedule($teachers);
-    $studyDirector = $user->getUsersByRole('directeuretude');
-    downloadSchedule($studyDirector);
+    $information = new InformationController();
+    $information->registerNewInformation();
 }
 
 add_action('downloadFileICS', 'downloadFileICS_func');

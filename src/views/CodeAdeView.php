@@ -45,7 +45,7 @@ class CodeAdeView extends View
                     <label class="form-check-label" for="halfGroup">Demi-groupe</label>
                 </div>
             </div>
-          <button type="submit" name="submit">Ajouter</button>
+          <button type="submit" class="btn button_ecran" name="submit">Ajouter</button>
         </form>';
     }
 
@@ -60,7 +60,7 @@ class CodeAdeView extends View
 	 */
 	public function displayModifyCode($title, $type, $code)
 	{
-		$page = get_page_by_title('Gestion codes ADE');
+		$page = get_page_by_title('Gestion des codes ADE');
 		$linkManageCode = get_permalink($page->ID);
 
 		return '
@@ -82,7 +82,7 @@ class CodeAdeView extends View
                     <option value="halfGroup">Demi-Groupe</option>
                 </select>
             </div>
-            <button type="submit" name="submit">Modifier</button>
+            <button type="submit" class="btn button_ecran" name="submit">Modifier</button>
             <a href="' . $linkManageCode . '">Annuler</a>
          </form>';
 	}
@@ -98,7 +98,7 @@ class CodeAdeView extends View
      */
     public function displayAllCode($years, $groups, $halfGroups)
     {
-	    $page = get_page_by_title('Modification code ADE');
+	    $page = get_page_by_title('Modifier un code ADE');
 	    $linkManageCodeAde = get_permalink($page->ID);
 
 	    $title = 'Codes Ade';
@@ -140,7 +140,7 @@ class CodeAdeView extends View
 	 */
 	public function successModification()
 	{
-		$page = get_page_by_title('Gestion codes ADE');
+		$page = get_page_by_title('Gestion des codes ADE');
 		$linkManageCode = get_permalink($page->ID);
 		$this->buildModal('Modification du code ADE', '<p>Le code ADE a bien été modifié</p>', $linkManageCode);
 	}
@@ -174,7 +174,7 @@ class CodeAdeView extends View
 	 */
 	public function errorNobody()
 	{
-		$page = get_page_by_title('Gestion codes ADE');
+		$page = get_page_by_title('Gestion des codes ADE');
 		$linkManageCode = get_permalink($page->ID);
 		echo '<p>Il n\'y a rien par ici</p><a href="'.$linkManageCode.'">Retour</a>';
 	}

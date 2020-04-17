@@ -37,13 +37,13 @@ class CodeAde extends Model implements Entity
 	/**
 	 * @inheritDoc
 	 */
-	public function create()
+	public function insert()
 	{
-		$request = $this->getDatabase()->prepare('INSERT INTO code_ade (type, title, code) VALUES (:type, :title, :code)');
+		$request = $this->getDatabase()->prepare('INSERT INTO ecran_code_ade (type, title, code) VALUES (:type, :title, :code)');
 
-		$request->bindParam(':title', $this->getTitle(), PDO::PARAM_STR);
-		$request->bindParam(':code', $this->getCode(), PDO::PARAM_STR);
-		$request->bindParam(':type', $this->getType(), PDO::PARAM_STR);
+		$request->bindValue(':title', $this->getTitle(), PDO::PARAM_STR);
+		$request->bindValue(':code', $this->getCode(), PDO::PARAM_STR);
+		$request->bindValue(':type', $this->getType(), PDO::PARAM_STR);
 
 		$request->execute();
 
@@ -55,12 +55,12 @@ class CodeAde extends Model implements Entity
 	 */
 	public function update()
 	{
-		$request = $this->getDatabase()->prepare('UPDATE code_ade SET title = :title, code = :code, type = :type WHERE id = :id');
+		$request = $this->getDatabase()->prepare('UPDATE ecran_code_ade SET title = :title, code = :code, type = :type WHERE id = :id');
 
-		$request->bindParam(':id', $this->getId(), PDO::PARAM_INT);
-		$request->bindParam(':title', $this->getTitle(), PDO::PARAM_STR);
-		$request->bindParam(':code', $this->getCode(), PDO::PARAM_STR);
-		$request->bindParam(':type', $this->getType(), PDO::PARAM_STR);
+		$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
+		$request->bindValue(':title', $this->getTitle(), PDO::PARAM_STR);
+		$request->bindValue(':code', $this->getCode(), PDO::PARAM_STR);
+		$request->bindValue(':type', $this->getType(), PDO::PARAM_STR);
 
 		$request->execute();
 
@@ -72,7 +72,7 @@ class CodeAde extends Model implements Entity
 	 */
 	public function delete()
 	{
-		$request = $this->getDatabase()->prepare( 'DELETE FROM code_ade WHERE id = :id');
+		$request = $this->getDatabase()->prepare( 'DELETE FROM ecran_code_ade WHERE id = :id');
 
 		$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
 
@@ -86,13 +86,16 @@ class CodeAde extends Model implements Entity
 	 */
 	public function get($id)
 	{
-		$request = $this->getDatabase()->prepare('SELECT * FROM code_ade WHERE id = :id');
+		$request = $this->getDatabase()->prepare('SELECT id, title, code, type FROM ecran_code_ade WHERE id = :id LIMIT 1');
 
 		$request->bindParam(':id', $id, PDO::PARAM_INT);
 
 		$request->execute();
 
-		return $this->setEntity($request->fetch(PDO::FETCH_ASSOC));
+		if($request->rowCount() > 0) {
+            return $this->setEntity($request->fetch(PDO::FETCH_ASSOC));
+        }
+		return false;
 	}
 
 	/**
@@ -100,39 +103,12 @@ class CodeAde extends Model implements Entity
 	 */
     public function getList()
     {
-	    $request = $this->getDatabase()->prepare('SELECT * FROM code_ade ORDER BY id DESC');
+	    $request = $this->getDatabase()->prepare('SELECT id, title, code, type FROM ecran_code_ade ORDER BY id DESC LIMIT 1000');
 
 	    $request->execute();
 
 	    return $this->setEntityList($request->fetchAll(PDO::FETCH_ASSOC));
     }
-
-	/**
-	 * @inheritDoc
-	 */
-	public function setEntity($data)
-	{
-		$entity = new CodeAde();
-
-		$entity->setId($data['id']);
-		$entity->setTitle($data['title']);
-		$entity->setCode($data['code']);
-		$entity->setType($data['type']);
-
-		return $entity;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function setEntityList($dataList)
-	{
-		$listEntity = array();
-		foreach ($dataList as $data) {
-			$listEntity[] = $this->setEntity($data);
-		}
-		return $listEntity;
-	}
 
 	/**
 	 * Check if a code ADE already exist with this title or with this code
@@ -144,7 +120,7 @@ class CodeAde extends Model implements Entity
 	 */
 	public function checkCode($title, $code)
 	{
-		$request = $this->getDatabase()->prepare('SELECT * FROM code_ade WHERE title = :title OR code = :code');
+		$request = $this->getDatabase()->prepare('SELECT id, title, code, type FROM ecran_code_ade WHERE title = :title OR code = :code LIMIT 2');
 
 		$request->bindParam(':title', $title, PDO::PARAM_STR);
 		$request->bindParam(':code', $code, PDO::PARAM_STR);
@@ -163,7 +139,7 @@ class CodeAde extends Model implements Entity
 	 */
     public function getAllFromType($type)
     {
-	    $request = $this->getDatabase()->prepare('SELECT * FROM code_ade WHERE type = :type ORDER BY id DESC');
+	    $request = $this->getDatabase()->prepare('SELECT id, title, code, type FROM ecran_code_ade WHERE type = :type ORDER BY id DESC LIMIT 500');
 
 	    $request->bindParam(':type', $type, PDO::PARAM_STR);
 
@@ -181,7 +157,7 @@ class CodeAde extends Model implements Entity
 	 */
 	public function getByCode($code)
 	{
-		$request = $this->getDatabase()->prepare('SELECT * FROM code_ade WHERE code = :code');
+		$request = $this->getDatabase()->prepare('SELECT id, title, code, type FROM ecran_code_ade WHERE code = :code LIMIT 1');
 
 		$request->bindParam(':code', $code, PDO::PARAM_STR);
 
@@ -199,7 +175,7 @@ class CodeAde extends Model implements Entity
 	 */
 	public function getByAlert($id)
 	{
-		$request = $this->getDatabase()->prepare('SELECT * FROM code_ade JOIN code_alert ON code_ade.id = code_alert.id_code_ade WHERE id_alert = :id');
+		$request = $this->getDatabase()->prepare('SELECT id, title, code, type FROM ecran_code_ade JOIN ecran_code_alert ON ecran_code_ade.id = ecran_code_alert.code_ade_id WHERE alert_id = :id LIMIT 100');
 
 		$request->bindParam(':id', $id, PDO::PARAM_INT);
 
@@ -207,6 +183,33 @@ class CodeAde extends Model implements Entity
 
 		return $this->setEntityList($request->fetchAll(PDO::FETCH_ASSOC));
 	}
+
+    /**
+     * @inheritDoc
+     */
+    public function setEntity($data)
+    {
+        $entity = new CodeAde();
+
+        $entity->setId($data['id']);
+        $entity->setTitle($data['title']);
+        $entity->setCode($data['code']);
+        $entity->setType($data['type']);
+
+        return $entity;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setEntityList($dataList)
+    {
+        $listEntity = array();
+        foreach ($dataList as $data) {
+            $listEntity[] = $this->setEntity($data);
+        }
+        return $listEntity;
+    }
 
 	/**
 	 * @return int|string

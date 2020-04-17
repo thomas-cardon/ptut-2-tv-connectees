@@ -61,7 +61,7 @@ class CodeAdeController extends Controller
 		        $this->model->setCode($code);
 		        $this->model->setType($type);
 
-		        if (!$this->checkDuplicateCode($this->model) && $this->model->create()) {
+		        if (!$this->checkDuplicateCode($this->model) && $this->model->insert()) {
 
 					$this->view->successCreation();
 			        $this->addFile($code);
@@ -82,16 +82,15 @@ class CodeAdeController extends Controller
 	 */
 	public function modify()
 	{
-		$id = $this->getMyIdUrl();
-		if(!is_numeric($id) || is_null($this->model->get($id)->getCode())) {
+		$id = $this->getPartOfUrl()[2];
+		if(is_numeric($id) && !$this->model->get($id)) {
 			return $this->view->errorNobody();
 		}
 
 		$result = $codeAde = $this->model->get($id);
 
-		$action = filter_input(INPUT_POST, 'submit');
-
-		if (isset($action)) {
+		$submit = filter_input(INPUT_POST, 'submit');
+		if (isset($submit)) {
 
 			$validType = ['year', 'group', 'halfGroup'];
 
@@ -141,10 +140,10 @@ class CodeAdeController extends Controller
      */
     public function deleteCodes()
     {
-        $actionDelete = filter_input(INPUT_POST, 'Delete');
+        $actionDelete = filter_input(INPUT_POST, 'delete');
         if (isset($actionDelete)) {
-            if (isset($_REQUEST['checkboxstatuscode'])) {
-                $checked_values = $_REQUEST['checkboxstatuscode'];
+            if (isset($_REQUEST['checkboxStatusCode'])) {
+                $checked_values = $_REQUEST['checkboxStatusCode'];
                 foreach ($checked_values as $id) {
 	                $this->model = $this->model->get($id);
                     $this->model->deleteCode();

@@ -42,7 +42,7 @@ class StudentView extends UserView
 	 */
     public function displayAllStudent($users)
     {
-	    $page = get_page_by_title('Modification utilisateur');
+	    $page = get_page_by_title('Modifier un utilisateur');
 	    $linkManageUser = get_permalink($page->ID);
 
 	    $title = 'Étudiants';

@@ -69,7 +69,7 @@ class SecretaryController extends UserController
 	            $this->model->setEmail($email);
 	            $this->model->setRole('secretaire');
 
-                if (!$this->checkDuplicateUser($this->model) && $this->model->create()) {
+                if (!$this->checkDuplicateUser($this->model) && $this->model->insert()) {
                     $this->view->displayInsertValidate();
                 } else {
                     $this->view->displayErrorInsertion();
@@ -158,12 +158,9 @@ class SecretaryController extends UserController
      */
     public function modifyUser()
     {
-    	$id = $this->getMyIdUrl();
-        if (is_numeric($id)) {
+    	$id = $this->getPartOfUrl()[2];
+        if (is_numeric($id) && $this->model->get($id)) {
             $user = $this->model->get($id);
-            if(is_null($user->getLogin())) {
-            	return;
-            }
 
 	        $wordpressUser = get_user_by('id', $id);
 
@@ -192,12 +189,12 @@ class SecretaryController extends UserController
      */
     public function deleteUsers()
     {
-        $actionDelete = $_POST['Delete'];
-        $roles = ['etu', 'teacher', 'direc', 'tech', 'secre', 'tele'];
+        $actionDelete = $_POST['delete'];
+        $roles = ['Etu', 'Teacher', 'Direc', 'Tech', 'Secre', 'Tele'];
         if (isset($actionDelete)) {
             foreach ($roles as $role) {
-                if (isset($_REQUEST['checkboxstatus' . $role])) {
-                    $checked_values = $_REQUEST['checkboxstatus' . $role];
+                if (isset($_REQUEST['checkboxStatus' . $role])) {
+                    $checked_values = $_REQUEST['checkboxStatus' . $role];
                     foreach ($checked_values as $id) {
                         $this->deleteUser($id);
                     }

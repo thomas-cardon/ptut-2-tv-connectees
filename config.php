@@ -1,6 +1,9 @@
 <?php
 
 include_once 'vendor/R34ICS/R34ICS.php';
+include 'widgets/WidgetAlert.php';
+include 'widgets/WidgetWeather.php';
+include 'widgets/WidgetInformation.php';
 
 // Login for viewer
 define('DB_USER_VIEWER', 'viewer');
@@ -59,26 +62,25 @@ function loadScriptsEcran()
     wp_enqueue_script('plugin-ticker', TV_PLUG_PATH . 'public/js/vendor/jquery.tickerNews.js', array('jquery'), '', true);
 
     //CSS
-	wp_enqueue_style('weather-style', TV_PLUG_PATH . 'public/css/weather.css', array(), '1.0');
-	wp_enqueue_style('style-style', TV_PLUG_PATH . 'public/css/style.css', array(), '1.0');
-	wp_enqueue_style('alert-style', TV_PLUG_PATH . 'public/css/alert.css', array(), '1.0');
-	wp_enqueue_style('info-style', TV_PLUG_PATH . 'public/css/information.css', array(), '1.0');
-	wp_enqueue_style('schedule-style', TV_PLUG_PATH . 'public/css/schedule.css', array(), '1.0');
+	wp_enqueue_style('alert_ecran', TV_PLUG_PATH . 'public/css/alert.css', array(), '1.0');
+	wp_enqueue_style('info_ecran', TV_PLUG_PATH . 'public/css/information.css', array(), '1.0');
+	wp_enqueue_style('schedule_ecran', TV_PLUG_PATH . 'public/css/schedule.css', array(), '1.0');
+    wp_enqueue_style('style_ecran', TV_PLUG_PATH . 'public/css/style.css', array(), '1.0');
+    wp_enqueue_style('weather_ecran', TV_PLUG_PATH . 'public/css/weather.css', array(), '1.0');
 
 	// SCRIPT
-	wp_enqueue_script('plugin-addCheckBox', TV_PLUG_PATH . 'public/js/addAllCheckBox.js', array('jquery'), '1.0', true);
-	wp_enqueue_script('plugin-addCodeAlert', TV_PLUG_PATH . 'public/js/addOrDeleteAlertCode.js', array('jquery'), '1.0', true);
-	wp_enqueue_script('plugin-addCodeTv', TV_PLUG_PATH . 'public/js/addOrDeleteTvCode.js', array('jquery'), '1.0', true);
-	wp_enqueue_script('plugin-alertTicker', TV_PLUG_PATH . 'public/js/alertTicker.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-scroll', TV_PLUG_PATH . 'public/js/scroll.js', array('plugin-jquerymin', 'plugin-jqueryEzTic', 'plugin-jqueryEzMinTic', 'plugin-JqueryEzMin'), '', true);
-	wp_enqueue_script('plugin-confPass', TV_PLUG_PATH . 'public/js/confirmPass.js', array('jquery'), '1.0', true);
-	wp_enqueue_script('plugin-showModal', TV_PLUG_PATH . 'public/js/modal.js', array('jquery'), '1.0', true);
-	wp_enqueue_script('plugin-oneSignal', TV_PLUG_PATH . 'public/js/oneSignalPush.js', array('jquery'), '', true);
-	wp_enqueue_script('plugin-slideshow', TV_PLUG_PATH . 'public/js/slideshow.js', array('jquery'), '2.0', true);
-	wp_enqueue_script('plugin-weather', TV_PLUG_PATH . 'public/js/weather.js', array('jquery'), '1.0', true);
-	wp_enqueue_script('plugin-weatherTime', TV_PLUG_PATH . 'public/js/weather_and_time.js', array('jquery'), '1.0', true);
-	wp_enqueue_script('plugin-sortTable', TV_PLUG_PATH . 'public/js/sortTable.js', array('jquery'), '1.0', true);
-	wp_enqueue_script('plugin-search', TV_PLUG_PATH . 'public/js/search.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('addCheckBox_script_ecran', TV_PLUG_PATH . 'public/js/addAllCheckBox.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('addCodeAlert_script_ecran', TV_PLUG_PATH . 'public/js/addOrDeleteAlertCode.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('addCodeTv_script_ecran', TV_PLUG_PATH . 'public/js/addOrDeleteTvCode.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('alertTicker_script_ecran', TV_PLUG_PATH . 'public/js/alertTicker.js', array('jquery'), '', true);
+    wp_enqueue_script('confPass_script_ecran', TV_PLUG_PATH . 'public/js/confirmPass.js', array('jquery'), '1.0', true);
+    wp_enqueue_script('oneSignal_script_ecran', TV_PLUG_PATH . 'public/js/oneSignalPush.js', array('jquery'), '', true);
+	wp_enqueue_script('scroll_script_ecran', TV_PLUG_PATH . 'public/js/scroll.js', array('plugin-jquerymin', 'plugin-jqueryEzTic', 'plugin-jqueryEzMinTic', 'plugin-JqueryEzMin'), '', true);
+    wp_enqueue_script('search_script_ecran', TV_PLUG_PATH . 'public/js/search.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('slideshow_script_ecran', TV_PLUG_PATH . 'public/js/slideshow.js', array('jquery'), '2.0', true);
+    wp_enqueue_script('sortTable_script_ecran', TV_PLUG_PATH . 'public/js/sortTable.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('weather_script_ecran', TV_PLUG_PATH . 'public/js/weather.js', array('jquery'), '1.0', true);
+	wp_enqueue_script('weatherTime_script_ecran', TV_PLUG_PATH . 'public/js/weather_and_time.js', array('jquery'), '1.0', true);
 }
 add_action('wp_enqueue_scripts', 'loadScriptsEcran');
 
@@ -102,7 +104,7 @@ function installDatabaseEcran()
 			expiration_date datetime NOT NULL,
 			author INT(10) NOT NULL,
 			type VARCHAR (10) DEFAULT 'text' NOT NULL,
-			id_administration INT(10) DEFAULT NULL,
+			administration_id INT(10) DEFAULT NULL,
 			PRIMARY KEY (id),
 			FOREIGN KEY (author) REFERENCES wp_users(ID) ON DELETE CASCADE
 		) $charset_collate;";
@@ -121,7 +123,8 @@ function installDatabaseEcran()
 			creation_date datetime DEFAULT NOW() NOT NULL,
 			expiration_date datetime NOT NULL,
 			author INT(10) NOT NULL,
-			id_administration INT(10) DEFAULT NULL,
+			for_everyone INT(1) DEFAULT '1' NOT NULL,
+			administration_id INT(10) DEFAULT NULL,
 			PRIMARY KEY (id),
 			FOREIGN KEY (author) REFERENCES wp_users(ID) ON DELETE CASCADE
 		) $charset_collate;";
@@ -151,11 +154,11 @@ function installDatabaseEcran()
     $table_name = 'ecran_code_alert';
 
     $query = "CREATE TABLE IF NOT EXISTS $table_name (
-			id_alert INT(10) NOT NULL ,
-			id_code_ade INT(10) NOT NULL ,
-			PRIMARY KEY (id_alert, id_code_ade),
-			FOREIGN KEY (id_alert) REFERENCES ecran_alert(id) ON DELETE CASCADE,
-			FOREIGN KEY (id_code_ade) REFERENCES ecran_information(id) ON DELETE CASCADE
+			alert_id INT(10) NOT NULL ,
+			code_ade_id INT(10) NOT NULL ,
+			PRIMARY KEY (alert_id, code_ade_id),
+			FOREIGN KEY (alert_id) REFERENCES ecran_alert(id) ON DELETE CASCADE,
+			FOREIGN KEY (code_ade_id) REFERENCES ecran_information(id) ON DELETE CASCADE
 			) $charset_collate;";
 
     dbDelta($query);
@@ -163,13 +166,78 @@ function installDatabaseEcran()
     $table_name = 'ecran_code_user';
 
     $query = "CREATE TABLE IF NOT EXISTS $table_name (
-			id_user INT(10) NOT NULL ,
-			id_code_ade INT(10) NOT NULL ,
-			PRIMARY KEY (id_user, id_code_ade),
-			FOREIGN KEY (id_user) REFERENCES wp_users(ID) ON DELETE CASCADE,
-			FOREIGN KEY (id_code_ade) REFERENCES ecran_information(id) ON DELETE CASCADE
+			user_id INT(10) NOT NULL ,
+			code_ade_id INT(10) NOT NULL ,
+			PRIMARY KEY (user_id, code_ade_id),
+			FOREIGN KEY (user_id) REFERENCES wp_users(ID) ON DELETE CASCADE,
+			FOREIGN KEY (code_ade_id) REFERENCES ecran_information(id) ON DELETE CASCADE
 			) $charset_collate;";
 
     dbDelta($query);
 }
 add_action('plugins_loaded', 'installDatabaseEcran');
+
+
+/*
+ * CREATE ROLES
+ */
+
+$result = add_role(
+    'secretaire',
+    __('Secretaire'),
+    array(
+        'read' => true,  // true allows this capability
+        'edit_posts' => true,
+        'delete_posts' => false, // Use false to explicitly deny
+    )
+);
+
+$result = add_role(
+    'television',
+    __('Television'),
+    array(
+        'read' => true,  // true allows this capability
+        'edit_posts' => true,
+        'delete_posts' => false, // Use false to explicitly deny
+    )
+);
+
+$result = add_role(
+    'etudiant',
+    __('Etudiant'),
+    array(
+        'read' => true,  // true allows this capability
+        'edit_posts' => true,
+        'delete_posts' => false, // Use false to explicitly deny
+    )
+);
+
+$result = add_role(
+    'enseignant',
+    __('Enseignant'),
+    array(
+        'read' => true,  // true allows this capability
+        'edit_posts' => true,
+        'delete_posts' => false, // Use false to explicitly deny
+    )
+);
+
+$result = add_role(
+    'technicien',
+    __('Technicien'),
+    array(
+        'read' => true,  // true allows this capability
+        'edit_posts' => true,
+        'delete_posts' => false, // Use false to explicitly deny
+    )
+);
+
+$result = add_role(
+    'directeuretude',
+    __('Directeur etude'),
+    array(
+        'read' => true,  // true allows this capability
+        'edit_posts' => true,
+        'delete_posts' => false, // Use false to explicitly deny
+    )
+);

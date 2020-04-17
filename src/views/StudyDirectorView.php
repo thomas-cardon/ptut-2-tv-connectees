@@ -56,7 +56,7 @@ class StudyDirectorView extends UserView
 	 */
 	public function displayAllStudyDirector($users)
 	{
-		$page = get_page_by_title('Modification utilisateur');
+		$page = get_page_by_title('Modifier un utilisateur');
 		$linkManageUser = get_permalink($page->ID);
 
 		$title = 'Directeur d\'études';
@@ -66,8 +66,15 @@ class StudyDirectorView extends UserView
 		$row = array();
 		$count = 0;
 		foreach ($users as $user) {
+
+		    if(sizeof($user->getCodes()) == 0) {
+		        $code = 'Aucun code';
+            } else {
+                $code = $user->getCodes()[0]->getCode();
+            }
+
 			++$count;
-			$row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), $user->getCodes()[0]->getCode(), $this->buildLinkForModify($linkManageUser.'/'.$user->getId())];
+			$row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), $code, $this->buildLinkForModify($linkManageUser.'/'.$user->getId())];
 		}
 
 		return $this->displayAll($name, $title, $header, $row, 'director');
@@ -85,13 +92,20 @@ class StudyDirectorView extends UserView
 	    $page = get_page_by_title('Gestion des utilisateurs');
 	    $linkManageUser = get_permalink($page->ID);
 
+        $code = 'Aucun code';
+	    if(sizeof($user->getCodes()) > 0) {
+	        $code = $user->getCodes()[0]->getCode();
+        }
+
 	    return '
+        <h2>' . $user->getLogin() . '</h2>
         <form method="post">
-            <h2>' . $user->getLogin() . '</h2>
-            <label for="modifCode">Code ADE</label>
-            <input type="text" class="form-control" id="modifCode" name="modifCode" placeholder="Entrer le Code ADE" value="' . $user->getCodes()[0]->getCode() . '" required="">
-            <button name="modifValidate" type="submit" value="Valider">Valider</button>
-            <a href="' . $linkManageUser . '">Annuler</a>
+            <div class="form-group">
+                <label for="modifCode">Code ADE</label>
+                <input type="text" class="form-control" id="modifCode" name="modifCode" placeholder="Entrer le Code ADE" value="' . $code . '" required="">
+            </div>
+            <button class="btn button_ecran" name="modifValidate" type="submit" value="Valider">Valider</button>
+            <a class="btn delete_button_ecran" href="' . $linkManageUser . '">Annuler</a>
         </form>';
     }
 }

@@ -233,4 +233,12 @@ class UserView extends View
     {
         return '<p>Vous n\'avez pas cours!</p>';
     }
+
+    public function errorMessageNoCodeRegister()
+    {
+        $current_user = wp_get_current_user();
+        return '
+        <h2>'.$current_user->user_login.'</h2>
+        <p>Vous êtes enregistré sans aucun emploi du temps, rendez-vous sur votre compte pour pouvoir vous attribuez un code afin d\'accèder à votre emploi du temps</p>';
+    }
 }

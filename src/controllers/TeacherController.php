@@ -112,7 +112,7 @@ class TeacherController extends UserController implements Schedule
 
 	                        $this->model->setCodes($code);
 
-                            if (!$this->checkDuplicateUser($this->model) && $this->model->create()) {
+                            if (!$this->checkDuplicateUser($this->model) && $this->model->insert()) {
                             	$path = $this->getFilePath($code);
                             	if (!file_exists($path)) {
 		                            $this->addFile($code);

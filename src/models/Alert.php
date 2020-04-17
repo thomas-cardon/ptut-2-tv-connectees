@@ -37,7 +37,7 @@ class Alert extends Model implements Entity
 	/**
 	 * @var string
 	 */
-	private $end_date;
+	private $expirationDate;
 
 	/**
 	 * @var CodeAde[]
@@ -49,19 +49,25 @@ class Alert extends Model implements Entity
 	 */
 	private $forEveryone;
 
+    /**
+     * @var int
+     */
+	private $adminId;
+
 
     /**
      * Add an alert in the database with today date and current user.
      */
-    public function create()
+    public function insert()
     {
-	    $request = $this->getDatabase()->prepare('INSERT INTO ecran_alert (author, content, creation_date, end_date, for_everyone) VALUES (:author, :content, :creation_date, :end_date, :for_everyone)');
+	    $request = $this->getDatabase()->prepare('INSERT INTO ecran_alert (author, content, creation_date, expiration_date, for_everyone, administration_id) VALUES (:author, :content, :creation_date, :expirationDate, :for_everyone, :administrationId)');
 
 	    $request->bindValue(':author', $this->getAuthor(), PDO::PARAM_INT);
 	    $request->bindValue(':content', $this->getContent(), PDO::PARAM_STR);
 	    $request->bindValue(':creation_date', $this->getCreationDate(), PDO::PARAM_STR);
-	    $request->bindValue(':end_date', $this->getEndDate(), PDO::PARAM_STR);
+	    $request->bindValue(':expirationDate', $this->getExpirationDate(), PDO::PARAM_STR);
 	    $request->bindValue(':for_everyone', $this->isForEveryone(), PDO::PARAM_INT);
+	    $request->bindValue(':administrationId', $this->getAdminId(), PDO::PARAM_INT);
 
 	    $request->execute();
 
@@ -70,7 +76,7 @@ class Alert extends Model implements Entity
 	    foreach ($this->getCodes() as $code) {
 
 	    	if($code !== 'all' || $code !== 0) {
-			    $request = $this->getDatabase()->prepare('INSERT INTO ecran_code_alert (id_alert, id_code_ade) VALUES (:idAlert, :idCodeAde)');
+			    $request = $this->getDatabase()->prepare('INSERT INTO ecran_code_alert (alert_id, code_ade_id) VALUES (:idAlert, :idCodeAde)');
 
 			    $request->bindParam(':idAlert', $id, PDO::PARAM_INT);
 			    $request->bindValue(':idCodeAde', $code->getId(), PDO::PARAM_INT);
@@ -80,26 +86,28 @@ class Alert extends Model implements Entity
 	    }
 
 	    return $id;
-    } //create()
+    }
 
 	/**
 	 * Modify the information in database
 	 */
 	public function update()
 	{
-		$request = $this->getDatabase()->prepare('UPDATE ecran_alert SET content = :content, end_date = :endDate, for_everyone = :for_everyone WHERE id = :id');
+		$request = $this->getDatabase()->prepare('UPDATE ecran_alert SET content = :content, expiration_date = :expirationDate, for_everyone = :for_everyone WHERE id = :id');
 
 		$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
 		$request->bindValue(':content', $this->getContent(), PDO::PARAM_STR);
-		$request->bindValue(':endDate', $this->getEndDate(), PDO::PARAM_STR);
+		$request->bindValue(':expirationDate', $this->getExpirationDate(), PDO::PARAM_STR);
 		$request->bindValue(':for_everyone', $this->isForEveryone(), PDO::PARAM_INT);
 
 		$request->execute();
 
-		if(!is_null($this->getAlertLinkToCode()[0])) {
-			$request = $this->getDatabase()->prepare('DELETE FROM ecran_code_alert WHERE id_alert = :id_alert');
+		$count = $request->rowCount();
 
-			$request->bindValue(':id_alert', $this->getId(), PDO::PARAM_INT);
+		if(!is_null($this->getAlertLinkToCode()[0])) {
+			$request = $this->getDatabase()->prepare('DELETE FROM ecran_code_alert WHERE alert_id = :alertId');
+
+			$request->bindValue(':alertId', $this->getId(), PDO::PARAM_INT);
 
 			$request->execute();
 		}
@@ -107,17 +115,17 @@ class Alert extends Model implements Entity
 		foreach ($this->getCodes() as $code) {
 
 			if($code->getCode() !== 'all' || $code->getCode() !== 0) {
-				$request = $this->getDatabase()->prepare('INSERT INTO ecran_code_alert (id_alert, id_code_ade) VALUES (:idAlert, :idCodeAde)');
+				$request = $this->getDatabase()->prepare('INSERT INTO ecran_code_alert (alert_id, code_ade_id) VALUES (:alertId, :codeAdeId)');
 
-				$request->bindValue(':idAlert', $this->getId(), PDO::PARAM_INT);
-				$request->bindValue(':idCodeAde', $code->getId(), PDO::PARAM_INT);
+				$request->bindValue(':alertId', $this->getId(), PDO::PARAM_INT);
+				$request->bindValue(':codeAdeId', $code->getId(), PDO::PARAM_INT);
 
 				$request->execute();
 			}
 		}
 
-		return $request->rowCount();
-	} //update()
+		return $count;
+	}
 
 	/**
 	 * Delete an alert in the database
@@ -142,14 +150,14 @@ class Alert extends Model implements Entity
 	 */
 	public function get($id)
 	{
-		$request = $this->getDatabase()->prepare('SELECT id, content, creation_date, expiration_date, author FROM ecran_alert WHERE alert.id = :id LIMIT 1');
+		$request = $this->getDatabase()->prepare('SELECT id, content, creation_date, expiration_date, author FROM ecran_alert WHERE id = :id LIMIT 1');
 
 		$request->bindParam(':id', $id, PDO::PARAM_INT);
 
 		$request->execute();
 
 		return $this->setEntity($request->fetch(PDO::FETCH_ASSOC));
-	} //get()
+	}
 
     /**
      * @param int $begin
@@ -178,7 +186,7 @@ class Alert extends Model implements Entity
      *
      * @return array|Alert[]
      */
-    public function getAuthorListAlert($begin = 0, $numberElement = 25)
+    public function getAuthorListAlert($author, $begin = 0, $numberElement = 25)
     {
         $request = $this->getDatabase()->prepare("SELECT id, content, creation_date, expiration_date, author FROM ecran_alert  WHERE author = :author ORDER BY id ASC LIMIT :begin, :numberElement");
 
@@ -194,6 +202,18 @@ class Alert extends Model implements Entity
         return [];
     }
 
+    /**
+     * @return Information[]
+     */
+    public function getFromAdminWebsite()
+    {
+        $request = $this->getDatabaseViewer()->prepare('SELECT id, title, content, type, author, expiration_date, creation_date FROM ecran_information LIMIT 200');
+
+        $request->execute();
+
+        return $this->setEntityList($request->fetchAll(), true);
+    }
+
 	/**
 	 * Get all alerts for the user
 	 *
@@ -205,10 +225,10 @@ class Alert extends Model implements Entity
 	{
 		$request = $this->getDatabase()->prepare('SELECT ecran_alert.id, content, creation_date, expiration_date, author 
 															FROM ecran_alert
-															JOIN ecran_code_alert ON ecran_alert.id = ecran_code_alert.id_alert 
-															JOIN ecran_code_ade ON ecran_code_alert.id_code_ade = ecran_code_ade.id
-															JOIN ecran_code_user ON ecran_code_ade.id = ecran_code_user.id_code_ade
-															WHERE ecran_code_user.id_user = :id ORDER BY end_date ASC');
+															JOIN ecran_code_alert ON ecran_alert.id = ecran_code_alert.alert_id
+															JOIN ecran_code_ade ON ecran_code_alert.code_ade_id = ecran_code_ade.id
+															JOIN ecran_code_user ON ecran_code_ade.id = ecran_code_user.code_ade_id
+															WHERE ecran_code_user.user_id = :id ORDER BY end_date ASC');
 
 		$request->bindParam(':id', $id, PDO::PARAM_INT);
 
@@ -222,7 +242,7 @@ class Alert extends Model implements Entity
 	 */
 	public function getForEveryone()
 	{
-		$request = $this->getDatabase()->prepare('SELECT ecran_alert.id, content, creation_date, expiration_date, author FROM ecran_alert WHERE for_everyone = 1 ORDER BY end_date ASC LIMIT 50');
+		$request = $this->getDatabase()->prepare('SELECT ecran_alert.id, content, creation_date, expiration_date, author FROM ecran_alert WHERE for_everyone = 1 ORDER BY expiration_date ASC LIMIT 50');
 
 		$request->bindParam(':id', $id, PDO::PARAM_INT);
 
@@ -238,14 +258,23 @@ class Alert extends Model implements Entity
 	 */
 	public function getAlertLinkToCode()
 	{
-		$request = $this->getDatabase()->prepare('SELECT ecran_alert.id, content, creation_date, expiration_date, author FROM code_alert JOIN ecran_alert ON code_alert.id_alert = ecran_alert.id WHERE id_alert = :id_alert LIMIT 50');
+		$request = $this->getDatabase()->prepare('SELECT ecran_alert.id, content, creation_date, expiration_date, author FROM code_alert JOIN ecran_alert ON code_alert.alert_id = ecran_alert.id WHERE alert_id = :alertId LIMIT 50');
 
-		$request->bindValue(':id_alert', $this->getId(), PDO::PARAM_INT);
+		$request->bindValue(':alertId', $this->getId(), PDO::PARAM_INT);
 
 		$request->execute();
 
 		return $this->setEntityList($request->fetchAll());
 	}
+
+    public function getAdminWebsiteAlert()
+    {
+        $request = $this->getDatabase()->prepare('SELECT id, content, author, expiration_date, creation_date, for_everyone FROM ecran_alert WHERE administration_id IS NOT NULL LIMIT 500');
+
+        $request->execute();
+
+        return $this->setEntityList($request->fetchAll());
+    }
 
     /**
      * @return int
@@ -266,11 +295,11 @@ class Alert extends Model implements Entity
 	 *
 	 * @return array | Alert
 	 */
-	public function setEntityList($dataList)
+	public function setEntityList($dataList, $adminSite = false)
 	{
 		$listEntity = array();
 		foreach ($dataList as $data) {
-			$listEntity[] = $this->setEntity($data);
+			$listEntity[] = $this->setEntity($data, $adminSite);
 		}
 		return $listEntity;
 	}
@@ -282,7 +311,7 @@ class Alert extends Model implements Entity
 	 *
 	 * @return Alert
 	 */
-	public function setEntity($data)
+	public function setEntity($data, $adminSite = false)
 	{
 		$entity = new Alert();
 		$author = new User();
@@ -292,8 +321,14 @@ class Alert extends Model implements Entity
 		$entity->setAuthor($author->get($data['author']));
 		$entity->setContent($data['content']);
 		$entity->setCreationDate(date('Y-m-d', strtotime($data['creation_date'])));
-		$entity->setEndDate(date('Y-m-d', strtotime($data['end_date'])));
+		$entity->setExpirationDate(date('Y-m-d', strtotime($data['expiration_date'])));
 		$entity->setForEveryone($data['for_everyone']);
+
+        if($adminSite) {
+            $entity->setAdminId($data['id']);
+        } else {
+            $entity->setAdminId($data['administration_id']);
+        }
 
 		$codes = array();
 
@@ -385,17 +420,17 @@ class Alert extends Model implements Entity
 	/**
 	 * @return string
 	 */
-	public function getEndDate()
+	public function getExpirationDate()
 	{
-		return $this->end_date;
+		return $this->expirationDate;
 	}
 
 	/**
-	 * @param $end_date
+	 * @param $expirationDate
 	 */
-	public function setEndDate($end_date)
+	public function setExpirationDate($expirationDate)
 	{
-		$this->end_date = $end_date;
+		$this->expirationDate = $expirationDate;
 	}
 
 	/**
@@ -429,4 +464,20 @@ class Alert extends Model implements Entity
 	{
 		$this->forEveryone = $forEveryone;
 	}
+
+    /**
+     * @return int
+     */
+    public function getAdminId()
+    {
+        return $this->adminId;
+    }
+
+    /**
+     * @param int $adminId
+     */
+    public function setAdminId($adminId)
+    {
+        $this->adminId = $adminId;
+    }
 }

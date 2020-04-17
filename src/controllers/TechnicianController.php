@@ -62,7 +62,7 @@ class TechnicianController extends UserController implements Schedule
                 $this->model->setEmail($email);
                 $this->model->setRole('technicien');
 
-                if ($this->model->create()) {
+                if ($this->model->insert()) {
                     $this->view->displayInsertValidate();
                 } else {
                     $this->view->displayErrorInsertion();

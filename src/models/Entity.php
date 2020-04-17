@@ -18,7 +18,7 @@ interface Entity
 	 *
 	 * @return int  id of the new entity
 	 */
-	public function create();
+	public function insert();
 
 	/**
 	 * Update an entity

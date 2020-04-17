@@ -44,10 +44,10 @@ class StudyDirectorController extends UserController implements Schedule
 	{
 		$current_user = wp_get_current_user();
 		$user = $this->model->get($current_user->ID);
-		if($this->displaySchedule($user->getCodes()[0]->getCode())) {
-			return $this->displaySchedule($user->getCodes()[0]->getCode());
-		} else {
-			return $this->view->displayNoStudy();
+        if (sizeof($user->getCodes()) > 0) {
+            return $this->displaySchedule($user->getCodes()[0]->getCode());
+        } else {
+			return $this->view->errorMessageNoCodeRegister();
 		}
 	}
 
@@ -78,7 +78,7 @@ class StudyDirectorController extends UserController implements Schedule
 	            $this->model->setRole('directeuretude');
 	            $this->model->setCodes($code);
 
-                if ($this->model->create()) {
+                if ($this->model->insert()) {
 	                $path = $this->getFilePath($code);
 	                if (!file_exists($path)) {
 		                $this->addFile($code);
@@ -92,15 +92,6 @@ class StudyDirectorController extends UserController implements Schedule
             }
         }
         return $this->view->displayCreateDirector();
-    }
-
-    /**
-     * Display all study directors
-     */
-    public function displayAllStudyDirector()
-    {
-        $users = $this->model->getUsersByRole('directeuretude');
-        return $this->view->displayAllStudyDirector($users);
     }
 
     /**
@@ -128,7 +119,15 @@ class StudyDirectorController extends UserController implements Schedule
 		        }
 	        }
         }
-
         return $this->view->displayModifyStudyDirector($user);
+    }
+
+    /**
+     * Display all study directors
+     */
+    public function displayAllStudyDirector()
+    {
+        $users = $this->model->getUsersByRole('directeuretude');
+        return $this->view->displayAllStudyDirector($users);
     }
 }

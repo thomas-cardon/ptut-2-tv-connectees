@@ -50,20 +50,26 @@ class Information extends Model implements Entity
 	private $type;
 
     /**
+     * @var int
+     */
+	private $adminId;
+
+    /**
      * Add the information in the database with today date and current user.
      *
      * @return int
      */
-    public function create()
+    public function insert()
     {
-	    $request = $this->getDatabase()->prepare('INSERT INTO ecran_information (title, author, creation_date, expiration_date, content, type) VALUES (:title, :author, :creation_date, :expiration_date, :content, :type)');
+	    $request = $this->getDatabase()->prepare('INSERT INTO ecran_information (title, author, creation_date, expiration_date, content, type, administration_id) VALUES (:title, :author, :creation_date, :expiration_date, :content, :type, :administrationId)');
 
-	    $request->bindParam(':title', $this->getTitle(), PDO::PARAM_STR);
-	    $request->bindParam(':author', $this->getAuthor(), PDO::PARAM_INT);
-	    $request->bindParam(':creation_date', $this->getCreationDate(), PDO::PARAM_STR);
-	    $request->bindParam(':expiration_date', $this->getEndDate(), PDO::PARAM_STR);
-	    $request->bindParam(':content', $this->getContent(), PDO::PARAM_STR);
-	    $request->bindParam(':type', $this->getType(), PDO::PARAM_STR);
+	    $request->bindValue(':title', $this->getTitle(), PDO::PARAM_STR);
+	    $request->bindValue(':author', $this->getAuthor(), PDO::PARAM_INT);
+	    $request->bindValue(':creation_date', $this->getCreationDate(), PDO::PARAM_STR);
+	    $request->bindValue(':expiration_date', $this->getExpirationDate(), PDO::PARAM_STR);
+	    $request->bindValue(':content', $this->getContent(), PDO::PARAM_STR);
+	    $request->bindValue(':type', $this->getType(), PDO::PARAM_STR);
+        $request->bindValue(':administrationId', $this->getAdminId(), PDO::PARAM_STR);
 
 	    $request->execute();
 
@@ -75,12 +81,12 @@ class Information extends Model implements Entity
 	 */
 	public function update()
 	{
-		$request = $this->getDatabase()->prepare('UPDATE ecran_information SET title = :title, content = :content, expiration_date = :expiration_date WHERE ID_info = :id');
+		$request = $this->getDatabase()->prepare('UPDATE ecran_information SET title = :title, content = :content, expiration_date = :expiration_date WHERE id = :id');
 
-		$request->bindParam(':id', $this->getId(), PDO::PARAM_INT);
-		$request->bindParam(':title', $this->getTitle(), PDO::PARAM_STR);
-		$request->bindParam(':content', $this->getContent(), PDO::PARAM_STR);
-		$request->bindParam(':expiration_date', $this->getEndDate(), PDO::PARAM_STR);
+		$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
+		$request->bindValue(':title', $this->getTitle(), PDO::PARAM_STR);
+		$request->bindValue(':content', $this->getContent(), PDO::PARAM_STR);
+		$request->bindValue(':expiration_date', $this->getExpirationDate(), PDO::PARAM_STR);
 
 		$request->execute();
 
@@ -92,7 +98,7 @@ class Information extends Model implements Entity
      */
     public function delete()
     {
-	    $request = $this->getDatabase()->prepare('DELETE FROM ecran_information WHERE ID_info = :id');
+	    $request = $this->getDatabase()->prepare('DELETE FROM ecran_information WHERE id = :id');
 
 	    $request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
 
@@ -100,6 +106,27 @@ class Information extends Model implements Entity
 
 	    return $request->rowCount();
     } //deleteInformation()
+
+    /**
+     * Return an information corresponding to the ID
+     *
+     * @param $id   int id
+     *
+     * @return Information | bool
+     */
+    public function get($id)
+    {
+        $request = $this->getDatabase()->prepare("SELECT id, title, content, creation_date, expiration_date, author, type FROM ecran_information WHERE id = :id LIMIT 1");
+
+	    $request->bindParam(':id', $id, PDO::PARAM_INT);
+
+	    $request->execute();
+
+	    if($request->rowCount() > 0) {
+            return $this->setEntity($request->fetch(PDO::FETCH_ASSOC));
+        }
+	    return false;
+    }
 
     /**
      * @param int $begin
@@ -122,6 +149,26 @@ class Information extends Model implements Entity
         return [];
     }
 
+    /**
+     * Return the list of information created by an user
+     *
+     * @param $authorId     int id
+     *
+     * @return Information[]
+     */
+    public function getAuthorListInformation($author, $begin = 0, $numberElement = 25)
+    {
+        $request = $this->getDatabase()->prepare( 'SELECT * FROM ecran_information WHERE author = :author ORDER BY expiration_date LIMIT :begin, :numberElement');
+
+        $request->bindParam(':author', $author, PDO::PARAM_INT);
+        $request->bindValue(':begin', (int) $begin, PDO::PARAM_INT);
+        $request->bindValue(':numberElement', (int) $numberElement, PDO::PARAM_INT);
+
+        $request->execute();
+
+        return $this->setEntityList($request->fetchAll(PDO::FETCH_ASSOC));
+    } //getAuthorListInformation()
+
     public function countAll()
     {
         $request = $this->getDatabase()->prepare("SELECT COUNT(*) FROM ecran_information");
@@ -131,62 +178,61 @@ class Information extends Model implements Entity
         return $request->fetch()[0];
     }
 
-	/**
-	 * Return the list of event present in database
-	 * @return array|null|object
-	 */
-	public function getListInformationEvent()
-	{
-		$request = $this->getDatabase()->prepare('SELECT * FROM ecran_information JOIN wp_users ON ecran_information.author = wp_users.ID WHERE type = "event" ORDER BY end_date ASC');
+    /**
+     * Return the list of event present in database
+     * @return array|null|object
+     */
+    public function getListInformationEvent()
+    {
+        $request = $this->getDatabase()->prepare('SELECT * FROM ecran_information WHERE type = "event" ORDER BY expiration_date ASC');
 
-		$request->execute();
+        $request->execute();
 
-		return $this->setEntityList($request->fetchAll(PDO::FETCH_ASSOC));
-	} //getListInformation()
+        return $this->setEntityList($request->fetchAll(PDO::FETCH_ASSOC));
+    }
+
 
     /**
-     * Return the list of information created by an user
-     *
-     * @param $authorId     int id
+     * @return Information[]
+     */
+    public function getFromAdminWebsite()
+    {
+        $request = $this->getDatabaseViewer()->prepare('SELECT id, title, content, type, author, expiration_date, creation_date FROM ecran_information LIMIT 200');
+
+        $request->execute();
+
+        return $this->setEntityList($request->fetchAll(), true);
+    }
+
+    /**
      *
      * @return Information[]
      */
-    public function getAuthorListInformation($author)
+    public function getAdminWebsiteInformation()
     {
-	    $request = $this->getDatabase()->prepare( 'SELECT * FROM ecran_information JOIN wp_users ON ecran_information.author = wp_users.ID WHERE author = :author ORDER BY end_date');
-
-	    $request->bindParam(':author', $author, PDO::PARAM_INT);
-
-	    $request->execute();
-
-	    return $this->setEntityList($request->fetchAll(PDO::FETCH_ASSOC));
-    } //getAuthorListInformation()
-
-    /**
-     * Return an information corresponding to the ID
-     *
-     * @param $id   int id
-     *
-     * @return Information
-     */
-    public function get($id)
-    {
-	    $request = $this->getDatabase()->prepare('SELECT * FROM ecran_information JOIN wp_users ON informations.author = wp_users.ID WHERE ID_info = :id');
-
-	    $request->bindParam(':id', $id, PDO::PARAM_INT);
-
-	    $request->execute();
-
-	    return $this->setEntity($request->fetch(PDO::FETCH_ASSOC));
-    } //getInformationByID()
-
-    public function getFromAdminWebsite()
-    {
-        $request = $this->getDatabaseViewer()->prepare('SELECT id, title, content, type, author, expiration_date, creation_date FROM ecran_information LIMIT 25');
+        $request = $this->getDatabase()->prepare('SELECT id, title, content, type, author, expiration_date, creation_date FROM ecran_information WHERE administration_id IS NOT NULL LIMIT 500');
 
         $request->execute();
 
         return $this->setEntityList($request->fetchAll());
+    }
+
+    /**
+     * @param $id
+     * @return $this|bool|Information
+     */
+    public function getInformationFromAdminSite($id)
+    {
+        $request = $this->getDatabaseViewer()->prepare('SELECT id, title, content, type, author, expiration_date, creation_date FROM ecran_information WHERE id = :id LIMIT 1');
+
+        $request->bindValue(':id', $id, PDO::PARAM_INT);
+
+        $request->execute();
+
+        if($request->rowCount() > 0) {
+            return $this->setEntity($request->fetch(), true);
+        }
+        return false;
     }
 
 	/**
@@ -196,11 +242,11 @@ class Information extends Model implements Entity
 	 *
 	 * @return array | Information
 	 */
-	public function setEntityList($dataList)
+	public function setEntityList($dataList, $adminSite = false)
 	{
 		$listEntity = array();
 		foreach ($dataList as $data) {
-			$listEntity[] = $this->setEntity($data);
+			$listEntity[] = $this->setEntity($data, $adminSite);
 		}
 		return $listEntity;
 	}
@@ -213,18 +259,24 @@ class Information extends Model implements Entity
 	 *
 	 * @return $this
 	 */
-	public function setEntity($data)
+	public function setEntity($data, $adminSite = false)
 	{
 		$entity = new Information();
 		$user = new User();
 
-		$entity->setId($data['ID_info']);
+		$entity->setId($data['id']);
 		$entity->setTitle($data['title']);
+        $entity->setContent($data['content']);
+        $entity->setCreationDate(date('Y-m-d', strtotime($data['creation_date'])));
+        $entity->setExpirationDate(date('Y-m-d', strtotime($data['expiration_date'])));
 		$entity->setAuthor($user->get($data['author']));
-		$entity->setCreationDate(date('Y-m-d', strtotime($data['creation_date'])));
-		$entity->setExpirationDate(date('Y-m-d', strtotime($data['end_date'])));
-		$entity->setContent($data['content']);
 		$entity->setType($data['type']);
+
+        if($adminSite) {
+            $entity->setAdminId($data['id']);
+        } else {
+            $entity->setAdminId($data['administration_id']);
+        }
 
 		return $entity;
 	}
@@ -340,4 +392,20 @@ class Information extends Model implements Entity
 	{
 		$this->type = $type;
 	}
+
+    /**
+     * @return int
+     */
+    public function getAdminId()
+    {
+        return $this->adminId;
+    }
+
+    /**
+     * @param int $adminId
+     */
+    public function setAdminId($adminId)
+    {
+        $this->adminId = $adminId;
+    }
 }
