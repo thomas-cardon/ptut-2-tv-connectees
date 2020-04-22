@@ -10,6 +10,8 @@ define('DB_USER_VIEWER', 'viewer');
 define('DB_PASSWORD_VIEWER', 'viewer');
 define('DB_HOST_VIEWER', 'localhost');
 define('DB_NAME_VIEWER', 'adminwordpress');
+define('URL_WEBSITE_VIEWER', 'http://adminwordpress/');
+
 
 /**
  * Create all directory

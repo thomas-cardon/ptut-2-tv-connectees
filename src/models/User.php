@@ -106,7 +106,6 @@ class User extends Model implements Entity
 		$request->execute();
         */
 		// To review
-        echo $id;
 		if($this->getRole() == 'television') {
 			foreach ($this->getCodes() as $code) {
 
@@ -213,6 +212,13 @@ class User extends Model implements Entity
             return $this->setEntity($request->fetch());
         }
 		return false;
+        /*
+        $author = get_user_by('id', $id);
+
+        $this->setLogin($author->user_login);
+
+        return $this;
+        */
 	}
 
     /**

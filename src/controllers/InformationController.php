@@ -3,6 +3,7 @@
 namespace Controllers;
 
 use Models\Information;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Views\InformationView;
 
 /**
@@ -34,242 +35,261 @@ class InformationController extends Controller
 		$this->view  = new InformationView();
 	}
 
-	/**
-	 * Create information and add it into the database
-	 *
-	 * @return string
-	 * @throws \PhpOffice\PhpSpreadsheet\Exception
-	 * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
-	 */
-	public function create() {
+    /**
+     * Create information and add it into the database
+     *
+     * @return string
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     */
+    public function create()
+    {
+        $current_user = wp_get_current_user();
 
-		// The current user who want to create the information
-		$current_user = wp_get_current_user();
+        // All forms
+        $actionText  = $_POST['createText'];
+        $actionImg   = $_POST['createImg'];
+        $actionTab   = $_POST['createTab'];
+        $actionPDF   = $_POST['createPDF'];
+        $actionEvent = $_POST['createEvent'];
 
-		// All forms
-		$actionText  = $_POST['createText'];
-		$actionImg   = $_POST['createImg'];
-		$actionTab   = $_POST['createTab'];
-		$actionPDF   = $_POST['createPDF'];
-		$actionEvent = $_POST['createEvent'];
+        // Variables
+        $title        = filter_input(INPUT_POST, 'title');
+        $content      = filter_input(INPUT_POST, 'content');
+        $endDate      = filter_input(INPUT_POST, 'expirationDate');
+        $creationDate = date('Y-m-d');
 
-		// Variables
-		$title        = filter_input(INPUT_POST, 'title');
-		$content      = filter_input(INPUT_POST, 'content');
-		$endDate      = filter_input(INPUT_POST, 'expirationDate');
-		$creationDate = date('Y-m-d');
+        // If the title is empty
+        if ($title == '') {
+            $title = 'Sans titre';
+        }
 
-		// If the title is empty
-		if ($title == '') {
-			$title = 'Sans titre';
-		}
+        $information = $this->model;
 
-		// Set the base of all information
-		$this->model->setTitle($title);
-		$this->model->setAuthor($current_user->ID);
-		$this->model->setCreationDate($creationDate);
-		$this->model->setExpirationDate($endDate);
-        $this->model->setAdminId(null);
+        // Set the base of all information
+        $information->setTitle($title);
+        $information->setAuthor($current_user->ID);
+        $information->setCreationDate($creationDate);
+        $information->setExpirationDate($endDate);
+        $information->setAdminId(null);
 
-		if (isset($actionText)) {   // If the information is a text
-			$this->model->setContent($content);
-			$this->model->setType("text");
+        if (isset($actionText)) {   // If the information is a text
+            $information->setContent($content);
+            $information->setType("text");
 
-			// Try to insert the information
-			if($this->model->insert()) {
-				$this->view->displayCreateValidate();
-			} else {
-				$this->view->displayErrorInsertionInfo();
-			}
-		}
-		if (isset($actionImg)) {  // If the information is an image
-			$type = "img";
-			$this->model->setType($type);
-			$filename    = $_FILES['contentFile']['name'];
-			$fileTmpName = $_FILES['contentFile']['tmp_name'];
-			$explodeName = explode('.', $filename);
-			$goodExtension = ['jpg', 'jpeg', 'gif', 'png', 'svg'];
-			if(in_array(end($explodeName), $goodExtension)) {
-				$this->registerFile($filename, $fileTmpName);
-			} else {
-				echo 'image non valide';
-			}
-		}
-		if (isset($actionTab)) { // If the information is a table
-			$type = "tab";
-			$this->model->setType($type);
-			$filename    = $_FILES['contentFile']['name'];
-			$fileTmpName = $_FILES['contentFile']['tmp_name'];
-			$explodeName = explode('.', $filename);
-			$goodExtension = ['xls', 'xlsx', 'ods'];
-			if(in_array(end($explodeName), $goodExtension)) {
-				$this->registerFile($filename, $fileTmpName);
-			}
-		}
-		if (isset($actionPDF)) {
-			$type = "pdf";
-			$this->model->setType($type);
-			$filename    = $_FILES['contentFile']['name'];
-			$explodeName = explode('.', $filename);
-			if(end($explodeName) == 'pdf') {
-				$fileTmpName = $_FILES['contentFile']['tmp_name'];
-				$this->registerFile($filename, $fileTmpName);
-			} else {
-				echo 'PDF non valide';
-			}
-		}
-		if (isset($actionEvent)) {
-			$type = 'event';
-			$this->model->setType($type);
-			// Register all files
-			$countFiles = count($_FILES['contentFile']['name']);
-			echo $countFiles;
-			for ( $i = 0; $i < $countFiles; $i ++ ) {
-				$this->model->setId(null);
-				$filename    = $_FILES['contentFile']['name'][$i];
-				$fileTmpName = $_FILES['contentFile']['tmp_name'][$i];
-				$explodeName = explode('.', $filename);
-				$goodExtension = ['jpg', 'jpeg', 'gif', 'png', 'svg', 'pdf'];
-				if(in_array(end($explodeName), $goodExtension)) {
-					$this->registerFile($filename, $fileTmpName);
-				}
-			}
-		}
-		// Return a selector with all forms
-		return
-			$this->view->displayStartMultiSelect() .
-			$this->view->displayTitleSelect('text','Texte', true) .
-			$this->view->displayTitleSelect('image','Image') .
-			$this->view->displayTitleSelect('table','Tableau') .
-			$this->view->displayTitleSelect('pdf','PDF') .
-			$this->view->displayTitleSelect('event', 'Événement') .
-			$this->view->displayEndOfTitle() .
-			$this->view->displayContentSelect('text', $this->view->displayFormText(), true) .
-			$this->view->displayContentSelect('image', $this->view->displayFormImg()) .
-			$this->view->displayContentSelect('table', $this->view->displayFormTab()) .
-			$this->view->displayContentSelect('pdf', $this->view->displayFormPDF()) .
-			$this->view->displayContentSelect('event', $this->view->displayFormEvent()) .
-			$this->view->displayEndDiv().
-            $this->view->contextCreateInformation();
-	}
-
-
-	/**
-	 * Upload a file in a directory and in the database
-	 *
-	 * @param $filename     string
-	 * @param $tmpName      string
-	 */
-	public function registerFile($filename, $tmpName)
-	{
-		$id               = 'temporary';
-		$extension_upload = strtolower(substr(strrchr($filename, '.'), 1));
-		$name              = $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $id . '.' . $extension_upload;
-
-		// Upload the file
-		if ($result = move_uploaded_file($tmpName, $name)) {
-			$this->model->setContent('temporary content');
-			if($this->model->getId() == null) {
-				$id = $this->model->insert();
-			} else {
-				$this->model->update();
-				$id = $this->model->getId();
-			}
-		} else {
-			$this->view->displayErrorInsertionInfo();
-		}
-		// If the file upload and the upload of the information in the database works
-		if ($id != 0) {
-			$this->model->setId($id);
-
-			$md5Name = $id.md5_file($name);
-			rename($name, $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH. $md5Name . '.' . $extension_upload);
-
-			$content = $md5Name. '.' . $extension_upload;
-
-			$this->model->setContent($content);
-			if($this->model->update()) {
+            // Try to insert the information
+            if($information->insert()) {
                 $this->view->displayCreateValidate();
             } else {
-                $this->view->errorMessageCantAdd();
+                $this->view->displayErrorInsertionInfo();
             }
-		}
-	}
+        }
+        if (isset($actionImg)) {  // If the information is an image
+            $type = "img";
+            $information->setType($type);
+            $filename    = $_FILES['contentFile']['name'];
+            $fileTmpName = $_FILES['contentFile']['tmp_name'];
+            $explodeName = explode('.', $filename);
+            $goodExtension = ['jpg', 'jpeg', 'gif', 'png', 'svg'];
+            if(in_array(end($explodeName), $goodExtension)) {
+                $this->registerFile($filename, $fileTmpName, $information);
+            } else {
+                $this->view->buildModal('Image non valide', '<p>Ce fichier est une image non valide, veuillez choisir une autre image</p>');
+            }
+        }
+        if (isset($actionTab)) { // If the information is a table
+            $type = "tab";
+            $information->setType($type);
+            $filename    = $_FILES['contentFile']['name'];
+            $fileTmpName = $_FILES['contentFile']['tmp_name'];
+            $explodeName = explode('.', $filename);
+            $goodExtension = ['xls', 'xlsx', 'ods'];
+            if(in_array(end($explodeName), $goodExtension)) {
+                $this->registerFile($filename, $fileTmpName, $information);
+            } else {
+                $this->view->buildModal('Tableau non valide', '<p>Ce fichier est un tableau non valide, veuillez choisir un autre tableau</p>');
+            }
+        }
+        if (isset($actionPDF)) {
+            $type = "pdf";
+            $information->setType($type);
+            $filename    = $_FILES['contentFile']['name'];
+            $explodeName = explode('.', $filename);
+            if(end($explodeName) == 'pdf') {
+                $fileTmpName = $_FILES['contentFile']['tmp_name'];
+                $this->registerFile($filename, $fileTmpName, $information);
+            } else {
+                $this->view->buildModal('PDF non valide', '<p>Ce fichier est un tableau non PDF, veuillez choisir un autre PDF</p>');
+            }
+        }
+        if (isset($actionEvent)) {
+            $type = 'event';
+            $information->setType($type);
+            $countFiles = count($_FILES['contentFile']['name']);
+            for ($i = 0; $i < $countFiles; $i++) {
+                $this->model->setId(null);
+                $filename    = $_FILES['contentFile']['name'][$i];
+                $fileTmpName = $_FILES['contentFile']['tmp_name'][$i];
+                $explodeName = explode('.', $filename);
+                $goodExtension = ['jpg', 'jpeg', 'gif', 'png', 'svg', 'pdf'];
+                if(in_array(end($explodeName), $goodExtension)) {
+                    $this->registerFile($filename, $fileTmpName, $information);
+                }
+            }
+        }
+        // Return a selector with all forms
+        return
+            $this->view->displayStartMultiSelect() .
+            $this->view->displayTitleSelect('text','Texte', true) .
+            $this->view->displayTitleSelect('image','Image') .
+            $this->view->displayTitleSelect('table','Tableau') .
+            $this->view->displayTitleSelect('pdf','PDF') .
+            $this->view->displayTitleSelect('event', 'Événement') .
+            $this->view->displayEndOfTitle() .
+            $this->view->displayContentSelect('text', $this->view->displayFormText(), true) .
+            $this->view->displayContentSelect('image', $this->view->displayFormImg()) .
+            $this->view->displayContentSelect('table', $this->view->displayFormTab()) .
+            $this->view->displayContentSelect('pdf', $this->view->displayFormPDF()) .
+            $this->view->displayContentSelect('event', $this->view->displayFormEvent()) .
+            $this->view->displayEndDiv().
+            $this->view->contextCreateInformation();
+    }
 
-	/**
-	 * Modify the information
-	 *
-	 * @return string
-	 * @throws \PhpOffice\PhpSpreadsheet\Exception
-	 * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
-	 */
-	public function modify()
-	{
-		// Id of the information
+    /**
+     * Modify the information
+     *
+     * @return string
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     */
+    public function modify()
+    {
         $id = $this->getPartOfUrl()[2];
-		if(empty($id) || is_numeric($id) && !$this->model->get($id)) {
-			return $this->view->noInformation();
-		}
-        $current_user = wp_get_current_user();
-        $information = $this->model->get($id);
-        if(!in_array('administrator', $current_user->roles) && !in_array('secretaire', $current_user->roles) && $information->getAuthor()->getId() != $current_user->ID) {
+        if(empty($id) || is_numeric($id) && !$this->model->get($id)) {
             return $this->view->noInformation();
         }
 
-		$submit = filter_input(INPUT_POST, 'submit');
-		if (isset($submit)) {
-			$title   = filter_input(INPUT_POST, 'title');
-			$content = filter_input(INPUT_POST, 'content');
-			$endDate = filter_input(INPUT_POST, 'expirationDate');
+        $current_user = wp_get_current_user();
+        $information = $this->model->get($id);
+
+        if(!(in_array('administrator', $current_user->roles) || in_array('secretaire', $current_user->roles) || $information->getAuthor()->getId() == $current_user->ID)) {
+            return $this->view->noInformation();
+        }
+
+        if(!is_null($information->getAdminId())) {
+            return $this->view->informationNotAllowed();
+        }
+
+        $submit = filter_input(INPUT_POST, 'submit');
+        if (isset($submit)) {
+            $title   = filter_input(INPUT_POST, 'title');
+            $content = filter_input(INPUT_POST, 'content');
+            $endDate = filter_input(INPUT_POST, 'expirationDate');
 
             $information->setTitle($title);
             $information->setExpirationDate($endDate);
 
-			if($information->getType() == 'text') {
-				// Set new information
+            if($information->getType() == 'text') {
+                // Set new information
                 $information->setContent($content);
-			} else {
-				// Change the content
-				if ($_FILES["contentFile"]['size'] != 0 ) { // If it's a new file
-					$filename = $_FILES["contentFile"]['name'];
-					if($information->getType() == 'img') {
-						$explodeName = explode('.', $filename);
-						$goodExtension = ['jpg', 'jpeg', 'gif', 'png', 'svg'];
-						if(in_array(end($explodeName), $goodExtension)) {
-							$this->deleteFile($information->getId());   //$_SERVER['DOCUMENT_ROOT'].$this->model->getContent()
-							$this->registerFile($filename, $_FILES["contentFile"]['tmp_name']);
-						}
-					} else if($information->getType() == 'pdf') {
-						$explodeName = explode('.', $filename);
-						if(end($explodeName) == 'pdf') {
-							$this->deleteFile($information->getId());   //$_SERVER['DOCUMENT_ROOT'].$this->model->getContent()
-							$this->registerFile($filename, $_FILES["contentFile"]['tmp_name']);
-						}
-					} else if($information->getType() == 'tab') {
-						$explodeName = explode('.', $filename);
-						$goodExtension = ['xls', 'xlsx', 'ods'];
-						if(in_array(end($explodeName), $goodExtension)) {
-							$this->deleteFile($information->getId());   //$_SERVER['DOCUMENT_ROOT'].$this->model->getContent()
-							$this->registerFile($filename, $_FILES["contentFile"]['tmp_name']);
-						}
-					}
-				}
-			}
 
-			if($information->update()) {
-                $this->view->displayModifyValidate();
+                if($information->update()) {
+                    $this->view->displayModifyValidate();
+                } else {
+                    $this->view->errorMessageCantAdd();
+                }
             } else {
-			    $this->view->errorMessageCantAdd();
-			}
-		}
+                // Change the content
+                if ($_FILES["contentFile"]['size'] != 0) {
+                    echo $_FILES["contentFile"]['size'];
+                    $filename = $_FILES["contentFile"]['name'];
+                    if($information->getType() == 'img') {
+                        $explodeName = explode('.', $filename);
+                        $goodExtension = ['jpg', 'jpeg', 'gif', 'png', 'svg'];
+                        if(in_array(end($explodeName), $goodExtension)) {
+                            $this->deleteFile($information->getId());   //$_SERVER['DOCUMENT_ROOT'].$this->model->getContent()
+                            $this->registerFile($filename, $_FILES["contentFile"]['tmp_name'], $information);
+                        } else {
+                            $this->view->buildModal('Image non valide', '<p>Ce fichier est une image non valide, veuillez choisir une autre image</p>');
+                        }
+                    } else if($information->getType() == 'pdf') {
+                        $explodeName = explode('.', $filename);
+                        if(end($explodeName) == 'pdf') {
+                            $this->deleteFile($information->getId());
+                            $this->registerFile($filename, $_FILES["contentFile"]['tmp_name'], $information);
+                        } else {
+                            $this->view->buildModal('PDF non valide', '<p>Ce fichier est un PDF non valide, veuillez choisir un autre PDF</p>');
+                        }
+                    } else if($information->getType() == 'tab') {
+                        $explodeName = explode('.', $filename);
+                        $goodExtension = ['xls', 'xlsx', 'ods'];
+                        if(in_array(end($explodeName), $goodExtension)) {
+                            $this->deleteFile($information->getId());
+                            $this->registerFile($filename, $_FILES["contentFile"]['tmp_name'], $information);
+                        } else {
+                            $this->view->buildModal('Tableau non valide', '<p>Ce fichier est un tableau non valide, veuillez choisir un autre tableau</p>');
+                        }
+                    }
 
-		$delete = filter_input(INPUT_POST, 'delete');
-		if(isset($delete)) {
+                    if($information->update()) {
+                        $this->view->displayModifyValidate();
+                    } else {
+                        $this->view->errorMessageCantAdd();
+                    }
+                }
+            }
+        }
+
+        $delete = filter_input(INPUT_POST, 'delete');
+        if(isset($delete)) {
             $information->delete();
             $this->view->displayModifyValidate();
         }
-		return $this->view->displayModifyInformationForm($information->getTitle(), $information->getContent(), $information->getExpirationDate(), $information->getType());
-	}
+        return $this->view->displayModifyInformationForm($information->getTitle(), $information->getContent(), $information->getExpirationDate(), $information->getType());
+    }
+
+
+    /**
+     * Upload a file in a directory and in the database
+     *
+     * @param $filename     string
+     * @param $tmpName      string
+     */
+    public function registerFile($filename, $tmpName, $entity)
+    {
+        $id               = 'temporary';
+        $extension_upload = strtolower(substr(strrchr($filename, '.'), 1));
+        $name              = $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $id . '.' . $extension_upload;
+
+        // Upload the file
+        if ($result = move_uploaded_file($tmpName, $name)) {
+            $entity->setContent('temporary content');
+            if($entity->getId() == null) {
+                $id = $entity->insert();
+            } else {
+                $entity->update();
+                $id = $entity->getId();
+            }
+        } else {
+            $this->view->errorMessageCantAdd();
+        }
+        // If the file upload and the upload of the information in the database works
+        if ($id != 0) {
+            $entity->setId($id);
+
+            $md5Name = $id.md5_file($name);
+            rename($name, $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH. $md5Name . '.' . $extension_upload);
+
+            $content = $md5Name. '.' . $extension_upload;
+
+            $entity->setContent($content);
+            if($entity->update()) {
+                $this->view->displayCreateValidate();
+            } else {
+                $this->view->errorMessageCantAdd();
+            }
+        }
+    }
 
 	/**
 	 * Delete the file who's link to the id
@@ -315,11 +335,16 @@ class InformationController extends Controller
         foreach ($informationList as $information) {
             ++$row;
 
-            $content = explode('.', $information->getContent());
+            $contentExplode = explode('.', $information->getContent());
 
-            if(in_array($content[1], $imgExtension)) {
-                $content = '<img class="img-thumbnail" src="' . TV_UPLOAD_PATH . $information->getContent() . '" alt="'.$information->getTitle().'">';
-            } else if($content[1] === 'pdf') {
+            $content = TV_UPLOAD_PATH;
+            if(!is_null($information->getAdminId())) {
+                $content = URL_WEBSITE_VIEWER.TV_UPLOAD_PATH;
+            }
+
+            if(in_array($contentExplode[1], $imgExtension)) {
+                $content = '<img class="img-thumbnail" src="'. $content . $information->getContent() . '" alt="'.$information->getTitle().'">';
+            } else if($contentExplode[1] === 'pdf') {
                 $content = '[pdf-embedder url="' . TV_UPLOAD_PATH . $information->getContent() . '"]';
             } else if($information->getType() === 'tab') {
                 $content = 'Tableau Excel';
@@ -408,7 +433,12 @@ class InformationController extends Controller
 			}
 			$endDate = date( 'Y-m-d', strtotime($information->getExpirationDate()));
 			$this->endDateCheckInfo($information->getId(), $endDate);
-			$this->view->displaySlide($information->getTitle(), $information->getContent(), $information->getType());
+
+			$adminSite = true;
+			if(is_null($information->getAdminId())) {
+                $adminSite = false;
+            }
+			$this->view->displaySlide($information->getTitle(), $information->getContent(), $information->getType(), $adminSite);
 		}
 		$this->view->displayEndDiv();
 	}

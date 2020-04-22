@@ -12,6 +12,7 @@
  * GitHub Plugin URI: https://github.com/Nicolas-Rohrbach/plugin-ecran-connecte
  */
 
+use Controllers\AlertController;
 use Controllers\CodeAdeController;
 use Controllers\InformationController;
 use Models\CodeAde;
@@ -34,7 +35,11 @@ include 'blocks.php';
 // Upload schedules
 $submit = filter_input(INPUT_POST, 'updatePluginEcranConnecte');
 if(isset($submit)) {
-    downloadFileICS_func();
+    include_once(ABSPATH . 'wp-includes/pluggable.php');
+    $current_user = wp_get_current_user();
+    if(in_array('administrator', $current_user->roles) || in_array('secretaire', $current_user->roles)) {
+        downloadFileICS_func();
+    }
 }
 
 /**
@@ -55,6 +60,9 @@ function downloadFileICS_func()
 
     $information = new InformationController();
     $information->registerNewInformation();
+
+    $alert = new AlertController();
+    $alert->registerNewAlert();
 }
 
 add_action('downloadFileICS', 'downloadFileICS_func');

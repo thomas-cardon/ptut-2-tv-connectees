@@ -109,7 +109,11 @@ class AlertController extends Controller
         $current_user = wp_get_current_user();
         $alert = $this->model->get($id);
         if(!in_array('administrator', $current_user->roles) && !in_array('secretaire', $current_user->roles) && $alert->getAuthor()->getId() != $current_user->ID) {
-            return $this->view->noAlert();
+            return $this->view->alertNotAllowed();
+        }
+
+        if($alert->getAdminId()) {
+            return $this->view->alertNotAllowed();
         }
 
 		$codeAde    = new CodeAde();
@@ -239,38 +243,38 @@ class AlertController extends Controller
         if (isset($content)) {
             $this->view->displayAlertMain($contentList);
         }
-    } // alertMain()
+    }
 
     public function registerNewAlert()
     {
-        $informationList = $this->model->getFromAdminWebsite();
-        $myInformationList = $this->model->getAdminWebsiteAlert();
-        foreach ($myInformationList as $information) {
-            if($adminInfo = $this->model->getAlertFromAdminSite($information->getId())) {
-                if($information->getTitle() != $adminInfo->getTitle()) {
-                    $information->setTitle($adminInfo->getTitle());
+        $alertList = $this->model->getFromAdminWebsite();
+        $myAlertList = $this->model->getAdminWebsiteAlert();
+        foreach ($myAlertList as $alert) {
+            if($adminInfo = $this->model->getAlertFromAdminSite($alert->getId())) {
+                if($alert->getContent() != $adminInfo->getContent()) {
+                    $alert->setContent($adminInfo->getContent());
                 }
-                if($information->getContent() != $adminInfo->getContent()) {
-                    $information->setContent($adminInfo->getContent());
+                if($alert->getExpirationDate() != $adminInfo->getExpirationDate()) {
+                    $alert->setExpirationDate($adminInfo->getExpirationDate());
                 }
-                if($information->getExpirationDate() != $adminInfo->getExpirationDate()) {
-                    $information->setExpirationDate($adminInfo->getExpirationDate());
-                }
-                $information->update();
+                $alert->setCodes([]);
+                $alert->setForEveryone(1);
+                $alert->update();
             } else {
-                $information->delete();
+                $alert->delete();
             }
         }
-        foreach ($informationList as $information) {
+        foreach ($alertList as $alert) {
             $exist = 0;
-            foreach ($myInformationList as $myInformation) {
-                if($information->getId() == $myInformation->getAdminId()) {
+            foreach ($myAlertList as $myAlert) {
+                if($alert->getId() == $myAlert->getAdminId()) {
                     ++$exist;
                 }
             }
             if($exist == 0) {
-                $information->setAdminId($information->getId());
-                $information->insert();
+                $alert->setAdminId($alert->getId());
+                $alert->setCodes([]);
+                $alert->insert();
             }
         }
     }

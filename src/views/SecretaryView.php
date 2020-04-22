@@ -21,7 +21,10 @@ class SecretaryView extends UserView
      */
     public function displayFormSecretary()
     {
-        return '<h2> Compte secrétaire </h2>' . $this->displayBaseForm('Secre');
+        return '
+        <h2> Compte secrétaire </h2>
+        <p class="lead">Pour créer des secrétaires, remplissez ce formulaire avec les valeurs demandées.</p>
+        ' . $this->displayBaseForm('Secre');
     }
 
     /**
@@ -95,7 +98,7 @@ class SecretaryView extends UserView
                 <p class="lead">Vous pouvez mettre à jour les emplois du temps du site.</p>
                 <p class="lead mb-4">Mettre à jour, permet aussi de synchroniser les informations et les alertes postées depuis le site de l\'administration</p>
                 <form method="post">
-                    <button type="submit" name="updatePluginEcranConnecte">Mettre à jours</button>
+                    <button type="submit" class="btn btn-lg button_presentation_ecran" name="updatePluginEcranConnecte">Mettre à jour</button>
                 </form>
             </div>
         </div>';

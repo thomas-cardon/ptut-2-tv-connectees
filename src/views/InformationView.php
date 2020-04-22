@@ -74,9 +74,9 @@ class InformationView extends View
 		            </div>';
 		if($content != null){
 			$form .= '
-		       	<figure>
-				  <img class="container-fluid" src="'. TV_UPLOAD_PATH  .$content.'" alt="'.$title.'">
-				  <figcaption class="text-center">Image actuelle</figcaption>
+		       	<figure class="text-center">
+				  <img class="img-thumbnail" src="'. TV_UPLOAD_PATH  .$content.'" alt="'.$title.'">
+				  <figcaption>Image actuelle</figcaption>
 				</figure>';
 		}
 		$form .= '
@@ -239,7 +239,7 @@ class InformationView extends View
 		<hr class="half-rule">
 		<div>
 			<h2>Les informations</h2>
-			<p class="lead">Lors de la création de votre information, celle-ci sera posté le lendemain sur tous les téléviseurs qui utilisent le projet de l\'écran connecté.</p>
+			<p class="lead">Lors de la création de votre information, celle-ci est postée directement sur tous les téléviseurs qui utilisent ce site.</p>
 			<p class="lead">Les informations que vous créez seront affichées avec les informations déjà présentes.</p>
 			<p class="lead">Les informations sont affichées dans un diaporama défilant les informations une par une sur la partie droite des téléviseurs.</p>
 			<div class="text-center">
@@ -281,63 +281,10 @@ class InformationView extends View
 			} else {
 				return '<a href="'.esc_url(get_permalink(get_page_by_title('Gestion des informations'))).'">< Retour</a>'.$this->displayFormImg($title, $content, $endDate, 'submit');
 			}
-		}
-	} //displayModifyInformationForm()
-
-	/**
-	 * Display an information in a line of a table
-	 *
-	 * @param $informations               Information[]
-	 *
-	 * @return string
-	 */
-	public function displayAllInformation($informations)
-	{
-		// Get the link of the modification page
-		$page           = get_page_by_title('Modifier une information');
-		$linkModifyInfo = get_permalink($page->ID);
-
-		$title = 'Informations';
-		$name = 'info';
-		$header = ['Contenu', 'Auteur', 'Type', 'Date de création', 'Date d\'expiration', 'Modifier'];
-
-		$imgExtension = ['jpg', 'jpeg', 'gif', 'png', 'svg'];
-
-		$row = array();
-		$count = 0;
-		foreach ($informations as $information) {
-
-			$content = explode('.', $information->getContent());
-
-			if(in_array($content[1], $imgExtension)) {
-				$content = '<img src="' . TV_UPLOAD_PATH . $information->getContent() . '" alt="'.$information->getTitle().'">';
-			} else if($content[1] === 'pdf') {
-				$content = '[pdf-embedder url="' . TV_UPLOAD_PATH . $information->getContent() . '"]';
-			} else if($information->getType() === 'tab') {
-				$content = 'Tableau Excel';
-			} else {
-				$content = $information->getContent();
-			}
-
-			$type = $information->getType();
-			if($information->getType() === 'img') {
-				$type = 'Image';
-			} else if ($information->getType() === 'pdf') {
-				$type = 'PDF';
-			} else if ($information->getType() === 'event') {
-				$type = 'Événement';
-			} else if ($information->getType() === 'text') {
-				$type = 'Texte';
-			} else if ($information->getType() === 'tab') {
-				$type = 'Table Excel';
-			}
-
-			++$count;
-			$row[] = [$count, $this->buildCheckbox($name, $information->getId()), $content, $information->getAuthor()->getLogin(), $type, $information->getCreationDate(), $information->getEndDate(), $this->buildLinkForModify($linkModifyInfo.'/'.$information->getId())];
-		}
-
-		return $this->displayAll($name, $title, $header, $row, 'info');
-	} // displayAllInformation()
+		} else {
+		    return $this->noInformation();
+        }
+	}
 
 	/**
 	 * Display the begin of the slideshow
@@ -353,8 +300,9 @@ class InformationView extends View
 	 * @param $title
 	 * @param $content
 	 * @param $type
+     * @param bool $adminSite
 	 */
-	public function displaySlide($title, $content, $type)
+	public function displaySlide($title, $content, $type, $adminSite = false)
 	{
 		echo '<div class="myInfoSlides text-center">';
 
@@ -362,6 +310,11 @@ class InformationView extends View
 		if ($title != "Sans titre") {
 			echo '<h2 class="titleInfo">' . $title . '</h2>';
 		}
+
+        $url = TV_UPLOAD_PATH;
+		if($adminSite) {
+		    $url = URL_WEBSITE_VIEWER.TV_UPLOAD_PATH;
+        }
 
 		$extension = explode('.', $content);
 		$extension = $extension[1];
@@ -371,12 +324,7 @@ class InformationView extends View
 			<div class="canvas_pdf" id="'.$content.'">
 			</div>';
 		} elseif ($type == "img" || $type == "event") {
-			if ($title != "Sans titre") {
-				echo '<img class="img-thumbnail" src="'. TV_UPLOAD_PATH .$content.'" alt="'.$title.'">';
-			} else {
-				echo '<img class="img-thumbnail" src="'. TV_UPLOAD_PATH .$content.'" alt="'.$title.'">';
-			}
-
+		    echo '<img class="img-thumbnail" src="'. $url .$content.'" alt="'.$title.'">';
 		}  else if ($type == 'text') {
 			echo '<p class="lead">'.$content.'</p>';
 		} else if ($type == 'special') {
@@ -440,27 +388,26 @@ class InformationView extends View
 			<div class="mySlides event-slide">';
 	}
 
-
-	/**
-	 * Display a modal to validate the creation of an information
-	 */
-	public function displayCreateValidate()
-	{
-		$page           = get_page_by_title('Gestion des informations');
-		$linkManageInfo = get_permalink($page->ID);
+    /**
+     * Display a modal to validate the creation of an information
+     */
+    public function displayCreateValidate()
+    {
+        $page           = get_page_by_title('Gestion des informations');
+        $linkManageInfo = get_permalink($page->ID);
         $this->buildModal('Ajout d\'information validé', '<p class="alert alert-success"> L\'information a été ajoutée </p>', $linkManageInfo);
-	}
+    }
 
-	/**
-	 * Display a modal to validate the modification of an information
-	 * Redirect to manage page
-	 */
-	public function displayModifyValidate()
-	{
-		$page           = get_page_by_title('Gestion des informations');
-		$linkManageInfo = get_permalink($page->ID);
-		$this->buildModal('Modification d\'information validée', '<p class="alert alert-success"> L\'information a été modifiée </p>', $linkManageInfo);
-	}
+    /**
+     * Display a modal to validate the modification of an information
+     * Redirect to manage page
+     */
+    public function displayModifyValidate()
+    {
+        $page           = get_page_by_title('Gestion des informations');
+        $linkManageInfo = get_permalink($page->ID);
+        $this->buildModal('Modification d\'information validée', '<p class="alert alert-success"> L\'information a été modifiée </p>', $linkManageInfo);
+    }
 
 	/**
 	 * Display a message if the insertion of the information doesn't work
@@ -469,4 +416,15 @@ class InformationView extends View
 	{
 		echo '<p>Il y a eu une erreur durant l\'insertion de l\'information</p>';
 	}
+
+    public function informationNotAllowed()
+    {
+        return '
+		<a href="'.esc_url(get_permalink(get_page_by_title('Gestion des informations'))).'">< Retour</a>
+		<div>
+			<h3>Vous ne pouvez pas modifier cette alerte</h3>
+			<p>Cette information appartient à quelqu\'un d\'autre, vous ne pouvez donc pas modifier cette information.</p>
+			<a href="'.esc_url(get_permalink(get_page_by_title('Créer une information'))).'">Créer une information</a>
+		</div>';
+    }
 }

@@ -15,11 +15,11 @@ function addButtonAlert() {
         let select = $('<select >', {
             id: counte,
             name: 'selectAlert[]',
-            class: 'form-control select'
+            class: 'form-control select_ecran'
         }).append(data).appendTo(div);
         let button = $('<input >', {
             id: counte,
-            class: 'selectbtn',
+            class: 'btn button_ecran',
             type: 'button',
             onclick: 'deleteRowAlert(this.id)',
             value: 'Supprimer'

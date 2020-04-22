@@ -14,11 +14,11 @@ function addButtonTv() {
         let select = $('<select >', {
             id: count,
             name: 'selectTv[]',
-            class: 'form-control select'
+            class: 'form-control select_ecran'
         }).append(data).appendTo(div);
         let button = $('<input >', {
             id: count,
-            class: 'selectbtn',
+            class: 'btn button_ecran',
             type: 'button',
             onclick: 'deleteRow(this.id)',
             value: 'Supprimer'

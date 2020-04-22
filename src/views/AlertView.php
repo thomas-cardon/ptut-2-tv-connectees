@@ -59,9 +59,9 @@ class AlertView extends View
 		<hr class="half-rule">
 		<div>
 			<h2>Les alertes</h2>
-			<p class="lead">Lors de la création de votre alerte, celle-ci sera posté le lendemain sur tous les téléviseurs qui utilisent le projet de l\'écran connecté.</p>
+			<p class="lead">Lors de la création de votre alerte, celle-ci sera posté directement sur tous les téléviseurs qui utilisent  ce site.</p>
 			<p class="lead">Les alertes que vous créez seront affichées avec les alertes déjà présentes.</p>
-			<p class="lead">Les alertes sont affichées les un après les autres défilant à la chaîne en bas des téléviseurs.</p>
+			<p class="lead">Les alertes sont affichées les une après les autres défilant à la chaîne en bas des téléviseurs.</p>
 			<div class="text-center">
 				<figure class="figure">
 					<img src="'.TV_PLUG_PATH.'public/img/presentation.png" class="figure-img img-fluid rounded" alt="Représentation d\'un téléviseur">
@@ -224,6 +224,17 @@ class AlertView extends View
 		<div>
 			<h3>Alerte non trouvée</h3>
 			<p>Cette alerte n\'éxiste pas, veuillez bien vérifier d\'avoir bien cliqué sur une alerte.</p>
+			<a href="'.esc_url(get_permalink(get_page_by_title('Créer une alerte'))).'">Créer une alerte</a>
+		</div>';
+    }
+
+    public function alertNotAllowed()
+    {
+        return '
+		<a href="'.esc_url(get_permalink(get_page_by_title('Gestion des alertes'))).'">< Retour</a>
+		<div>
+			<h3>Vous ne pouvez pas modifier cette alerte</h3>
+			<p>Cette alerte appartient à quelqu\'un d\'autre, vous ne pouvez donc pas modifier cette alerte.</p>
 			<a href="'.esc_url(get_permalink(get_page_by_title('Créer une alerte'))).'">Créer une alerte</a>
 		</div>';
     }

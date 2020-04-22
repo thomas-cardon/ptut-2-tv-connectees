@@ -25,11 +25,16 @@ class StudentView extends UserView
     {
 	    return '
         <h2>Compte étudiant</h2>
-        <a href="' . TV_PLUG_PATH . 'public/files/Ajout Etus.xlsx"
-            download="Ajout Etus.xlsx">Télécharger le fichier excel ! </a>
+        <p class="lead">Pour créer des étudiants, commencer par télécharger le fichier Excel en cliquant sur le lien ci-dessous.</p>
+        <p class="lead">Remplissez les colonnes par les valeurs demandées, une ligne est égale à un utilisateur.</p>
+        <p class="lead">Lorsque vous avez remplis le fichier Excel, enregistrez le et cliquez sur "Parcourir" et sélectionnez votre fichier.</p>
+        <p class="lead">Pour finir, validez l\'envoie du formulaire en cliquant sur "Importer le fichier"</p>
+        <p class="lead">Lorsqu\'un élève est inscrit, un email lui est envoyé contenant son login et son mot de passe avec un lien du site.</p>
+        <p class="lead">Lors de sa première connection, l\'étudiant devraz choisir son groupe pour avoir son emploi du temps.</p>
+        <a href="' . TV_PLUG_PATH . 'public/files/Ajout Etus.xlsx" download="Ajout Etus.xlsx">Télécharger le fichier excel !</a>
         <form id="etu" method="post" enctype="multipart/form-data">
             <input type="file" name="excelEtu" class="inpFil" required=""/>
-            <button type="submit" name="importEtu" value="Importer">Importer le fichier</button>
+            <button type="submit" class="btn button_ecran" name="importEtu" value="Importer">Importer le fichier</button>
         </form>';
     }
 
@@ -141,7 +146,7 @@ class StudentView extends UserView
 	        		</optgroup>
 	        	</select>
 	        </div>
-	        <input name="modifvalider" type="submit" value="Valider">
+	        <button name="modifvalider" class="btn button_ecran" type="submit" value="Valider">Valider</button>
 	    	<a href="' . $linkManageUser . '">Annuler</a>
 	    </form>';
 
@@ -200,7 +205,7 @@ class StudentView extends UserView
 		echo '
 							</optgroup>
 	                    </select>
-	                    <input type="submit" name="addSchedules">
+	                    <button type="submit" class="btn button_ecran" name="addSchedules">Valider</button>
 	                </form>
 	            </div>
 	        </div>

@@ -22,7 +22,10 @@ class TechnicianView extends UserView
      */
     public function displayFormTechnician()
     {
-        return '<h2>Compte technicien</h2>' . $this->displayBaseForm('Tech');
+        return '
+        <h2>Compte technicien</h2>
+        <p class="lead">Pour créer des techniciens, remplissez ce formulaire avec les valeurs demandées.</p>
+        ' . $this->displayBaseForm('Tech');
     }
 
 	/**

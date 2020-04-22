@@ -22,11 +22,22 @@ class TeacherView extends UserView
     {
 	    return '
         <h2>Compte enseignant</h2>
+        <p class="lead">Pour créer des enseignants, commencer par télécharger le fichier Excel en cliquant sur le lien ci-dessous.</p>
+        <p class="lead">Remplissez les colonnes par les valeurs demandées, une ligne est égale à un utilisateur.</p>
+        <p class="lead">Le code demandé est son code provenant de l\'ADE, pour avoir ce code, suivez ce petit tutoriel :</p>
+        <ul>
+            <li><p class="lead">Connectez vous sur l\'ADE</p></li>
+            <li><p class="lead">...</p></li>
+        </ul>
+        <p class="lead">Lorsque vous avez remplis le fichier Excel, enregistrez le et cliquez sur "Parcourir" et sélectionnez votre fichier.</p>
+        <p class="lead">Pour finir, validez l\'envoie du formulaire en cliquant sur "Importer le fichier"</p>
+        <p class="lead">Lorsqu\'un enseignant est inscrit, un email lui est envoyé contenant son login et son mot de passe avec un lien du site.</p>
+        <a href="' . TV_PLUG_PATH . 'public/files/Ajout Etus.xlsx" download="Ajout Etus.xlsx">Télécharger le fichier excel !</a>
         <a href="' . TV_PLUG_PATH . 'public/files/Ajout Profs.xlsx"
             download="Ajout Prof.xlsx">Télécharger le fichier excel ! </a>
         <form id="Prof" method="post" enctype="multipart/form-data">
             <input type="file" name="excelProf" class="inpFil" required=""/>
-            <button type="submit" name="importProf" value="Importer">Importer le fichier</button>
+            <button type="submit" class="btn button_ecran" name="importProf" value="Importer">Importer le fichier</button>
         </form>';
     }
 
@@ -47,7 +58,7 @@ class TeacherView extends UserView
             <h2>' . $user->getLogin() . '</h2>
             <label for="modifCode">Code ADE</label>
             <input type="text" class="form-control" id="modifCode" name="modifCode" placeholder="Entrer le Code ADE" value="' . $user->getCodes()[0]->getCode() . '" required="">
-            <button name="modifValidate" type="submit" value="Valider">Valider</button>
+            <button name="modifValidate" class="btn button_ecran" type="submit" value="Valider">Valider</button>
             <a href="' . $linkManageUser . '">Annuler</a>
         </form>';
 	}

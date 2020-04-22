@@ -125,7 +125,6 @@ class TelevisionController extends UserController implements Schedule
 			$user->setCodes($codesAde);
 
 			if ($user->update()) {
-
 				$this->view->displayModificationValidate($linkManageUser);
 			}
 		}

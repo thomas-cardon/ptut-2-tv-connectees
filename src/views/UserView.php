@@ -35,7 +35,7 @@ class UserView extends View
                     <input class="form-control" minlength="8" maxlength="25" type="password" id="pwdConf' . $name . '" name="pwdConfirm' . $name . '" placeholder="Confirmer le Mot de passe" minlength="8" maxlength="25" required="" onkeyup=checkPwd("' . $name . '")>
                 	<small id="passwordHelpBlock" class="form-text text-muted">Votre mot de passe doit contenir entre 8 et 25 caractère</small>
                 </div>
-                <input type="submit" id="valid' . $name . '" name="create' . $name . '">
+                <button type="submit" class="btn button_ecran" id="valid' . $name . '" name="create' . $name . '">Créer</button>
             </form>';
     }
 
@@ -53,7 +53,7 @@ class UserView extends View
                 <input type="password" class="form-control text-center" name="verifPwd" placeholder="Mot de passe" required="">
                 <label for="newPwd">Votre nouveau mot de passe</label>
                 <input type="password" class="form-control text-center" name="newPwd" placeholder="Mot de passe" required="">
-                <button type="submit"  name="modifyMyPwd"> Modifier </button>
+                <button type="submit" class="btn button_ecran" name="modifyMyPwd">Modifier</button>
             </form>';
     }
 
@@ -69,8 +69,31 @@ class UserView extends View
                 <h2>Supprimer le compte</h2>
                 <label for="verifPwd">Votre mot de passe actuel</label>
                 <input type="password" class="form-control text-center" name="verifPwd" placeholder="Mot de passe" required="">
-                <button type="submit" name="deleteMyAccount">Confirmer</button>
+                <button type="submit" class="btn button_ecran" name="deleteMyAccount">Confirmer</button>
             </form>';
+    }
+
+    public function contextCreateUser()
+    {
+        return '
+        <hr class="half-rule">
+        <div class="row">
+            <div class="col-6 mx-auto col-md-6 order-md-2">
+            <img src="'.TV_PLUG_PATH.'/public/img/user.png" alt="Logo utilisateur" class="img-fluid mb-3 mb-md-0">
+            </div>
+            <div class="col-md-6 order-md-1 text-center text-md-left pr-md-5">
+                <h2 class="mb-3 bd-text-purple-bright">Les utilisateurs</h2>
+                <p class="lead">Vous pouvez créer ici les utilisateurs</p>
+                <p class="lead">Il y a plusieurs types d\'utilisateur : Les étudiants, enseignants, directeurs d\'études, scrétaires, techniciens, télévisions.</p>
+                <p class="lead">Les étudiants ont accès à leur emploi du temps et reçoivent les alertes les concernants et les informations.</p>
+                <p class="lead">Les enseignants ont accès à leur emploi du temps et peuvent poster des alertes.</p>
+                <p class="lead">Les directeurs d\'études ont accès à leur emploi du temps et peuvent poster des alertes et des informations.</p>
+                <p class="lead">Les secrétaires peuvent poster des alertes et des informations. Ils peuvent aussi créer des utilisateurs.</p>
+                <p class="lead">Les techniciens ont accès aux emplois du temps des promotions.</p>
+                <p class="lead">Les télévisions sont les utilisateurs utilisés pour afficher ce site sur les téléviseurs. Les comptes télévisions peuvent afficher autant d\'emploi du temps que souhaité.</p>
+            </div>
+        </div>
+        <a href="'.esc_url(get_permalink(get_page_by_title('Gestion des utilisateurs'))).'">Voir les utilisateurs</a>';
     }
 
     /**
@@ -93,7 +116,7 @@ class UserView extends View
      */
     public function displayButtonSubscription()
     {
-        return '<a href="#" id="my-notification-button" class="btn btn-danger">recevoirNotifications</a></br>';
+        return '<a href="#" id="my-notification-button" class="btn btn-danger">Recevoir des notifications</a></br>';
     }
 
     /**
@@ -156,7 +179,7 @@ class UserView extends View
 	    $form .= '
                 </optgroup>
             </select>
-            <input name="modifvalider" type="submit" value="Valider">
+            <button name="modifvalider" type="submit" class="btn button_ecran">Valider</button>
          </form>';
 
         return $form;
@@ -178,9 +201,15 @@ class UserView extends View
     public function displayHome()
     {
         return '
-        <div>
-            <h1>' . get_bloginfo("name") . '</h1>
-            <p>Retrouvez ici votre emploi du temps</p>
+        <div class="row">
+            <div class="col-6 mx-auto col-md-6 order-md-1">
+                <img src="'.TV_PLUG_PATH.'/public/img/background.png" alt="Logo Amu" class="img-fluid mb-3 mb-md-0">
+            </div>
+            <div class="col-md-6 order-md-2 text-center text-md-left pr-md-5">
+                <h1 class="mb-3 bd-text-purple-bright">'.get_bloginfo("name").'</h1>
+                <p class="lead">Bienvenue sur le site de l\'écran connecté !</p>
+                <p class="lead mb-4">Accèder à votre emploi du temps tant en recevant diverses informations de la part de votre département.</p>
+            </div>
         </div>';
     }
 

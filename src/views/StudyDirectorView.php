@@ -22,8 +22,10 @@ class StudyDirectorView extends UserView
     public function displayCreateDirector()
     {
         return '
+        <h2> Compte directeur d\'études</h2>
+        <p class="lead">Pour créer des directeurs d\'études, remplissez ce formulaire avec les valeurs demandées.</p>
+        <p class="lead">Le code ADE demandé est son code provenant de l\'ADE, pour avoir ce code, suivez le ce trouvant dans la partie pour créer un enseignant.</p>
         <form class="cadre" method="post">
-            <h2> Compte directeur d\'études</h2>
             <div class="form-group">
                 <label for="loginDirec">Login</label>
                 <input minlength="4" type="text" class="form-control" name="loginDirec" placeholder="Login" required="">
@@ -43,7 +45,7 @@ class StudyDirectorView extends UserView
                 <label for="codeADEDirec"> Code ADE</label>
                 <input type="text" class="form-control" placeholder="Code ADE" name="codeDirec" required="">
             </div>
-            <input type="submit" id="validDirec" name="createDirec" value="Créer">
+            <button type="submit" class="btn button_ecran" id="validDirec" name="createDirec" value="Créer">Créer</button>
         </form>';
     }
 
