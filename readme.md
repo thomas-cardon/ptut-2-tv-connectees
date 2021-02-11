@@ -4,11 +4,15 @@ Ce plugin permet d'avoir accès aux emplois du temps d'ADE. Il télécharge l'em
 
 L'emploi du temps est affiché automatiquement en fonction de la personne connectée.
 
-Les identifiants des emplois doivent être enregistrés dans la base de données.
-
-Pour avoir l'identifiant d'un emploi du temps : 
-  - Allez sur l'ADE 
-  - Sélectionnez l'emploi du temps 
-  - Cliquez sur la petite baguette - la suite un autre jours...
+Voici les différents Readme écrits par Nicolas Rohrbach :
+- [Readme d'installation](ReadMeInstallationEcran.md)  
+- [Readme du fonctionnement](ReadMeEcranConnecte.md)  
+- [Readme du code](ReadMeCodeEcran.md)
 
 Langages utilisés : HTML, CSS, PHP, JS, SQL
+
+Plugins utilisés :
+- https://memberpress.com/plugins/members/
+- https://wp-pdf.com/
+- https://wordpress.org/plugins/wp-crontrol/
+- https://fr.wordpress.org/plugins/wps-hide-login/
