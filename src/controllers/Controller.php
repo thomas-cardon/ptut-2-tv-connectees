@@ -15,13 +15,21 @@ class Controller
 {
 
     /**
-     * Get the id from an url
+     * Explode the url by /
+     *
+     * @return array
      */
-    public function getMyIdUrl()
+    public function getPartOfUrl()
     {
-        $urlExplode = explode('/', $_SERVER['REQUEST_URI']);
-        $size = sizeof($urlExplode);
-        return $urlExplode[$size - 2];
+        $url = $_SERVER['REQUEST_URI'];
+        $urlExplode = explode('/', $url);
+        $cleanUrl = array();
+        for($i = 0; $i < sizeof($urlExplode); ++$i) {
+            if($urlExplode[$i] != '/' && $urlExplode[$i] != '') {
+                $cleanUrl[] = $urlExplode[$i];
+            }
+        }
+        return $cleanUrl;
     }
 
     /**

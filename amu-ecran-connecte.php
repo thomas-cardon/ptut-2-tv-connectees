@@ -12,7 +12,9 @@
  * GitHub Plugin URI: https://github.com/Nicolas-Rohrbach/plugin-ecran-connecte
  */
 
+use Controllers\AlertController;
 use Controllers\CodeAdeController;
+use Controllers\InformationController;
 use Models\CodeAde;
 use Models\User;
 
@@ -20,12 +22,24 @@ if (! defined('ABSPATH')) {
 	die;
 }
 
+define('TV_PLUG_PATH', '/wp-content/plugins/plugin-ecran-connecte/');
+define('TV_UPLOAD_PATH', '/wp-content/uploads/media/');
+define('TV_ICSFILE_PATH', '/wp-content/uploads/fileICS/');
+
+require __DIR__ . '/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
+
 include 'config.php';
+include 'blocks.php';
 
 // Upload schedules
-$download = filter_input(INPUT_POST, 'dlEDT');
-if (isset($download)) {
-    downloadFileICS_func();
+$submit = filter_input(INPUT_POST, 'updatePluginEcranConnecte');
+if(isset($submit)) {
+    include_once(ABSPATH . 'wp-includes/pluggable.php');
+    $current_user = wp_get_current_user();
+    if(in_array('administrator', $current_user->roles) || in_array('secretaire', $current_user->roles)) {
+        downloadFileICS_func();
+    }
 }
 
 /**
@@ -39,16 +53,16 @@ function downloadFileICS_func()
 	$controllerAde = new CodeAdeController();
     $model = new CodeAde();
 
-    $codesAde = $model->getAll();
+    $codesAde = $model->getList();
     foreach ($codesAde as $codeAde) {
         $controllerAde->addFile($codeAde->getCode());
     }
 
-    $user = new User();
-    $teachers = $user->getUsersByRole('enseignant');
-    downloadSchedule($teachers);
-    $studyDirector = $user->getUsersByRole('directeuretude');
-    downloadSchedule($studyDirector);
+    $information = new InformationController();
+    $information->registerNewInformation();
+
+    $alert = new AlertController();
+    $alert->registerNewAlert();
 }
 
 add_action('downloadFileICS', 'downloadFileICS_func');

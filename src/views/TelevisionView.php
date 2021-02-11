@@ -15,43 +15,6 @@ use Models\User;
  */
 class TelevisionView extends UserView
 {
-
-    /**
-     * Display a select of code ADE
-     *
-     * @param $years        CodeAde[]
-     * @param $groups       CodeAde[]
-     * @param $halfgroups   CodeAde[]
-     *
-     * @return string
-     */
-    public function displaySelect($years, $groups, $halfgroups)
-    {
-        $string = '<option value="0">Aucun</option>
-                        <optgroup label="Année">';
-
-        foreach ($years as $year) {
-        	$string .= '<option value="' . $year->getCode() . '">' . $year->getTitle() . '</option >';
-        }
-
-        $string .= '</optgroup>
-                        <optgroup label="Groupe">';
-
-        foreach ($groups as $group) {
-        	$string .= '<option value="' . $group->getCode() . '">' . $group->getTitle() . '</option>';
-        }
-        $string .= '</optgroup>
-                        <optgroup label="Demi groupe">';
-
-        foreach ($halfgroups as $halfgroup) {
-        	$string .= '<option value="' . $halfgroup->getCode() . '">' . $halfgroup->getTitle() . '</option>';
-        }
-
-        $string .= '</optgroup>
-                </select>';
-        return $string;
-    }
-
     /**
      * Display a form to create a television
      *
@@ -64,8 +27,10 @@ class TelevisionView extends UserView
     public function displayFormTelevision($years, $groups, $halfGroups)
     {
         $form = '
+        <h2> Compte télévision</h2>
+        <p class="lead">Pour créer des télévisions, remplissez ce formulaire avec les valeurs demandées.</p>
+        <p class="lead">Vous pouvez mettre autant d\'emploi du temps que vous souhaitez, cliquez sur "Ajouter des emplois du temps</p>
         <form method="post" id="registerTvForm">
-            <h2> Compte télévision</h2>
             <div class="form-group">
             	<label for="loginTv">Login</label>
             	<input type="text" class="form-control" name="loginTv" placeholder="Nom de compte" required="">
@@ -81,8 +46,8 @@ class TelevisionView extends UserView
             	<label>Premier emploi du temps</label>'.
                 $this->buildSelectCode($years, $groups, $halfGroups) .'
             </div>
-            <input type="button" onclick="addButtonTv()" value="Ajouter des emplois du temps">
-            <button type="submit" id="validTv" name="createTv">Créer</button>
+            <input type="button" class="btn button_ecran" onclick="addButtonTv()" value="Ajouter des emplois du temps">
+            <button type="submit" class="btn button_ecran" id="validTv" name="createTv">Créer</button>
         </form>';
 
 	    return $form;
@@ -97,7 +62,7 @@ class TelevisionView extends UserView
 	 */
     public function displayAllTv($users)
     {
-	    $page = get_page_by_title('Modification utilisateur');
+	    $page = get_page_by_title('Modifier un utilisateur');
 	    $linkManageUser = get_permalink($page->ID);
 
 	    $title = 'Televisions';
@@ -147,8 +112,8 @@ class TelevisionView extends UserView
         $page = get_page_by_title('Gestion des utilisateurs');
         $linkManageUser = get_permalink($page->ID);
         $string .= '
-            <input type="button" onclick="addButtonTv()" value="Ajouter des emplois du temps">
-            <input name="modifValidate" type="submit" id="validTv" value="Valider">
+            <input type="button" class="btn button_ecran" onclick="addButtonTv()" value="Ajouter des emplois du temps">
+            <button name="modifValidate" class="btn button_ecran" type="submit" id="validTv">Valider</button>
             <a href="' . $linkManageUser . '">Annuler</a>
         </form>';
         return $string;
@@ -209,16 +174,6 @@ class TelevisionView extends UserView
             <input  minlength="4" type="password" class="form-control text-center modal-sm" id="pwdConfTv" name="pwdConfirmTv" placeholder="Confirmer le nouveau mot de passe" onkeyup=checkPwd("Tv")>
 		</form>';
 
-    }
-
-    /**
-     * Message to prevent a login already exist
-     */
-    public function displayErrorLogin()
-    {
-        $this->displayStartModal('Inscription échouée');
-        echo '<div class="alert alert-danger"> Le login est déjà utilisé ! </div>';
-        $this->displayEndModal();
     }
 
     /**

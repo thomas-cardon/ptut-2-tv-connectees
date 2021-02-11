@@ -977,7 +977,7 @@ class Xlsx extends BaseReader
                                     }
                                 }
 
-                                // Header/footer images
+                                // Header/footer media
                                 if ($xmlSheet && $xmlSheet->legacyDrawingHF && !$this->readDataOnly) {
                                     if ($zip->locateName(dirname("$dir/$fileWorksheet") . '/_rels/' . basename($fileWorksheet) . '.rels')) {
                                         //~ http://schemas.openxmlformats.org/package/2006/relationships"
@@ -997,7 +997,7 @@ class Xlsx extends BaseReader
                                         }
 
                                         if ($vmlRelationship != '') {
-                                            // Fetch linked images
+                                            // Fetch linked media
                                             //~ http://schemas.openxmlformats.org/package/2006/relationships"
                                             $relsVML = simplexml_load_string(
                                                 $this->securityScanner->scan(

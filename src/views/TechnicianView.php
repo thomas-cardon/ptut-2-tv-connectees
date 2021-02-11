@@ -22,7 +22,10 @@ class TechnicianView extends UserView
      */
     public function displayFormTechnician()
     {
-        return '<h2>Compte technicien</h2>' . $this->displayBaseForm('Tech');
+        return '
+        <h2>Compte technicien</h2>
+        <p class="lead">Pour créer des techniciens, remplissez ce formulaire avec les valeurs demandées.</p>
+        ' . $this->displayBaseForm('Tech');
     }
 
 	/**
@@ -35,7 +38,7 @@ class TechnicianView extends UserView
     public function displayAllTechnicians($users)
     {
 	    $title = 'Techniciens';
-	    $name = 'tech';
+	    $name = 'Tech';
 	    $header = ['Login'];
 
 	    $row = array();
@@ -45,6 +48,6 @@ class TechnicianView extends UserView
 		    $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin()];
 	    }
 
-	    return $this->displayAll($name, $title, $header, $row, 'tech');
+	    return $this->displayAll($name, $title, $header, $row, $name);
     }
 }

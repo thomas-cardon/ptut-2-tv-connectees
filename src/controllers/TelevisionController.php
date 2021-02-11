@@ -77,8 +77,7 @@ class TelevisionController extends UserController implements Schedule
         		$this->model->setRole('television');
         		$this->model->setCodes($codesAde);
 
-		        if (!$this->checkDuplicateUser($this->model) &&
-		            $this->model->create()) {
+		        if (!$this->checkDuplicateUser($this->model) && $this->model->insert()) {
 			        $this->view->displayInsertValidate();
 		        } else {
 			        $this->view->displayErrorLogin();
@@ -126,7 +125,6 @@ class TelevisionController extends UserController implements Schedule
 			$user->setCodes($codesAde);
 
 			if ($user->update()) {
-
 				$this->view->displayModificationValidate($linkManageUser);
 			}
 		}

@@ -92,8 +92,7 @@ class StudentController extends UserController implements Schedule
 	                        $this->model->setEmail($email);
 	                        $this->model->setRole('etudiant');
 
-                            if (!$this->checkDuplicateUser($this->model) &&
-                                $this->model->create()) {
+                            if (!$this->checkDuplicateUser($this->model) && $this->model->insert()) {
 
                             	// Generate Mail
                                 $to = $email;

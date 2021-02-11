@@ -72,4 +72,4 @@ foreach ($inputFileNames as $inputFileName) {
     unset($spreadsheet);
 }
 
-$helper->log('Done rendering charts as images');
+$helper->log('Done rendering charts as media');

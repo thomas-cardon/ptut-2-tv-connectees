@@ -18,7 +18,7 @@ interface Entity
 	 *
 	 * @return int  id of the new entity
 	 */
-	public function create();
+	public function insert();
 
 	/**
 	 * Update an entity
@@ -48,7 +48,7 @@ interface Entity
 	 *
 	 * @return mixed
 	 */
-	public function getAll();
+	public function getList();
 
 	/**
 	 * Build an entity
@@ -66,5 +66,5 @@ interface Entity
 	 *
 	 * @return mixed
 	 */
-	public function setListEntity($dataList);
+	public function setEntityList($dataList);
 }

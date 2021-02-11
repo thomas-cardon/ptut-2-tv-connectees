@@ -322,7 +322,7 @@ class Rels extends WriterPart
         $objWriter->startElement('Relationships');
         $objWriter->writeAttribute('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
 
-        // Loop through images and write relationships
+        // Loop through media and write relationships
         $i = 1;
         $iterator = $pWorksheet->getDrawingCollection()->getIterator();
         while ($iterator->valid()) {
@@ -391,7 +391,7 @@ class Rels extends WriterPart
         $objWriter->startElement('Relationships');
         $objWriter->writeAttribute('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
 
-        // Loop through images and write relationships
+        // Loop through media and write relationships
         foreach ($pWorksheet->getHeaderFooter()->getImages() as $key => $value) {
             // Write relationship for image drawing
             $this->writeRelationship(

@@ -1,6 +1,6 @@
 {
   "name": "nicochoco/mvc",
-  "description": "C'est mon premier mvc avec composer",
+  "description": "Composer de l'écran connecté",
   "type": "project",
   "authors": [
     {
@@ -10,8 +10,6 @@
   ],
   "require": {
     "ext-pdo": "*",
-    "twbs/bootstrap": "^4.4",
-    "components/jquery": "^3.4",
     "phpoffice/phpspreadsheet": "^1.6"
   },
   "autoload": {

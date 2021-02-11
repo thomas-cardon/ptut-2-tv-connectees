@@ -1220,7 +1220,7 @@ class Worksheet extends WriterPart
      */
     private function writeLegacyDrawingHF(XMLWriter $objWriter, PhpspreadsheetWorksheet $pSheet)
     {
-        // If sheet contains images, add the relationships
+        // If sheet contains media, add the relationships
         if (count($pSheet->getHeaderFooter()->getImages()) > 0) {
             $objWriter->startElement('legacyDrawingHF');
             $objWriter->writeAttribute('r:id', 'rId_headerfooter_vml1');
