@@ -47,17 +47,18 @@ class InformationController extends Controller
         $current_user = wp_get_current_user();
 
         // All forms
-        $actionText  = $_POST['createText'];
-        $actionImg   = $_POST['createImg'];
-        $actionTab   = $_POST['createTab'];
-        $actionPDF   = $_POST['createPDF'];
-        $actionEvent = $_POST['createEvent'];
+        $actionText  = filter_input(INPUT_POST, 'createText');
+        $actionImg   = filter_input(INPUT_POST, 'createImg');
+        $actionTab   = filter_input(INPUT_POST, 'createTab');
+        $actionPDF   = filter_input(INPUT_POST, 'createPDF');
+        $actionEvent = filter_input(INPUT_POST, 'createEvent');
 
         // Variables
         $title        = filter_input(INPUT_POST, 'title');
         $content      = filter_input(INPUT_POST, 'content');
         $endDate      = filter_input(INPUT_POST, 'expirationDate');
         $creationDate = date('Y-m-d');
+        var_dump($endDate);
 
         // If the title is empty
         if ($title == '') {
@@ -164,7 +165,8 @@ class InformationController extends Controller
      */
     public function modify()
     {
-        $id = $this->getPartOfUrl()[2];
+        $id = $_GET['id'];
+
         if(empty($id) || is_numeric($id) && !$this->model->get($id)) {
             return $this->view->noInformation();
         }
@@ -192,12 +194,6 @@ class InformationController extends Controller
             if($information->getType() == 'text') {
                 // Set new information
                 $information->setContent($content);
-
-                if($information->update()) {
-                    $this->view->displayModifyValidate();
-                } else {
-                    $this->view->errorMessageCantAdd();
-                }
             } else {
                 // Change the content
                 if ($_FILES["contentFile"]['size'] != 0) {
@@ -230,14 +226,14 @@ class InformationController extends Controller
                             $this->view->buildModal('Tableau non valide', '<p>Ce fichier est un tableau non valide, veuillez choisir un autre tableau</p>');
                         }
                     }
-
-                    if($information->update()) {
-                        $this->view->displayModifyValidate();
-                    } else {
-                        $this->view->errorMessageCantAdd();
-                    }
                 }
             }
+
+			if($information->update()) {
+				$this->view->displayModifyValidate();
+			} else {
+				$this->view->errorMessageCantAdd();
+			}
         }
 
         $delete = filter_input(INPUT_POST, 'delete');
@@ -342,13 +338,15 @@ class InformationController extends Controller
                 $content = URL_WEBSITE_VIEWER.TV_UPLOAD_PATH;
             }
 
-            if(in_array($contentExplode[1], $imgExtension)) {
-                $content = '<img class="img-thumbnail" src="'. $content . $information->getContent() . '" alt="'.$information->getTitle().'">';
-            } else if($contentExplode[1] === 'pdf') {
-                $content = '[pdf-embedder url="' . TV_UPLOAD_PATH . $information->getContent() . '"]';
-            } else if($information->getType() === 'tab') {
-                $content = 'Tableau Excel';
-            } else {
+			if(in_array($information->getType(), ['img', 'pdf', 'event', 'tab'])) {
+				if(in_array($contentExplode[1], $imgExtension)) {
+	                $content = '<img class="img-thumbnail img_table_ecran" src="'. $content . $information->getContent() . '" alt="'.$information->getTitle().'">';
+	            } else if($contentExplode[1] === 'pdf') {
+	                $content = '[pdf-embedder url="' . TV_UPLOAD_PATH . $information->getContent() . '"]';
+	            } else if($information->getType() === 'tab') {
+	                $content = 'Tableau Excel';
+	            }
+			} else {
                 $content = $information->getContent();
             }
 
@@ -364,7 +362,7 @@ class InformationController extends Controller
             } else if ($information->getType() === 'tab') {
                 $type = 'Table Excel';
             }
-            $dataList[] = [$row, $this->view->buildCheckbox($name, $information->getId()), $information->getTitle(), $content, $information->getCreationDate(), $information->getExpirationDate(), $information->getAuthor()->getLogin(), $type, $this->view->buildLinkForModify(esc_url(get_permalink(get_page_by_title('Modifier une information'))).'/'.$information->getId())];
+            $dataList[] = [$row, $this->view->buildCheckbox($name, $information->getId()), $information->getTitle(), $content, $information->getCreationDate(), $information->getExpirationDate(), $information->getAuthor()->getLogin(), $type, $this->view->buildLinkForModify(esc_url(get_permalink(get_page_by_title('Modifier une information'))).'?id='.$information->getId())];
         }
 
         $submit = filter_input(INPUT_POST, 'delete');
@@ -410,7 +408,6 @@ class InformationController extends Controller
 		}
 	}
 
-
 	/**
 	 * Display a slideshow
 	 * The slideshow display all the informations
@@ -423,22 +420,23 @@ class InformationController extends Controller
 		$informations = $this->model->getList();
 		$this->view->displayStartSlideshow();
 		foreach ($informations as $information) {
-			if ($information->getType() == 'tab') {
-					$list = $this->readSpreadSheet(TV_UPLOAD_PATH  . $information->getContent());
-					$content = "";
-					foreach ($list as $table) {
-						$content .= $table;
-					}
-					$information->setContent($content);
-			}
 			$endDate = date( 'Y-m-d', strtotime($information->getExpirationDate()));
-			$this->endDateCheckInfo($information->getId(), $endDate);
+			if(!$this->endDateCheckInfo($information->getId(), $endDate)) {
+				if ($information->getType() == 'tab') {
+						$list = $this->readSpreadSheet(TV_UPLOAD_PATH  . $information->getContent());
+						$content = "";
+						foreach ($list as $table) {
+							$content .= $table;
+						}
+						$information->setContent($content);
+				}
 
-			$adminSite = true;
-			if(is_null($information->getAdminId())) {
-                $adminSite = false;
-            }
-			$this->view->displaySlide($information->getTitle(), $information->getContent(), $information->getType(), $adminSite);
+				$adminSite = true;
+				if(is_null($information->getAdminId())) {
+	                $adminSite = false;
+	            }
+				$this->view->displaySlide($information->getTitle(), $information->getContent(), $information->getType(), $adminSite);
+			}
 		}
 		$this->view->displayEndDiv();
 	}

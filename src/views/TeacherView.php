@@ -32,9 +32,7 @@ class TeacherView extends UserView
         <p class="lead">Lorsque vous avez remplis le fichier Excel, enregistrez le et cliquez sur "Parcourir" et sélectionnez votre fichier.</p>
         <p class="lead">Pour finir, validez l\'envoie du formulaire en cliquant sur "Importer le fichier"</p>
         <p class="lead">Lorsqu\'un enseignant est inscrit, un email lui est envoyé contenant son login et son mot de passe avec un lien du site.</p>
-        <a href="' . TV_PLUG_PATH . 'public/files/Ajout Etus.xlsx" download="Ajout Etus.xlsx">Télécharger le fichier excel !</a>
-        <a href="' . TV_PLUG_PATH . 'public/files/Ajout Profs.xlsx"
-            download="Ajout Prof.xlsx">Télécharger le fichier excel ! </a>
+        <a href="' . TV_PLUG_PATH . 'public/files/Ajout Profs.xlsx" download="Ajout Prof.xlsx">Télécharger le fichier excel ! </a>
         <form id="Prof" method="post" enctype="multipart/form-data">
             <input type="file" name="excelProf" class="inpFil" required=""/>
             <button type="submit" class="btn button_ecran" name="importProf" value="Importer">Importer le fichier</button>
@@ -54,8 +52,9 @@ class TeacherView extends UserView
 		$linkManageUser = get_permalink($page->ID);
 
 		return '
+        <a href="'.esc_url(get_permalink(get_page_by_title('Gestion des utilisateurs'))).'">< Retour</a>
+        <h2>' . $user->getLogin() . '</h2>
         <form method="post">
-            <h2>' . $user->getLogin() . '</h2>
             <label for="modifCode">Code ADE</label>
             <input type="text" class="form-control" id="modifCode" name="modifCode" placeholder="Entrer le Code ADE" value="' . $user->getCodes()[0]->getCode() . '" required="">
             <button name="modifValidate" class="btn button_ecran" type="submit" value="Valider">Valider</button>
@@ -83,7 +82,7 @@ class TeacherView extends UserView
 		$count = 0;
 		foreach ($teachers as $teacher) {
 			++$count;
-			$row[] = [$count, $this->buildCheckbox($name, $teacher->getId()), $teacher->getLogin(), $teacher->getCodes()[0]->getCode(), $this->buildLinkForModify($linkManageUser.'/'.$teacher->getId())];
+			$row[] = [$count, $this->buildCheckbox($name, $teacher->getId()), $teacher->getLogin(), $teacher->getCodes()[0]->getCode(), $this->buildLinkForModify($linkManageUser.'?id='.$teacher->getId())];
 		}
 
 		return $this->displayAll($name, $title, $header, $row, 'teacher');

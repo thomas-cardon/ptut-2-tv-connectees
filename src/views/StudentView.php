@@ -70,7 +70,7 @@ class StudentView extends UserView
 		    }
 
 	    	++$count;
-	    	$row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), $codesTitle[0], $codesTitle[1], $codesTitle[2], $this->buildLinkForModify($linkManageUser.'/'.$user->getId())];
+	    	$row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), $codesTitle[0], $codesTitle[1], $codesTitle[2], $this->buildLinkForModify($linkManageUser.'?id='.$user->getId())];
 	    }
 
 	    return $this->displayAll($name, $title, $header, $row, 'student');
@@ -92,8 +92,9 @@ class StudentView extends UserView
         $linkManageUser = get_permalink($page->ID);
 
         $form = '
+        <a href="'.esc_url(get_permalink(get_page_by_title('Gestion des utilisateurs'))).'">< Retour</a>
+        <h2>' . $user->getLogin() . '</h2>
          <form method="post">
-            <h2>' . $user->getLogin() . '</h2>
             <div class="form-group">
             	<label for="modifYear">Année</label>
             	<select id="modifYear" class="form-control" name="modifYear">';
@@ -211,7 +212,7 @@ class StudentView extends UserView
 	        </div>
 	      </div>
 	    </div>
-	    
+
 	    <script> $("#myModal").show() </script>';
 	}
 }

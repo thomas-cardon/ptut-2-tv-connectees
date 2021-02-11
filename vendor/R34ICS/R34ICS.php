@@ -279,33 +279,36 @@ class R34ICS extends Controller
                     }
                 }
             }
-            // Sort events and remove out-of-range dates
-            foreach (array_keys((array)$ics_data['events']) as $date) {
-                $first_date = date_i18n('Ymd');
-                $limit_date = date_i18n('Ymd', mktime(0, 0, 0, date_i18n('n'), date_i18n('j') + $this->limit_days, date_i18n('Y')));
-                if ($date < $first_date || $date > $limit_date) {
-                    unset($ics_data['events'][$date]);
-                } else {
-                    ksort($ics_data['events'][$date]);
-                }
-            }
-            if (isset($ics_data['events'])) {
-                ksort($ics_data['events']);
-            }
 
-            // Split events into year/month/day groupings and determine earliest and latest dates along the way
-            foreach ((array)$ics_data['events'] as $date => $events) {
-                $year = substr($date, 0, 4);
-                $month = substr($date, 4, 2);
-                $day = substr($date, 6, 2);
-                $ym = substr($date, 0, 6);
-                $ics_data['events'][$year][$month][$day] = $events;
-                unset($ics_data['events'][$date]);
-                if (empty($ics_data['earliest']) || $ym < $ics_data['earliest']) {
-                    $ics_data['earliest'] = $ym;
+            if(isset($ics_data['events'])) {
+                // Sort events and remove out-of-range dates
+                foreach (array_keys((array)$ics_data['events']) as $date) {
+                    $first_date = date_i18n('Ymd');
+                    $limit_date = date_i18n('Ymd', mktime(0, 0, 0, date_i18n('n'), date_i18n('j') + $this->limit_days, date_i18n('Y')));
+                    if ($date < $first_date || $date > $limit_date) {
+                        unset($ics_data['events'][$date]);
+                    } else {
+                        ksort($ics_data['events'][$date]);
+                    }
                 }
-                if (empty($ics_data['latest']) || $ym > $ics_data['latest']) {
-                    $ics_data['latest'] = $ym;
+                if (isset($ics_data['events'])) {
+                    ksort($ics_data['events']);
+                }
+
+                // Split events into year/month/day groupings and determine earliest and latest dates along the way
+                foreach ((array)$ics_data['events'] as $date => $events) {
+                    $year = substr($date, 0, 4);
+                    $month = substr($date, 4, 2);
+                    $day = substr($date, 6, 2);
+                    $ym = substr($date, 0, 6);
+                    $ics_data['events'][$year][$month][$day] = $events;
+                    unset($ics_data['events'][$date]);
+                    if (empty($ics_data['earliest']) || $ym < $ics_data['earliest']) {
+                        $ics_data['earliest'] = $ym;
+                    }
+                    if (empty($ics_data['latest']) || $ym > $ics_data['latest']) {
+                        $ics_data['latest'] = $ym;
+                    }
                 }
             }
         }

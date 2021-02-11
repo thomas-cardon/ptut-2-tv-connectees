@@ -535,8 +535,8 @@ add_action( 'init', 'block_user_modify' );
 function choose_account_render_callback()
 {
     if(is_page()) {
-        $myAccount = new UserController();
-        return $myAccount->chooseModif();
+        $user = new UserController();
+        return $user->chooseModif();
     }
 }
 

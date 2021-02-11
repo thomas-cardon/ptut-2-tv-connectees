@@ -94,7 +94,8 @@ class Alert extends Model implements Entity
 	 */
 	public function update()
 	{
-		$request = $this->getDatabase()->prepare('UPDATE ecran_alert SET content = :content, expiration_date = :expirationDate, for_everyone = :for_everyone WHERE id = :id');
+		$database = $this->getDatabase();
+		$request = $database->prepare('UPDATE ecran_alert SET content = :content, expiration_date = :expirationDate, for_everyone = :for_everyone WHERE id = :id');
 
 		$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
 		$request->bindValue(':content', $this->getContent(), PDO::PARAM_STR);
@@ -105,18 +106,16 @@ class Alert extends Model implements Entity
 
 		$count = $request->rowCount();
 
-		if(!is_null($this->getAlertLinkToCode()[0])) {
-			$request = $this->getDatabase()->prepare('DELETE FROM ecran_code_alert WHERE alert_id = :alertId');
+		$request = $database->prepare('DELETE FROM ecran_code_alert WHERE alert_id = :alertId');
 
-			$request->bindValue(':alertId', $this->getId(), PDO::PARAM_INT);
+		$request->bindValue(':alertId', $this->getId(), PDO::PARAM_INT);
 
-			$request->execute();
-		}
+		$request->execute();
 
 		foreach ($this->getCodes() as $code) {
 
 			if($code->getCode() !== 'all' || $code->getCode() !== 0) {
-				$request = $this->getDatabase()->prepare('INSERT INTO ecran_code_alert (alert_id, code_ade_id) VALUES (:alertId, :codeAdeId)');
+				$request = $database->prepare('INSERT INTO ecran_code_alert (alert_id, code_ade_id) VALUES (:alertId, :codeAdeId)');
 
 				$request->bindValue(':alertId', $this->getId(), PDO::PARAM_INT);
 				$request->bindValue(':codeAdeId', $code->getId(), PDO::PARAM_INT);
@@ -224,12 +223,12 @@ class Alert extends Model implements Entity
 	 */
 	public function getForUser($id)
 	{
-		$request = $this->getDatabase()->prepare('SELECT ecran_alert.id, content, creation_date, expiration_date, author 
+		$request = $this->getDatabase()->prepare('SELECT ecran_alert.id, content, creation_date, expiration_date, author, administration_id
 															FROM ecran_alert
 															JOIN ecran_code_alert ON ecran_alert.id = ecran_code_alert.alert_id
 															JOIN ecran_code_ade ON ecran_code_alert.code_ade_id = ecran_code_ade.id
 															JOIN ecran_code_user ON ecran_code_ade.id = ecran_code_user.code_ade_id
-															WHERE ecran_code_user.user_id = :id ORDER BY end_date ASC');
+															WHERE ecran_code_user.user_id = :id ORDER BY expiration_date ASC');
 
 		$request->bindParam(':id', $id, PDO::PARAM_INT);
 
@@ -243,7 +242,7 @@ class Alert extends Model implements Entity
 	 */
 	public function getForEveryone()
 	{
-		$request = $this->getDatabase()->prepare('SELECT ecran_alert.id, content, creation_date, expiration_date, author FROM ecran_alert WHERE for_everyone = 1 ORDER BY expiration_date ASC LIMIT 50');
+		$request = $this->getDatabase()->prepare('SELECT ecran_alert.id, content, creation_date, expiration_date, author, administration_id FROM ecran_alert WHERE for_everyone = 1 ORDER BY expiration_date ASC LIMIT 50');
 
 		$request->bindParam(':id', $id, PDO::PARAM_INT);
 

@@ -76,7 +76,7 @@ class StudyDirectorView extends UserView
             }
 
 			++$count;
-			$row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), $code, $this->buildLinkForModify($linkManageUser.'/'.$user->getId())];
+			$row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), $code, $this->buildLinkForModify($linkManageUser.'?id='.$user->getId())];
 		}
 
 		return $this->displayAll($name, $title, $header, $row, 'director');
@@ -100,6 +100,7 @@ class StudyDirectorView extends UserView
         }
 
 	    return '
+        <a href="'.esc_url(get_permalink(get_page_by_title('Gestion des utilisateurs'))).'">< Retour</a>
         <h2>' . $user->getLogin() . '</h2>
         <form method="post">
             <div class="form-group">

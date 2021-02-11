@@ -102,7 +102,8 @@ class AlertController extends Controller
 	 */
 	public function modify()
 	{
-        $id = $this->getPartOfUrl()[2];
+        $id = $_GET['id'];
+
         if(!is_numeric($id) || !$this->model->get($id)) {
             return $this->view->noAlert();
 		}
@@ -196,7 +197,7 @@ class AlertController extends Controller
         $row = $begin;
         foreach ($alertList as $alert) {
             ++$row;
-            $dataList[] = [$row, $this->view->buildCheckbox($name, $alert->getId()), $alert->getContent(), $alert->getCreationDate(), $alert->getExpirationDate(), $alert->getAuthor()->getLogin(), $this->view->buildLinkForModify(esc_url(get_permalink(get_page_by_title('Modifier une alerte'))).$alert->getId())];
+            $dataList[] = [$row, $this->view->buildCheckbox($name, $alert->getId()), $alert->getContent(), $alert->getCreationDate(), $alert->getExpirationDate(), $alert->getAuthor()->getLogin(), $this->view->buildLinkForModify(esc_url(get_permalink(get_page_by_title('Modifier une alerte'))).'?id='.$alert->getId())];
         }
 
         $submit = filter_input(INPUT_POST, 'delete');
@@ -233,7 +234,7 @@ class AlertController extends Controller
 
         $contentList = array();
         foreach ($alertsUser as $alert) {
-            $endDate = date('Y-m-d', strtotime($alert->getEndDate()));
+            $endDate = date('Y-m-d', strtotime($alert->getExpirationDate()));
             $this->endDateCheckAlert($alert->getId(), $endDate); // Check alert
 
 	        $content = $alert->getContent() . '&emsp;&emsp;&emsp;&emsp;';

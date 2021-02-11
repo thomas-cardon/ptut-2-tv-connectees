@@ -107,7 +107,7 @@ class UserView extends View
         <form method="post">
             <label for="codeDelete"> Code de suppression de compte</label>
             <input type="text" class="form-control text-center" name="codeDelete" placeholder="Code à rentrer" required="">
-            <button type="submit" name="deleteAccount">Supprimer</button>
+            <button type="submit" name="deleteAccount" class="btn button_ecran">Supprimer</button>
         </form>';
     }
 
@@ -208,7 +208,7 @@ class UserView extends View
             <div class="col-md-6 order-md-2 text-center text-md-left pr-md-5">
                 <h1 class="mb-3 bd-text-purple-bright">'.get_bloginfo("name").'</h1>
                 <p class="lead">Bienvenue sur le site de l\'écran connecté !</p>
-                <p class="lead mb-4">Accèder à votre emploi du temps tant en recevant diverses informations de la part de votre département.</p>
+                <p class="lead mb-4">Accédez à votre emploi du temps tant en recevant diverses informations de la part de votre département.</p>
             </div>
         </div>';
     }
@@ -269,5 +269,13 @@ class UserView extends View
         return '
         <h2>'.$current_user->user_login.'</h2>
         <p>Vous êtes enregistré sans aucun emploi du temps, rendez-vous sur votre compte pour pouvoir vous attribuez un code afin d\'accèder à votre emploi du temps</p>';
+    }
+
+    public function successMesageChangeCode () {
+        $this->buildModal('Modification validée', '<div class="alert alert-success"> Le changement de groupe a été pris en compte</div>');
+    }
+
+    public function errorMesageChangeCode () {
+        $this->buildModal('Modification échouée', '<div class="alert alert-danger"> Le changement de groupe n\'a pas été pris en compte</div>');
     }
 }

@@ -31,39 +31,31 @@ class ICSView extends View
 			foreach (array_keys((array) $ics_data['events']) as $year) {
 				for ($m = 1; $m <= 12; $m ++) {
 					$month = $m < 10 ? '0' . $m : '' . $m;
-					foreach ((array) $ics_data['events'][ $year ][ $month ] as $day => $day_events) {
+					if(array_key_exists($month, (array) $ics_data['events'][ $year ])) {
+						foreach ((array) $ics_data['events'][ $year ][ $month ] as $day => $day_events) {
+							
+							$day = $day - 1;
 
-						// HEADER
-						if ($current_study > 9) {
-							break;
-						}
-						if ($allDay) {
-							if ( $day == date( 'j' ) ) {
-								$string .= $this->displayStartSchedule( $current_user );
+							// HEADER
+							if ($current_study > 9) {
+								break;
 							}
-						} else if (in_array( 'television', $current_user->roles) || in_array('technicien', $current_user->roles)) {
-							if ($day == date( 'j')) {
-								$string .= $this->displayStartSchedule( $current_user );
+							if ($allDay) {
+								if ( $day == date( 'j' ) ) {
+									$string .= $this->displayStartSchedule( $current_user );
+								}
+							} else if (in_array( 'television', $current_user->roles) || in_array('technicien', $current_user->roles)) {
+								if ($day == date( 'j')) {
+									$string .= $this->displayStartSchedule( $current_user );
+								}
+							} else {
+								$string .= $this->giveDate($day, $month, $year);
+								$string .= $this->displayStartSchedule($current_user);
 							}
-						} else {
-							$string .= $this->giveDate($day, $month, $year);
-							$string .= $this->displayStartSchedule($current_user);
-						}
-						foreach ($day_events as $day_event => $events) {
-							foreach ($events as $event) {
-								// CONTENT
-								if ($allDay) {
-									if ($day == date('j')) {
-										if ($current_study > 9) {
-											break;
-										}
-										if($this->getContent($event)){
-											++ $current_study;
-											$string .= $this->getContent($event);
-										}
-									}
-								} else {
-									if (in_array('television', $current_user->roles) || in_array('technicien', $current_user->roles)) {
+							foreach ($day_events as $day_event => $events) {
+								foreach ($events as $event) {
+									// CONTENT
+									if ($allDay) {
 										if ($day == date('j')) {
 											if ($current_study > 9) {
 												break;
@@ -73,41 +65,54 @@ class ICSView extends View
 												$string .= $this->getContent($event);
 											}
 										}
-									} elseif ( in_array( 'enseignant', $current_user->roles ) || in_array( 'directeuretude', $current_user->roles )
-									|| in_array( 'etudiant', $current_user->roles ) ) {
-										if ( $current_study > 9 ) {
-											break;
-										}
-										if($this->getContent( $event )){
-											++ $current_study;
-											$string .= $this->getContent( $event , $day);
-										}
 									} else {
-										if ( $current_study > 9 ) {
-											break;
-										}
-										if ( $day == date( 'j' ) ) {
+										if (in_array('television', $current_user->roles) || in_array('technicien', $current_user->roles)) {
+											if ($day == date('j')) {
+												if ($current_study > 9) {
+													break;
+												}
+												if($this->getContent($event)){
+													++ $current_study;
+													$string .= $this->getContent($event);
+												}
+											}
+										} elseif ( in_array( 'enseignant', $current_user->roles ) || in_array( 'directeuretude', $current_user->roles )
+										|| in_array( 'etudiant', $current_user->roles ) ) {
 											if ( $current_study > 9 ) {
 												break;
 											}
 											if($this->getContent( $event )){
 												++ $current_study;
-												$string .= $this->getContent( $event );
+												$string .= $this->getContent( $event , $day);
+											}
+										} else {
+											if ( $current_study > 9 ) {
+												break;
+											}
+											if ( $day == date( 'j' ) ) {
+												if ( $current_study > 9 ) {
+													break;
+												}
+												if($this->getContent( $event )){
+													++ $current_study;
+													$string .= $this->getContent( $event );
+												}
 											}
 										}
 									}
 								}
 							}
-						}
-						// FOOTER
-						if (in_array( 'television', $current_user->roles) || in_array('technicien', $current_user->roles)) {
-							if ($day == date( 'j')) {
+							// FOOTER
+							if (in_array( 'television', $current_user->roles) || in_array('technicien', $current_user->roles)) {
+								if ($day == date( 'j')) {
+									$string .= $this->displayEndSchedule();
+								}
+							} else {
 								$string .= $this->displayEndSchedule();
 							}
-						} else {
-							$string .= $this->displayEndSchedule();
 						}
 					}
+
 				}
 			}
 			// IF NO SCHEDULE

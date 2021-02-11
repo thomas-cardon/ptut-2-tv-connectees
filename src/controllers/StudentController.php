@@ -79,8 +79,8 @@ class StudentController extends UserController implements Schedule
                                 $cells[] = $cell->getValue();
                             }
                         }
+
                         $pwd = wp_generate_password();
-                        $hashpass = wp_hash_password($pwd);
                         $login = $cells[0];
                         $email = $cells[1];
 
@@ -88,7 +88,7 @@ class StudentController extends UserController implements Schedule
                         if (isset($login) && isset($email)) {
 
 	                        $this->model->setLogin($login);
-	                        $this->model->setPassword($hashpass);
+	                        $this->model->setPassword($pwd);
 	                        $this->model->setEmail($email);
 	                        $this->model->setRole('etudiant');
 
@@ -121,7 +121,7 @@ class StudentController extends UserController implements Schedule
                             }
                         }
                     }
-                    if (!is_null($doubles[0])) {
+                    if (sizeof($doubles) > 0) {
                         $this->view->displayErrorDouble($doubles);
                     } else {
                         $this->view->displayInsertValidate();
@@ -206,6 +206,7 @@ class StudentController extends UserController implements Schedule
 
 		if(sizeof($user->getCodes()) > 0) {
 			$codes = array_reverse($user->getCodes());
+            //$codes = [$user->getCodes()[2], $user->getCodes()[1], $user->getCodes()[0]];
 			foreach ($codes as $code) {
 				if($code instanceof CodeAde) {
 					if (file_exists($this->getFilePath($code->getCode()))) {
@@ -214,8 +215,7 @@ class StudentController extends UserController implements Schedule
 				}
 			}
 		}
-
-		return $this->manageStudent($user);
+		$this->manageStudent($user);
 	}
 
 	/**
@@ -233,20 +233,15 @@ class StudentController extends UserController implements Schedule
 		$groups = $codeAde->getAllFromType('group');
 		$halfGroups = $codeAde->getAllFromType('halfGroup');
 
-		$this->view->selectSchedules($years, $groups, $halfGroups);
-
 		$action = filter_input(INPUT_POST, 'addSchedules');
 
-		if ($action) {
+		if (isset($action)) {
 
 			$year = filter_input(INPUT_POST, 'selectYears');
 			$group = filter_input(INPUT_POST, 'selectGroups');
 			$halfGroup = filter_input(INPUT_POST, 'selectHalfgroups');
 
-			echo 'year '.$year;
-			echo 'group '.$group;
-			echo 'halfGroup '.$halfGroup;
-			if(is_numeric($year) && is_numeric($group) && is_numeric($halfGroup)) {
+			if((is_numeric($year) || $year == 0) && (is_numeric($group) || $group == 0) && (is_numeric($halfGroup) || $halfGroup == 0)) {
 
 				$codes = [$year, $group, $halfGroup];
 				$codesAde = [];
@@ -274,6 +269,7 @@ class StudentController extends UserController implements Schedule
 				$this->view->refreshPage();
 			}
 		}
+        return $this->view->selectSchedules($years, $groups, $halfGroups);
 	}
 
     /**

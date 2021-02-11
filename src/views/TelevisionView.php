@@ -67,13 +67,13 @@ class TelevisionView extends UserView
 
 	    $title = 'Televisions';
 	    $name = 'tele';
-	    $header = ['Login', 'Nombre d\'emploi du temps ', 'Modifier'];
+	    $header = ['Login', 'Nombre d\'emplois du temps ', 'Modifier'];
 
 	    $row = array();
 	    $count = 0;
 	    foreach ($users as $user) {
 		    ++$count;
-		    $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), sizeof($user->getCodes()), $this->buildLinkForModify($linkManageUser.'/'.$user->getId())];
+		    $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), sizeof($user->getCodes()), $this->buildLinkForModify($linkManageUser.'?id='.$user->getId())];
 	    }
 
 	    return $this->displayAll($name, $title, $header, $row, 'tele');
@@ -93,8 +93,9 @@ class TelevisionView extends UserView
     {
         $count = 0;
         $string = '
+        <a href="'.esc_url(get_permalink(get_page_by_title('Gestion des utilisateurs'))).'">< Retour</a>
+        <h2>' . $user->getLogin() . '</h2>
          <form method="post" id="registerTvForm">
-            <h2>' . $user->getLogin() . '</h2>
             <label id="selectId1"> Emploi du temps</label>';
 
         foreach ($user->getCodes() as $code) {
@@ -105,10 +106,15 @@ class TelevisionView extends UserView
                 $string .= '
 					<div class="row">' .
                         $this->buildSelectCode($years, $groups, $halfGroups, $code, $count) .
-                        '<input type="button" id="selectId' . $count . '" onclick="deleteRow(this.id)" class="selectbtn" value="Supprimer">
+                        '<input type="button" id="selectId' . $count . '" onclick="deleteRow(this.id)" class="btn button_ecran" value="Supprimer">
 					</div>';
             }
         }
+
+        if($count == 0) {
+            $string .= $this->buildSelectCode($years, $groups, $halfGroups, null, $count);
+        }
+
         $page = get_page_by_title('Gestion des utilisateurs');
         $linkManageUser = get_permalink($page->ID);
         $string .= '

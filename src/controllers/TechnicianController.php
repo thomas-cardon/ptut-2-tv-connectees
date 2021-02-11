@@ -55,8 +55,6 @@ class TechnicianController extends UserController implements Schedule
                 $password === $passwordConfirm
                 && is_email($email)) {
 
-                $password = wp_hash_password($password);
-
                 $this->model->setLogin($login);
                 $this->model->setPassword($password);
                 $this->model->setEmail($email);

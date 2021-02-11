@@ -58,7 +58,7 @@ class Controller
         $str2 = strtotime(date("Y-m-d", strtotime('now')) . " +6 day");
         $start = date('Y-m-d', $str);
         $end = date('Y-m-d', $str2);
-        $url = 'https://ade-consult.univ-amu.fr/jsp/custom/modules/plannings/anonymous_cal.jsp?projectId=8&resources=' . $code . '&calType=ical&firstDate=' . $start . '&lastDate=' . $end;
+        $url = 'https://ade-web-consult.univ-amu.fr/jsp/custom/modules/plannings/anonymous_cal.jsp?projectId=8&resources=' . $code . '&calType=ical&firstDate=' . $start . '&lastDate=' . $end;
         return $url;
     }
 
@@ -72,20 +72,20 @@ class Controller
     public function getFilePath($code)
     {
         $filepath = ABSPATH . TV_ICSFILE_PATH;
-        if (file_exists($filepath . "file0/" . $code) && filesize($filepath . "file0/" . $code) > 120) {
-            $path = ABSPATH . TV_ICSFILE_PATH . "file0/" . $code;
-        } else if (file_exists($filepath . "file1/" . $code) && filesize($filepath . "file1/" . $code) > 120) {
-            $path = ABSPATH . TV_ICSFILE_PATH . "file1/" . $code;
-            copy($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1/' . $code, $_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0/' . $code);
-        } else if (file_exists($filepath . "file2/" . $code) && filesize($filepath . "file2/" . $code) > 120) {
-            $path = $filepath . "file2/" . $code;
-            copy($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2/' . $code, $_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0/' . $code);
-        } else if (file_exists($filepath . "file3/" . $code) && filesize($filepath . "file3/" . $code) > 120) {
-            $path = $filepath . "file3/" . $code;
-            copy($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3/' . $code, $_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0/' . $code);
+        if (file_exists($filepath . "file0/" . $code.'.ics') && filesize($filepath . "file0/" . $code.'.ics') > 120) {
+            $path = ABSPATH . TV_ICSFILE_PATH . "file0/" . $code.'.ics';
+        } else if (file_exists($filepath . "file1/" . $code.'.ics') && filesize($filepath . "file1/" . $code.'.ics') > 120) {
+            $path = ABSPATH . TV_ICSFILE_PATH . "file1/" . $code.'.ics';
+            copy($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1/' . $code.'.ics', $_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0/' . $code.'.ics');
+        } else if (file_exists($filepath . "file2/" . $code.'.ics') && filesize($filepath . "file2/" . $code.'.ics') > 120) {
+            $path = $filepath . "file2/" . $code.'.ics';
+            copy($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2/' . $code.'.ics', $_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0/' . $code.'.ics');
+        } else if (file_exists($filepath . "file3/" . $code.'.ics') && filesize($filepath . "file3/" . $code.'.ics') > 120) {
+            $path = $filepath . "file3/" . $code.'.ics';
+            copy($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3/' . $code.'.ics', $_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0/' . $code.'.ics');
         } else {
             $this->addFile($code);
-            $path = $filepath . "file0/" . $code;
+            $path = $filepath . "file0/" . $code.'.ics';
         }
         return $path;
     }
@@ -98,7 +98,7 @@ class Controller
     public function addFile($code)
     {
         try {
-            $path = ABSPATH . TV_ICSFILE_PATH . "file0/" . $code;
+            $path = ABSPATH . TV_ICSFILE_PATH . "file0/" . $code.'.ics';
             $url = $this->getUrl($code);
             //file_put_contents($path, fopen($url, 'r'));
             $contents = '';

@@ -316,8 +316,10 @@ class InformationView extends View
 		    $url = URL_WEBSITE_VIEWER.TV_UPLOAD_PATH;
         }
 
-		$extension = explode('.', $content);
-		$extension = $extension[1];
+		if($type == 'pdf' || $type == "event" || $type == "img") {
+			$extension = explode('.', $content);
+			$extension = $extension[1];
+		}
 
 		if ($type == 'pdf' || $type == "event" && $extension == "pdf") {
 			echo '

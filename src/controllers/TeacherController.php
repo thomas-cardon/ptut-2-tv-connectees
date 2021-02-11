@@ -98,7 +98,6 @@ class TeacherController extends UserController implements Schedule
                         }
 
                         $password = wp_generate_password();
-	                    $password = wp_hash_password($password);
 
                         $login = $cells[0];
                         $email = $cells[1];
@@ -194,6 +193,7 @@ class TeacherController extends UserController implements Schedule
 	public function displayAllTeachers()
 	{
 		$users = $this->model->getUsersByRole('enseignant');
+		$users = $this->model->getMyCodes($users);
 		return $this->view->displayAllTeachers($users);
 	}
 }

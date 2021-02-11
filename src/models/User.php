@@ -138,7 +138,8 @@ class User extends Model implements Entity
 
 	public function update()
 	{
-		$request = $this->getDatabase()->prepare('UPDATE wp_users SET user_pass = :password WHERE ID = :id');
+		$database = $this->getDatabase();
+		$request = $database->prepare('UPDATE wp_users SET user_pass = :password WHERE ID = :id');
 
 		$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
 		$request->bindValue(':password', $this->getPassword(), PDO::PARAM_STR);
@@ -150,17 +151,15 @@ class User extends Model implements Entity
 			$this->getCodes()[0]->update();
 
 		} else {
-			$codes = $this->getUserLinkToCode();
-			if(sizeof($codes) > 0) {
-				$request = $this->getDatabase()->prepare('DELETE FROM ecran_code_user WHERE user_id = :id');
+			$request = $database->prepare('DELETE FROM ecran_code_user WHERE user_id = :id');
 
-				$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
+			$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
 
-				$request->execute();
-			}
+			$request->execute();
+
 			foreach ($this->getCodes() as $code) {
 				if($code instanceof CodeAde && !is_null($code->getId())) {
-					$request = $this->getDatabase()->prepare('INSERT INTO ecran_code_user (user_id, code_ade_id) VALUES (:userId, :codeAdeId)');
+					$request = $database->prepare('INSERT INTO ecran_code_user (user_id, code_ade_id) VALUES (:userId, :codeAdeId)');
 
 					$request->bindValue(':userId', $this->getId(), PDO::PARAM_INT);
 					$request->bindValue(':codeAdeId', $code->getId(), PDO::PARAM_INT);
@@ -177,14 +176,15 @@ class User extends Model implements Entity
 	 */
 	public function delete()
 	{
-		$request = $this->getDatabase()->prepare('DELETE FROM wp_users WHERE ID = :id');
+		$database = $this->getDatabase();
+		$request = $database->prepare('DELETE FROM wp_users WHERE ID = :id');
 
 		$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
 
 		$request->execute();
 		$count = $request->rowCount();
 
-		$request = $this->getDatabase()->prepare('DELETE FROM wp_usermeta WHERE user_id = :id');
+		$request = $database->prepare('DELETE FROM wp_usermeta WHERE user_id = :id');
 
 		$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
 
@@ -251,7 +251,7 @@ class User extends Model implements Entity
 	 */
 	public function getUsersByRole($role)
 	{
-		$request = $this->getDatabase()->prepare('SELECT ID, user_login, user_pass, user_email FROM wp_users user, wp_usermeta meta WHERE user.ID = meta.user_id AND meta.meta_value =:role ORDER BY user.user_login LIMIT 1000');
+		$request = $this->getDatabase()->prepare('SELECT ID, user_login, user_pass, user_email  FROM wp_users user, wp_usermeta meta WHERE user.ID = meta.user_id AND meta.meta_value =:role ORDER BY user.user_login LIMIT 1000');
 
 		$size = strlen($role);
 		$role = 'a:1:{s:' . $size . ':"' . $role . '";b:1;}';
@@ -261,6 +261,33 @@ class User extends Model implements Entity
 		$request->execute();
 
 		return $this->setEntityList($request->fetchAll());
+	}
+
+	/**
+	 *
+	 */
+	public function getMyCodes($users)
+	{
+		foreach($users as $user) {
+			$request = $this->getDatabase()->prepare('SELECT code.id, type, title, code FROM ecran_code_ade code, ecran_code_user user WHERE user.user_id = :id AND user.code_ade_id = code.id ORDER BY code.id LIMIT 100');
+
+			$id = $user->getId();
+
+			$request->bindParam(':id', $id, PDO::PARAM_INT);
+
+			$request->execute();
+
+			$code = new CodeAde();
+			if($request->rowCount() <= 0) {
+				$codes = [];
+			} else {
+				$codes = $code->setEntityList($request->fetchAll());
+			}
+
+			$user->setCodes($codes);
+		}
+
+		return $users;
 	}
 
 	/**
@@ -301,7 +328,7 @@ class User extends Model implements Entity
 
 	public function createCode($code)
 	{
-		$request = $this->getDatabase()->prepare('INSERT INTO code_delete_account (user_id, code) VALUES (:user_id, :code)');
+		$request = $this->getDatabase()->prepare('INSERT INTO ecran_code_delete_account (user_id, code) VALUES (:user_id, :code)');
 
 		$request->bindValue(':user_id', $this->getId(), PDO::PARAM_INT);
 		$request->bindParam(':code', $code, PDO::PARAM_STR);
@@ -311,7 +338,7 @@ class User extends Model implements Entity
 
 	public function updateCode($code)
 	{
-		$request = $this->getDatabase()->prepare('UPDATE code_delete_account SET code = :code WHERE user_id = :id');
+		$request = $this->getDatabase()->prepare('UPDATE ecran_code_delete_account SET code = :code WHERE user_id = :id');
 
 		$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
 		$request->bindParam(':code', $code, PDO::PARAM_STR);
@@ -321,7 +348,7 @@ class User extends Model implements Entity
 
 	public function deleteCode()
 	{
-		$request = $this->getDatabase()->prepare('DELETE FROM code_delete_account WHERE user_id = :id');
+		$request = $this->getDatabase()->prepare('DELETE FROM ecran_code_delete_account WHERE user_id = :id');
 
 		$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
 
@@ -332,7 +359,7 @@ class User extends Model implements Entity
 
 	public function getCodeDeleteAccount()
 	{
-		$request = $this->getDatabase()->prepare('SELECT * FROM code_delete_account WHERE user_id = :id LIMIT 1');
+		$request = $this->getDatabase()->prepare('SELECT code FROM ecran_code_delete_account WHERE user_id = :id LIMIT 1');
 
 		$request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
 
@@ -355,7 +382,7 @@ class User extends Model implements Entity
 		$entity->setLogin($data['user_login']);
 		$entity->setPassword($data['user_pass']);
 		$entity->setEmail($data['user_email']);
-		$entity->setRole($data['role']);
+		$entity->setRole(get_user_by('ID', $data['ID'])->roles[0]);
 
 		$request = $this->getDatabase()->prepare('SELECT id, title, code, type FROM ecran_code_ade JOIN ecran_code_user ON ecran_code_ade.id = ecran_code_user.code_ade_id WHERE ecran_code_user.user_id = :id');
 

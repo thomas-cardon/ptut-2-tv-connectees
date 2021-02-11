@@ -39,7 +39,8 @@ class CodeAde extends Model implements Entity
 	 */
 	public function insert()
 	{
-		$request = $this->getDatabase()->prepare('INSERT INTO ecran_code_ade (type, title, code) VALUES (:type, :title, :code)');
+		$database = $this->getDatabase();
+		$request = $database->prepare('INSERT INTO ecran_code_ade (type, title, code) VALUES (:type, :title, :code)');
 
 		$request->bindValue(':title', $this->getTitle(), PDO::PARAM_STR);
 		$request->bindValue(':code', $this->getCode(), PDO::PARAM_STR);
@@ -47,7 +48,7 @@ class CodeAde extends Model implements Entity
 
 		$request->execute();
 
-		return $this->getDatabase()->lastInsertId();
+		return $database->lastInsertId();
 	}
 
 	/**

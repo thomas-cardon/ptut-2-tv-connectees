@@ -113,10 +113,6 @@ function installDatabaseEcran()
 
     dbDelta($sql);
 
-    // With wordpress id = 1 can't be access if we do : /page/1
-    $sql = "ALTER TABLE $table_name AUTO_INCREMENT = 2;";
-    dbDelta($sql);
-
     $table_name = 'ecran_alert';
 
     $sql = "CREATE TABLE IF NOT EXISTS $table_name (
@@ -131,10 +127,6 @@ function installDatabaseEcran()
 			FOREIGN KEY (author) REFERENCES wp_users(ID) ON DELETE CASCADE
 		) $charset_collate;";
 
-    dbDelta($sql);
-
-    // With wordpress id = 1 can't be access if we do : /page/1
-    $sql = "ALTER TABLE $table_name AUTO_INCREMENT = 2;";
     dbDelta($sql);
 
     $table_name = 'ecran_code_ade';
@@ -176,6 +168,18 @@ function installDatabaseEcran()
 			) $charset_collate;";
 
     dbDelta($query);
+
+	$table_name = 'ecran_code_delete_account';
+
+	$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+			id INT(10) NOT NULL AUTO_INCREMENT,
+			user_id INT (10),
+			code VARCHAR(40) NOT NULL,
+			PRIMARY KEY (id),
+			FOREIGN KEY (user_id) REFERENCES wp_users(ID) ON DELETE CASCADE
+		) $charset_collate;";
+
+    dbDelta($sql);
 }
 add_action('plugins_loaded', 'installDatabaseEcran');
 

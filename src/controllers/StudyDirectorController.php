@@ -70,8 +70,6 @@ class StudyDirectorController extends UserController implements Schedule
                 is_string($password) && strlen($password) >= 8 && strlen($password) <= 25 &&
             	$password === $passwordConfirm && is_email($email)) {
 
-	            $password = wp_hash_password($password);
-
 	            $this->model->setLogin($login);
 	            $this->model->setPassword($password);
 	            $this->model->setEmail($email);
@@ -128,6 +126,7 @@ class StudyDirectorController extends UserController implements Schedule
     public function displayAllStudyDirector()
     {
         $users = $this->model->getUsersByRole('directeuretude');
+		$users = $this->model->getMyCodes($users);
         return $this->view->displayAllStudyDirector($users);
     }
 }

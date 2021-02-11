@@ -167,7 +167,7 @@ class UserController extends Controller
      */
     public function modifyPwd()
     {
-        $action = $_POST['modifyMyPwd'];
+        $action = filter_input(INPUT_POST, 'modifyMyPwd');
         $current_user = wp_get_current_user();
         if (isset($action)) {
             $pwd = filter_input(INPUT_POST, 'verifPwd');
@@ -261,7 +261,7 @@ class UserController extends Controller
 
 		$action = filter_input(INPUT_POST, 'modifvalider');
 
-		if ($action == 'Valider') {
+		if (isset($action)) {
 			$year = filter_input(INPUT_POST, 'modifYear');
 			$group = filter_input(INPUT_POST, 'modifGroup');
 			$halfGroup = filter_input(INPUT_POST, 'modifHalfgroup');
@@ -291,7 +291,12 @@ class UserController extends Controller
 				}
 
 				$this->model->setCodes($codesAde);
-				$this->model->update();
+
+				if($this->model->update()) {
+                        $this->view->successMesageChangeCode();
+                } else {
+                        $this->view->errorMesageChangeCode();
+                }
 			}
 		}
 

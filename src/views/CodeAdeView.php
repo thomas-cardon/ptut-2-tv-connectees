@@ -33,7 +33,7 @@ class CodeAdeView extends View
             </div>
             <div class="form-group">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="type" id="year" value="year"> 
+                    <input class="form-check-input" type="radio" name="type" id="year" value="year">
                     <label class="form-check-label" for="year">Année</label>
                 </div>
                 <div class="form-check form-check-inline">
@@ -64,6 +64,7 @@ class CodeAdeView extends View
 		$linkManageCode = get_permalink($page->ID);
 
 		return '
+        <a href="'.esc_url(get_permalink(get_page_by_title('Gestion des codes ADE'))).'">< Retour</a>
          <form method="post">
          	<div class="form-group">
             	<label for="title">Titre</label>

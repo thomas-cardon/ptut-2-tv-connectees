@@ -42,7 +42,7 @@ class AlertView extends View
                 <label for="selectAlert">Année, groupe, demi-groupes concernés</label>
                 ' . $this->buildSelectCode($years, $groups, $halfGroups) . '
             </div>
-            <input type="button" onclick="addButtonAlert()" value="+">
+            <input type="button" onclick="addButtonAlert()" class="btn button_ecran" value="+">
             <button type="submit" class="btn button_ecran" name="submit">Valider</button>
         </form>
         <a href="'.esc_url(get_permalink(get_page_by_title('Gestion des alertes'))).'">Voir les alertes</a>'.$this->contextCreateAlert();
@@ -114,7 +114,7 @@ class AlertView extends View
             }
         }
 
-		$form .= '<input type="button" onclick="addButtonAlert()" value="+">    
+		$form .= '<input type="button" onclick="addButtonAlert()" value="+">
                   <button type="submit" class="btn button_ecran" name="submit">Valider</button>
                   <button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette alerte ?\');">Supprimer</button>
                 </form>'.$this->contextModify();

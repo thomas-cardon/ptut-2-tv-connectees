@@ -49,7 +49,7 @@ class SecretaryController extends UserController
      */
     public function insert()
     {
-        $action = $_POST['createSecre'];
+        $action = filter_input(INPUT_POST, 'createSecre');
 
         if (isset($action)) {
 
@@ -61,8 +61,6 @@ class SecretaryController extends UserController
             if (is_string($login) && strlen($login) >= 4 && strlen($login) <= 25 &&
                 is_string($password) && strlen($password) >= 8 && strlen($password) <= 25 &&
             	$password === $passwordConfirm && is_email($email)) {
-
-	            $password = wp_hash_password($password);
 
 	            $this->model->setLogin($login);
 	            $this->model->setPassword($password);
@@ -135,7 +133,7 @@ class SecretaryController extends UserController
         $studyDirector = new StudyDirectorController();
         $secretary = new SecretaryController();
         $technician = new TechnicianController();
-        $television = new TelevisionController();
+	$television = new TelevisionController();
         return
             $this->view->displayStartMultiSelect() .
             $this->view->displayTitleSelect('student', 'Étudiants', true) .
@@ -159,7 +157,7 @@ class SecretaryController extends UserController
      */
     public function modifyUser()
     {
-    	$id = $this->getPartOfUrl()[2];
+    	$id = $_GET['id'];
         if (is_numeric($id) && $this->model->get($id)) {
             $user = $this->model->get($id);
 
@@ -190,7 +188,7 @@ class SecretaryController extends UserController
      */
     public function deleteUsers()
     {
-        $actionDelete = $_POST['delete'];
+        $actionDelete = filter_input(INPUT_POST, 'delete');
         $roles = ['Etu', 'Teacher', 'Direc', 'Tech', 'Secre', 'Tele'];
         if (isset($actionDelete)) {
             foreach ($roles as $role) {
