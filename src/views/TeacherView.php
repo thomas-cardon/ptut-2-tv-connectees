@@ -75,7 +75,7 @@ class TeacherView extends UserView
 		$linkManageUser = get_permalink($page->ID);
 
 		$title = 'Enseignants';
-		$name = 'teacher';
+		$name = 'Teacher';
 		$header = ['Numéro Ent', 'Code ADE', 'Modifier'];
 
 		$row = array();

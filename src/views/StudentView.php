@@ -51,7 +51,7 @@ class StudentView extends UserView
 	    $linkManageUser = get_permalink($page->ID);
 
 	    $title = 'Étudiants';
-	    $name = 'etu';
+	    $name = 'Etu';
 	    $header = ['Numéro étudiant', 'Année', 'Groupe', 'Demi groupe', 'Modifier'];
 
 	    $row = array();

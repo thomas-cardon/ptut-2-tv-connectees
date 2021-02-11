@@ -62,7 +62,7 @@ class StudyDirectorView extends UserView
 		$linkManageUser = get_permalink($page->ID);
 
 		$title = 'Directeur d\'études';
-		$name = 'direc';
+		$name = 'Direc';
 		$header = ['Numéro Ent', 'Code ADE', 'Modifier'];
 
 		$row = array();
