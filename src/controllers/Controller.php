@@ -71,23 +71,19 @@ class Controller
      */
     public function getFilePath($code)
     {
-        $filepath = ABSPATH . TV_ICSFILE_PATH;
-        if (file_exists($filepath . "file0/" . $code.'.ics') && filesize($filepath . "file0/" . $code.'.ics') > 120) {
-            $path = ABSPATH . TV_ICSFILE_PATH . "file0/" . $code.'.ics';
-        } else if (file_exists($filepath . "file1/" . $code.'.ics') && filesize($filepath . "file1/" . $code.'.ics') > 120) {
-            $path = ABSPATH . TV_ICSFILE_PATH . "file1/" . $code.'.ics';
-            copy($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1/' . $code.'.ics', $_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0/' . $code.'.ics');
-        } else if (file_exists($filepath . "file2/" . $code.'.ics') && filesize($filepath . "file2/" . $code.'.ics') > 120) {
-            $path = $filepath . "file2/" . $code.'.ics';
-            copy($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2/' . $code.'.ics', $_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0/' . $code.'.ics');
-        } else if (file_exists($filepath . "file3/" . $code.'.ics') && filesize($filepath . "file3/" . $code.'.ics') > 120) {
-            $path = $filepath . "file3/" . $code.'.ics';
-            copy($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3/' . $code.'.ics', $_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0/' . $code.'.ics');
-        } else {
-            $this->addFile($code);
-            $path = $filepath . "file0/" . $code.'.ics';
+        $base_path = ABSPATH . TV_ICSFILE_PATH;
+
+        // Check if local file exists
+        for ($i = 0; $i <= 3; ++$i) {
+            $file_path = $base_path . 'file' . $i . '/' . $code . '.ics';
+            // TODO: Demander a propos du filesize
+            if (file_exists($file_path) && filesize($file_path) > 100)
+                return $file_path;
         }
-        return $path;
+
+        // No local version, let's download one
+        $this->addFile($code);
+        return $base_path . "file0/" . $code . '.ics';
     }
 
     /**
