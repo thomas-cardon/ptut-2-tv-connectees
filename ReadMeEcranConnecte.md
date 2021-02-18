@@ -44,13 +44,15 @@ Il y a six rôles différents avec chacun leur droit :
 | Enseignant         |        Oui               |      Non                  |     Oui            |     Non                   |
 | Directeur d'études |        Oui               |      Oui                  |     Oui            |     Non                   |
 | Secretaire         |        Non               |      Oui                  |     Oui            |     Oui                   |
-
+| informationPoster  |        Non               |      Oui                  |     Non            |     Non                   |
 
 Dans ce tableau, on peut voir qu'étudiant, technicien et télévisions ont les mêmes droits.  
 Mais quelle est la différence ? L'affichage de l'emploi du temps.  
 
 L'étudiant ne voit que son emploi du temps alors que le technicien va avoir un mixe de toutes les promotions afin de savoir quelle salle est / sera utilisé.  
 Quant à la télévision, la télévision affiche autant d'emploi du temps désiré.  
+
+Si vous voulez autoriser un professeur à poster des informations, ajoutez-lui le rôle informationPoster
 
 ### Emploi du temps
 
