@@ -197,7 +197,7 @@ class ICSView extends View
 		} else {
 			$label = $event['label'];
 		}
-		$description = substr( $event['description'], 0, - 29 );
+		$description = substr( $event['description'], 0, - 30 );
 		if (!( date("H:i", strtotime($event['fin'])) <= $time) ||  $day != date('j')) {
 			$current_user = wp_get_current_user();
 			if (in_array( "technicien", $current_user->roles)) {
