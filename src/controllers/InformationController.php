@@ -58,7 +58,6 @@ class InformationController extends Controller
         $content      = filter_input(INPUT_POST, 'content');
         $endDate      = filter_input(INPUT_POST, 'expirationDate');
         $creationDate = date('Y-m-d');
-        var_dump($endDate);
 
         // If the title is empty
         if ($title == '') {
