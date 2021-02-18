@@ -44,8 +44,10 @@ class TeacherController extends UserController implements Schedule
     {
         $current_user = wp_get_current_user();
         $user = $this->model->get($current_user->ID);
-        if($this->displaySchedule($user->getCodes()[0]->getCode())) {
-            return $this->displaySchedule($user->getCodes()[0]->getCode());
+        $schedule = $this->displaySchedule($user->getCodes()[0]->getCode());
+
+        if ($schedule) {
+            return $schedule;
         } else {
             return $this->view->displayNoStudy();
         }
