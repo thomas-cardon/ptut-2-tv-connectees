@@ -249,10 +249,3 @@ $result = add_role(
         'delete_posts' => false, // Use false to explicitly deny
     )
 );
-$result = add_role(
-    'informationposter',
-    __('informationPoster'),
-    array(
-        'read' => true,  // true allows this capability
-    )
-);
