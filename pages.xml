@@ -16,7 +16,7 @@
 <!-- 7. WordPress will then import each of the posts, pages, comments, categories, etc. -->
 <!--    contained in this file into your site. -->
 
-	<!-- generator="WordPress/5.6.2" created="2021-02-24 12:54" -->
+	<!-- generator="WordPress/5.6.2" created="2021-02-24 13:15" -->
 <rss version="2.0"
 	xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
 	xmlns:content="http://purl.org/rss/1.0/modules/content/"
@@ -29,7 +29,7 @@
 	<title>test-tv</title>
 	<link>https://sautax.alwaysdata.net</link>
 	<description>Just another WordPress site</description>
-	<pubDate>Wed, 24 Feb 2021 12:54:19 +0000</pubDate>
+	<pubDate>Wed, 24 Feb 2021 13:15:49 +0000</pubDate>
 	<language>en-US</language>
 	<wp:wxr_version>1.2</wp:wxr_version>
 	<wp:base_site_url>https://sautax.alwaysdata.net</wp:base_site_url>
@@ -1166,7 +1166,7 @@ test
 		</wp:postmeta>
 							<wp:postmeta>
 		<wp:meta_key><![CDATA[_members_access_role]]></wp:meta_key>
-		<wp:meta_value><![CDATA[informationposter]]></wp:meta_value>
+		<wp:meta_value><![CDATA[enseignant]]></wp:meta_value>
 		</wp:postmeta>
 							</item>
 					<item>
