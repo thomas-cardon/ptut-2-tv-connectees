@@ -39,7 +39,7 @@ class InformationRestController extends WP_REST_Controller
                     'methods'             => WP_REST_Server::CREATABLE,
                     'callback'            => array($this, 'create_item'),
                     'permission_callback' => array($this, 'create_item_permissions_check'),
-                    'args'                =>  array(
+                    'args'                => array(
                         'title'   => array(
                             'type'        => 'string',
                             'required'    => true,
@@ -58,6 +58,51 @@ class InformationRestController extends WP_REST_Controller
                     ),
                 ),
                 'schema' => array($this, 'get_public_item_schema'),
+            )
+        );
+
+        register_rest_route(
+            $this->namespace,
+            '/' . $this->rest_base . '/(?P<id>[\d]+)',
+            array(
+                'args'   => array(
+                    'id' => array(
+                        'description' => __('Unique identifier for the information'),
+                        'type'        => 'integer',
+                    ),
+                ),
+                array(
+                    'methods'             => WP_REST_Server::READABLE,
+                    'callback'            => array($this, 'get_item'),
+                    'permission_callback' => array($this, 'get_item_permissions_check'),
+                    'args'                => null,
+                ),
+                array(
+                    'methods'             => WP_REST_Server::EDITABLE,
+                    'callback'            => array($this, 'update_item'),
+                    'permission_callback' => array($this, 'update_item_permissions_check'),
+                    'args'                => array(
+                        'title'   => array(
+                            'type'        => 'string',
+                            'description' => __('Information title'),
+                        ),
+                        'content'   => array(
+                            'type'        => 'string',
+                            'description' => __('Information content'),
+                        ),
+                        'expiration-date'   => array(
+                            'type'        => 'string',
+                            'description' => __('Information expiration date'),
+                        ),
+                    ),
+                ),
+                array(
+                    'methods'             => WP_REST_Server::DELETABLE,
+                    'callback'            => array($this, 'delete_item'),
+                    'permission_callback' => array($this, 'delete_item_permissions_check'),
+                    'args'                => array()
+                ),
+                'schema' => array( $this, 'get_public_item_schema' ),
             )
         );
     }
@@ -101,10 +146,81 @@ class InformationRestController extends WP_REST_Controller
         $information->setType('text');
 
         // Try to insert the information
-        if ($information->insert())
-            return new WP_REST_Response(null, 200);
+        if (($insert_id = $information->insert()))
+            return new WP_REST_Response($insert_id, 200);
 
         return new WP_REST_Response('Could not insert the information', 400);
+    }
+
+    /**
+     * Retrieves a single information.
+     *
+     * @param WP_REST_Request $request Full details about the request.
+     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
+     */
+    public function get_item($request)
+    {
+        // Get an instance of the information manager
+        $information = new Information();
+
+        // Grab the information from the database
+        $requested_info = $information->get($request->get_param('id'));
+        if (!$requested_info)
+            return new WP_REST_Response('Information not found', 404);
+
+        return new WP_REST_Response($requested_info, 200);
+    }
+
+    /**
+     * Updates a single information.
+     *
+     * @param WP_REST_Request $request Full details about the request.
+     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
+     */
+    public function update_item($request)
+    {
+        // Get an instance of the information manager
+        $information = new Information();
+
+        // Grab the information from the database
+        $requested_info = $information->get($request->get_param('id'));
+        if (!$requested_info)
+            return new WP_REST_Response('Information not found', 404);
+
+        // Update the information data
+        if (is_string($request->get_json_params()['title']))
+            $requested_info->setTitle($request->get_json_params()['title']);
+
+        if (is_string($request->get_json_params()['content']))
+            $requested_info->setContent($request->get_json_params()['content']);
+
+        if (is_string($request->get_json_params()['expiration-date']))
+            $requested_info->setExpirationDate($request->get_json_params()['expiration-date']);
+
+        // Try to update the information
+        if ($requested_info->update() > 0)
+            return new WP_REST_Response(null, 200);
+
+        return new WP_REST_Response('Could not update the information', 400);
+    }
+
+    /**
+     * Deletes a single information.
+     *
+     * @param WP_REST_Request $request Full details about the request.
+     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
+     */
+    public function delete_item($request)
+    {
+        // Get an instance of the information manager
+        $information = new Information();
+
+        // Grab the information from the database
+        $requested_info = $information->get($request->get_param('id'));
+        if ($requested_info && $requested_info->delete())
+            return new WP_REST_Response(null, 200);
+
+        return new WP_REST_Response('Could not delete the information', 400);
     }
 
     /**
@@ -117,6 +233,50 @@ class InformationRestController extends WP_REST_Controller
     {
         $current_user = wp_get_current_user();
         return in_array("administrator", $current_user->roles);
+    }
+
+    /**
+     * Checks if a given request has access to create an information.
+     *
+     * @param WP_REST_Request $request Full details about the request.
+     * @return true|WP_Error True if the request has access to create items, WP_Error object otherwise.
+     */
+    public function create_item_permissions_check($request)
+    {
+        return $this->get_items_permissions_check($request);
+    }
+
+    /**
+     * Checks if a given request has access to read an information.
+     *
+     * @param WP_REST_Request $request Full details about the request.
+     * @return true|WP_Error True if the request has read access for the item, otherwise WP_Error object.
+     */
+    public function get_item_permissions_check($request)
+    {
+        return $this->get_items_permissions_check($request);
+    }
+
+    /**
+     * Checks if a given request has access to update a single information.
+     *
+     * @param WP_REST_Request $request Full details about the request.
+     * @return true|WP_Error True if the request has access to update the item, WP_Error object otherwise.
+     */
+    public function update_item_permissions_check($request)
+    {
+        return $this->get_items_permissions_check($request);
+    }
+
+    /**
+     * Checks if a given request has access delete an information.
+     *
+     * @param WP_REST_Request $request Full details about the request.
+     * @return true|WP_Error True if the request has access to delete the item, WP_Error object otherwise.
+     */
+    public function delete_item_permissions_check($request)
+    {
+        return $this->get_items_permissions_check($request);
     }
 
     /**
@@ -141,16 +301,5 @@ class InformationRestController extends WP_REST_Controller
         );
 
         return apply_filters( 'rest_user_collection_params', $query_params );
-    }
-
-    /**
-     * Checks if a given request has access to create an information.
-     *
-     * @param WP_REST_Request $request Full details about the request.
-     * @return true|WP_Error True if the request has access to create items, WP_Error object otherwise.
-     */
-    public function create_item_permissions_check($request)
-    {
-        return $this->get_items_permissions_check($request);
     }
 }
