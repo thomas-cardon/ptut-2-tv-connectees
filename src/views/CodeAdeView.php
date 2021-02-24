@@ -77,16 +77,53 @@ class CodeAdeView extends View
             <div class="form-group">
             	<label for="type">Selectionner un type</label>
              	<select class="form-control" id="type" name="type">
-                    <option value="' . $type . '">' . $type . '</option>
-                    <option value="year">Annee</option>
-                    <option value="group">Groupe</option>
-                    <option value="halfGroup">Demi-Groupe</option>
+                    ' . $this->createTypeOption($type) . '
                 </select>
             </div>
             <button type="submit" class="btn button_ecran" name="submit">Modifier</button>
             <a href="' . $linkManageCode . '">Annuler</a>
          </form>';
 	}
+
+    /**
+     * Display options for selecting a code type
+     *
+     * @param string $selectedType Currently selected type of the code
+     *
+     * @return string
+     */
+	private function createTypeOption($selectedType)
+    {
+        $result = '';
+
+        // Declare available code types
+        $types = array(
+            array(
+                'value' => 'year',
+                'title' => 'Année',
+            ),
+            array(
+                'value' => 'group',
+                'title' => 'Groupe',
+            ),
+            array(
+                'value' => 'halfGroup',
+                'title' => 'Demi-Groupe',
+            ),
+        );
+
+        // Build option list
+        foreach ($types as $type) {
+            $result .= '<option value="' . $type['value'] . '"';
+
+            if ($selectedType === $type['value'])
+                $result .= ' selected';
+
+            $result .= '>' . $type['title'] . '</option>' . PHP_EOL;
+        }
+
+        return $result;
+    }
 
     /**
      * Display all informations of a code ade
@@ -121,7 +158,7 @@ class CodeAdeView extends View
 				    $code->setType('Demi-groupe');
 			    }
 			    ++$count;
-			    $row[] = [$count, $this->buildCheckbox($name, $code->getId()), $code->getTitle(), $code->getCode(), $code->getType(), $this->buildLinkForModify($linkManageCodeAde.'/'.$code->getId())];
+			    $row[] = [$count, $this->buildCheckbox($name, $code->getId()), $code->getTitle(), $code->getCode(), $code->getType(), $this->buildLinkForModify($linkManageCodeAde.'?id='.$code->getId())];
 		    }
 	    }
 

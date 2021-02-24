@@ -82,7 +82,7 @@ class CodeAdeController extends Controller
 	 */
 	public function modify()
 	{
-		$id = $this->getPartOfUrl()[2];
+        $id = $_GET['id'];
 		if(is_numeric($id) && !$this->model->get($id)) {
 			return $this->view->errorNobody();
 		}
@@ -91,7 +91,6 @@ class CodeAdeController extends Controller
 
 		$submit = filter_input(INPUT_POST, 'submit');
 		if (isset($submit)) {
-
 			$validType = ['year', 'group', 'halfGroup'];
 
 			$title = filter_input(INPUT_POST, 'title');
@@ -106,7 +105,7 @@ class CodeAdeController extends Controller
 				$codeAde->setCode($code);
 				$codeAde->setType($type);
 
-				if ($this->checkDuplicateCode($codeAde) && $codeAde->update()) {
+				if (!$this->checkDuplicateCode($codeAde) && $codeAde->update()) {
 					if ($result->getCode() != $code) {
 						$this->addFile($code);
 					}
@@ -166,7 +165,7 @@ class CodeAdeController extends Controller
 
 		$count = 0;
 		foreach ($codesAde as $codeAde) {
-			if($newCodeAde === $codeAde) {
+			if($newCodeAde->getId() === $codeAde->getId()) {
 				unset($codesAde[$count]);
 			}
 			++$count;
