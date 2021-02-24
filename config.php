@@ -1,5 +1,7 @@
 <?php
 
+use Controllers\InformationRestController;
+
 include_once 'vendor/R34ICS/R34ICS.php';
 include 'widgets/WidgetAlert.php';
 include 'widgets/WidgetWeather.php';
@@ -247,5 +249,28 @@ $result = add_role(
         'read' => true,  // true allows this capability
         'edit_posts' => true,
         'delete_posts' => false, // Use false to explicitly deny
+    )
+);
+$result = add_role(
+    'informationposter',
+    __('informationPoster'),
+    array(
+        'read' => true,  // true allows this capability
+    )
+);
+
+/*
+ * CREATE REST API ENDPOINTS
+ */
+
+add_action('rest_api_init', function () {
+    $controller = new InformationRestController();
+    $controller->register_routes();
+});
+$result = add_role(
+    'informationposter',
+    __('informationPoster'),
+    array(
+        'read' => true,  // true allows this capability
     )
 );

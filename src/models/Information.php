@@ -2,6 +2,7 @@
 
 namespace Models;
 
+use JsonSerializable;
 use PDO;
 
 /**
@@ -11,7 +12,7 @@ use PDO;
  *
  * @package Models
  */
-class Information extends Model implements Entity
+class Information extends Model implements Entity, JsonSerializable
 {
 
 	/**
@@ -417,5 +418,10 @@ class Information extends Model implements Entity
     public function setAdminId($adminId)
     {
         $this->adminId = $adminId;
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }
