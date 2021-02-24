@@ -21,26 +21,24 @@ class StudentController extends UserController implements Schedule
      */
     private $model;
 
-	/**
-	 * @var StudentView
-	 */
-	public $view;
+    /**
+     * @var StudentView
+     */
+    public $view;
 
     /**
      * Constructor of StudentController.
      */
-    public function __construct()
-    {
-	    parent::__construct();
-	    $this->model = new User();
+    public function __construct() {
+        parent::__construct();
+        $this->model = new User();
         $this->view = new StudentView();
     }
 
     /**
      * Insert all users in the excel's file
      */
-    public function insert()
-    {
+    public function insert() {
         $actionStudent = filter_input(INPUT_POST, 'importEtu');
 
         if ($actionStudent) {
@@ -87,14 +85,14 @@ class StudentController extends UserController implements Schedule
 
                         if (isset($login) && isset($email)) {
 
-	                        $this->model->setLogin($login);
-	                        $this->model->setPassword($pwd);
-	                        $this->model->setEmail($email);
-	                        $this->model->setRole('etudiant');
+                            $this->model->setLogin($login);
+                            $this->model->setPassword($pwd);
+                            $this->model->setEmail($email);
+                            $this->model->setRole('etudiant');
 
                             if (!$this->checkDuplicateUser($this->model) && $this->model->insert()) {
 
-                            	// Generate Mail
+                                // Generate Mail
                                 $to = $email;
                                 $subject = "Inscription à la télé-connecté";
                                 $message = '
@@ -136,147 +134,143 @@ class StudentController extends UserController implements Schedule
         return $this->view->displayInsertImportFileStudent();
     }
 
-	/**
-	 * Modify a student
-	 *
-	 * @param $user   User
-	 *
-	 * @return string
-	 */
-	public function modify($user)
-	{
-		$page = get_page_by_title('Gestion des utilisateurs');
-		$linkManageUser = get_permalink($page->ID);
+    /**
+     * Modify a student
+     *
+     * @param $user   User
+     *
+     * @return string
+     */
+    public function modify($user) {
+        $page = get_page_by_title('Gestion des utilisateurs');
+        $linkManageUser = get_permalink($page->ID);
 
-		$action = filter_input(INPUT_POST, 'modifvalider');
+        $action = filter_input(INPUT_POST, 'modifvalider');
 
-		$codeAde    = new CodeAde();
+        $codeAde = new CodeAde();
 
-		if ($action == 'Valider') {
-			$year      = filter_input(INPUT_POST, 'modifYear');
-			$group     = filter_input(INPUT_POST, 'modifGroup');
-			$halfGroup = filter_input(INPUT_POST, 'modifHalfgroup');
+        if ($action == 'Valider') {
+            $year = filter_input(INPUT_POST, 'modifYear');
+            $group = filter_input(INPUT_POST, 'modifGroup');
+            $halfGroup = filter_input(INPUT_POST, 'modifHalfgroup');
 
-			if(is_numeric($year) && is_numeric($group) && is_numeric($halfGroup)) {
+            if (is_numeric($year) && is_numeric($group) && is_numeric($halfGroup)) {
 
-				$codes = [$year, $group, $halfGroup];
-				$codesAde = array();
-				foreach ($codes as $code) {
-					if($code !== 0) {
-						$code = $codeAde->getByCode($code);
-					}
-					$codesAde[] = $code;
-				}
+                $codes = [$year, $group, $halfGroup];
+                $codesAde = array();
+                foreach ($codes as $code) {
+                    if ($code !== 0) {
+                        $code = $codeAde->getByCode($code);
+                    }
+                    $codesAde[] = $code;
+                }
 
-				if($codesAde[0]->getType() !== 'year') {
-					$codesAde[0] = 0;
-				}
+                if ($codesAde[0]->getType() !== 'year') {
+                    $codesAde[0] = 0;
+                }
 
-				if($codesAde[1]->getType() !== 'group') {
-					$codesAde[1] = 0;
-				}
+                if ($codesAde[1]->getType() !== 'group') {
+                    $codesAde[1] = 0;
+                }
 
-				if($codesAde[2]->getType() !== 'halfGroup') {
-					$codesAde[2] = 0;
-				}
+                if ($codesAde[2]->getType() !== 'halfGroup') {
+                    $codesAde[2] = 0;
+                }
 
-				$user->setCodes($codesAde);
-				if($user->update()) {
-					$this->view->displayModificationValidate($linkManageUser);
-				}
-			}
-		}
+                $user->setCodes($codesAde);
+                if ($user->update()) {
+                    $this->view->displayModificationValidate($linkManageUser);
+                }
+            }
+        }
 
-		$years      = $codeAde->getAllFromType('year');
-		$groups     = $codeAde->getAllFromType('group');
-		$halfGroups = $codeAde->getAllFromType('halfGroup');
+        $years = $codeAde->getAllFromType('year');
+        $groups = $codeAde->getAllFromType('group');
+        $halfGroups = $codeAde->getAllFromType('halfGroup');
 
-		return $this->view->displayModifyStudent($user, $years, $groups, $halfGroups);
-	}
+        return $this->view->displayModifyStudent($user, $years, $groups, $halfGroups);
+    }
 
-	/**
-	 * Display Schedule
-	 *
-	 * @return bool|mixed|string
-	 */
-	public function displayMySchedule()
-	{
-		$current_user = wp_get_current_user();
-		$user = $this->model->get($current_user->ID);
+    /**
+     * Display Schedule
+     *
+     * @return bool|mixed|string
+     */
+    public function displayMySchedule() {
+        $current_user = wp_get_current_user();
+        $user = $this->model->get($current_user->ID);
 
-		if(sizeof($user->getCodes()) > 0) {
-			$codes = array_reverse($user->getCodes());
+        if (sizeof($user->getCodes()) > 0) {
+            $codes = array_reverse($user->getCodes());
             //$codes = [$user->getCodes()[2], $user->getCodes()[1], $user->getCodes()[0]];
-			foreach ($codes as $code) {
-				if($code instanceof CodeAde) {
-					if (file_exists($this->getFilePath($code->getCode()))) {
-						return $this->displaySchedule($code->getCode());
-					}
-				}
-			}
-		}
-		$this->manageStudent($user);
-	}
+            foreach ($codes as $code) {
+                if ($code instanceof CodeAde) {
+                    if (file_exists($this->getFilePath($code->getCode()))) {
+                        return $this->displaySchedule($code->getCode());
+                    }
+                }
+            }
+        }
+        $this->manageStudent($user);
+    }
 
-	/**
-	 * Check if the student have a group
-	 * If not, ask to select some groups
-	 *
-	 * @param $user     User
-	 *
-	 */
-	public function manageStudent($user)
-	{
-		$codeAde = new CodeAde();
+    /**
+     * Check if the student have a group
+     * If not, ask to select some groups
+     *
+     * @param $user     User
+     *
+     */
+    public function manageStudent($user) {
+        $codeAde = new CodeAde();
 
-		$years = $codeAde->getAllFromType('year');
-		$groups = $codeAde->getAllFromType('group');
-		$halfGroups = $codeAde->getAllFromType('halfGroup');
+        $years = $codeAde->getAllFromType('year');
+        $groups = $codeAde->getAllFromType('group');
+        $halfGroups = $codeAde->getAllFromType('halfGroup');
 
-		$action = filter_input(INPUT_POST, 'addSchedules');
+        $action = filter_input(INPUT_POST, 'addSchedules');
 
-		if (isset($action)) {
+        if (isset($action)) {
 
-			$year = filter_input(INPUT_POST, 'selectYears');
-			$group = filter_input(INPUT_POST, 'selectGroups');
-			$halfGroup = filter_input(INPUT_POST, 'selectHalfgroups');
+            $year = filter_input(INPUT_POST, 'selectYears');
+            $group = filter_input(INPUT_POST, 'selectGroups');
+            $halfGroup = filter_input(INPUT_POST, 'selectHalfgroups');
 
-			if((is_numeric($year) || $year == 0) && (is_numeric($group) || $group == 0) && (is_numeric($halfGroup) || $halfGroup == 0)) {
+            if ((is_numeric($year) || $year == 0) && (is_numeric($group) || $group == 0) && (is_numeric($halfGroup) || $halfGroup == 0)) {
 
-				$codes = [$year, $group, $halfGroup];
-				$codesAde = [];
-				foreach ($codes as $code) {
-					if($code !== 0) {
-						$code = $codeAde->getByCode($code);
-					}
-					$codesAde[] = $code;
-				}
+                $codes = [$year, $group, $halfGroup];
+                $codesAde = [];
+                foreach ($codes as $code) {
+                    if ($code !== 0) {
+                        $code = $codeAde->getByCode($code);
+                    }
+                    $codesAde[] = $code;
+                }
 
-				if($codesAde[0]->getType() !== 'year') {
-					$codesAde[0] = 0;
-				}
+                if ($codesAde[0]->getType() !== 'year') {
+                    $codesAde[0] = 0;
+                }
 
-				if($codesAde[1]->getType() !== 'group') {
-					$codesAde[1] = 0;
-				}
+                if ($codesAde[1]->getType() !== 'group') {
+                    $codesAde[1] = 0;
+                }
 
-				if($codesAde[2]->getType() !== 'halfGroup') {
-					$codesAde[2] = 0;
-				}
+                if ($codesAde[2]->getType() !== 'halfGroup') {
+                    $codesAde[2] = 0;
+                }
 
-				$user->setCodes($codesAde);
-				$user->update();
-				$this->view->refreshPage();
-			}
-		}
+                $user->setCodes($codesAde);
+                $user->update();
+                $this->view->refreshPage();
+            }
+        }
         return $this->view->selectSchedules($years, $groups, $halfGroups);
-	}
+    }
 
     /**
      * Display all users in a table
      */
-    function displayAllStudents()
-    {
+    function displayAllStudents() {
         $users = $this->model->getUsersByRole('etudiant');
         return $this->view->displayAllStudent($users);
     }

@@ -18,9 +18,8 @@ class TeacherView extends UserView
     /**
      * Display a creation form
      */
-    public function displayInsertImportFileTeacher()
-    {
-	    return '
+    public function displayInsertImportFileTeacher() {
+        return '
         <h2>Compte enseignant</h2>
         <p class="lead">Pour créer des enseignants, commencer par télécharger le fichier Excel en cliquant sur le lien ci-dessous.</p>
         <p class="lead">Remplissez les colonnes par les valeurs demandées, une ligne est égale à un utilisateur.</p>
@@ -39,20 +38,19 @@ class TeacherView extends UserView
         </form>';
     }
 
-	/**
-	 * Display form to modify a teacher
-	 *
-	 * @param $user   User
-	 *
-	 * @return string
-	 */
-	public function modifyForm($user)
-	{
-		$page = get_page_by_title('Gestion des utilisateurs');
-		$linkManageUser = get_permalink($page->ID);
+    /**
+     * Display form to modify a teacher
+     *
+     * @param $user   User
+     *
+     * @return string
+     */
+    public function modifyForm($user) {
+        $page = get_page_by_title('Gestion des utilisateurs');
+        $linkManageUser = get_permalink($page->ID);
 
-		return '
-        <a href="'.esc_url(get_permalink(get_page_by_title('Gestion des utilisateurs'))).'">< Retour</a>
+        return '
+        <a href="' . esc_url(get_permalink(get_page_by_title('Gestion des utilisateurs'))) . '">< Retour</a>
         <h2>' . $user->getLogin() . '</h2>
         <form method="post">
             <label for="modifCode">Code ADE</label>
@@ -60,31 +58,30 @@ class TeacherView extends UserView
             <button name="modifValidate" class="btn button_ecran" type="submit" value="Valider">Valider</button>
             <a href="' . $linkManageUser . '">Annuler</a>
         </form>';
-	}
+    }
 
-	/**
-	 * Display all teachers in a table
-	 *
-	 * @param $teachers    User[]
-	 *
-	 * @return string
-	 */
-	public function displayAllTeachers($teachers)
-	{
-		$page = get_page_by_title('Modifier un utilisateur');
-		$linkManageUser = get_permalink($page->ID);
+    /**
+     * Display all teachers in a table
+     *
+     * @param $teachers    User[]
+     *
+     * @return string
+     */
+    public function displayAllTeachers($teachers) {
+        $page = get_page_by_title('Modifier un utilisateur');
+        $linkManageUser = get_permalink($page->ID);
 
-		$title = 'Enseignants';
-		$name = 'Teacher';
-		$header = ['Numéro Ent', 'Code ADE', 'Modifier'];
+        $title = 'Enseignants';
+        $name = 'Teacher';
+        $header = ['Numéro Ent', 'Code ADE', 'Modifier'];
 
-		$row = array();
-		$count = 0;
-		foreach ($teachers as $teacher) {
-			++$count;
-			$row[] = [$count, $this->buildCheckbox($name, $teacher->getId()), $teacher->getLogin(), $teacher->getCodes()[0]->getCode(), $this->buildLinkForModify($linkManageUser.'?id='.$teacher->getId())];
-		}
+        $row = array();
+        $count = 0;
+        foreach ($teachers as $teacher) {
+            ++$count;
+            $row[] = [$count, $this->buildCheckbox($name, $teacher->getId()), $teacher->getLogin(), $teacher->getCodes()[0]->getCode(), $this->buildLinkForModify($linkManageUser . '?id=' . $teacher->getId())];
+        }
 
-		return $this->displayAll($name, $title, $header, $row, 'teacher');
-	}
+        return $this->displayAll($name, $title, $header, $row, 'teacher');
+    }
 }

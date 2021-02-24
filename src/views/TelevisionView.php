@@ -24,8 +24,7 @@ class TelevisionView extends UserView
      *
      * @return string
      */
-    public function displayFormTelevision($years, $groups, $halfGroups)
-    {
+    public function displayFormTelevision($years, $groups, $halfGroups) {
         $form = '
         <h2> Compte télévision</h2>
         <p class="lead">Pour créer des télévisions, remplissez ce formulaire avec les valeurs demandées.</p>
@@ -43,40 +42,39 @@ class TelevisionView extends UserView
             	<small id="passwordHelpBlock" class="form-text text-muted">Votre mot de passe doit contenir entre 8 et 25 caractère</small>
             </div>
             <div class="form-group">
-            	<label>Premier emploi du temps</label>'.
-                $this->buildSelectCode($years, $groups, $halfGroups) .'
+            	<label>Premier emploi du temps</label>' .
+            $this->buildSelectCode($years, $groups, $halfGroups) . '
             </div>
             <input type="button" class="btn button_ecran" onclick="addButtonTv()" value="Ajouter des emplois du temps">
             <button type="submit" class="btn button_ecran" id="validTv" name="createTv">Créer</button>
         </form>';
 
-	    return $form;
+        return $form;
     }
 
-	/**
-	 * Display all televisions in a table
-	 *
-	 * @param $users    User[]
-	 *
-	 * @return string
-	 */
-    public function displayAllTv($users)
-    {
-	    $page = get_page_by_title('Modifier un utilisateur');
-	    $linkManageUser = get_permalink($page->ID);
+    /**
+     * Display all televisions in a table
+     *
+     * @param $users    User[]
+     *
+     * @return string
+     */
+    public function displayAllTv($users) {
+        $page = get_page_by_title('Modifier un utilisateur');
+        $linkManageUser = get_permalink($page->ID);
 
-	    $title = 'Televisions';
-	    $name = 'Tele';
-	    $header = ['Login', 'Nombre d\'emplois du temps ', 'Modifier'];
+        $title = 'Televisions';
+        $name = 'Tele';
+        $header = ['Login', 'Nombre d\'emplois du temps ', 'Modifier'];
 
-	    $row = array();
-	    $count = 0;
-	    foreach ($users as $user) {
-		    ++$count;
-		    $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), sizeof($user->getCodes()), $this->buildLinkForModify($linkManageUser.'?id='.$user->getId())];
-	    }
+        $row = array();
+        $count = 0;
+        foreach ($users as $user) {
+            ++$count;
+            $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), sizeof($user->getCodes()), $this->buildLinkForModify($linkManageUser . '?id=' . $user->getId())];
+        }
 
-	    return $this->displayAll($name, $title, $header, $row, 'tele');
+        return $this->displayAll($name, $title, $header, $row, 'tele');
     }
 
     /**
@@ -89,11 +87,10 @@ class TelevisionView extends UserView
      *
      * @return string
      */
-    public function modifyForm($user, $years, $groups, $halfGroups)
-    {
+    public function modifyForm($user, $years, $groups, $halfGroups) {
         $count = 0;
         $string = '
-        <a href="'.esc_url(get_permalink(get_page_by_title('Gestion des utilisateurs'))).'">< Retour</a>
+        <a href="' . esc_url(get_permalink(get_page_by_title('Gestion des utilisateurs'))) . '">< Retour</a>
         <h2>' . $user->getLogin() . '</h2>
          <form method="post" id="registerTvForm">
             <label id="selectId1"> Emploi du temps</label>';
@@ -105,13 +102,13 @@ class TelevisionView extends UserView
             } else {
                 $string .= '
 					<div class="row">' .
-                        $this->buildSelectCode($years, $groups, $halfGroups, $code, $count) .
-                        '<input type="button" id="selectId' . $count . '" onclick="deleteRow(this.id)" class="btn button_ecran" value="Supprimer">
+                    $this->buildSelectCode($years, $groups, $halfGroups, $code, $count) .
+                    '<input type="button" id="selectId' . $count . '" onclick="deleteRow(this.id)" class="btn button_ecran" value="Supprimer">
 					</div>';
             }
         }
 
-        if($count == 0) {
+        if ($count == 0) {
             $string .= $this->buildSelectCode($years, $groups, $halfGroups, null, $count);
         }
 
@@ -125,55 +122,53 @@ class TelevisionView extends UserView
         return $string;
     }
 
-	/**
-	 * Build a select with all codes Ade
-	 *
-	 * @param $years        CodeAde[]
-	 * @param $groups       CodeAde[]
-	 * @param $halfGroups   CodeAde[]
-	 * @param $code         CodeAde
-	 * @param $count        int
-	 *
-	 * @return string
-	 */
-    public function buildSelectCode($years, $groups, $halfGroups, $code = null,  $count = 0)
-    {
-    	$select = '<select class="form-control firstSelect" id="selectId'.$count.'" name="selectTv[]" required="">';
+    /**
+     * Build a select with all codes Ade
+     *
+     * @param $years        CodeAde[]
+     * @param $groups       CodeAde[]
+     * @param $halfGroups   CodeAde[]
+     * @param $code         CodeAde
+     * @param $count        int
+     *
+     * @return string
+     */
+    public function buildSelectCode($years, $groups, $halfGroups, $code = null, $count = 0) {
+        $select = '<select class="form-control firstSelect" id="selectId' . $count . '" name="selectTv[]" required="">';
 
-    	if(!is_null($code)) {
-		    $select .= '<option value="'.$code->getCode().'">'.$code->getTitle().'</option>';
-	    }
+        if (!is_null($code)) {
+            $select .= '<option value="' . $code->getCode() . '">' . $code->getTitle() . '</option>';
+        }
 
-    	$select .= '<option value="0">Aucun</option>
+        $select .= '<option value="0">Aucun</option>
             		<optgroup label="Année">';
 
-	    foreach ($years as $year) {
-		    $select .= '<option value="' . $year->getCode() . '">' . $year->getTitle() . '</option >';
-	    }
-	    $select .= '</optgroup><optgroup label="Groupe">';
+        foreach ($years as $year) {
+            $select .= '<option value="' . $year->getCode() . '">' . $year->getTitle() . '</option >';
+        }
+        $select .= '</optgroup><optgroup label="Groupe">';
 
-	    foreach ($groups as $group) {
-		    $select .= '<option value="' . $group->getCode() . '">' . $group->getTitle() . '</option>';
-	    }
-	    $select .= '</optgroup><optgroup label="Demi groupe">';
+        foreach ($groups as $group) {
+            $select .= '<option value="' . $group->getCode() . '">' . $group->getTitle() . '</option>';
+        }
+        $select .= '</optgroup><optgroup label="Demi groupe">';
 
-	    foreach ($halfGroups as $halfGroup) {
-		    $select .= '<option value="' . $halfGroup->getCode() . '">' . $halfGroup->getTitle() . '</option>';
-	    }
-	    $select .= '</optgroup>
+        foreach ($halfGroups as $halfGroup) {
+            $select .= '<option value="' . $halfGroup->getCode() . '">' . $halfGroup->getTitle() . '</option>';
+        }
+        $select .= '</optgroup>
 			</select>';
 
-	    return $select;
+        return $select;
     }
 
-	/**
-	 * Display form to modify the password of a television
-	 *
-	 * @return string
-	 */
-    public function modifyPassword()
-    {
-    	return '
+    /**
+     * Display form to modify the password of a television
+     *
+     * @return string
+     */
+    public function modifyPassword() {
+        return '
 		<form method="post">
 		<label>Nouveau mot de passe </label>
             <input  minlength="4" type="password" class="form-control text-center modal-sm" id="pwdTv" name="pwdTv" placeholder="Nouveau mot de passe" onkeyup=checkPwd("Tv")>
@@ -187,8 +182,7 @@ class TelevisionView extends UserView
      *
      * @return string
      */
-    public function displayStartSlide()
-    {
+    public function displayStartSlide() {
         return '<div id="slideshow-container" class="slideshow-container">';
     }
 
@@ -197,8 +191,7 @@ class TelevisionView extends UserView
      *
      * @return string
      */
-    public function displayMidSlide()
-    {
+    public function displayMidSlide() {
         return '<div class="mySlides">';
     }
 }

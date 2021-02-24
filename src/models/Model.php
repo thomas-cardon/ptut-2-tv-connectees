@@ -15,17 +15,16 @@ use PDO;
 class Model
 {
 
-	/**
-	 * @var PDO
-	 */
-	private static $database;
+    /**
+     * @var PDO
+     */
+    private static $database;
 
-	/**
-	 * Connect to the database
-	 */
-	private static function setDatabase()
-    {
-        self::$database = new PDO( 'mysql:host=' . DB_HOST . '; dbname=' . DB_NAME, DB_USER, DB_PASSWORD);
+    /**
+     * Connect to the database
+     */
+    private static function setDatabase() {
+        self::$database = new PDO('mysql:host=' . DB_HOST . '; dbname=' . DB_NAME, DB_USER, DB_PASSWORD);
         //self::$database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
         self::$database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
     }
@@ -33,20 +32,18 @@ class Model
     /**
      * Connect to the database
      */
-    private static function setDatabaseViewer()
-    {
-        self::$database = new PDO( 'mysql:host=' . DB_HOST_VIEWER . '; dbname=' . DB_NAME_VIEWER, DB_USER_VIEWER, DB_PASSWORD_VIEWER);
+    private static function setDatabaseViewer() {
+        self::$database = new PDO('mysql:host=' . DB_HOST_VIEWER . '; dbname=' . DB_NAME_VIEWER, DB_USER_VIEWER, DB_PASSWORD_VIEWER);
         //self::$database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
         self::$database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
     }
 
-	/**
-	 * Return the connection
-	 *
-	 * @return PDO
-	 */
-	protected function getDatabase()
-    {
+    /**
+     * Return the connection
+     *
+     * @return PDO
+     */
+    protected function getDatabase() {
         self::setDatabase();
         return self::$database;
     }
@@ -56,8 +53,7 @@ class Model
      *
      * @return PDO
      */
-    protected function getDatabaseViewer()
-    {
+    protected function getDatabaseViewer() {
         self::setDatabaseViewer();
         return self::$database;
     }

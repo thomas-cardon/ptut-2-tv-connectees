@@ -19,13 +19,12 @@ class Controller
      *
      * @return array
      */
-    public function getPartOfUrl()
-    {
+    public function getPartOfUrl() {
         $url = $_SERVER['REQUEST_URI'];
         $urlExplode = explode('/', $url);
         $cleanUrl = array();
-        for($i = 0; $i < sizeof($urlExplode); ++$i) {
-            if($urlExplode[$i] != '/' && $urlExplode[$i] != '') {
+        for ($i = 0; $i < sizeof($urlExplode); ++$i) {
+            if ($urlExplode[$i] != '/' && $urlExplode[$i] != '') {
                 $cleanUrl[] = $urlExplode[$i];
             }
         }
@@ -37,8 +36,7 @@ class Controller
      *
      * @param $event    string
      */
-    public function addLogEvent($event)
-    {
+    public function addLogEvent($event) {
         $time = date("D, d M Y H:i:s");
         $time = "[" . $time . "] ";
         $event = $time . $event . "\n";
@@ -52,8 +50,7 @@ class Controller
      *
      * @return string
      */
-    public function getUrl($code)
-    {
+    public function getUrl($code) {
         $str = strtotime("now");
         $str2 = strtotime(date("Y-m-d", strtotime('now')) . " +6 day");
         $start = date('Y-m-d', $str);
@@ -69,8 +66,7 @@ class Controller
      *
      * @return string
      */
-    public function getFilePath($code)
-    {
+    public function getFilePath($code) {
         $base_path = ABSPATH . TV_ICSFILE_PATH;
 
         // Check if local file exists
@@ -91,10 +87,9 @@ class Controller
      *
      * @param $code     int Code ADE
      */
-    public function addFile($code)
-    {
+    public function addFile($code) {
         try {
-            $path = ABSPATH . TV_ICSFILE_PATH . "file0/" . $code.'.ics';
+            $path = ABSPATH . TV_ICSFILE_PATH . "file0/" . $code . '.ics';
             $url = $this->getUrl($code);
             //file_put_contents($path, fopen($url, 'r'));
             $contents = '';
@@ -117,19 +112,18 @@ class Controller
         }
     }
 
-	/**
-	 * Check if the input is a date
-	 *
-	 * @param $date
-	 *
-	 * @return bool
-	 */
-	public function isRealDate($date)
-	{
-		if (false === strtotime($date)) {
-			return false;
-		}
-		list($year, $month, $day) = explode('-', $date);
-		return checkdate($month, $day, $year);
-	}
+    /**
+     * Check if the input is a date
+     *
+     * @param $date
+     *
+     * @return bool
+     */
+    public function isRealDate($date) {
+        if (false === strtotime($date)) {
+            return false;
+        }
+        list($year, $month, $day) = explode('-', $date);
+        return checkdate($month, $day, $year);
+    }
 }

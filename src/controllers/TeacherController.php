@@ -15,11 +15,11 @@ use Views\TeacherView;
 class TeacherController extends UserController implements Schedule
 {
 
-	/**
-	 * Modèle de TeacherController
-	 * @var User
-	 */
-	private $model;
+    /**
+     * Modèle de TeacherController
+     * @var User
+     */
+    private $model;
 
     /**
      * Vue de TeacherController
@@ -30,18 +30,16 @@ class TeacherController extends UserController implements Schedule
     /**
      * Constructor of TeacherController
      */
-    public function __construct()
-    {
-	    parent::__construct();
-	    $this->model = new User();
+    public function __construct() {
+        parent::__construct();
+        $this->model = new User();
         $this->view = new TeacherView();
     }
 
     /**
      * Display the schedule of the teacher
      */
-    public function displayMySchedule()
-    {
+    public function displayMySchedule() {
         $current_user = wp_get_current_user();
         $user = $this->model->get($current_user->ID);
         $schedule = $this->displaySchedule($user->getCodes()[0]->getCode());
@@ -56,8 +54,7 @@ class TeacherController extends UserController implements Schedule
     /**
      * Insert all teachers from an excel's file
      */
-    public function insert()
-    {
+    public function insert() {
         $actionTeacher = filter_input(INPUT_POST, 'importProf');
         if ($actionTeacher) {
             $allowed_extension = array("Xls", "Xlsx", "Csv");
@@ -76,15 +73,15 @@ class TeacherController extends UserController implements Schedule
                 $cells = [];
 
                 //On lit la première ligne
-	            if(!empty($row)) {
-		            foreach ($row as $value) {
-			            $cellIterator = $value->getCellIterator();
-			            $cellIterator->setIterateOnlyExistingCells(FALSE);
-			            foreach ($cellIterator as $cell) {
-				            $cells[] = $cell->getValue();
-			            }
-		            }
-	            }
+                if (!empty($row)) {
+                    foreach ($row as $value) {
+                        $cellIterator = $value->getCellIterator();
+                        $cellIterator->setIterateOnlyExistingCells(FALSE);
+                        foreach ($cellIterator as $cell) {
+                            $cells[] = $cell->getValue();
+                        }
+                    }
+                }
 
                 // Check if it's a good file
                 if ($cells[0] == "Identifiant Ent" && $cells[1] == "Adresse mail" && $cells[2] == "Code") {
@@ -106,18 +103,18 @@ class TeacherController extends UserController implements Schedule
                         $code = $cells[2];
                         if (isset($login) && isset($email)) {
 
-	                        $this->model->setLogin($login);
-	                        $this->model->setPassword($password);
-	                        $this->model->setEmail($email);
-	                        $this->model->setRole('enseignant');
+                            $this->model->setLogin($login);
+                            $this->model->setPassword($password);
+                            $this->model->setEmail($email);
+                            $this->model->setRole('enseignant');
 
-	                        $this->model->setCodes($code);
+                            $this->model->setCodes($code);
 
                             if (!$this->checkDuplicateUser($this->model) && $this->model->insert()) {
-                            	$path = $this->getFilePath($code);
-                            	if (!file_exists($path)) {
-		                            $this->addFile($code);
-	                            }
+                                $path = $this->getFilePath($code);
+                                if (!file_exists($path)) {
+                                    $this->addFile($code);
+                                }
 
                                 //Send mail to the new user
                                 $to = $email;
@@ -167,35 +164,33 @@ class TeacherController extends UserController implements Schedule
      *
      * @return string
      */
-    public function modify($user)
-    {
+    public function modify($user) {
         $page = get_page_by_title('Gestion des utilisateurs');
         $linkManageUser = get_permalink($page->ID);
 
         $action = filter_input(INPUT_POST, 'modifValidate');
 
         if ($action === 'Valider') {
-	        $code = filter_input(INPUT_POST, 'modifCode');
-	        if(is_numeric($code)) {
-		        $user->setRole('enseignant');
-		        $user->getCodes()[0]->setCode($code);
+            $code = filter_input(INPUT_POST, 'modifCode');
+            if (is_numeric($code)) {
+                $user->setRole('enseignant');
+                $user->getCodes()[0]->setCode($code);
 
-		        if ($user->update()) {
-			        $this->view->displayModificationValidate($linkManageUser);
-		        }
-	        }
+                if ($user->update()) {
+                    $this->view->displayModificationValidate($linkManageUser);
+                }
+            }
         }
 
         return $this->view->modifyForm($user);
     }
 
-	/**
-	 * Display all teachers in a table
-	 */
-	public function displayAllTeachers()
-	{
-		$users = $this->model->getUsersByRole('enseignant');
-		$users = $this->model->getMyCodes($users);
-		return $this->view->displayAllTeachers($users);
-	}
+    /**
+     * Display all teachers in a table
+     */
+    public function displayAllTeachers() {
+        $users = $this->model->getUsersByRole('enseignant');
+        $users = $this->model->getMyCodes($users);
+        return $this->view->displayAllTeachers($users);
+    }
 }

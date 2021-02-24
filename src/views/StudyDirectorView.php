@@ -19,8 +19,7 @@ class StudyDirectorView extends UserView
      *
      * @return string
      */
-    public function displayCreateDirector()
-    {
+    public function displayCreateDirector() {
         return '
         <h2> Compte directeur d\'études</h2>
         <p class="lead">Pour créer des directeurs d\'études, remplissez ce formulaire avec les valeurs demandées.</p>
@@ -49,38 +48,37 @@ class StudyDirectorView extends UserView
         </form>';
     }
 
-	/**
-	 * Display all study directors in a table
-	 *
-	 * @param $users    User[]
-	 *
-	 * @return string
-	 */
-	public function displayAllStudyDirector($users)
-	{
-		$page = get_page_by_title('Modifier un utilisateur');
-		$linkManageUser = get_permalink($page->ID);
+    /**
+     * Display all study directors in a table
+     *
+     * @param $users    User[]
+     *
+     * @return string
+     */
+    public function displayAllStudyDirector($users) {
+        $page = get_page_by_title('Modifier un utilisateur');
+        $linkManageUser = get_permalink($page->ID);
 
-		$title = 'Directeur d\'études';
-		$name = 'Direc';
-		$header = ['Numéro Ent', 'Code ADE', 'Modifier'];
+        $title = 'Directeur d\'études';
+        $name = 'Direc';
+        $header = ['Numéro Ent', 'Code ADE', 'Modifier'];
 
-		$row = array();
-		$count = 0;
-		foreach ($users as $user) {
+        $row = array();
+        $count = 0;
+        foreach ($users as $user) {
 
-		    if(sizeof($user->getCodes()) == 0) {
-		        $code = 'Aucun code';
+            if (sizeof($user->getCodes()) == 0) {
+                $code = 'Aucun code';
             } else {
                 $code = $user->getCodes()[0]->getCode();
             }
 
-			++$count;
-			$row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), $code, $this->buildLinkForModify($linkManageUser.'?id='.$user->getId())];
-		}
+            ++$count;
+            $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), $code, $this->buildLinkForModify($linkManageUser . '?id=' . $user->getId())];
+        }
 
-		return $this->displayAll($name, $title, $header, $row, 'director');
-	}
+        return $this->displayAll($name, $title, $header, $row, 'director');
+    }
 
     /**
      * Display a form to modify the study director
@@ -89,18 +87,17 @@ class StudyDirectorView extends UserView
      *
      * @return string
      */
-    public function displayModifyStudyDirector($user)
-    {
-	    $page = get_page_by_title('Gestion des utilisateurs');
-	    $linkManageUser = get_permalink($page->ID);
+    public function displayModifyStudyDirector($user) {
+        $page = get_page_by_title('Gestion des utilisateurs');
+        $linkManageUser = get_permalink($page->ID);
 
         $code = 'Aucun code';
-	    if(sizeof($user->getCodes()) > 0) {
-	        $code = $user->getCodes()[0]->getCode();
+        if (sizeof($user->getCodes()) > 0) {
+            $code = $user->getCodes()[0]->getCode();
         }
 
-	    return '
-        <a href="'.esc_url(get_permalink(get_page_by_title('Gestion des utilisateurs'))).'">< Retour</a>
+        return '
+        <a href="' . esc_url(get_permalink(get_page_by_title('Gestion des utilisateurs'))) . '">< Retour</a>
         <h2>' . $user->getLogin() . '</h2>
         <form method="post">
             <div class="form-group">

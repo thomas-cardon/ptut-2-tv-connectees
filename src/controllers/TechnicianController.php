@@ -16,10 +16,10 @@ use Views\TechnicianView;
 class TechnicianController extends UserController implements Schedule
 {
 
-	/**
-	 * @var User
-	 */
-	private $model;
+    /**
+     * @var User
+     */
+    private $model;
 
     /**
      * @var TechnicianView
@@ -29,26 +29,24 @@ class TechnicianController extends UserController implements Schedule
     /**
      * Constructor of SecretaryController.
      */
-    public function __construct()
-    {
-	    parent::__construct();
-	    $this->model = new User();
+    public function __construct() {
+        parent::__construct();
+        $this->model = new User();
         $this->view = new TechnicianView();
     }
 
     /**
      * Insert a technician in the database
      */
-    public function insert()
-    {
+    public function insert() {
         $action = filter_input(INPUT_POST, 'createTech');
 
         if (isset($action)) {
 
-	        $login           = filter_input(INPUT_POST, 'loginTech');
-	        $password        = filter_input(INPUT_POST, 'pwdTech');
-	        $passwordConfirm = filter_input(INPUT_POST, 'pwdConfirmTech');
-	        $email           = filter_input(INPUT_POST, 'emailTech');
+            $login = filter_input(INPUT_POST, 'loginTech');
+            $password = filter_input(INPUT_POST, 'pwdTech');
+            $passwordConfirm = filter_input(INPUT_POST, 'pwdConfirmTech');
+            $email = filter_input(INPUT_POST, 'emailTech');
 
             if (is_string($login) && strlen($login) >= 4 && strlen($login) <= 25 &&
                 is_string($password) && strlen($password) >= 8 && strlen($password) <= 25 &&
@@ -66,7 +64,7 @@ class TechnicianController extends UserController implements Schedule
                     $this->view->displayErrorInsertion();
                 }
             } else {
-	            $this->view->displayErrorCreation();
+                $this->view->displayErrorCreation();
             }
         }
         return $this->view->displayFormTechnician();
@@ -77,26 +75,24 @@ class TechnicianController extends UserController implements Schedule
      *
      * @return string
      */
-    public function displayAllTechnician()
-    {
+    public function displayAllTechnician() {
         $users = $this->model->getUsersByRole('technicien');
         return $this->view->displayAllTechnicians($users);
     }
 
-	/**
-	 * Display the schedule of all students
-	 *
-	 * @return mixed|string
-	 */
-	public function displayMySchedule()
-	{
-		$codeAde = new CodeAde();
+    /**
+     * Display the schedule of all students
+     *
+     * @return mixed|string
+     */
+    public function displayMySchedule() {
+        $codeAde = new CodeAde();
 
-		$years = $codeAde->getAllFromType('year');
-		$string = "";
-		foreach ($years as $year) {
-			$string .= $this->displaySchedule($year->getCode());
-		}
-		return $string;
-	}
+        $years = $codeAde->getAllFromType('year');
+        $string = "";
+        foreach ($years as $year) {
+            $string .= $this->displaySchedule($year->getCode());
+        }
+        return $string;
+    }
 }

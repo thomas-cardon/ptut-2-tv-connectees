@@ -17,10 +17,10 @@ interface Schedule
      */
     public function displaySchedule($code, $allDay);
 
-	/**
-	 * Display the schedule of the current user
-	 *
-	 * @return mixed
-	 */
+    /**
+     * Display the schedule of the current user
+     *
+     * @return mixed
+     */
     public function displayMySchedule();
 }
