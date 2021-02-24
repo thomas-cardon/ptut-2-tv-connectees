@@ -147,9 +147,9 @@ class InformationRestController extends WP_REST_Controller
 
         // Try to insert the information
         if (($insert_id = $information->insert()))
-            return new WP_REST_Response($insert_id, 200);
+            return new WP_REST_Response(array('id' => $insert_id), 200);
 
-        return new WP_REST_Response('Could not insert the information', 400);
+        return new WP_REST_Response(array('message' => 'Could not insert the information'), 400);
     }
 
     /**
@@ -166,7 +166,7 @@ class InformationRestController extends WP_REST_Controller
         // Grab the information from the database
         $requested_info = $information->get($request->get_param('id'));
         if (!$requested_info)
-            return new WP_REST_Response('Information not found', 404);
+            return new WP_REST_Response(array('message' => 'Information not found'), 404);
 
         return new WP_REST_Response($requested_info, 200);
     }
@@ -201,7 +201,7 @@ class InformationRestController extends WP_REST_Controller
         if ($requested_info->update() > 0)
             return new WP_REST_Response(null, 200);
 
-        return new WP_REST_Response('Could not update the information', 400);
+        return new WP_REST_Response(array('message' => 'Could not update the information'), 400);
     }
 
     /**
@@ -220,7 +220,7 @@ class InformationRestController extends WP_REST_Controller
         if ($requested_info && $requested_info->delete())
             return new WP_REST_Response(null, 200);
 
-        return new WP_REST_Response('Could not delete the information', 400);
+        return new WP_REST_Response(array('message' => 'Could not delete the information'), 400);
     }
 
     /**
