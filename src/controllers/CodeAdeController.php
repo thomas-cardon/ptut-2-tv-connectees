@@ -140,7 +140,7 @@ class CodeAdeController extends Controller
                 $checked_values = $_REQUEST['checkboxStatusCode'];
                 foreach ($checked_values as $id) {
                     $this->model = $this->model->get($id);
-                    $this->model->deleteCode();
+                    $this->model->delete();
                     $this->view->refreshPage();
                 }
             }

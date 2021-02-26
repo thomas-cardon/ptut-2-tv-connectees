@@ -136,7 +136,7 @@ class CodeAdeView extends View
         $linkManageCodeAde = get_permalink($page->ID);
 
         $title = 'Codes Ade';
-        $name = 'code';
+        $name = 'Code';
         $header = ['Titre', 'Code', 'Type', 'Modifier'];
 
         $codesAde = [$years, $groups, $halfGroups];
