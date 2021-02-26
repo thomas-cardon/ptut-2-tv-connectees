@@ -2,6 +2,7 @@
 
 namespace Models;
 
+use JsonSerializable;
 use PDO;
 
 /**
@@ -11,7 +12,7 @@ use PDO;
  *
  * @package Models
  */
-class CodeAde extends Model implements Entity
+class CodeAde extends Model implements Entity, JsonSerializable
 {
 
     /**
@@ -255,5 +256,9 @@ class CodeAde extends Model implements Entity
      */
     public function setTitle($title) {
         $this->title = $title;
+    }
+
+    public function jsonSerialize() {
+        return get_object_vars($this);
     }
 }

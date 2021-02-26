@@ -1,5 +1,6 @@
 <?php
 
+use Controllers\CodeAdeRestController;
 use Controllers\InformationRestController;
 
 include_once 'vendor/R34ICS/R34ICS.php';
@@ -266,11 +267,7 @@ $result = add_role(
 add_action('rest_api_init', function () {
     $controller = new InformationRestController();
     $controller->register_routes();
+
+    $controller = new CodeAdeRestController();
+    $controller->register_routes();
 });
-$result = add_role(
-    'informationposter',
-    __('informationPoster'),
-    array(
-        'read' => true,  // true allows this capability
-    )
-);
