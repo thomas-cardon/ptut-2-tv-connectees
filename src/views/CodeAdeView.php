@@ -24,11 +24,11 @@ class CodeAdeView extends View
         <form method="post">
             <div class="form-group">
                 <label for="title">Titre</label>
-                <input class="form-control" type="text" id="title" name="title" placeholder="Titre" required="">
+                <input class="form-control" type="text" id="title" name="title" placeholder="Titre" required="" minlength="5" maxlength="29">
             </div>
             <div class="form-group">
                 <label for="code">Code ADE</label>
-                <input class="form-control" type="text" id="code" name="code" placeholder="Code ADE" required="">
+                <input class="form-control" type="text" id="code" name="code" placeholder="Code ADE" required="" maxlength="19" pattern="\d+">
             </div>
             <div class="form-group">
                 <div class="form-check form-check-inline">
