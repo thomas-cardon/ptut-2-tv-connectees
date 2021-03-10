@@ -173,7 +173,7 @@ class CodeAdeRestController extends WP_REST_Controller
         // Grab the information from the database
         $requested_ade_code = $ade_code->get($request->get_param('id'));
         if (!$requested_ade_code)
-            return new WP_REST_Response('ADE code not found', 404);
+            return new WP_REST_Response(array('message' => 'ADE code not found'), 404);
 
         // Update the information data
         if (is_string($request->get_json_params()['title']))

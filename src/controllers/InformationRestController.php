@@ -179,7 +179,7 @@ class InformationRestController extends WP_REST_Controller
         // Grab the information from the database
         $requested_info = $information->get($request->get_param('id'));
         if (!$requested_info)
-            return new WP_REST_Response('Information not found', 404);
+            return new WP_REST_Response(array('message' => 'Information not found'), 404);
 
         // Update the information data
         if (is_string($request->get_json_params()['title']))
