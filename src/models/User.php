@@ -2,6 +2,7 @@
 
 namespace Models;
 
+use JsonSerializable;
 use PDO;
 use WP_User;
 
@@ -12,7 +13,7 @@ use WP_User;
  *
  * @package Models
  */
-class User extends Model implements Entity
+class User extends Model implements Entity, JsonSerializable
 {
 
     /**
@@ -496,5 +497,12 @@ class User extends Model implements Entity
      */
     public function setCodes($codes) {
         $this->codes = $codes;
+    }
+
+    public function jsonSerialize() {
+        return array(
+            'id' => $this->id,
+            'name' => $this->login
+        );
     }
 }

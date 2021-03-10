@@ -1,5 +1,6 @@
 <?php
 
+use Controllers\AlertRestController;
 use Controllers\CodeAdeRestController;
 use Controllers\InformationRestController;
 
@@ -269,5 +270,8 @@ add_action('rest_api_init', function () {
     $controller->register_routes();
 
     $controller = new CodeAdeRestController();
+    $controller->register_routes();
+
+    $controller = new AlertRestController();
     $controller->register_routes();
 });

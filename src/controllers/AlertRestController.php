@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use Models\Alert;
 use Models\CodeAde;
 use WP_Error;
 use WP_REST_Controller;
@@ -9,14 +10,14 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 
-class CodeAdeRestController extends WP_REST_Controller
+class AlertRestController extends WP_REST_Controller
 {
     /**
      * Constructor for the REST controller
      */
     public function __construct() {
         $this->namespace = 'amu-ecran-connectee/v1';
-        $this->rest_base = 'ade';
+        $this->rest_base = 'alert';
     }
 
     /**
@@ -38,21 +39,21 @@ class CodeAdeRestController extends WP_REST_Controller
                     'callback' => array($this, 'create_item'),
                     'permission_callback' => array($this, 'create_item_permissions_check'),
                     'args' => array(
-                        'title' => array(
+                        'content' => array(
                             'type' => 'string',
                             'required' => true,
-                            'description' => __('ADE code title'),
+                            'description' => __('Alert content'),
                         ),
-                        'code' => array(
-                            'type' => 'number',
-                            'required' => true,
-                            'description' => __('ADE code'),
-                        ),
-                        'type' => array(
+                        'expiration-date' => array(
                             'type' => 'string',
                             'required' => true,
-                            'enum' => array('year', 'group', 'halfGroup'),
-                            'description' => __('ADE code type'),
+                            'description' => __('Alert expiration date'),
+                        ),
+                        'codes' => array(
+                            'type'        => 'array',
+                            'required'    => true,
+                            'items'       => array( 'type' => 'string' ),
+                            'description' => __('ADE codes'),
                         ),
                     ),
                 ),
@@ -66,7 +67,7 @@ class CodeAdeRestController extends WP_REST_Controller
             array(
                 'args' => array(
                     'id' => array(
-                        'description' => __('Unique identifier for the ADE code'),
+                        'description' => __('Unique identifier for the alert'),
                         'type' => 'integer',
                     ),
                 ),
@@ -81,18 +82,18 @@ class CodeAdeRestController extends WP_REST_Controller
                     'callback' => array($this, 'update_item'),
                     'permission_callback' => array($this, 'update_item_permissions_check'),
                     'args' => array(
-                        'title' => array(
+                        'content' => array(
                             'type' => 'string',
-                            'description' => __('ADE code title'),
+                            'description' => __('Alert content'),
                         ),
-                        'code' => array(
-                            'type' => 'number',
-                            'description' => __('ADE code'),
-                        ),
-                        'type' => array(
+                        'expiration-date' => array(
                             'type' => 'string',
-                            'enum' => array('year', 'group', 'halfGroup'),
-                            'description' => __('ADE code type'),
+                            'description' => __('Alert expiration date'),
+                        ),
+                        'codes' => array(
+                            'type'        => 'array',
+                            'items'       => array( 'type' => 'string' ),
+                            'description' => __('ADE codes'),
                         ),
                     ),
                 ),
@@ -115,99 +116,114 @@ class CodeAdeRestController extends WP_REST_Controller
      */
     public function get_items($request) {
         // Get an instance of the ADE code manager
-        $ade_code = new CodeAde();
+        $alert = new Alert();
 
-        return new WP_REST_Response($ade_code->getList(), 200);
+        return new WP_REST_Response($alert->getList(), 200);
     }
 
     /**
-     * Creates a single ADE code.
+     * Creates a single alert.
      *
      * @param WP_REST_Request $request Full details about the request.
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function create_item($request) {
-        // Get an instance of the ADE code manager
-        $ade_code = new CodeAde();
+        // Get an instance of the alert manager
+        $alert = new Alert();
 
-        // Set ADE code data
-        $ade_code->setTitle($request->get_param('title'));
-        $ade_code->setCode($request->get_param('code'));
-        $ade_code->setType($request->get_param('type'));
+        // Set alert data
+        $alert->setAuthor(wp_get_current_user()->ID);
+        $alert->setContent($request->get_param('content'));
+        $alert->setCreationDate(date('Y-m-d'));
+        $alert->setExpirationDate($request->get_param('expiration-date'));
+
+        // Set ADE codes to the alert
+        $ade_codes = $this->find_ade_codes($alert, $request->get_json_params()['codes']);
+
+        if (is_null($ade_codes))
+            return new WP_REST_Response(array('message' => 'An invalid code was specified'), 400);
+
+        $alert->setCodes($ade_codes);
 
         // Try to insert the ADE code
-        if (($insert_id = $ade_code->insert()))
+        if (($insert_id = $alert->insert()))
             return new WP_REST_Response(array('id' => $insert_id), 200);
 
-        return new WP_REST_Response(array('message' => 'Could not insert the ADE code'), 400);
+        return new WP_REST_Response(array('message' => 'Could not insert the alert'), 400);
     }
 
     /**
-     * Retrieves a single ADE code.
+     * Retrieves a single alert.
      *
      * @param WP_REST_Request $request Full details about the request.
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function get_item($request) {
-        // Get an instance of the ADE code manager
-        $ade_code = new CodeAde();
+        // Get an instance of the alert manager
+        $alert = new Alert();
 
         // Grab the information from the database
-        $requested_ade_code = $ade_code->get($request->get_param('id'));
-        if (!$requested_ade_code)
-            return new WP_REST_Response(array('message' => 'ADE code not found'), 404);
+        $requested_alert = $alert->get($request->get_param('id'));
+        if (!$requested_alert)
+            return new WP_REST_Response(array('message' => 'Alert not found'), 404);
 
-        return new WP_REST_Response($requested_ade_code, 200);
+        return new WP_REST_Response($requested_alert, 200);
     }
 
     /**
-     * Updates a single ADE code.
+     * Updates a single alert.
      *
      * @param WP_REST_Request $request Full details about the request.
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function update_item($request) {
-        // Get an instance of the ADE code manager
-        $ade_code = new CodeAde();
+        // Get an instance of the alert manager
+        $alert = new Alert();
 
         // Grab the information from the database
-        $requested_ade_code = $ade_code->get($request->get_param('id'));
-        if (!$requested_ade_code)
-            return new WP_REST_Response('ADE code not found', 404);
+        $requested_alert = $alert->get($request->get_param('id'));
+        if (is_null($requested_alert->getId()))
+            return new WP_REST_Response(array('message' => 'Alert not found'), 404);
 
-        // Update the information data
-        if (is_string($request->get_json_params()['title']))
-            $requested_ade_code->setTitle($request->get_json_params()['title']);
+        // Update the alert data
+        if (is_string($request->get_json_params()['content']))
+            $requested_alert->setContent($request->get_json_params()['content']);
 
-        if (is_string($request->get_json_params()['code']))
-            $requested_ade_code->setCode($request->get_json_params()['code']);
+        if (is_string($request->get_json_params()['expiration-date']))
+            $requested_alert->setExpirationDate($request->get_json_params()['expiration-date']);
 
-        if (is_string($request->get_json_params()['type']))
-            $requested_ade_code->setType($request->get_json_params()['type']);
+        if (is_array($request->get_json_params()['codes'])) {
+            $ade_codes = $this->find_ade_codes($requested_alert, $request->get_json_params()['codes']);
+
+            if (is_null($ade_codes))
+                return new WP_REST_Response(array('message' => 'An invalid code was specified'), 400);
+
+            $requested_alert->setCodes($ade_codes);
+        }
 
         // Try to update the information
-        if ($requested_ade_code->update() > 0)
+        if ($requested_alert->update() > 0)
             return new WP_REST_Response(null, 200);
 
-        return new WP_REST_Response(array('message' => 'Could not update the ADE code'), 400);
+        return new WP_REST_Response(array('message' => 'Could not update the alert'), 400);
     }
 
     /**
-     * Deletes a single ADE code.
+     * Deletes a single alert.
      *
      * @param WP_REST_Request $request Full details about the request.
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function delete_item($request) {
-        // Get an instance of the ADE code manager
-        $codeAde = new CodeAde();
+        // Get an instance of the alert manager
+        $alert = new Alert();
 
         // Grab the information from the database
-        $requested_ade_code = $codeAde->get($request->get_param('id'));
-        if ($requested_ade_code && $requested_ade_code->delete())
+        $requested_alert = $alert->get($request->get_param('id'));
+        if ($requested_alert && $requested_alert->delete())
             return new WP_REST_Response(null, 200);
 
-        return new WP_REST_Response(array('message' => 'Could not delete the ADE code'), 400);
+        return new WP_REST_Response(array('message' => 'Could not delete the alert'), 400);
     }
 
     /**
@@ -259,5 +275,35 @@ class CodeAdeRestController extends WP_REST_Controller
      */
     public function delete_item_permissions_check($request) {
         return $this->get_items_permissions_check($request);
+    }
+
+    /**
+     * Finds ADE codes and test their validity in a string array
+     *
+     * @param Alert $alert Alert to find ADE codes for
+     * @param array $codes Array of string containing the ADE codes
+     * @return array|null The array of instantiated ADE codes, or null if an error occured
+     */
+    private function find_ade_codes($alert, $codes) {
+        // Find the ADE codes
+        $ade_code = new CodeAde();
+        $alert->setForEveryone(0);
+        $ade_codes = array();
+
+        foreach ($codes as $code) {
+            if ($code == 'all') {
+                $alert->setForEveryone(1);
+            } else if ($code != 0) {
+                if (is_null($ade_code->getByCode($code)->getId())) {
+                    return null;
+                } else {
+                    $ade_codes[] = $ade_code->getByCode($code);
+                }
+            } else {
+                return null;
+            }
+        }
+
+        return $ade_codes;
     }
 }
