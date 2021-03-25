@@ -10,6 +10,7 @@ use Controllers\TeacherController;
 use Controllers\TechnicianController;
 use Controllers\TelevisionController;
 use Controllers\UserController;
+use Views\HelpMapView;
 use Views\UserView;
 
 /*
@@ -654,3 +655,34 @@ function block_password_modify()
     ));
 }
 add_action( 'init', 'block_password_modify' );
+
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function help_map_render_callback()
+{
+    if(is_page()) {
+        $view = new HelpMapView();
+        return $view->displayHelpMap();
+    }
+}
+
+/**
+ * Build a block
+ */
+function block_help_map()
+{
+    wp_register_script(
+        'help_map-script',
+        plugins_url( '/blocks/helpMap/display.js', __FILE__ ),
+        array( 'wp-blocks', 'wp-element', 'wp-data' )
+    );
+
+    register_block_type('tvconnecteeamu/help-map', array(
+        'editor_script' => 'help_map-script',
+        'render_callback' => 'help_map_render_callback'
+    ));
+}
+add_action( 'init', 'block_help_map' );
