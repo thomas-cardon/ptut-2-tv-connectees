@@ -110,7 +110,11 @@ class UserView extends View
      * Display the subscription button
      */
     public function displayButtonSubscription() {
-        return '<a href="#" id="my-notification-button" class="btn btn-danger">Recevoir des notifications</a></br>';
+        $wpnonce = wp_create_nonce('wp_rest');
+
+        return '
+        <a href="#" id="my-notification-button" class="btn btn-danger">Recevoir des notifications</a></br>
+        <input id="wpnonce" type="hidden" value="' . $wpnonce . '" />';
     }
 
     /**
