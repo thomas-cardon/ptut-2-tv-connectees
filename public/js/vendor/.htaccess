@@ -1,0 +1,5 @@
+AddCharset UTF-8 .js
+
+<FilesMatch "OneSignalSDKUpdaterWorker.js|OneSignalSDKWorker.js">
+Header add Service-Worker-Allowed "/"
+</FilesMatch>

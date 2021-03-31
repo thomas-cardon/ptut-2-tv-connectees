@@ -1,109 +1,93 @@
-var OneSignal = window.OneSignal || [];
+(() => {
+    console.log('oneSignalPush.js');
 
-console.log("non");
+    window.OneSignal = window.OneSignal || [];
+    const notificationButton = document.getElementById('my-notification-button');
+    let subscribing = false;
 
-OneSignal.push(function () {
-    OneSignal.init({
-        appId: "d7c7a01c-6e25-4b81-8bf7-5af2a55210d7",
-        subdomainName: "ecranconnectetc.os.tc",/* The label for your site that you added in Site Setup mylabel.os.tc */
-        notifyButton: {
-            enable: false
-        },
-        welcomeNotification: {
-            "title": 'Bienvenue !',
-            "message": 'Vous allez maintenant recevoir les alertes de l\'IUT ! '
-            // "url": "" /* Leave commented for the notification to not open a window on Chrome and Firefox (on Safari, it opens to your webpage) */
-        }
-    });
-});
+    const getSubscriptionState = () => {
+        return Promise.all([
+            OneSignal.isPushNotificationsEnabled(),
+            OneSignal.isOptedOut()
+        ]).then(function(result) {
+            let isPushEnabled = result[0];
+            let isOptedOut = result[1];
 
-
-function onManageWebPushSubscriptionButtonClicked(event) {
-    getSubscriptionState().then(function (state) {
-        if (state.isPushEnabled) {
-            /* Subscribed, opt them out */
-            OneSignal.setSubscription(false);
-        } else {
-            if (state.isOptedOut) {
-                /* Opted out, opt them back in */
-                OneSignal.setSubscription(true);
-            } else {
-                /* Unsubscribed, subscribe them */
-                OneSignal.registerForPushNotifications();
-            }
-        }
-    });
-    event.preventDefault();
-}
-
-function updateMangeWebPushSubscriptionButton(buttonSelector) {
-    var hideWhenSubscribed = false;
-    var subscribeText = "Recevoir les notifications";
-    var unsubscribeText = "Ne plus recevoir les notifications";
-
-    getSubscriptionState().then(function (state) {
-        var buttonText = !state.isPushEnabled || state.isOptedOut ? subscribeText : unsubscribeText;
-
-        var element = document.querySelector(buttonSelector);
-        if (element === null) {
-            return;
-        }
-
-        element.removeEventListener('click', onManageWebPushSubscriptionButtonClicked);
-        element.addEventListener('click', onManageWebPushSubscriptionButtonClicked);
-        element.textContent = buttonText;
-
-        if (state.hideWhenSubscribed && state.isPushEnabled) {
-            element.style.display = "none";
-        } else {
-            element.style.display = "";
-        }
-
-
-    });
-}
-
-function getSubscriptionState() {
-    return Promise.all([
-        OneSignal.isPushNotificationsEnabled(),
-        OneSignal.isOptedOut()
-    ]).then(function (result) {
-        var isPushEnabled = result[0];
-        var isOptedOut = result[1];
-
-        return {
-            isPushEnabled: isPushEnabled,
-            isOptedOut: isOptedOut
-        };
-    });
-}
-
-let errorMessage = function () {
-    $('body').html('une erreur critique est survenue')
-};
-var buttonSelector = "#my-notification-button";
-
-/* This example assumes you've already initialized OneSignal */
-OneSignal.push(function () {
-    // If we're on an unsupported browser, do nothing
-    if (!OneSignal.isPushNotificationsSupported()) {
-        return;
+            return {
+                isPushEnabled: isPushEnabled,
+                isOptedOut: isOptedOut
+            };
+        });
     }
 
-    updateMangeWebPushSubscriptionButton(buttonSelector);
+    const updateButtonAppearance = () => {
+        if (!OneSignal.isPushNotificationsSupported()) {
+            notificationButton.style.display = 'none';
+        } else {
+            getSubscriptionState()
+                .then((state) => {
+                    const buttonText = !state.isPushEnabled || state.isOptedOut ?
+                        'Recevoir des notifications' :
+                        'Ne plus recevoir des notifications';
 
-    OneSignal.on("subscriptionChange", function (isSubscribed) {
-        /* If the user's subscription state changes during the page's session, update the button text */
-        updateMangeWebPushSubscriptionButton(buttonSelector);
-        $.ajax({
-            url: '/wp-content/plugins/plugin-ecran-connecte/public/js/utils/userID.php',
-            method: 'get'
-        })
-            .done(function (data) {
-                OneSignal.sendTag("login", data).then(function (tagsSent) {
-                    console.log("tagsSent: " + tagsSent.login);
+                    notificationButton.innerText = buttonText;
                 });
+        }
+    }
+
+    const toggleNotificationSubscription = () => {
+        getSubscriptionState()
+            .then(function(state) {
+                if (state.isPushEnabled) {
+                    /* Subscribed, opt them out */
+                    return OneSignal.setSubscription(false);
+                } else {
+                    if (state.isOptedOut) {
+                        /* Opted out, opt them back in */
+                        return OneSignal.setSubscription(true);
+                    } else {
+                        /* Unsubscribed, subscribe them */
+                        return OneSignal.registerForPushNotifications();
+                    }
+                }
             })
-            .fail(errorMessage);
+            .then(() => {
+                updateButtonAppearance();
+            });
+    }
+
+    OneSignal.push(function() {
+        OneSignal.SERVICE_WORKER_PARAM = { scope: '/push/onesignal/' };
+        OneSignal.SERVICE_WORKER_PATH = 'wp-content/plugins/plugin-ecran-connecte/public/js/vendor/OneSignalSDKWorker.js'
+        OneSignal.SERVICE_WORKER_UPDATER_PATH = 'wp-content/plugins/plugin-ecran-connecte/public/js/vendor/OneSignalSDKUpdaterWorker.js'
+
+        OneSignal.init({
+            appId: "9d06a052-42ec-4e2e-8407-94dbb81b4766",
+        });
+
+        OneSignal.on('subscriptionChange', (isSubscribed) => {
+            if (subscribing && isSubscribed) {
+                subscribing = false;
+                toggleNotificationSubscription();
+            }
+        });
+
+        updateButtonAppearance();
     });
-});
+
+    notificationButton.addEventListener('click', () => {
+        OneSignal.push(function() {
+            OneSignal.getNotificationPermission()
+                .then((res) => {
+                    if (res === 'default') {
+                        OneSignal.showNativePrompt();
+                        subscribing = true;
+                    } else if (res === 'granted') {
+                        toggleNotificationSubscription();
+                    } else if (res === 'denied') {
+                        alert('Vous avez désactivé les notifications de votre navigateur');
+                    }
+                });
+        });
+    });
+})();

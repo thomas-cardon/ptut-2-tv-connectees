@@ -60,6 +60,7 @@ function loadScriptsEcran()
 
     // LIBRARY
     wp_enqueue_script('pdf-js', 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.2.228/build/pdf.min.js', array(), '', false);
+    wp_enqueue_script('onesignal-js', 'https://cdn.onesignal.com/sdks/OneSignalSDK.js', array(), '', false);
     wp_enqueue_script('plugin-jquerymin', TV_PLUG_PATH . 'public/js/vendor/jquery.min.js', array('jquery'), '', true);
     wp_enqueue_script('plugin-JqueryEzMin', TV_PLUG_PATH . 'public/js/vendor/jquery.easing.min.js', array('jquery'), '', true);
     wp_enqueue_script('plugin-jqueryEzTic', TV_PLUG_PATH . 'public/js/vendor/jquery.easy-ticker.js', array('jquery'), '', true);
