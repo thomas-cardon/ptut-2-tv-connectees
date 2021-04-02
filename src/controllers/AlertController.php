@@ -2,9 +2,12 @@
 
 namespace Controllers;
 
+include __DIR__ . '/../utils/OneSignalPush.php';
+
 use Models\Alert;
 use Models\CodeAde;
 use Models\User;
+use Utils\OneSignalPush;
 use Views\AlertView;
 
 /**
@@ -79,7 +82,15 @@ class AlertController extends Controller
                 // Insert
                 if ($id = $this->model->insert()) {
                     $this->view->displayAddValidate();
-                    //$this->sendAlert($id);
+
+                    // Send the push notification
+                    $oneSignalPush = new OneSignalPush();
+
+                    if ($this->model->isForEveryone()) {
+                        $oneSignalPush->sendNotification(null, $this->model->getContent());
+                    } else {
+                        $oneSignalPush->sendNotification($codesAde, $this->model->getContent());
+                    }
                 } else {
                     $this->view->errorMessageCantAdd();
                 }
@@ -272,88 +283,6 @@ class AlertController extends Controller
                 $alert->insert();
             }
         }
-    }
-
-
-    /**
-     * ONESIGNAL NOTIFICATIONS PUSH
-     *
-     */
-    public function sendAlert($id) {
-        $alert = $this->model->get($id);
-        $message = $alert->getContent();
-
-        if ($alert->isForEveryone()) {
-            $this->sendMessage("all", $message);
-        } else {
-            $user = new User();
-            $students = $user->getUsersByRole("etudiant");
-            $studentLoginListToSend = array();
-            foreach ($students as $student) {
-                foreach ($alert->getCodes() as $code) {
-                    if (in_array($code, $student->getCodes())) {
-                        array_push($studentLoginListToSend, $student->getLogin());
-                    }
-                }
-            }
-            $studentLoginListToSend = array_unique($studentLoginListToSend);
-
-            foreach ($studentLoginListToSend as $login) {
-                $this->sendMessage($login, $message);
-            }
-        }
-    }
-
-    function sendMessage($login, $message) {
-        $content = array(
-            "en" => $message
-        );
-        $hashes_array = array();
-        if ($login == "all") {
-            $fields = array(
-                'app_id' => "317b1068-1f28-4e19-81e4-9a3553c449ea",
-                'included_segments' => array(
-                    'All'
-                ),
-                'data' => array(
-                    "foo" => "bar"
-                ),
-                'contents' => $content,
-                'web_buttons' => $hashes_array
-            );
-        } else {
-            $fields = array(
-                'app_id' => "317b1068-1f28-4e19-81e4-9a3553c449ea",
-                'included_segments' => array(
-                    'All'
-                ),
-                'data' => array(
-                    "foo" => "bar"
-                ),
-                'contents' => $content,
-                'web_buttons' => $hashes_array,
-                'filters' => array(array("field" => "tag", "key" => "login", "relation" => "=", "value" => $login))
-            );
-        }
-
-        $fields = json_encode($fields);
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type: application/json; charset=utf-8',
-            'Authorization: Basic YjY1ZGUxMDktYjNhZi00NTYxLWIwZjYtNWEwMmZhNzQ2ZGY1'
-        ));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_HEADER, FALSE);
-        curl_setopt($ch, CURLOPT_POST, TRUE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        return $response;
     }
 
     /**

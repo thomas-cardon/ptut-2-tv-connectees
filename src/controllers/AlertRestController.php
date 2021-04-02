@@ -2,8 +2,11 @@
 
 namespace Controllers;
 
+include __DIR__ . '/../utils/OneSignalPush.php';
+
 use Models\Alert;
 use Models\CodeAde;
+use Utils\OneSignalPush;
 use WP_Error;
 use WP_REST_Controller;
 use WP_REST_Request;
@@ -146,8 +149,19 @@ class AlertRestController extends WP_REST_Controller
         $alert->setCodes($ade_codes);
 
         // Try to insert the ADE code
-        if (($insert_id = $alert->insert()))
+        if (($insert_id = $alert->insert())) {
+            // Send the push notification
+            $oneSignalPush = new OneSignalPush();
+
+            if ($alert->isForEveryone()) {
+                $oneSignalPush->sendNotification(null, $alert->getContent());
+            } else {
+                $oneSignalPush->sendNotification($ade_codes, $alert->getContent());
+            }
+
+            // Return the inserted alert ID
             return new WP_REST_Response(array('id' => $insert_id), 200);
+        }
 
         return new WP_REST_Response(array('message' => 'Could not insert the alert'), 400);
     }

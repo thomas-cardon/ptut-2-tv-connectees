@@ -1,6 +1,7 @@
 (() => {
     document.addEventListener('DOMContentLoaded', () => {
         window.OneSignal = window.OneSignal || [];
+
         const notificationButton = document.getElementById('my-notification-button');
         const wpnonce = document.getElementById('wpnonce').value;
         let subscribing = false;
@@ -107,7 +108,7 @@
             OneSignal.SERVICE_WORKER_UPDATER_PATH = 'wp-content/plugins/plugin-ecran-connecte/public/js/vendor/OneSignalSDKUpdaterWorker.js'
 
             OneSignal.init({
-                appId: "9d06a052-42ec-4e2e-8407-94dbb81b4766",
+                appId: ONESIGNAL_APP_ID,
             });
 
             OneSignal.on('subscriptionChange', (isSubscribed) => {
