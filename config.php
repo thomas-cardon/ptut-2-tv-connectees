@@ -169,7 +169,7 @@ function installDatabaseEcran()
     $table_name = 'ecran_code_user';
 
     $query = "CREATE TABLE IF NOT EXISTS $table_name (
-			user_id INT(10) NOT NULL ,
+			user_id BIGINT(20) UNSIGNED NOT NULL,
 			code_ade_id INT(10) NOT NULL ,
 			PRIMARY KEY (user_id, code_ade_id),
 			FOREIGN KEY (user_id) REFERENCES wp_users(ID) ON DELETE CASCADE,
@@ -182,7 +182,7 @@ function installDatabaseEcran()
 
     $sql = "CREATE TABLE IF NOT EXISTS $table_name (
 			id INT(10) NOT NULL AUTO_INCREMENT,
-			user_id INT (10),
+			user_id BIGINT(20) UNSIGNED NOT NULL,
 			code VARCHAR(40) NOT NULL,
 			PRIMARY KEY (id),
 			FOREIGN KEY (user_id) REFERENCES wp_users(ID) ON DELETE CASCADE
