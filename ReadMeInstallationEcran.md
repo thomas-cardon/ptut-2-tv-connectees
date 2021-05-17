@@ -12,6 +12,8 @@ Avant de commencer l'installation du site, vous devez avoir :
 
 - Le fichier contenant les pages de WordPress
 
+- Un serveur web avec PHP 7.4.14 d'installé
+
 ## WordPress
 
 La première étape consiste à mettre en place WordPress.  
