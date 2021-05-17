@@ -161,7 +161,7 @@ function installDatabaseEcran()
 			code_ade_id INT(10) NOT NULL ,
 			PRIMARY KEY (alert_id, code_ade_id),
 			FOREIGN KEY (alert_id) REFERENCES ecran_alert(id) ON DELETE CASCADE,
-			FOREIGN KEY (code_ade_id) REFERENCES ecran_information(id) ON DELETE CASCADE
+			FOREIGN KEY (code_ade_id) REFERENCES ecran_code_ade(id) ON DELETE CASCADE
 			) $charset_collate;";
 
     dbDelta($query);
@@ -173,7 +173,7 @@ function installDatabaseEcran()
 			code_ade_id INT(10) NOT NULL ,
 			PRIMARY KEY (user_id, code_ade_id),
 			FOREIGN KEY (user_id) REFERENCES wp_users(ID) ON DELETE CASCADE,
-			FOREIGN KEY (code_ade_id) REFERENCES ecran_information(id) ON DELETE CASCADE
+			FOREIGN KEY (code_ade_id) REFERENCES ecran_code_ade(id) ON DELETE CASCADE
 			) $charset_collate;";
 
     dbDelta($query);
