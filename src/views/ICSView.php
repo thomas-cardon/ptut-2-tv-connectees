@@ -32,9 +32,6 @@ class ICSView extends View
                     $month = $m < 10 ? '0' . $m : '' . $m;
                     if (array_key_exists($month, (array)$ics_data['events'][$year])) {
                         foreach ((array)$ics_data['events'][$year][$month] as $day => $day_events) {
-
-                            $day = $day - 1;
-
                             // HEADER
                             if ($current_study > 9) {
                                 break;
