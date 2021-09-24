@@ -18,33 +18,35 @@ define('DB_HOST_VIEWER', 'localhost');
 define('DB_NAME_VIEWER', 'adminwordpress');
 define('URL_WEBSITE_VIEWER', 'http://adminwordpress/');
 
+define('PATH', /* $_SERVER['DOCUMENT_ROOT'] */ 'C:\wamp64\www\tv\\');
 
 /**
  * Create all directory
  * (For ICS file and media)
  */
-if (!file_exists($_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH)) {
-    mkdir($_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH);
+
+if (!file_exists(PATH . TV_UPLOAD_PATH)) {
+    mkdir(PATH . TV_UPLOAD_PATH);
 }
 
-if (!file_exists($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH)) {
-    mkdir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH, 0777);
+if (!file_exists(PATH . TV_ICSFILE_PATH)) {
+    mkdir(PATH . TV_ICSFILE_PATH, 0777);
 }
 
-if (!file_exists($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0')) {
-    mkdir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0', 0777);
+if (!file_exists(PATH . TV_ICSFILE_PATH . 'file0')) {
+    mkdir(PATH . TV_ICSFILE_PATH . 'file0', 0777);
 }
 
-if (!file_exists($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1')) {
-    mkdir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1', 0777);
+if (!file_exists(PATH . TV_ICSFILE_PATH . 'file1')) {
+    mkdir(PATH . TV_ICSFILE_PATH . 'file1', 0777);
 }
 
-if (!file_exists($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2')) {
-    mkdir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2', 0777);
+if (!file_exists(PATH . TV_ICSFILE_PATH . 'file2')) {
+    mkdir(PATH . TV_ICSFILE_PATH . 'file2', 0777);
 }
 
-if (!file_exists($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3')) {
-    mkdir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3', 0777);
+if (!file_exists(PATH . TV_ICSFILE_PATH . 'file3')) {
+    mkdir(PATH . TV_ICSFILE_PATH . 'file3', 0777);
 }
 
 /**
