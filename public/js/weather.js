@@ -12,7 +12,7 @@ function refreshWeather() {
     meteoRequest.send();
 }
 
-meteoRequest.onload = function () {    
+meteoRequest.onload = function () {
     var json = JSON.parse(this.responseText);
     var temp = Math.round(getTemp(json));
     var vent = getWind(json).toFixed(0);
@@ -32,7 +32,7 @@ meteoRequest.onload = function () {
         wind.id = "wind";
         var imgVent = document.createElement("IMG");
         imgVent.src = location.pathname + "wp-content/plugins/plugin-ecran-connecte/public/img/wind.png";
-        imgVent.alt = "Img du vent";
+        imgVent.alt = "Vent";
         wind.appendChild(imgVent);
         div.appendChild(weather);
         div.appendChild(wind);
