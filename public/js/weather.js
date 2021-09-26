@@ -12,7 +12,7 @@ function refreshWeather() {
     meteoRequest.send();
 }
 
-meteoRequest.onload = function () {
+meteoRequest.onload = function () {    
     var json = JSON.parse(this.responseText);
     var temp = Math.round(getTemp(json));
     var vent = getWind(json).toFixed(0);
@@ -24,14 +24,14 @@ meteoRequest.onload = function () {
         weather.id = "weather";
         var imgTemp = document.createElement("IMG");
         imgTemp.id = "icon";
-        imgTemp.src = "/wp-content/plugins/plugin-ecran-connecte/public/img/" + getIcon(json) + ".png";
+        imgTemp.src = location.pathname + "wp-content/plugins/plugin-ecran-connecte/public/img/" + getIcon(json) + ".png";
         imgTemp.alt = getAlt(json);
         weather.appendChild(imgTemp);
         var wind = document.createElement("DIV");
         wind.innerHTML = vent + "<span class=\"kmh\">km/h</span>";
         wind.id = "wind";
         var imgVent = document.createElement("IMG");
-        imgVent.src = "/wp-content/plugins/plugin-ecran-connecte/public/img/wind.png";
+        imgVent.src = location.pathname + "wp-content/plugins/plugin-ecran-connecte/public/img/wind.png";
         imgVent.alt = "Img du vent";
         wind.appendChild(imgVent);
         div.appendChild(weather);
