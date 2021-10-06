@@ -12,13 +12,13 @@ include 'widgets/WidgetWeather.php';
 include 'widgets/WidgetInformation.php';
 
 // Login for viewer
-define('DB_USER_VIEWER', 'viewer');
-define('DB_PASSWORD_VIEWER', 'viewer');
+define('DB_USER_VIEWER', 'root');
+define('DB_PASSWORD_VIEWER', '');
 define('DB_HOST_VIEWER', 'localhost');
-define('DB_NAME_VIEWER', 'adminwordpress');
-define('URL_WEBSITE_VIEWER', 'http://adminwordpress/');
+define('DB_NAME_VIEWER', 'wordpress2');
+define('URL_WEBSITE_VIEWER', 'http://localhost/');
 
-define('PATH', /* $_SERVER['DOCUMENT_ROOT'] */ 'C:\xampp\htdocs\tv\\');
+define('PATH', /* $_SERVER['DOCUMENT_ROOT'] */ 'C:\xampp\htdocs\tv2\\');
 
 /**
  * Create all directory

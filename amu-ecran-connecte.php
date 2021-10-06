@@ -19,7 +19,7 @@ use Models\CodeAde;
 use Models\User;
 
 if (! defined('ABSPATH')) {
-	die;
+	exit(1);
 }
 
 define('TV_PLUG_PATH', '/wp-content/plugins/plugin-ecran-connecte/');
@@ -89,36 +89,36 @@ function downloadSchedule($users)
  */
 function move_fileICS_schedule()
 {
-    if ($myFiles = scandir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3')) {
+    if ($myFiles = scandir(PATH . TV_ICSFILE_PATH . 'file3')) {
         foreach ($myFiles as $myFile) {
-            if (is_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3/' . $myFile)) {
-                wp_delete_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3/' . $myFile);
+            if (is_file(PATH . TV_ICSFILE_PATH . 'file3/' . $myFile)) {
+                wp_delete_file(PATH . TV_ICSFILE_PATH . 'file3/' . $myFile);
             }
         }
     }
-    if ($myFiles = scandir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2')) {
+    if ($myFiles = scandir(PATH . TV_ICSFILE_PATH . 'file2')) {
         foreach ($myFiles as $myFile) {
-            if (is_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2/' . $myFile)) {
-                copy($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2/' . $myFile, $_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file3/' . $myFile);
-                wp_delete_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2/' . $myFile);
-            }
-        }
-    }
-
-    if ($myFiles = scandir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1')) {
-        foreach ($myFiles as $myFile) {
-            if (is_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1/' . $myFile)) {
-                copy($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1/' . $myFile, $_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file2/' . $myFile);
-                wp_delete_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1/' . $myFile);
+            if (is_file(PATH . TV_ICSFILE_PATH . 'file2/' . $myFile)) {
+                copy(PATH . TV_ICSFILE_PATH . 'file2/' . $myFile, PATH . TV_ICSFILE_PATH . 'file3/' . $myFile);
+                wp_delete_file(PATH . TV_ICSFILE_PATH . 'file2/' . $myFile);
             }
         }
     }
 
-    if ($myFiles = scandir($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0')) {
+    if ($myFiles = scandir(PATH . TV_ICSFILE_PATH . 'file1')) {
         foreach ($myFiles as $myFile) {
-            if (is_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0/' . $myFile)) {
-                copy($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0/' . $myFile, $_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file1/' . $myFile);
-                wp_delete_file($_SERVER['DOCUMENT_ROOT'] . TV_ICSFILE_PATH . 'file0/' . $myFile);
+            if (is_file(PATH . TV_ICSFILE_PATH . 'file1/' . $myFile)) {
+                copy(PATH . TV_ICSFILE_PATH . 'file1/' . $myFile, PATH . TV_ICSFILE_PATH . 'file2/' . $myFile);
+                wp_delete_file(PATH . TV_ICSFILE_PATH . 'file1/' . $myFile);
+            }
+        }
+    }
+
+    if ($myFiles = scandir(PATH . TV_ICSFILE_PATH . 'file0')) {
+        foreach ($myFiles as $myFile) {
+            if (is_file(PATH . TV_ICSFILE_PATH . 'file0/' . $myFile)) {
+                copy(PATH . TV_ICSFILE_PATH . 'file0/' . $myFile, PATH . TV_ICSFILE_PATH . 'file1/' . $myFile);
+                wp_delete_file(PATH . TV_ICSFILE_PATH . 'file0/' . $myFile);
             }
         }
     }

@@ -250,7 +250,7 @@ class InformationController extends Controller
     public function registerFile($filename, $tmpName, $entity) {
         $id = 'temporary';
         $extension_upload = strtolower(substr(strrchr($filename, '.'), 1));
-        $name = $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $id . '.' . $extension_upload;
+        $name = PATH . TV_UPLOAD_PATH . $id . '.' . $extension_upload;
 
         // Upload the file
         if ($result = move_uploaded_file($tmpName, $name)) {
@@ -269,7 +269,7 @@ class InformationController extends Controller
             $entity->setId($id);
 
             $md5Name = $id . md5_file($name);
-            rename($name, $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $md5Name . '.' . $extension_upload);
+            rename($name, PATH . TV_UPLOAD_PATH . $md5Name . '.' . $extension_upload);
 
             $content = $md5Name . '.' . $extension_upload;
 
@@ -289,7 +289,7 @@ class InformationController extends Controller
      */
     public function deleteFile($id) {
         $this->model = $this->model->get($id);
-        $source = $_SERVER['DOCUMENT_ROOT'] . TV_UPLOAD_PATH . $this->model->getContent();
+        $source = PATH. TV_UPLOAD_PATH . $this->model->getContent();
         wp_delete_file($source);
     }
 
@@ -496,7 +496,7 @@ class InformationController extends Controller
      * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
     public function readSpreadSheet($content) {
-        $file = $_SERVER['DOCUMENT_ROOT'] . $content;
+        $file = PATH. $content;
 
         $extension = ucfirst(strtolower(end(explode(".", $file))));
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($extension);
