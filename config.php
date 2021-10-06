@@ -15,7 +15,7 @@ include 'widgets/WidgetInformation.php';
 define('DB_USER_VIEWER', 'root');
 define('DB_PASSWORD_VIEWER', '');
 define('DB_HOST_VIEWER', 'localhost');
-define('DB_NAME_VIEWER', 'wordpress2');
+define('DB_NAME_VIEWER', 'tv');
 define('URL_WEBSITE_VIEWER', 'http://localhost/');
 
 define('PATH', /* $_SERVER['DOCUMENT_ROOT'] */ 'C:\xampp\htdocs\tv2\\');
@@ -73,26 +73,29 @@ function loadScriptsEcran()
     wp_enqueue_script('plugin-ticker', TV_PLUG_PATH . 'public/js/vendor/jquery.tickerNews.js', array('jquery'), '', true);
 
     //CSS
-    wp_enqueue_style('alert_ecran', TV_PLUG_PATH . 'public/css/alert.css', array(), '1.0');
-    wp_enqueue_style('info_ecran', TV_PLUG_PATH . 'public/css/information.css', array(), '1.0');
-    wp_enqueue_style('schedule_ecran', TV_PLUG_PATH . 'public/css/schedule.css', array(), '1.0');
-    wp_enqueue_style('style_ecran', TV_PLUG_PATH . 'public/css/style.css', array(), '1.0');
-    wp_enqueue_style('weather_ecran', TV_PLUG_PATH . 'public/css/weather.css', array(), '1.0');
+    wp_enqueue_style('alert_ecran', TV_PLUG_PATH . 'public/css/alert.css', array(), rand(111,9999));
+    wp_enqueue_style('info_ecran', TV_PLUG_PATH . 'public/css/information.css', array(), rand(111,9999));
+    wp_enqueue_style('schedule_ecran', TV_PLUG_PATH . 'public/css/schedule.css', array(), rand(111,9999));
+    wp_enqueue_style('style_ecran', TV_PLUG_PATH . 'public/css/style.css', array(), rand(111,9999));
+    wp_enqueue_style('weather_ecran', TV_PLUG_PATH . 'public/css/weather.css', array(), rand(111,9999));
 
     // SCRIPT
-    wp_enqueue_script('addCheckBox_script_ecran', TV_PLUG_PATH . 'public/js/addAllCheckBox.js', array('jquery'), '1.0', true);
-    wp_enqueue_script('addCodeAlert_script_ecran', TV_PLUG_PATH . 'public/js/addOrDeleteAlertCode.js', array('jquery'), '1.0', true);
-    wp_enqueue_script('addCodeTv_script_ecran', TV_PLUG_PATH . 'public/js/addOrDeleteTvCode.js', array('jquery'), '1.0', true);
+
+    wp_enqueue_script('global_ecran', TV_PLUG_PATH . 'public/js/global.js', array(), rand(111,9999), true);
+
+    wp_enqueue_script('addCheckBox_script_ecran', TV_PLUG_PATH . 'public/js/addAllCheckBox.js', array('jquery'), rand(111,9999), true);
+    wp_enqueue_script('addCodeAlert_script_ecran', TV_PLUG_PATH . 'public/js/addOrDeleteAlertCode.js', array('jquery'), rand(111,9999), true);
+    wp_enqueue_script('addCodeTv_script_ecran', TV_PLUG_PATH . 'public/js/addOrDeleteTvCode.js', array('jquery'), rand(111,9999), true);
     wp_enqueue_script('alertTicker_script_ecran', TV_PLUG_PATH . 'public/js/alertTicker.js', array('jquery'), '', true);
-    wp_enqueue_script('confPass_script_ecran', TV_PLUG_PATH . 'public/js/confirmPass.js', array('jquery'), '1.0', true);
+    wp_enqueue_script('confPass_script_ecran', TV_PLUG_PATH . 'public/js/confirmPass.js', array('jquery'), rand(111,9999), true);
     //wp_enqueue_script('oneSignal_script_ecran', TV_PLUG_PATH . 'public/js/oneSignalPush.js', array('jquery'), '', true);
     //wp_add_inline_script('oneSignal_script_ecran', 'const ONESIGNAL_APP_ID = \'' . ONESIGNAL_APP_ID . '\';', 'before');
     wp_enqueue_script('scroll_script_ecran', TV_PLUG_PATH . 'public/js/scroll.js', array('plugin-jquerymin', 'plugin-jqueryEzTic', 'plugin-jqueryEzMinTic', 'plugin-JqueryEzMin'), '', true);
-    wp_enqueue_script('search_script_ecran', TV_PLUG_PATH . 'public/js/search.js', array('jquery'), '1.0', true);
+    wp_enqueue_script('search_script_ecran', TV_PLUG_PATH . 'public/js/search.js', array('jquery'), rand(111,9999), true);
     wp_enqueue_script('slideshow_script_ecran', TV_PLUG_PATH . 'public/js/slideshow.js', array('jquery'), '2.0', true);
-    wp_enqueue_script('sortTable_script_ecran', TV_PLUG_PATH . 'public/js/sortTable.js', array('jquery'), '1.0', true);
-    wp_enqueue_script('weather_script_ecran', TV_PLUG_PATH . 'public/js/weather.js', array('jquery'), '1.0', true);
-    wp_enqueue_script('weatherTime_script_ecran', TV_PLUG_PATH . 'public/js/weather_and_time.js', array('jquery'), '1.0', true);
+    wp_enqueue_script('sortTable_script_ecran', TV_PLUG_PATH . 'public/js/sortTable.js', array('jquery'), rand(111,9999), true);
+    wp_enqueue_script('weather_script_ecran', TV_PLUG_PATH . 'public/js/weather.js', array('jquery'), rand(111,9999), true);
+    wp_enqueue_script('weatherTime_script_ecran', TV_PLUG_PATH . 'public/js/weather_and_time.js', array('jquery'), rand(111,9999), true);
 }
 
 add_action('wp_enqueue_scripts', 'loadScriptsEcran');
