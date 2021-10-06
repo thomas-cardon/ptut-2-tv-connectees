@@ -6,15 +6,18 @@
 
 .Infos {
     width: 100%;
-    background-color: #00558b;
+    background: var(--color-secondary);
+    background-position: center;
     box-sizing: border-box;
     color: #FFF;
     text-align: center;
+
+    font-weight: lighter;
 }
 
 .Infos .Weather {
     box-sizing: border-box;
-    border-top: solid 1px #FFF;
+    background: rgba(0, 0, 0 , 0.12);
     font-size: 1.6vw;
     text-align: center;
     width: 100%;
@@ -23,7 +26,6 @@
 }
 
 .Infos .Weather #weather {
-    border-right: solid 1px #FFF;
     display: inline-block;
     height: 100%;
     width: 49%;
@@ -54,7 +56,7 @@
     margin-bottom: 0 !important;
 }
 
-.kmh, .degree {
+.kmh {
     font-size: 1.4vw;
 }
 

@@ -1,5 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap');
+
+:root {
+    font-size: 16px;
+    --color-button-text: #fff;
+    --color-primary-100: #151a21;
+    --color-primary-200: #242c37;
+    --color-primary-300: #323d4d;
+    --color-primary-600: #5d7290;
+    --color-primary-700: #b2bdcd;
+    --color-primary-800: #dee3ea;
+    --color-primary-900: #fff;
+    --color-secondary-washed-out: #879eed;
+    --color-secondary: #5575e7;
+    --color-accent-glow: rgba(253,77,77,0.3);
+    --color-accent: #fd4d4d;
+    --color-accent-hover: #fd6868;
+    --color-accent-disabled: #f5bfbf;
+}
+
+header {
+  display: none;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
 .button_ecran, .delete_button_ecran, .button_ecran:hover, .delete_button_ecran:hover, .active_ecran .page-link {
-    color: white;
+  color: var(--color-button-text);
 }
 
 .button_ecran {
@@ -14,9 +39,29 @@
     background-color: #00558b;
 }
 
+h1 {
+  color: var(--color-secondary) !important;
+}
+
+h2 {
+  color: var(--color-button-text) !important;
+  font-weight: bold;
+}
+
 thead {
-    background-color: #00558b;
-    color: white;
+    background-color: var(--color-secondary);
+    color: var(--color-button-text);
+}
+
+.sidebar {
+  background-color: var(--color-secondary) !important;
+  border-radius: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.container {
+  margin-top: 5vh;
+  padding-top: 1vh;
 }
 
 .select_ecran {

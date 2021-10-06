@@ -1,5 +1,5 @@
-let urlUpload = "/wp-content/uploads/media/";
-let pdfUrl = null;
+const urlUpload = `${location.pathname}wp-content/uploads/media/`;
+
 let numPage = 0; // Numéro de page courante
 let totalPage = null; // Nombre de pages
 let endPage = false;
@@ -9,158 +9,153 @@ infoSlideShow();
 scheduleSlideshow();
 
 /**
- * Begin a slideshow if there is some informations
- */
-function infoSlideShow()
-{
-    if(document.getElementsByClassName("myInfoSlides").length > 0) {
-        console.log("-Début du diaporama");
-        displayOrHide(document.getElementsByClassName("myInfoSlides"), 0);
-    }
+* Begin a slideshow if there is some informations
+*/
+function infoSlideShow() {
+  if(document.getElementsByClassName("myInfoSlides").length > 0) {
+    console.log("-Début du diaporama");
+    displayOrHide(document.getElementsByClassName("myInfoSlides"), 0);
+  }
 }
 
 /**
- * Begin a slideshow if there is some informations
- */
-function scheduleSlideshow()
-{
-    if(document.getElementsByClassName("mySlides").length > 0) {
-        console.log("-Début du diaporama");
-        displayOrHide(document.getElementsByClassName("mySlides"), 0);
-    }
+* Begin a slideshow if there is some informations
+*/
+function scheduleSlideshow() {
+  if(document.getElementsByClassName("mySlides").length > 0) {
+    console.log("-Début du diaporama");
+    displayOrHide(document.getElementsByClassName("mySlides"), 0);
+  }
 }
 
 /**
- * Display a slideshow
- */
-function displayOrHide(slides, slideIndex)
-{
-    if(slides.length > 0) {
-        if(slides.length > 1) {
-            for (let i = 0; i < slides.length; ++i) {
-                slides[i].style.display = "none";
-            }
-        }
+* Display a slideshow
+*/
+function displayOrHide(slides, slideIndex) {
+  let pdfUrl = null;
 
-        if(slideIndex === slides.length) {
-            console.log("-Fin du diaporama - On recommence");
-            slideIndex = 0;
-        }
+  if(slides.length > 0) {
+    if(slides.length > 1) {
+      for (let i = 0; i < slides.length; ++i) {
+        slides[i].style.display = "none";
+      }
+    }
 
-        // Check if the slide exist
-        if(slides[slideIndex] !== undefined) {
+    if(slideIndex === slides.length) {
+      console.log("-Fin du diaporama - On recommence");
+      slideIndex = 0;
+    }
 
-            console.log("--Slide n°"+ slideIndex);
-            // Display the slide
-            slides[slideIndex].style.display = "block";
-            // Check child
-            if(slides[slideIndex].childNodes) {
-                var count = 0;
-                // Try to find if it's a PDF
-                for(let i = 0; i < slides[slideIndex].childNodes.length; ++i) {
-                    // If is a PDF
-                    if(slides[slideIndex].childNodes[i].className === 'canvas_pdf') {
+    // Check if the slide exist
+    if(slides[slideIndex] !== undefined) {
 
-                        console.log("--Lecture de PDF");
+      console.log("--Slide n°"+ slideIndex);
+      // Display the slide
+      slides[slideIndex].style.display = "block";
+      // Check child
+      if(slides[slideIndex].childNodes) {
+        var count = 0;
+        // Try to find if it's a PDF
+        for(let i = 0; i < slides[slideIndex].childNodes.length; ++i) {
+          // If is a PDF
+          if(slides[slideIndex].childNodes[i].className === 'canvas_pdf') {
 
-                        count = count + 1;
+            console.log("--Lecture de PDF");
 
-                        // Generate the url
-                        let pdfLink = slides[slideIndex].childNodes[i].id;
-                        pdfUrl = urlUpload + pdfLink;
+            ++count;
 
-                        let loadingTask = pdfjsLib.getDocument(pdfUrl);
-                        loadingTask.promise.then(function(pdf) {
+            // Generate the url
+            let pdfLink = slides[slideIndex].childNodes[i].id;
+            pdfUrl = urlUpload + pdfLink;
 
-                            totalPage = pdf.numPages;
-                            ++numPage;
+            let loadingTask = pdfjsLib.getDocument(pdfUrl);
+            loadingTask.promise.then(function(pdf) {
 
-                            let div = document.getElementById(pdfLink);
-                            let scale = 1.5;
+              totalPage = pdf.numPages;
+              ++numPage;
 
-                            if(stop === false) {
-                                if(document.getElementById('the-canvas-' + pdfLink + '-page' + (numPage-1)) != null) {
-                                    console.log('----Supression page n°'+ (numPage-1));
-                                    document.getElementById('the-canvas-' + pdfLink + '-page' + (numPage-1)).remove();
-                                }
-                            }
+              let div = document.getElementById(pdfLink);
+              let scale = 1.5;
 
-                            if(totalPage >= numPage && stop === false) {
-                                pdf.getPage(numPage).then(function(page) {
+              if(stop === false) {
+                if(document.getElementById('the-canvas-' + pdfLink + '-page' + (numPage-1)) != null) {
+                  console.log('----Suppression page n°'+ (numPage-1));
+                  document.getElementById('the-canvas-' + pdfLink + '-page' + (numPage-1)).remove();
+                }
+              }
 
-                                    console.log(slides.length);
-                                    console.log(totalPage);
-                                    if(slides.length === 1 && totalPage === 1 || totalPage === null && slides.length === 1) {
-                                        stop = true;
-                                    }
+              if(totalPage >= numPage && stop === false) {
+                pdf.getPage(numPage).then(function(page) {
 
-                                    console.log(stop);
+                  console.log(slides.length);
+                  console.log(totalPage);
+                  if(slides.length === 1 && totalPage === 1 || totalPage === null && slides.length === 1) {
+                    stop = true;
+                  }
 
-                                    console.log("---Page du PDF n°"+numPage);
+                  console.log(stop);
 
-                                    let viewport = page.getViewport({ scale: scale, });
+                  console.log("---Page du PDF n°" + numPage);
 
-                                    $('<canvas >', {
-                                        id: 'the-canvas-'+ pdfLink + '-page' + numPage,
-                                    }).appendTo(div).fadeOut(0).fadeIn(2000);
+                  let viewport = page.getViewport({ scale: scale, });
 
-                                    let canvas = document.getElementById('the-canvas-' + pdfLink + '-page' + numPage);
-                                    let context = canvas.getContext('2d');
-                                    canvas.height = viewport.height;
-                                    canvas.width = viewport.width;
+                  $('<canvas >', {
+                    id: 'the-canvas-'+ pdfLink + '-page' + numPage,
+                  }).appendTo(div).fadeOut(0).fadeIn(2000);
 
-                                    let renderContext = {
-                                        canvasContext: context,
-                                        viewport: viewport
-                                    };
+                  let canvas = document.getElementById('the-canvas-' + pdfLink + '-page' + numPage);
+                  let context = canvas.getContext('2d');
+                  canvas.height = viewport.height;
+                  canvas.width = viewport.width;
 
-                                    // Give the CSS to the canvas
-                                    if(slides === document.getElementsByClassName("mySlides")) {
-                                        canvas.style.maxHeight = "99vh";
-                                        canvas.style.maxWidth = "100%";
-                                        canvas.style.height = "99vh";
-                                        canvas.style.width = "auto";
-                                    } else {
-                                        canvas.style.maxHeight = "68vh";
-                                        canvas.style.maxWidth = "100%";
-                                        canvas.style.height = "auto";
-                                        canvas.style.width = "auto";
-                                    }
+                  let renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                  };
 
-                                    page.render(renderContext);
-                                });
+                  // Give the CSS to the canvas
+                  if(slides === document.getElementsByClassName("mySlides")) {
+                    canvas.style.maxHeight = "99vh";
+                    canvas.style.maxWidth = "100%";
+                    canvas.style.height = "99vh";
+                    canvas.style.width = "auto";
+                  } else {
+                    canvas.style.maxHeight = "68vh";
+                    canvas.style.maxWidth = "100%";
+                    canvas.style.height = "auto";
+                    canvas.style.width = "auto";
+                  }
 
-                                if(numPage === totalPage) {
-                                    // Reinitialise variables
-                                    if(stop === false) {
-                                        if(document.getElementById('the-canvas-' + pdfLink + '-page' + (totalPage)) != null) {
-                                            document.getElementById('the-canvas-' + pdfLink + '-page' + (totalPage)).remove();
-                                        }
-                                    }
-                                    console.log("--Fin du PDF");
-                                    totalPage = null;
-                                    numPage = 0;
-                                    endPage = true;
-                                    ++slideIndex;
-                                    // Go to the next slide
-                                }
-                            }
-                        });
+                  page.render(renderContext);
+                });
+
+                if(numPage === totalPage) {
+                  // Reinitialise variables
+                  if(stop === false) {
+                    if(document.getElementById('the-canvas-' + pdfLink + '-page' + (totalPage)) != null) {
+                      document.getElementById('the-canvas-' + pdfLink + '-page' + (totalPage)).remove();
                     }
+                  }
+                  console.log("--Fin du PDF");
+                  totalPage = null;
+                  numPage = 0;
+                  endPage = true;
+                  ++slideIndex;
+                  // Go to the next slide
                 }
-                if(count === 0) {
-                    console.log("--Lecture image");
-                    // Go to the next slide
-                    ++slideIndex;
-                }
-            } else {
-                // Go to the next slide
-                ++slideIndex;
-            }
+              }
+            });
+          }
         }
+        if(count === 0) {
+          console.log("--Lecture image");
+          // Go to the next slide
+          ++slideIndex;
+        }
+      } else ++slideIndex;
     }
+  }
 
-     if(slides.length !== 1 || totalPage !== 1) {
-        setTimeout(function(){displayOrHide(slides, slideIndex)} , 10000);
-    }
+  if(slides.length !== 1 || totalPage !== 1)
+    setTimeout(() => displayOrHide(slides, slideIndex), 10000);
 }
