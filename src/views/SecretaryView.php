@@ -33,12 +33,12 @@ class SecretaryView extends UserView
         return '
         <div class="row">
             <div class="col-6 mx-auto col-md-6 order-md-1">
-                <img src="' . TV_PLUG_PATH . '/public/img/background.png" alt="Logo Amu" class="img-fluid mb-3 mb-md-0">
+                <img src="https://upload.wikimedia.org/wikipedia/fr/thumb/8/83/Univ_Aix-Marseille_-_IUT.svg/1200px-Univ_Aix-Marseille_-_IUT.svg.png" alt="Logo AMU" class="img-fluid mb-3 mb-md-0">
             </div>
             <div class="col-md-6 order-md-2 text-center text-md-left pr-md-5">
                 <h1 class="mb-3 bd-text-purple-bright">' . get_bloginfo("name") . '</h1>
                 <p class="lead">
-                    Créer des informations pour toutes les télévisions connectées, les informations seront affichées sur chaque télévisions en plus des informations déjà publiées.
+                    Créez des informations pour toutes les télévisions connectées, les informations seront affichées sur chaque télévisions en plus des informations déjà publiées.
                     Les informations des télévisions peuvent contenir du texte, des images et même des pdf.
                 </p>
                 <p class="lead mb-4">Vous pouvez faire de même avec les alertes des télévisions connectées.</p>
