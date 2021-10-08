@@ -176,7 +176,7 @@ class ICSView extends View
         }
 
         $time = date("H:i");
-        $duration = str_replace(':', 'h', date("H:i", strtotime($event['deb']))) . ' - ' . str_replace(':', 'h', date("H:i", strtotime($event['fin'])));
+        $duration = str_replace(':', 'h', date("H:i", strtotime($event['deb']))) . '<br />' . str_replace(':', 'h', date("H:i", strtotime($event['fin'])));
         if ($day == date('j')) {
             if (date("H:i", strtotime($event['deb'])) <= $time && $time < date("H:i", strtotime($event['fin']))) {
                 $active = true;
@@ -213,7 +213,7 @@ class ICSView extends View
      */
     public function displayLineSchedule($datas, $active = false) {
         if ($active) {
-            $string = '<tr class="table-success" scope="row">';
+            $string = '<tr scope="row">';
         } else {
             $string = '<tr scope="row">';
         }
