@@ -283,7 +283,10 @@ class InformationView extends View
      * Display the begin of the slideshow
      */
     public function displayStartSlideshow() {
-        echo '<div class="slideshow-container">';
+        echo '
+          <img class="iut" src="wp-content/plugins/plugin-ecran-connecte/public/img/iut.png" />
+          <div class="slideshow-container">
+        ';
     }
 
     /**

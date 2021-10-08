@@ -48,6 +48,15 @@ h2 {
   font-weight: bold;
 }
 
+.iut {
+  width: 85px;
+  margin-top: 74vh;
+  z-index: 99999;
+  display: block;
+  left: 14vw;
+  position: absolute;
+}
+
 .table-responsive {
   border-radius: 10px;
 }
