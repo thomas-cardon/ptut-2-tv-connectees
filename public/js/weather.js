@@ -1,8 +1,3 @@
-var meteoRequest = new XMLHttpRequest();
-var longitude = 5.4510;
-var latitude = 43.5156;
-var url = "https://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&lang=fr&APPID=ae546c64c1c36e47123b3d512efa723e";
-
 /**
  * refreshWeather - Displays the weather, updated using the last ECMAScript specs (fetch > XMLHttpRequest, especially in 2021)
  */
