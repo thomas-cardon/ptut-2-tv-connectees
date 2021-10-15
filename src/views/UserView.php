@@ -75,7 +75,7 @@ class UserView extends View
         <hr class="half-rule">
         <div class="row">
             <div class="col-6 mx-auto col-md-6 order-md-2">
-            <img src="' . TV_PLUG_PATH . '/public/img/user.png" alt="Logo utilisateur" class="img-fluid mb-3 mb-md-0">
+            <img src="' . URL_PATH . TV_PLUG_PATH . '/public/img/user.png" alt="Logo utilisateur" class="img-fluid mb-3 mb-md-0">
             </div>
             <div class="col-md-6 order-md-1 text-center text-md-left pr-md-5">
                 <h2 class="mb-3 bd-text-purple-bright">Les utilisateurs</h2>
