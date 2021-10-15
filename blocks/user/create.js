@@ -6,12 +6,12 @@
     var el = element.createElement;
 
     blocks.registerBlockType('tvconnecteeamu/creation-user', {
-        title: 'Créé les utilisateurs demandés',
+        title: 'Crée les utilisateurs demandés',
         icon: 'smiley',
         category: 'common',
 
         edit: function() {
-            return "Créé les utilisateurs demandés";
+            return "Crée les utilisateurs demandés";
         },
         save: function() {
             return "test";
