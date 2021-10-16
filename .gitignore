@@ -18,5 +18,4 @@ wp-content/plugins/hello.php
 /sitemap.xml.gz
 
 
-.idea/*
-config.php
+.idea/**
