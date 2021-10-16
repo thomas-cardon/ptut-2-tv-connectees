@@ -6,6 +6,10 @@
     {
       "name": "Nicolas Rohrbach",
       "email": "rohrbach.nicolas@outlook.fr"
+    },
+    {
+      "name": "Thomas Cardon",
+      "email": "thomas.cardon@etu.univ-amu.fr"
     }
   ],
   "require": {
@@ -17,7 +21,9 @@
       "Components\\": "src/components/",
       "Controllers\\": "src/controllers/",
       "Models\\": "src/models/",
-      "Views\\": "src/views/"
+      "Views\\": "src/views/",
+      "EC\\Views\\": "src/views/",
+      "EC\\VirtualPages\\": "src/virtual-pages/"
     }
   }
 }

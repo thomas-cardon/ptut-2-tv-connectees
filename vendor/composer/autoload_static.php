@@ -82,6 +82,11 @@ class ComposerStaticInit5af73e98c2cd35777ac7e205f4a236df
             'Models\\' => 7,
             'Matrix\\' => 7,
         ),
+        'E' => 
+        array (
+            'EC\\VirtualPages\\' => 16,
+            'EC\\Views\\' => 9,
+        ),
         'C' => 
         array (
             'Controllers\\' => 12,
@@ -111,6 +116,14 @@ class ComposerStaticInit5af73e98c2cd35777ac7e205f4a236df
         array (
             0 => __DIR__ . '/..' . '/markbaker/matrix/classes/src',
         ),
+        'EC\\VirtualPages\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/virtual-pages',
+        ),
+        'EC\\Views\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/views',
+        ),
         'Controllers\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src/controllers',
@@ -125,11 +138,16 @@ class ComposerStaticInit5af73e98c2cd35777ac7e205f4a236df
         ),
     );
 
+    public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+    );
+
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit5af73e98c2cd35777ac7e205f4a236df::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit5af73e98c2cd35777ac7e205f4a236df::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit5af73e98c2cd35777ac7e205f4a236df::$classMap;
 
         }, null, ClassLoader::class);
     }

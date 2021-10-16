@@ -11,6 +11,8 @@ return array(
     'PhpOffice\\PhpSpreadsheet\\' => array($vendorDir . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet'),
     'Models\\' => array($baseDir . '/src/models'),
     'Matrix\\' => array($vendorDir . '/markbaker/matrix/classes/src'),
+    'EC\\VirtualPages\\' => array($baseDir . '/src/virtual-pages'),
+    'EC\\Views\\' => array($baseDir . '/src/views'),
     'Controllers\\' => array($baseDir . '/src/controllers'),
     'Components\\' => array($baseDir . '/src/components'),
     'Complex\\' => array($vendorDir . '/markbaker/complex/classes/src'),
