@@ -12,16 +12,7 @@ include 'widgets/WidgetWeather.php';
 include 'widgets/WidgetInformation.php';
 
 // Login for viewer
-define('DB_USER_VIEWER', 'root');
-define('DB_PASSWORD_VIEWER', '');
-define('DB_HOST_VIEWER', 'localhost');
-define('DB_NAME_VIEWER', 'tv');
-define('URL_WEBSITE_VIEWER', 'http://localhost/');
-
-define('VERSION', /*'2.0'*/ rand(1, 9999999));
-
-define('PATH', /* $_SERVER['DOCUMENT_ROOT'] */ 'C:/xampp/htdocs/tv/');
-define('URL_PATH', /* example: http://localhost/tv -> /tv */ $_SERVER['REQUEST_URI']);
+require 'config.php';
 
 /**
  * Create all directory
