@@ -37,8 +37,8 @@ add_filter( 'the_permalink', function( $plink ) {
 } );
 
 add_action( 'ec_virtual_pages', function( $controller ) {
-  $controller->addPage( new \EC\VirtualPages\Page( "/creation-des-comptes" ) )
-    ->setTitle( 'My First Custom Page' )
+  $controller->addPage( new \EC\VirtualPages\Page( "/tablet-view" ) )
+    ->setTitle( 'tablet-view' )
     ->setContent( 'test' )
-    ->setTemplate( 'page0.php' );
+    ->setTemplate( 'page-tablet.php' );
 } );
