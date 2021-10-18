@@ -50,6 +50,8 @@ if (!file_exists(PATH . TV_ICSFILE_PATH . 'file3')) {
 
 function loadScriptsEcran()
 {
+    if (is_page('tablet-view')) return;
+
     //jQuery | TODO: remplacer entièrement?
     wp_enqueue_script('jquery_cdn', 'https://code.jquery.com/jquery-3.4.1.slim.min.js');
 
