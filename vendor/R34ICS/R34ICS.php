@@ -87,7 +87,7 @@ class R34ICS extends Controller
      * @param array $args Array d'option
      * @return string
      */
-    public function display_calendar($ics_url, $code, $allDay, $args = array()) {
+    public function display_calendar($ics_url, $code, $allDay, $args = array(), $ics = false) {
         $force_reload = true;
         // Get ICS file, from transient if possible
         $transient_name = __METHOD__ . '_' . sha1($ics_url);
@@ -323,6 +323,8 @@ class R34ICS extends Controller
 
         $model = new CodeAde();
         $title = $model->getByCode($code)->getTitle();
+
+        if ($ics) return $ics_data;
         return $this->view->displaySchedule($ics_data, $title, $allDay);
     }
 
