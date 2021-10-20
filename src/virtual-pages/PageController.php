@@ -39,7 +39,7 @@ class PageController implements PageControllerInterface {
         while( $this->pages->valid() ) {
             if ( trim( $this->pages->current()->getUrl(), '/' ) === $path ) {
                 $this->matched = $this->pages->current();
-                return TRUE;
+                return true;
             }
             $this->pages->next();
         }
