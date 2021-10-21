@@ -10,8 +10,44 @@ use Controllers\TeacherController;
 use Controllers\TechnicianController;
 use Controllers\TelevisionController;
 use Controllers\UserController;
+
+use Controllers\ScheduleViewController;
+
 use Views\HelpMapView;
 use Views\UserView;
+
+/*
+ * TABLET VIEW BLOCKS
+ */
+
+/**
+ * Build a block
+ */
+function block_scheduleView()
+{
+    wp_register_script(
+      'schedule-view',
+      plugins_url( 'blocks/tablet-view/schedule-view.js', __FILE__ ),
+      [ 'wp-blocks', 'wp-element', 'wp-editor' ],
+      VERSION
+    );
+
+    // Add block style.
+    wp_register_style(
+      'schedule-view',
+      plugins_url( 'blocks/tablet-view/schedule-view.css', __FILE__ ),
+      [],
+      VERSION
+    );
+
+    // Register block script and style.
+    register_block_type( 'tvconnecteeamu/schedule-view', [
+      'style' => 'schedule-view', // Loads both on editor and frontend.
+      'editor_script' => 'schedule-view', // Loads only on editor.
+    ]);
+}
+
+add_action('init', 'block_scheduleView');
 
 /*
  * ALERT BLOCKS
