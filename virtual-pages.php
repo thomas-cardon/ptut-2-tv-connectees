@@ -39,6 +39,15 @@ add_filter( 'the_permalink', function( $plink ) {
 add_action( 'ec_virtual_pages', function( $controller ) {
   $controller->addPage( new \EC\VirtualPages\Page( "/tablet-view" ) )
     ->setTitle( 'tablet-view' )
-    ->setContent( 'test' )
+    ->setContent( '' )
+    ->setTemplate( 'page-tablet.php' );
+
+  $controller->addPage( new \EC\VirtualPages\Page( "/tablet-view/schedule" ) )
+    ->setTitle( 'tablet-view' )
+    ->setContent( '
+    <!-- wp:tvconnecteeamu/tablet-schedule -->
+    test
+    <!-- /wp:tvconnecteeamu/tablet-schedule -->
+    ' )
     ->setTemplate( 'page-tablet.php' );
 } );
