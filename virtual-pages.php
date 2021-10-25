@@ -260,7 +260,7 @@ add_action( 'ec_virtual_pages', function( $controller ) {
   /**
    *  Page: /tablet-view/schedule
    */
-  $controller->addPage( new \EC\VirtualPages\Page( "/tablet-view/schedule" ) )
+  $controller->addPage( new \EC\VirtualPages\Page( "/tablet-view/emploi-du-temps" ) )
     ->setTitle( 'tablet-view' )
     ->setContent( '
     <!-- wp:tvconnecteeamu/tablet-schedule -->
