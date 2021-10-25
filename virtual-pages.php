@@ -50,6 +50,38 @@ add_action( 'ec_virtual_pages', function( $controller ) {
     ->setTemplate( 'page.php' );
 
     /**
+     *  Page: /creation-des-comptes
+     */
+  $controller->addPage( new \EC\VirtualPages\Page( "/creation-des-comptes" ) )
+    ->setTitle( 'Créer un utilisateur' )
+    ->setContent( '
+    <!-- wp:heading {"level":1} -->
+    <h1>Création des comptes</h1>
+    <!-- /wp:heading -->
+
+    <!-- wp:tvconnecteeamu/creation-user -->
+    test
+    <!-- /wp:tvconnecteeamu/creation-user -->
+    ' )
+    ->setTemplate( 'page.php' );
+
+    /**
+     *  Page: /gestion-des-utilisateurs
+     */
+  $controller->addPage( new \EC\VirtualPages\Page( "/gestion-des-utilisateurs" ) )
+    ->setTitle( 'Gestion des utilisateurs' )
+    ->setContent( '
+    <!-- wp:heading {"level":1} -->
+    <h1>Gestion des utilisateurs</h1>
+    <!-- /wp:heading -->
+
+    <!-- wp:tvconnecteeamu/management-user -->
+    test
+    <!-- /wp:tvconnecteeamu/management-user -->
+    ' )
+    ->setTemplate( 'page.php' );
+
+    /**
      *  Page: /inscription
      */
   $controller->addPage( new \EC\VirtualPages\Page( "/inscription" ) )
@@ -81,7 +113,6 @@ add_action( 'ec_virtual_pages', function( $controller ) {
     ' )
     ->setTemplate( 'page.php' );
 
-
     /**
      *  Page: /creer-une-alerte
      */
@@ -104,6 +135,22 @@ add_action( 'ec_virtual_pages', function( $controller ) {
 
     /**
      *  Page: /emploi-du-temps
+     */
+  $controller->addPage( new \EC\VirtualPages\Page( "/gerer-les-informations" ) )
+    ->setTitle( 'Gérer les informations' )
+    ->setContent( '
+    <!-- wp:heading {"level":1} -->
+    <h1>Gestion des informations</h1>
+    <!-- /wp:heading -->
+
+    <!-- wp:tvconnecteeamu/manage-information -->
+    test
+    <!-- /wp:tvconnecteeamu/manage-information -->
+    ' )
+    ->setTemplate( 'page.php' );
+
+    /**
+     *  Page: /gerer-les-informations/modification-information
      */
   $controller->addPage( new \EC\VirtualPages\Page( "/gerer-les-informations/modification-information" ) )
     ->setTitle( 'Modifier une information' )
@@ -189,7 +236,7 @@ add_action( 'ec_virtual_pages', function( $controller ) {
    *  Page: /gerer-les-alertes
    */
   $controller->addPage( new \EC\VirtualPages\Page( "/gerer-les-alertes" ) )
-    ->setTitle( 'Gérer les informations' )
+    ->setTitle( 'Gérer les alertes' )
     ->setContent( '
     <!-- wp:heading {"level":1} -->
     <h1>Gestion des alertes</h1>
