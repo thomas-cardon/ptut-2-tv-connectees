@@ -50,6 +50,39 @@ add_action( 'ec_virtual_pages', function( $controller ) {
     ->setTemplate( 'page.php' );
 
     /**
+     *  Page: /inscription
+     */
+  $controller->addPage( new \EC\VirtualPages\Page( "/inscription" ) )
+    ->setTitle( 'Inscription' )
+    ->setContent( '
+    <!-- wp:heading {"level":1} -->
+    <h1>Inscription</h1>
+    <!-- /wp:heading -->
+
+    <!-- wp:tvconnecteeamu/inscr-student -->
+    test
+    <!-- /wp:tvconnecteeamu/inscr-student -->
+    ' )
+    ->setTemplate( 'page.php' );
+
+  /**
+   *  Page: /creer-information
+   */
+  $controller->addPage( new \EC\VirtualPages\Page( "/creer-information" ) )
+    ->setTitle( 'Créer une information' )
+    ->setContent( '
+    <!-- wp:heading {"level":1} -->
+    <h1>Créer une information</h1>
+    <!-- /wp:heading -->
+
+    <!-- wp:tvconnecteeamu/add-information -->
+    test
+    <!-- /wp:tvconnecteeamu/add-information -->
+    ' )
+    ->setTemplate( 'page.php' );
+
+
+    /**
      *  Page: /creer-information
      */
   $controller->addPage( new \EC\VirtualPages\Page( "/creer-information" ) )
