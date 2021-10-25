@@ -2,14 +2,13 @@
 
 /**
  * Plugin Name:       Ecran connecté AMU
- * Plugin URI:        https://github.com/Nicolas-Rohrbach/plugin-ecran-connecte
+ * Plugin URI:        https://github.com/thomas-cardon/plugin-ecran-connecte
  * Description:       Plugin écrans connectés de l'AMU, ce plugin permet de générer des fichiers ICS. Ces fichiers sont ensuite lus pour pouvoir afficher l'emploi du temps de la personne connectée. Ce plugin permet aussi d'afficher la météo, des informations, des alertes. Tant en ayant une gestion des utilisateurs et des informations.
  * Version:           1.2.9
- * Author:            Léa Arnaud & Nicolas Rohrbach
  * License:           GNU General Public License v2
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       ecran-connecte
- * GitHub Plugin URI: https://github.com/Nicolas-Rohrbach/plugin-ecran-connecte
+ * GitHub Plugin URI: https://github.com/thomas-cardon/plugin-ecran-connecte (2021)
  */
 
 use Controllers\AlertController;
@@ -29,8 +28,9 @@ define('TV_ICSFILE_PATH', '/wp-content/uploads/fileICS/');
 require __DIR__ . '/autoload.php';
 require_once __DIR__ . '/vendor/autoload.php';
 
-include 'config.php';
-include 'blocks.php';
+require 'init.php';
+require 'virtual-pages.php';
+require 'blocks.php';
 
 // Upload schedules
 $submit = filter_input(INPUT_POST, 'updatePluginEcranConnecte');

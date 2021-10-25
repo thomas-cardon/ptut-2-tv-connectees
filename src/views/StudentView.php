@@ -30,7 +30,7 @@ class StudentView extends UserView
         <p class="lead">Pour finir, validez l\'envoie du formulaire en cliquant sur "Importer le fichier"</p>
         <p class="lead">Lorsqu\'un élève est inscrit, un email lui est envoyé contenant son login et son mot de passe avec un lien du site.</p>
         <p class="lead">Lors de sa première connection, l\'étudiant devraz choisir son groupe pour avoir son emploi du temps.</p>
-        <a href="' . TV_PLUG_PATH . 'public/files/Ajout Etus.xlsx" download="Ajout Etus.xlsx">Télécharger le fichier excel !</a>
+        <a href="' . URL_PATH . TV_PLUG_PATH . 'public/files/Ajout Etus.xlsx" download="Ajout Etus.xlsx">Télécharger le fichier excel !</a>
         <form id="etu" method="post" enctype="multipart/form-data">
             <input type="file" name="excelEtu" class="inpFil" required=""/>
             <button type="submit" class="btn button_ecran" name="importEtu" value="Importer">Importer le fichier</button>

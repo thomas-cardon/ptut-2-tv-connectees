@@ -210,6 +210,23 @@ class CodeAdeRestController extends WP_REST_Controller
         return new WP_REST_Response(array('message' => 'Could not delete the ADE code'), 400);
     }
 
+    /*
+    $R34ICS = new R34ICS();
+
+    $url = $this->getFilePath($code);
+    $args = array(
+        'count' => 10,
+        'description' => null,
+        'eventdesc' => null,
+        'format' => null,
+        'hidetimes' => null,
+        'showendtimes' => null,
+        'title' => null,
+        'view' => 'list',
+    );
+    return $R34ICS->display_calendar($url, $code, $allDay, $args);
+  */
+
     /**
      * Check if a given request has access to get items
      *
@@ -217,8 +234,7 @@ class CodeAdeRestController extends WP_REST_Controller
      * @return WP_Error|bool
      */
     public function get_items_permissions_check($request) {
-        $current_user = wp_get_current_user();
-        return in_array("administrator", $current_user->roles);
+      return true;
     }
 
     /**

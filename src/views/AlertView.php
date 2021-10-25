@@ -62,7 +62,7 @@ class AlertView extends View
 			<p class="lead">Les alertes sont affichées les une après les autres défilant à la chaîne en bas des téléviseurs.</p>
 			<div class="text-center">
 				<figure class="figure">
-					<img src="' . TV_PLUG_PATH . 'public/img/presentation.png" class="figure-img img-fluid rounded" alt="Représentation d\'un téléviseur">
+					<img src="' . URL_PATH . TV_PLUG_PATH . 'public/img/presentation.png" class="figure-img img-fluid rounded" alt="Représentation d\'un téléviseur">
 					<figcaption class="figure-caption">Représentation d\'un téléviseur</figcaption>
 				</figure>
 			</div>
@@ -132,7 +132,7 @@ class AlertView extends View
         return '
 		<div class="row">
 			<div class="col-6 mx-auto col-md-6 order-md-2">
-				<img src="' . TV_PLUG_PATH . 'public/img/alert.png" alt="Logo alerte" class="img-fluid mb-3 mb-md-0">
+				<img src="' . URL_PATH . TV_PLUG_PATH . 'public/img/alert.png" alt="Logo alerte" class="img-fluid mb-3 mb-md-0">
 			</div>
 			<div class="col-md-6 order-md-1 text-center text-md-left pr-md-5">
 				<p class="lead">Vous pouvez retrouver ici toutes les alertes qui ont été créées sur ce site.</p>

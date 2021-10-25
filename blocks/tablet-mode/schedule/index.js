@@ -4,17 +4,18 @@
 ( function(blocks, element, data)
 {
     var el = element.createElement;
+    console.log('test');
 
-    blocks.registerBlockType('tvconnecteeamu/creation-user', {
-        title: 'Crée les utilisateurs demandés',
+    blocks.registerBlockType('tvconnecteeamu/tablet-schedule', {
+        title: '(Tablette) Emploi du temps',
         icon: 'smiley',
         category: 'common',
 
         edit: function() {
-            return "Crée les utilisateurs demandés";
+          return 'test';
         },
         save: function() {
-            return "test";
+          return 'test';
         },
     });
 }(
