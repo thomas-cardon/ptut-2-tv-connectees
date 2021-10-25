@@ -37,11 +37,45 @@ add_filter( 'the_permalink', function( $plink ) {
 } );
 
 add_action( 'ec_virtual_pages', function( $controller ) {
+  /**
+   *  Page: /
+   */
+  $controller->addPage( new \EC\VirtualPages\Page( "/" ) )
+    ->setTitle( 'Accueil' )
+    ->setContent( '
+    <!-- wp:tvconnecteeamu/schedule -->
+    Yo
+    <!-- /wp:tvconnecteeamu/schedule -->
+    ' )
+    ->setTemplate( 'page.php' );
+
+  /**
+   *  Page: /gerer-les-alertes
+   */
+  $controller->addPage( new \EC\VirtualPages\Page( "/gerer-les-alertes" ) )
+    ->setTitle( 'Accueil' )
+    ->setContent( '
+    <!-- wp:heading {"level":1} -->
+    <h1>Gestion des alertes</h1>
+    <!-- /wp:heading -->
+
+    <!-- wp:tvconnecteeamu/manage-alert -->
+    test
+    <!-- /wp:tvconnecteeamu/manage-alert -->
+    ' )
+    ->setTemplate( 'page.php' );
+
+  /**
+   *  Page: /tablet-view
+   */
   $controller->addPage( new \EC\VirtualPages\Page( "/tablet-view" ) )
     ->setTitle( 'tablet-view' )
     ->setContent( '' )
     ->setTemplate( 'page-tablet.php' );
 
+  /**
+   *  Page: /tablet-view/schedule
+   */
   $controller->addPage( new \EC\VirtualPages\Page( "/tablet-view/schedule" ) )
     ->setTitle( 'tablet-view' )
     ->setContent( '
