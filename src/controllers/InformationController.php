@@ -137,6 +137,7 @@ class InformationController extends Controller
         }
         // Return a selector with all forms
         return
+          $this->view->renderContainer(
             $this->view->displayStartMultiSelect() .
             $this->view->displayTitleSelect('text', 'Texte', true) .
             $this->view->displayTitleSelect('image', 'Image') .
@@ -149,8 +150,9 @@ class InformationController extends Controller
             $this->view->displayContentSelect('table', $this->view->displayFormTab()) .
             $this->view->displayContentSelect('pdf', $this->view->displayFormPDF()) .
             $this->view->displayContentSelect('event', $this->view->displayFormEvent()) .
-            $this->view->displayEndDiv() .
-            $this->view->contextCreateInformation();
+            $this->view->displayEndDiv(), 'Créer une information'
+          ) . $this->view->renderContainerDivider() .
+          $this->view->renderContainer($this->view->contextCreateInformation());
     }
 
     /**

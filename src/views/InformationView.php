@@ -27,29 +27,28 @@ class InformationView extends View
      * @return string
      */
     public function displayFormText($title = null, $content = null, $endDate = null, $type = "createText") {
-        $dateMin = date('Y-m-d', strtotime("+1 day"));
+      $dateMin = date('Y-m-d', strtotime("+1 day"));
+      $form = '
+      <form method="post">
+        <div class="mb-3">
+          <label for="title">Titre <span class="text-muted">(Optionnel)</span></label>
+          <input id="info" class="form-control" type="text" name="title" minlength="4" maxlength="40" placeholder="Titre..." value="' . $title . '">
+        </div>
+        <div class="mb-3">
+          <label for="content">Contenu</label>
+          <textarea class="form-control" id="content" name="content" rows="3" placeholder="280 caractères au maximum" maxlength="280" minlength="4" required="true">' . $content . '</textarea>
+        </div>
+        <div class="mb-3">
+          <label for="expirationDate">Date d\'expiration</label>
+          <input id="expirationDate" class="form-control" type="date" name="expirationDate" min="' . $dateMin . '" value="' . $endDate . '" required="true" />
+        </div>
+        <button class="btn button_ecran" type="submit" name="' . $type . '">Valider</button>';
 
-        $form = '
-        <form method="post">
-            <div class="form-group">
-                <label for="title">Titre <span class="text-muted">(Optionnel)</span></label>
-                <input id="info" class="form-control" type="text" name="title" minlength="4" maxlength="40" placeholder="Titre..." value="' . $title . '">
-            </div>
-            <div class="form-group">
-                <label for="content">Contenu</label>
-                <textarea class="form-control" id="content" name="content" rows="3" placeholder="280 caractères au maximum" maxlength="280" minlength="4" required>' . $content . '</textarea>
-            </div>
-            <div class="form-group">
-                <label for="expirationDate">Date d\'expiration</label>
-                <input id="expirationDate" class="form-control" type="date" name="expirationDate" min="' . $dateMin . '" value="' . $endDate . '" required >
-            </div>
-            <button class="btn button_ecran" type="submit" name="' . $type . '">Valider</button>';
+         if ($type == 'submit') {
+             $form .= '<button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
+         }
 
-        if ($type == 'submit') {
-            $form .= '<button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
-        }
-
-        return $form . '</form>';
+         return $form . '</form>';
     }
 
     /**
@@ -230,12 +229,12 @@ class InformationView extends View
      */
     public function contextCreateInformation() {
         return '
-		<hr class="half-rule">
 		<div>
-			<h2>Les informations</h2>
-			<p class="lead">Lors de la création de votre information, celle-ci est postée directement sur tous les téléviseurs qui utilisent ce site.</p>
-			<p class="lead">Les informations que vous créez seront affichées avec les informations déjà présentes.</p>
-			<p class="lead">Les informations sont affichées dans un diaporama défilant les informations une par une sur la partie droite des téléviseurs.</p>
+			<h2 style="color: var(--color-secondary) !important;">Les informations</h2>
+			<p class="lead mb-4">
+        Lors de la création de votre information, celle-ci est postée directement sur tous les téléviseurs qui utilisent ce site. Les informations que vous créez seront affichées avec les informations déjà présentes.
+        Elles seront affichées dans un diaporama défilant les informations une par une sur la partie droite des téléviseurs.
+      </p>
 			<div class="text-center">
 				<figure class="figure">
 					<img src="' . URL_PATH . TV_PLUG_PATH . 'public/img/presentation.png" class="figure-img img-fluid rounded" alt="Représentation d\'un téléviseur">
