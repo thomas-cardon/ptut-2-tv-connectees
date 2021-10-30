@@ -18,11 +18,6 @@
     --color-accent-disabled: #f5bfbf;
 }
 
-header {
-  display: none;
-  font-family: 'Source Sans Pro', sans-serif;
-}
-
 .button_ecran, .delete_button_ecran, .button_ecran:hover, .delete_button_ecran:hover, .active_ecran .page-link {
   color: var(--color-button-text);
 }
@@ -37,15 +32,6 @@ header {
 
 .active_ecran .page-link {
     background-color: #00558b;
-}
-
-h1 {
-  color: var(--color-secondary) !important;
-}
-
-h2 {
-  color: var(--color-button-text) !important;
-  font-weight: bold;
 }
 
 .iut {
