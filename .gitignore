@@ -21,3 +21,5 @@ wp-content/plugins/hello.php
 .idea/**
 
 config.php
+
+vendor/composer/
