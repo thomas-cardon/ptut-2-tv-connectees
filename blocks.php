@@ -11,10 +11,10 @@ use Controllers\TechnicianController;
 use Controllers\TelevisionController;
 use Controllers\UserController;
 
-use Controllers\TabletModeScheduleViewController;
-
 use Views\HelpMapView;
 use Views\UserView;
+
+use Views\TabletModeScheduleView;
 
 /*
 * TABLET VIEW BLOCKS
@@ -23,28 +23,32 @@ use Views\UserView;
 /**
 * Build a block
 */
-function schedule_view_render_callback($block_attributes, $content)
+function tablet_schedule_render_callback()
 {
-  echo '<script>alert("test")</script>';
-  $schedule = new TabletModeScheduleViewController();
-  return '<div><i>test</i></div>';
+  if(is_page()) {
+    $view = new TabletModeScheduleView();
+    return $view->display();
+  }
 }
 
-function block_scheduleView()
+/**
+* Build a block
+*/
+function block_tablet_schedule()
 {
   wp_register_script(
-    'schedule-view',
-    plugins_url( 'blocks/tablet-view/schedule-view.js', __FILE__ ),
+    'tablet-schedule-script',
+    plugins_url( 'blocks/tablet-mode/schedule/index.js', __FILE__ ),
     array( 'wp-blocks', 'wp-element', 'wp-data' )
   );
 
-  register_block_type( 'tvconnecteeamu/schedule-view', [
-    'render_callback' => 'schedule_view_render_callback',
-    'editor_script' => 'schedule-view', // Loads only on editor.
-  ]);
+  register_block_type('tvconnecteeamu/tablet-schedule', array(
+    'editor_script' => 'tablet-schedule-script',
+    'render_callback' => 'tablet_schedule_render_callback'
+  ));
 }
 
-add_action('init', 'block_scheduleView');
+add_action('init', 'block_tablet_schedule');
 
 /*
 * ALERT BLOCKS
