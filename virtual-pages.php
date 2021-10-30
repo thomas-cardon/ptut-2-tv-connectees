@@ -167,23 +167,9 @@ add_action( 'ec_virtual_pages', function( $controller ) {
   $controller->addPage( new \EC\VirtualPages\Page( "/mon-compte" ) )
     ->setTitle( 'Mon compte' )
     ->setContent( '
-    <!-- wp:heading {"level":1} -->
-    <h1>Mon compte</h1>
-    <!-- /wp:heading -->
-
-    <!-- wp:spacer {"height":34} -->
-    <div style="height:34px" aria-hidden="true" class="wp-block-spacer"></div>
-    <!-- /wp:spacer -->
-
     <!-- wp:tvconnecteeamu/choose-account -->
     test
     <!-- /wp:tvconnecteeamu/choose-account -->
-
-    <!-- wp:html -->
-    <center>
-      <a href="/politique-de-confidentialite"> Mention légales</a>
-    </center>
-    <!-- /wp:html -->
     ' )
     ->setTemplate( 'page.php' );
 

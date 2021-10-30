@@ -532,7 +532,7 @@ function choose_account_render_callback()
 {
   if(is_page()) {
     $user = new UserController();
-    return $user->chooseModif();
+    return $user->edit();
   }
 }
 

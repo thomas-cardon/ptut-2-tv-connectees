@@ -58,15 +58,21 @@ class UserView extends View
      * @return string
      */
     public function displayModifyPassword() {
-        return '
+        return '<div class="container-sm px-5"
             <form id="check" method="post">
-                <h2>Modifier le mot de passe</h2>
-                <label for="verifPwd">Votre mot de passe actuel</label>
-                <input type="password" class="form-control text-center" name="verifPwd" placeholder="Mot de passe" required="">
-                <label for="newPwd">Votre nouveau mot de passe</label>
-                <input type="password" class="form-control text-center" name="newPwd" placeholder="Mot de passe" required="">
-                <button type="submit" class="btn button_ecran" name="modifyMyPwd">Modifier</button>
-            </form>';
+                <h2 class="mb-5">Modifier le mot de passe</h2>
+                <div class="mb-3">
+                  <label for="oldPwd" class="form-label">Votre ancien mot de passe</label>
+                  <input type="password" class="form-control text-center" name="verifPwd" placeholder="Mot de passe" required="">
+                </div>
+                <div class="mb-3">
+                  <label for="newPwd" class="form-label">Votre nouveau mot de passe</label>
+                  <input type="password" class="form-control text-center" name="newPwd" placeholder="Mot de passe" required="">
+                </div>
+                <div class="d-grid">
+                  <button class="btn btn-outline-warning" type="submit" name="modifyMyPwd">Modifier</button>
+                </div>
+            </form></div>';
     }
 
     /**
@@ -74,14 +80,21 @@ class UserView extends View
      *
      * @return string
      */
-    public function displayDeleteAccount() {
-        return '
-            <form id="check" method="post">
-                <h2>Supprimer le compte</h2>
+    public function displayEnterCode() {
+      return '<div class="container-sm px-5"
+          <form id="check" method="post">
+              <h2>Générer un code de suppression</h2>
+              <p class="lead">
+                Avant de supprimer votre compte, vous devez générer un code de suppression <b>ici</b>.
+              </p>
+              <div class="mb-3">
                 <label for="verifPwd">Votre mot de passe actuel</label>
                 <input type="password" class="form-control text-center" name="verifPwd" placeholder="Mot de passe" required="">
-                <button type="submit" class="btn button_ecran" name="deleteMyAccount">Confirmer</button>
-            </form>';
+              </div>
+              <div class="d-grid">
+                <button class="btn btn-outline-danger" type="submit" name="deleteMyAccount">Générer le code requis pour supprimer le compte</button>
+              </div>
+          </form></div>';
     }
 
     /**
@@ -89,13 +102,20 @@ class UserView extends View
      *
      * @return string
      */
-    public function displayEnterCode() {
-        return '
-        <form method="post">
-            <label for="codeDelete"> Code de suppression de compte</label>
-            <input type="text" class="form-control text-center" name="codeDelete" placeholder="Code à rentrer" required="">
-            <button type="submit" name="deleteAccount" class="btn button_ecran">Supprimer</button>
-        </form>';
+    public function displayDeleteAccount() {
+      return '<div class="container-sm px-5"
+          <form id="check" method="post">
+              <h2>Supprimer le compte</h2>
+              <p class="lead">
+                Pour supprimer votre compte, vous devez avoir généré un code de suppression via l\'onglet éponyme.
+              </p>
+              <div class="mb-3">
+                <input type="text" class="form-control text-center" name="codeDelete" placeholder="Code à rentrer" required="">
+              </div>
+              <div class="d-grid">
+                <button class="btn btn-outline-danger" type="submit" name="deleteAccount">Supprimer le compte</button>
+              </div>
+          </form></div>';
     }
 
     /**

@@ -133,38 +133,31 @@ class UserController extends Controller
                 $this->view->displayWrongPassword();
             }
         }
-        return $this->view->displayDeleteAccount() . $this->view->displayEnterCode();
+        return $this->view->displayDeleteAccount();
     }
 
     /**
-     * Modify his password, delete his account or modify his groups
-     *
-     * @return string
+     * Modifies user's password, delete their account or modify their groups
+     * @author Thomas Cardon
+     * @return mixed|string
      */
-    public function chooseModif() {
+    public function edit() {
         $current_user = wp_get_current_user();
-        $string = $this->view->displayStartMultiSelect();
 
-        if (in_array('etudiant', $current_user->roles)) {
-            $string .= $this->view->displayTitleSelect('code', 'Modifier mes codes', true) .
-                $this->view->displayTitleSelect('pass', 'Modifier mon mot de passe');
-        } else {
-            $string .= $this->view->displayTitleSelect('pass', 'Modifier mon mot de passe', true);
-        }
-
-        $string .= $this->view->displayTitleSelect('delete', 'Supprimer mon compte') .
-            $this->view->displayEndOfTitle();
-
-        if (in_array('etudiant', $current_user->roles)) {
-            $string .= $this->view->displayContentSelect('code', $this->modifyCodes(), true) .
-                $this->view->displayContentSelect('pass', $this->modifyPwd());
-        } else {
-            $string .= $this->view->displayContentSelect('pass', $this->modifyPwd(), true);
-        }
-
-        $string .= $this->view->displayContentSelect('delete', $this->deleteAccount()) . $this->view->displayEndDiv();
-
-        return $string;
+        return $this->view->renderHeroHeader('Vos réglages', 'Changez votre mot de passe, vos groupes ou supprimez votre compte.', URL_PATH . TV_PLUG_PATH . 'public/img/settings.png')
+        . $this->view->renderContainerDivider()
+        . $this->view->renderContainer(
+           $this->view->displayStartMultiSelect()
+        .  $this->view->displayTitleSelect('pass', 'Modifier mon mot de passe', true)
+        .  $this->view->displayTitleSelect('generate', 'Générer un code de suppression')
+        .  $this->view->displayTitleSelect('delete', 'Supprimer mon compte')
+        .  $this->view->displayEndOfTitle()
+        .  $this->view->displayContentSelect('pass', $this->modifyPwd(), true)
+        .  $this->view->displayContentSelect('generate', $this->view->displayEnterCode(), false)
+        .  $this->view->displayContentSelect('delete', $this->deleteAccount())
+        .  $this->view->displayEndDiv()
+        . '<a role="button" class="btn btn-outline-secondary mt-5" href="/politique-de-confidentialite">Mention légales</a>'
+        , '', 'container-sm px-4 pb-3 my-3 text-center');
     }
 
     /**
