@@ -175,10 +175,6 @@ add_action( 'ec_virtual_pages', function( $controller ) {
     <div style="height:34px" aria-hidden="true" class="wp-block-spacer"></div>
     <!-- /wp:spacer -->
 
-    <!-- wp:tvconnecteeamu/subscription -->
-    test
-    <!-- /wp:tvconnecteeamu/subscription -->
-
     <!-- wp:tvconnecteeamu/choose-account -->
     test
     <!-- /wp:tvconnecteeamu/choose-account -->
