@@ -115,10 +115,6 @@ add_action( 'ec_virtual_pages', function( $controller ) {
   $controller->addPage( new \EC\VirtualPages\Page( "/creer-une-alerte" ) )
     ->setTitle( 'Créer une alerte' )
     ->setContent( '
-    <!-- wp:heading {"level":1} -->
-    <h1>Créer une alerte</h1>
-    <!-- /wp:heading -->
-
     <!-- wp:tvconnecteeamu/add-alert -->
     test
     <!-- /wp:tvconnecteeamu/add-alert -->

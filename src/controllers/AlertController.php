@@ -105,8 +105,9 @@ class AlertController extends Controller
 
         return
           $this->view->renderContainer(
-            $this->view->creationForm($years, $groups, $halfGroups)
-          );
+            $this->view->creationForm($years, $groups, $halfGroups), 'Créer une alerte'
+          ) . $this->view->renderContainerDivider() .
+          $this->view->renderContainer($this->view->contextCreateAlert());
     }
 
     /**

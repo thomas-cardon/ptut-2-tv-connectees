@@ -41,10 +41,10 @@ class AlertView extends View
                 <label for="selectAlert">Année, groupe, demi-groupes concernés</label>
                 ' . $this->buildSelectCode($years, $groups, $halfGroups) . '
             </div>
-            <input type="button" onclick="addButtonAlert()" class="btn button_ecran" value="+">
-            <button type="submit" class="btn button_ecran" name="submit">Valider</button>
-        </form>
-        <a href="' . esc_url(get_permalink(get_page_by_title('Gestion des alertes'))) . '">Voir les alertes</a>' . $this->contextCreateAlert();
+            <button type="button" onclick="addButtonAlert()" class="btn btn-primary" disabled>+</button>
+            <button type="submit" class="btn btn-primary" name="submit">Valider</button>
+            <a role="button" class="btn btn-secondary" href="' . home_url('/gerer-les-alertes') . '">Voir les alertes</a>
+        </form>';
     }
 
     /**
@@ -53,20 +53,20 @@ class AlertView extends View
      * @return string
      */
     public function contextCreateAlert() {
-        return '
-		<hr class="half-rule">
-		<div>
-			<h2>Les alertes</h2>
-			<p class="lead">Lors de la création de votre alerte, celle-ci sera posté directement sur tous les téléviseurs qui utilisent  ce site.</p>
-			<p class="lead">Les alertes que vous créez seront affichées avec les alertes déjà présentes.</p>
-			<p class="lead">Les alertes sont affichées les une après les autres défilant à la chaîne en bas des téléviseurs.</p>
-			<div class="text-center">
-				<figure class="figure">
-					<img src="' . URL_PATH . TV_PLUG_PATH . 'public/img/presentation.png" class="figure-img img-fluid rounded" alt="Représentation d\'un téléviseur">
-					<figcaption class="figure-caption">Représentation d\'un téléviseur</figcaption>
-				</figure>
-			</div>
-		</div>';
+      return '
+        <div>
+          <h2 style="color: var(--color-secondary) !important;">Les alertes</h2>
+          <p class="lead mb-4">
+            Lors de la création de votre alerte, celle-ci est postée directement sur tous les téléviseurs qui utilisent ce site.
+            Les alertes sont affichées les une après les autres défilant à la chaîne en bas des téléviseurs.
+          </p>
+          <div class="text-center">
+            <figure class="figure">
+              <img src="' . URL_PATH . TV_PLUG_PATH . 'public/img/presentation.png" class="figure-img img-fluid rounded" alt="Représentation d\'un téléviseur">
+              <figcaption class="figure-caption">Représentation d\'un téléviseur</figcaption>
+            </figure>
+          </div>
+        </div>';
     }
 
     /**
@@ -182,7 +182,7 @@ class AlertView extends View
      * @return string
      */
     public function buildSelectCode($years, $groups, $halfGroups, $code = null, $count = 0, $forEveryone = 0) {
-        $select = '<select class="form-control firstSelect" id="selectId' . $count . '" name="selectAlert[]" required="">';
+        $select = '<select class="form-control" id="selectId' . $count . '" name="selectAlert[]" required="">';
 
         if ($forEveryone) {
             $select .= '<option value="all" selected>Tous</option>';
