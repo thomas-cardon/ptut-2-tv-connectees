@@ -2,7 +2,9 @@
  * Yes
  */
 docReady(function () {
-  new Marquee('#alert', {
+  const alert = document.getElementById('alert');
+  if (alert)
+  new Marquee(alert, {
       continuous: true,
       direction: 'ltr',
       delayAfter: 1000,
