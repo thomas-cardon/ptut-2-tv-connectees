@@ -77,15 +77,18 @@ class InformationView extends View
 				</figure>';
         }
         $form .= '
-			<div class="form-group">
-				<label for="contentFile">Ajouter une image</label>
-		        <input class="form-control-file" id="contentFile" type="file" name="contentFile"/>
-		        <input type="hidden" name="MAX_FILE_SIZE" value="5000000"/>
-	        </div>
-	        <div class="form-group">
-				<label for="expirationDate">Date d\'expiration</label>
-				<input id="expirationDate" class="form-control" type="date" name="expirationDate" min="' . $dateMin . '" value="' . $endDate . '" required >
-			</div>
+      <div class="mb-3">
+        <label for="contentFile" class="form-label">Ajouter une image</label>
+        <input class="form-control" id="contentFile" type="file" name="contentFile">
+        <div class="form-text">
+          Votre image sera le contenu de l\'information. Elle doit peser moins de 5 MB.
+        </div>
+        <input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
+      </div>
+      <div class="mb-3">
+        <label for="expirationDate" class="form-label">Date d\'expiration</label>
+        <input id="expirationDate" class="form-control" type="date" name="expirationDate" min="' . $dateMin . '" value="' . $endDate . '" required >
+      </div>
 			<button class="btn button_ecran" type="submit" name="' . $type . '">Valider</button>';
 
         if ($type == 'submit') {
@@ -125,18 +128,19 @@ class InformationView extends View
         }
 
         $form .= '
-			<div class="form-group">
-                <label for="contentFile">Ajout du fichier Xls (ou xlsx)</label>
-                <input class="form-control-file" id="contentFile" type="file" name="contentFile" />
-                <input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
-                <small id="tabHelp" class="form-text text-muted">Nous vous conseillons de ne pas dépasser trois colonnes.</small>
-                <small id="tabHelp" class="form-text text-muted">Nous vous conseillons également de ne pas mettre trop de contenu dans une cellule.</small>
-            </div>
-            <div class="form-group">
-				<label for="expirationDate">Date d\'expiration</label>
-				<input id="expirationDate" class="form-control" type="date" name="expirationDate" min="' . $dateMin . '" value="' . $endDate . '" required >
-			</div>
-			<button class="btn button_ecran" type="submit" name="' . $type . '">Valider</button>';
+        <div class="mb-3">
+          <label for="contentFile" class="form-label">Ajouter un fichier XLS(X)</label>
+          <input class="form-control" id="contentFile" type="file" name="contentFile">
+          <div class="form-text">
+            Nous vous conseillons de ne pas dépasser trois colonnes, et de ne pas mettre trop de contenu dans une cellule.
+          </div>
+          <input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
+        </div>
+        <div class="mb-3">
+          <label for="expirationDate" class="form-label">Date d\'expiration</label>
+          <input id="expirationDate" class="form-control" type="date" name="expirationDate" min="' . $dateMin . '" value="' . $endDate . '" required >
+        </div>
+			  <button class="btn button_ecran" type="submit" name="' . $type . '">Valider</button>';
 
         if ($type == 'submit') {
             $form .= '<button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
@@ -172,16 +176,19 @@ class InformationView extends View
         }
 
         $form .= '
-			<div class="form-group">
-                <label>Ajout du fichier PDF</label>
-                <input class="form-control-file" type="file" name="contentFile"/>
-                <input type="hidden" name="MAX_FILE_SIZE" value="5000000"/>
-            </div>
-            <div class="form-group">
-				<label for="expirationDate">Date d\'expiration</label>
-				<input id="expirationDate" class="form-control" type="date" name="expirationDate" min="' . $dateMin . '" value="' . $endDate . '" required >
-			</div>
-			<button class="btn button_ecran" type="submit" name="' . $type . '">Valider</button>';
+        <div class="mb-3">
+          <label for="contentFile" class="form-label">Ajouter un fichier PDF</label>
+          <input class="form-control" id="contentFile" type="file" name="contentFile">
+          <div class="form-text">
+            Nous vous conseillons de ne pas dépasser trois colonnes, et de ne pas mettre trop de contenu dans une cellule.
+          </div>
+          <input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
+        </div>
+        <div class="mb-3">
+          <label for="expirationDate" class="form-label">Date d\'expiration</label>
+          <input id="expirationDate" class="form-control" type="date" name="expirationDate" min="' . $dateMin . '" value="' . $endDate . '" required >
+        </div>
+			  <button class="btn button_ecran" type="submit" name="' . $type . '">Valider</button>';
 
         if ($type == 'submit') {
             $form .= '<button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
@@ -202,24 +209,26 @@ class InformationView extends View
         $dateMin = date('Y-m-d', strtotime("+1 day"));
         $form = '
 		<form method="post" enctype="multipart/form-data">
-			<div class="form-group">
-                <label>Sélectionner les fichiers</label>
-                <input class="form-control-file" multiple type="file" name="contentFile[]"/>
-                <input type="hidden" name="MAX_FILE_SIZE" value="5000000"/>
-                <small id="fileHelp" class="form-text text-muted">Images ou PDF</small>
-        	</div>
-        	<div class="form-group">
-				<label for="expirationDate">Date d\'expiration</label>
-				<input id="expirationDate" class="form-control" type="date" name="expirationDate" min="' . $dateMin . '" value="' . $endDate . '" required >
-			</div>
-			<button class="btn button_ecran" type="submit" name="' . $type . '">Valider</button>';
+      <div class="mb-3">
+        <label for="contentFile" class="form-label">Sélectionner les fichiers</label>
+        <input id="contentFile" class="form-control" multiple type="file" name="contentFile[]" />
+        <div class="form-text">
+          Images ou PDF
+        </div>
+        <input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
+      </div>
+      <div class="mb-3">
+        <label for="expirationDate" class="form-label">Date d\'expiration</label>
+        <input id="expirationDate" class="form-control" type="date" name="expirationDate" min="' . $dateMin . '" value="' . $endDate . '" required >
+      </div>
+      <button class="btn button_ecran" type="submit" name="' . $type . '">Valider</button>';
 
-        if ($type == 'submit') {
-            $form .= '<button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
-        }
-        $form .= '</form>';
+      if ($type == 'submit') {
+          $form .= '<button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
+      }
 
-        return $form;
+      $form .= '</form>';
+      return $form;
     }
 
     /**
