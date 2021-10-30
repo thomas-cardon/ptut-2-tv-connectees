@@ -14,6 +14,28 @@ class View
 {
 
     /**
+     * Displays the divider - allows containers to be separated conveniently
+     * @author Thomas Cardon
+     * @param $data
+     * @param $classes
+     * @return string - Container HTML data
+     */
+    public function renderContainerDivider() {
+      return '<div class="container-divider"></div>';
+    }
+
+    /**
+     * Displays a container in an elegant way
+     * @author Thomas Cardon
+     * @param $data
+     * @param $classes
+     * @return string - Container HTML data
+     */
+    public function renderContainer($data, $title = '', $classes = 'container-sm px-4 py-5 my-5 text-center') {
+      return '<div class="' . $classes . '">' . ($title == '' ? '' : '<h1 class="display-5 fw-bold" style="color: var(--color-primary-200) !important;">' . $title . '</h1>') . $data . '</div>';
+    }
+
+    /**
      * Display a table, showing all element from a database
      *
      * @param $name
@@ -139,8 +161,7 @@ class View
      * @return string
      */
     public function displayStartMultiSelect() {
-        return '<nav>
-          <div class="nav nav-tabs" id="nav-tab" role="tablist">';
+        return '<ul class="nav nav-pills mb-3" id="nav-tab" role="tablist">';
     }
 
     /**
@@ -152,9 +173,13 @@ class View
      * @return string
      */
     public function displayTitleSelect($id, $title, $active = false) {
-        $string = '<a class="nav-item nav-link';
-        if ($active) $string .= ' active';
-        $string .= '" id="nav-' . $id . '-tab" data-toggle="tab" href="#nav-' . $id . '" role="tab" aria-controls="nav-' . $id . '" aria-selected="false">' . $title . '</a>';
+        $string = '<li class="nav-item' . ($active ? ' active' : '') . '" role="presentation">';
+
+        $string .= '
+          <button class="nav-link' . ($active ? ' active' : '') . '" id="nav-' . $id . '-tab" href="#nav-' . $id . '" role="tab" data-bs-toggle="pill" data-bs-target="#"nav-' . $id . '" aria-controls="nav-' . $id . '" aria-selected="false">' . $title . '</button>
+        ';
+
+        $string .= '</li>';
         return $string;
     }
 
@@ -164,10 +189,8 @@ class View
      * @return string
      */
     public function displayEndOfTitle() {
-        return '
-            </div>
-        </nav>
-        <br/>
+        return '</ul>
+        <br />
         <div class="tab-content" id="nav-tabContent">';
     }
 
@@ -181,9 +204,11 @@ class View
      * @return string
      */
     public function displayContentSelect($id, $content, $active = false) {
-        $string = '<div class="tab-pane fade show';
-        if ($active) $string .= ' active';
-        $string .= '" id="nav-' . $id . '" role="tabpanel" aria-labelledby="nav-' . $id . '-tab">' . $content . '</div>';
+        $string = '<div class="tab-pane fade' . ($active ? ' show active' : '');
+        $string .= '" id="nav-' . $id . '" role="tabpanel" aria-labelledby="nav-' . $id . '-tab">';
+        $string .= $content;
+        $string .= '</div>';
+
         return $string;
     }
 
@@ -221,7 +246,7 @@ class View
 		    </div>
 		  </div>
 		</div>
-		
+
 		<script>
 			$(\'#myModal\').show();
 		</script>';
