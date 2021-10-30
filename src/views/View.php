@@ -61,6 +61,14 @@ class View
     }
 
     /**
+     * Displays the view's header
+     * @author Thomas Cardon
+    */
+    public function getHeader() {
+      return $this->renderHeroHeader('Vue inconnue');
+    }
+
+    /**
      * Display a table, showing all element from a database
      *
      * @param $name

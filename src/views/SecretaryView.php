@@ -21,15 +21,16 @@ class SecretaryView extends UserView
      */
     public function displayFormSecretary() {
         return '
-        <h2> Compte secrétaire </h2>
+        <h2>Compte secrétaire</h2>
         <p class="lead">Pour créer des secrétaires, remplissez ce formulaire avec les valeurs demandées.</p>
         ' . $this->displayBaseForm('Secre');
     }
 
     /**
-     * Display a button for download all schedules
+     * Displays the admin dashboard
+     * @author Thomas Cardon
      */
-    public function displayWelcomeAdmin() {
+    public function displayContent() {
       return '<section class="container col-xxl-10 py-5">
       <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
         <div class="col-10 col-sm-8 col-lg-6">
@@ -109,6 +110,6 @@ class SecretaryView extends UserView
      * Ask to the user to choose an user
      */
     public function displayNoUser() {
-        return '<p class="alert alert-danger">Veuillez choisir un utilisateur </p>';
+        return '<p class="alert alert-danger">Veuillez choisir un utilisateur</p>';
     }
 }

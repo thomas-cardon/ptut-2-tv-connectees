@@ -38,6 +38,15 @@ class UserController extends Controller
     }
 
     /**
+     * Displays user view content
+     * @author Thomas Cardon
+     * @return mixed|string
+     */
+    public function displayContent() {
+        return $this->view->displayContent();
+    }
+
+    /**
      * Delete an user
      *
      * @param $id   int

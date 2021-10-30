@@ -71,6 +71,7 @@ class CodeAdeController extends Controller
                 $this->view->errorCreation();
             }
         }
+        
         return $this->view->createForm();
     }
 
@@ -118,16 +119,28 @@ class CodeAdeController extends Controller
     }
 
     /**
-     * Display all codes Ade in a table
-     *
-     * @return string
+     * Displays content
+     * @author Thomas Cardon
+     * @return mixed|string
      */
-    public function displayAllCodes() {
+    public function displayContent($content) {
         $years = $this->model->getAllFromType('year');
         $groups = $this->model->getAllFromType('group');
         $halfGroups = $this->model->getAllFromType('halfGroup');
 
-        return $this->view->displayAllCode($years, $groups, $halfGroups);
+        return
+          $this->view->renderContainer('<p class="lead">
+          - <b>Titre</b>: Associé au code, il sera affiché lors de l’affichage de l’emploi du temps
+          <br />
+          - <b>Code ADE</b>: Identifiant sur le système ADE afin de récupérer les bonnes données
+          <br />
+          - <b>Type</b>: Précise si ces codes appartiennent à quel type de groupe/sous-groupe
+          ' . $content . '
+          </p>', 'Suivre des codes ADE')
+          . $this->view->renderContainerDivider() .
+          $this->view->renderContainer(
+            $this->view->displayAllCode($years, $groups, $halfGroups)
+          );
     }
 
     /**

@@ -36,6 +36,22 @@ class TechnicianController extends UserController implements Schedule
     }
 
     /**
+     * Displays the schedule of all students
+     * @author Thomas Cardon
+     * @return mixed|string
+     */
+    public function displayContent() {
+        $codeAde = new CodeAde();
+
+        $years = $codeAde->getAllFromType('year');
+        $string = "";
+        foreach ($years as $year) {
+            $string .= $this->displaySchedule($year->getCode());
+        }
+        return $string;
+    }
+
+    /**
      * Insert a technician in the database
      */
     public function insert() {
@@ -78,21 +94,5 @@ class TechnicianController extends UserController implements Schedule
     public function displayAllTechnician() {
         $users = $this->model->getUsersByRole('technicien');
         return $this->view->displayAllTechnicians($users);
-    }
-
-    /**
-     * Display the schedule of all students
-     *
-     * @return mixed|string
-     */
-    public function displayMySchedule() {
-        $codeAde = new CodeAde();
-
-        $years = $codeAde->getAllFromType('year');
-        $string = "";
-        foreach ($years as $year) {
-            $string .= $this->displaySchedule($year->getCode());
-        }
-        return $string;
     }
 }

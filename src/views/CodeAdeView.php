@@ -22,15 +22,15 @@ class CodeAdeView extends View
     public function createForm() {
         return '
         <form method="post">
-            <div class="form-group">
+            <div class="mb-3">
                 <label for="title">Titre</label>
                 <input class="form-control" type="text" id="title" name="title" placeholder="Titre" required="" minlength="5" maxlength="29">
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <label for="code">Code ADE</label>
                 <input class="form-control" type="text" id="code" name="code" placeholder="Code ADE" required="" maxlength="19" pattern="\d+">
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="type" id="year" value="year">
                     <label class="form-check-label" for="year">Année</label>
@@ -44,7 +44,7 @@ class CodeAdeView extends View
                     <label class="form-check-label" for="halfGroup">Demi-groupe</label>
                 </div>
             </div>
-          <button type="submit" class="btn button_ecran" name="submit">Ajouter</button>
+          <button type="submit" class="btn btn-primary" name="submit">Ajouter</button>
         </form>';
     }
 
@@ -64,15 +64,15 @@ class CodeAdeView extends View
         return '
         <a href="' . esc_url(get_permalink(get_page_by_title('Gestion des codes ADE'))) . '">< Retour</a>
          <form method="post">
-         	<div class="form-group">
+         	<div class="mb-3">
             	<label for="title">Titre</label>
             	<input class="form-control" type="text" id="title" name="title" placeholder="Titre" value="' . $title . '">
             </div>
-            <div class="form-group">
+            <div class="mb-3">
             	<label for="code">Code</label>
             	<input type="text" class="form-control" id="code" name="code" placeholder="Code" value="' . $code . '">
             </div>
-            <div class="form-group">
+            <div class="mb-3">
             	<label for="type">Selectionner un type</label>
              	<select class="form-control" id="type" name="type">
                     ' . $this->createTypeOption($type) . '
@@ -135,7 +135,6 @@ class CodeAdeView extends View
         $page = get_page_by_title('Modifier un code ADE');
         $linkManageCodeAde = get_permalink($page->ID);
 
-        $title = 'Codes Ade';
         $name = 'Code';
         $header = ['Titre', 'Code', 'Type', 'Modifier'];
 

@@ -36,6 +36,57 @@ class TelevisionController extends UserController implements Schedule
     }
 
     /**
+     * Displays the TV schedule
+     * @author Thomas Cardon
+     * @return mixed|string
+     */
+    public function displayContent() {
+        $current_user = wp_get_current_user();
+        $user = $this->model->get($current_user->ID);
+        $user = $this->model->getMycodes([$user])[0];
+
+        $string = "";
+        if (sizeof($user->getCodes()) > 1) {
+            if (get_theme_mod('ecran_connecte_schedule_scroll', 'vert') == 'vert') {
+                $string .= '<div id="tickit" class="tickit">
+            <div class="tickit-inner js-tickit-inner"></div>
+            <div class="innerWrap tv-schedule">';
+                foreach ($user->getCodes() as $code) {
+                    $path = $this->getFilePath($code->getCode());
+                    if (file_exists($path)) {
+                        if ($this->displaySchedule($code->getCode())) {
+                            $string .= '<div class="list">';
+                            $string .= $this->displaySchedule($code->getCode());
+                            $string .= '</div>';
+                        }
+                    }
+                }
+                $string .= '</div></div>';
+            } else {
+                $string .= $this->view->displayStartSlide();
+                foreach ($user->getCodes() as $code) {
+                    $path = $this->getFilePath($code->getCode());
+                    if (file_exists($path)) {
+                        if ($this->displaySchedule($code->getCode())) {
+                            $string .= $this->view->displayMidSlide();
+                            $string .= $this->displaySchedule($code->getCode());
+                            $string .= $this->view->displayEndDiv();
+                        }
+                    }
+                }
+                $string .= $this->view->displayEndDiv();
+            }
+        } else {
+            if (!empty($user->getCodes()[0])) {
+                $string .= $this->displaySchedule($user->getCodes()[0]->getCode());
+            } else {
+                $string .= '<p>Vous n\'avez pas cours </p>';
+            }
+        }
+        return $string;
+    }
+
+    /**
      * Insert a television in the database
      *
      * @return string
@@ -139,55 +190,5 @@ class TelevisionController extends UserController implements Schedule
     public function displayAllTv() {
         $users = $this->model->getUsersByRole('television');
         return $this->view->displayAllTv($users);
-    }
-
-    /**
-     * Display a list a schedule
-     *
-     * @return mixed|string
-     */
-    public function displayMySchedule() {
-        $current_user = wp_get_current_user();
-        $user = $this->model->get($current_user->ID);
-        $user = $this->model->getMycodes([$user])[0];
-
-        $string = "";
-        if (sizeof($user->getCodes()) > 1) {
-            if (get_theme_mod('ecran_connecte_schedule_scroll', 'vert') == 'vert') {
-                $string .= '<div class="ticker1">
-						<div class="innerWrap tv-schedule">';
-                foreach ($user->getCodes() as $code) {
-                    $path = $this->getFilePath($code->getCode());
-                    if (file_exists($path)) {
-                        if ($this->displaySchedule($code->getCode())) {
-                            $string .= '<div class="list">';
-                            $string .= $this->displaySchedule($code->getCode());
-                            $string .= '</div>';
-                        }
-                    }
-                }
-                $string .= '</div></div>';
-            } else {
-                $string .= $this->view->displayStartSlide();
-                foreach ($user->getCodes() as $code) {
-                    $path = $this->getFilePath($code->getCode());
-                    if (file_exists($path)) {
-                        if ($this->displaySchedule($code->getCode())) {
-                            $string .= $this->view->displayMidSlide();
-                            $string .= $this->displaySchedule($code->getCode());
-                            $string .= $this->view->displayEndDiv();
-                        }
-                    }
-                }
-                $string .= $this->view->displayEndDiv();
-            }
-        } else {
-            if (!empty($user->getCodes()[0])) {
-                $string .= $this->displaySchedule($user->getCodes()[0]->getCode());
-            } else {
-                $string .= '<p>Vous n\'avez pas cours </p>';
-            }
-        }
-        return $string;
     }
 }

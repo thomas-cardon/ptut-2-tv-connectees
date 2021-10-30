@@ -352,24 +352,6 @@ class InformationView extends View
       Les alertes sont triées de la plus vieille à la plus récente.
       Vous pouvez modifier une information en cliquant sur « Modifier » à la ligne correspondante à l’information.
       Vous souhaitez <b>supprimer une / plusieurs information(s)</b> ? Cochez les cases des infos puis cliquez sur "Supprimer", en dessous du tableau.');
-
-      return '<section class="container col-xxl-10 py-5">
-          <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
-            <div class="col-10 col-sm-8 col-lg-6">
-              <img draggable="false" src="' . URL_PATH . TV_PLUG_PATH . 'public/img/info.png" class="d-block mx-lg-auto img-fluid" loading="lazy" width="256">
-            </div>
-            <div class="col-lg-6">
-              <h1 class="display-5 fw-bold title-bold">Gestion des informations</h1>
-              <p class="lead">
-                Vous pouvez retrouver ici toutes les informations qui ont été créées sur ce site.
-                <br /> <br />
-                Les alertes sont triées de la plus vieille à la plus récente.
-                Vous pouvez modifier une information en cliquant sur « Modifier » à la ligne correspondante à l’information.
-                Vous souhaitez <b>supprimer une / plusieurs information(s)</b> ? Cochez les cases des infos puis cliquez sur "Supprimer", en dessous du tableau.
-              </p>
-            </div>
-          </div>
-        </section>';
     }
 
     public function noInformation() {
