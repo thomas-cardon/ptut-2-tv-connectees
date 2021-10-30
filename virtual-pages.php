@@ -44,7 +44,7 @@ add_action( 'ec_virtual_pages', function( $controller ) {
     ->setTitle( 'Accueil' )
     ->setContent( '
     <!-- wp:tvconnecteeamu/schedule -->
-    Yo
+    test
     <!-- /wp:tvconnecteeamu/schedule -->
     ' )
     ->setTemplate( 'page.php' );
@@ -55,10 +55,6 @@ add_action( 'ec_virtual_pages', function( $controller ) {
   $controller->addPage( new \EC\VirtualPages\Page( "/creation-des-comptes" ) )
     ->setTitle( 'Créer un utilisateur' )
     ->setContent( '
-    <!-- wp:heading {"level":1} -->
-    <h1>Création des comptes</h1>
-    <!-- /wp:heading -->
-
     <!-- wp:tvconnecteeamu/creation-user -->
     test
     <!-- /wp:tvconnecteeamu/creation-user -->
@@ -216,6 +212,11 @@ add_action( 'ec_virtual_pages', function( $controller ) {
   $controller->addPage( new \EC\VirtualPages\Page( "/gestion-codes-ade" ) )
     ->setTitle( 'Gestion des codes ADE' )
     ->setContent( '
+    <!-- wp:tvconnecteeamu/manage-codes -->
+      <!-- wp:tvconnecteeamu/add-code -->
+      test
+      <!-- /wp:tvconnecteeamu/add-code -->
+    <!-- /wp:tvconnecteeamu/manage-codes -->
     ' )
     ->setTemplate( 'page.php' );
 
