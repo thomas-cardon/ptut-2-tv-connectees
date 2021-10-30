@@ -103,7 +103,10 @@ class AlertController extends Controller
         $groups = $codeAde->getAllFromType('group');
         $halfGroups = $codeAde->getAllFromType('halfGroup');
 
-        return $this->view->creationForm($years, $groups, $halfGroups);
+        return
+          $this->view->renderContainer(
+            $this->view->creationForm($years, $groups, $halfGroups)
+          );
     }
 
     /**
@@ -221,7 +224,12 @@ class AlertController extends Controller
         if ($pageNumber == 1) {
             $returnString = $this->view->contextDisplayAll();
         }
-        return $returnString . $this->view->displayAll($name, 'Alertes', $header, $dataList) . $this->view->pageNumber($maxPage, $pageNumber, esc_url(get_permalink(get_page_by_title('Gestion des alertes'))), $number);
+
+        return $returnString
+        . $this->view->renderContainerDivider() .
+        $this->view->renderContainer(
+          $this->view->displayAll($name, 'Alertes', $header, $dataList) . $this->view->pageNumber($maxPage, $pageNumber, esc_url(get_permalink(get_page_by_title('Gestion des alertes'))), $number)
+        , '', 'container-xl py-5 my-5 text-center');
     }
 
 

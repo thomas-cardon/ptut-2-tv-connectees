@@ -29,15 +29,15 @@ class AlertView extends View
 
         return '
         <form method="post" id="alert">
-            <div class="form-group">
-                <label for="content">Contenu</label>
-                <input class="form-control" type="text" id="content" name="content" placeholder="280 caractères au maximum" minlength="4" maxlength="280" required>
-			</div>
-            <div class="form-group">
-				<label>Date d\'expiration</label>
-				<input type="date" class="form-control" id="expirationDate" name="expirationDate" min="' . $dateMin . '" required>
-			</div>
-            <div class="form-group">
+          <div class="mb-3">
+            <label for="content">Contenu</label>
+            <input class="form-control" type="text" id="content" name="content" placeholder="280 caractères au maximum" minlength="4" maxlength="280" required>
+          </div>
+            <div class="mb-3">
+      				<label>Date d\'expiration</label>
+      				<input type="date" class="form-control" id="expirationDate" name="expirationDate" min="' . $dateMin . '" required>
+      			</div>
+            <div class="mb-3">
                 <label for="selectAlert">Année, groupe, demi-groupes concernés</label>
                 ' . $this->buildSelectCode($years, $groups, $halfGroups) . '
             </div>
@@ -86,15 +86,15 @@ class AlertView extends View
         $form = '
         <a href="' . esc_url(get_permalink(get_page_by_title('Gestion des alertes'))) . '">< Retour</a>
         <form method="post" id="alert">
-            <div class="form-group">
+            <div class="mb-3">
                 <label for="content">Contenu</label>
                 <input type="text" class="form-control" id="content" name="content" value="' . $alert->getContent() . '" placeholder="280 caractères au maximum" minlength="4" maxlength="280" required>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <label for="expirationDate">Date d\'expiration</label>
                 <input type="date" class="form-control" id="expirationDate" name="expirationDate" min="' . $dateMin . '" value = "' . $alert->getExpirationDate() . '" required>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <label for="selectId1">Année, groupe, demi-groupes concernés</label>' .
             $this->buildSelectCode($years, $groups, $halfGroups, $codes[0], 1, $alert->getForEveryone()) . '
             </div>';
@@ -129,20 +129,23 @@ class AlertView extends View
     }
 
     public function contextDisplayAll() {
-        return '
-		<div class="row">
-			<div class="col-6 mx-auto col-md-6 order-md-2">
-				<img src="' . URL_PATH . TV_PLUG_PATH . 'public/img/alert.png" alt="Logo alerte" class="img-fluid mb-3 mb-md-0">
-			</div>
-			<div class="col-md-6 order-md-1 text-center text-md-left pr-md-5">
-				<p class="lead">Vous pouvez retrouver ici toutes les alertes qui ont été créées sur ce site.</p>
-				<p class="lead mb-4">Les alertes sont triées de la plus vieille à la plus récente.</p>
-				<p class="lead mb-4">Vous pouvez modifier une alerte en cliquant sur "Modifier" à la ligne correspondante à l\'alerte.</p>
-				<p class="lead mb-4">Vous souhaitez supprimer une / plusieurs alerte(s) ? Cochez les cases des alertes puis cliquez sur "Supprimer" le bouton ce situe en bas du tableau.</p>
-			</div>
-		</div>
-		<a href="' . esc_url(get_permalink(get_page_by_title('Créer une alerte'))) . '">Créer une alerte</a>
-		<hr class="half-rule">';
+        return '<section class="container col-xxl-10 py-5">
+            <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+              <div class="col-10 col-sm-8 col-lg-6">
+                <img draggable="false" src="' . URL_PATH . TV_PLUG_PATH . 'public/img/alert.png" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" loading="lazy" width="256">
+              </div>
+              <div class="col-lg-6">
+                <h1 class="display-5 fw-bold title-bold">Gestion des alertes</h1>
+                <p class="lead">
+                  Vous pouvez retrouver ici toutes les alertes qui ont été créées sur ce site.
+                  <br /> <br />
+                  Les alertes sont triées de la plus vieille à la plus récente.
+                  Vous pouvez modifier une alerte en cliquant sur "Modifier" à la ligne correspondante à l\'alerte.
+                  Vous souhaitez <b>supprimer une / plusieurs alerte(s)</b> ? Cochez les cases des alertes puis cliquez sur "Supprimer" le bouton ce situe en bas du tableau.
+                </p>
+              </div>
+            </div>
+          </section>';
     }
 
     /**

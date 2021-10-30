@@ -49,24 +49,30 @@ class View
     public function displayAll($name, $title, $dataHeader, $dataList, $idTable = '') {
         $name = '\'' . $name . '\'';
         $table = '
-		<h2>' . $title . '</h2>
-		<input type="text" id="key' . $idTable . '" name="key" onkeyup="search(\'' . $idTable . '\')" placeholder="Recherche...">
-		<form method="post">
-			<div class="table-responsive">
-				<table class="table table-striped table-hover" id="table' . $idTable . '">
-					<thead>
-						<tr class="text-center">
-							<th width="5%" class="text-center" onclick="sortTable(0, \'' . $idTable . '\')">#</th>
-		                    <th scope="col" width="5%" class="text-center"><input type="checkbox" onClick="toggle(this, ' . $name . ')" /></th>';
+    		<h2>' . $title . '</h2>
+        <div class="row g-3 align-items-center">
+          <div class="col-auto">
+            <label for="key' . $idTable . '" class="col-form-label">Rechercher</label>
+          </div>
+          <div class="col-auto">
+            <input class="form-control form-control-sm" type="text" id="key' . $idTable . '" name="key" onkeyup="search(\'' . $idTable . '\')" placeholder="Entrez un mot-clé...">
+          </div>
+        </div>
+    		<form method="post">
+    			<div class="table-responsive">
+    				<table class="table table-striped table-hover" id="table' . $idTable . '">
+    					<thead>
+    						<tr class="text-center">
+    							<th width="5%" class="text-center" onclick="sortTable(0, \'' . $idTable . '\')">#</th>
+    		                    <th scope="col" width="5%" class="text-center"><input type="checkbox" onClick="toggle(this, ' . $name . ')" /></th>';
         $count = 1;
         foreach ($dataHeader as $data) {
             ++$count;
             $table .= '<th scope="col" class="text-center" onclick="sortTable(' . $count . ', \'' . $idTable . '\')">' . $data . '</th>';
         }
-        $table .= '
-			</tr>
-		</thead>
-		<tbody>';
+
+        $table .= '</tr></thead><tbody>';
+
         foreach ($dataList as $data) {
             $table .= '<tr>';
             foreach ($data as $column) {
@@ -74,11 +80,21 @@ class View
             }
             $table .= '</tr>';
         }
+
+        $table .= '</tbody></table></div>';
+
         $table .= '
-					</tbody>
-				</table>
-			</div>
-	        <button type="submit" class="btn delete_button_ecran" value="Supprimer" name="delete" onclick="return confirm(\' Voulez-vous supprimer le(s) élément(s) sélectionné(s) ?\');">Supprimer</button>
+        <div class="row d-flex justify-content-center">
+          <div class="col-auto my-auto">
+            <a type="submit" href="' . home_url('/creer-une-alerte') . '"  class="btn btn-primary" role="button">Créer</a>
+            <button type="submit" class="btn btn-danger" name="delete" onclick="return confirm(\' Voulez-vous supprimer le(s) élément(s) sélectionné(s) ?\');">Supprimer</button>
+          </div>
+          <div class="col-auto my-auto">
+            <span id="passwordHelpInline" class="form-text">
+              Supprime les éléments sélectionnés.
+            </span>
+          </div>
+        </div>
 	    </form>';
         return $table;
     }
