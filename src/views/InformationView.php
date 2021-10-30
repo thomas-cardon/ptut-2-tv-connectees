@@ -237,20 +237,20 @@ class InformationView extends View
      * @return string
      */
     public function contextCreateInformation() {
-        return '
-		<div>
-			<h2 style="color: var(--color-secondary) !important;">Les informations</h2>
-			<p class="lead mb-4">
-        Lors de la création de votre information, celle-ci est postée directement sur tous les téléviseurs qui utilisent ce site. Les informations que vous créez seront affichées avec les informations déjà présentes.
-        Elles seront affichées dans un diaporama défilant les informations une par une sur la partie droite des téléviseurs.
-      </p>
-			<div class="text-center">
-				<figure class="figure">
-					<img src="' . URL_PATH . TV_PLUG_PATH . 'public/img/presentation.png" class="figure-img img-fluid rounded" alt="Représentation d\'un téléviseur">
-					<figcaption class="figure-caption">Représentation d\'un téléviseur</figcaption>
-				</figure>
-			</div>
-		</div>';
+      return '
+    		<div>
+    			<h2 style="color: var(--color-secondary) !important;">Les informations</h2>
+    			<p class="lead mb-4">
+            Lors de la création de votre information, celle-ci est postée directement sur tous les téléviseurs qui utilisent ce site. Les informations que vous créez seront affichées avec les informations déjà présentes.
+            Elles seront affichées dans un diaporama défilant les informations une par une sur la partie droite des téléviseurs.
+          </p>
+    			<div class="text-center">
+    				<figure class="figure">
+    					<img src="' . URL_PATH . TV_PLUG_PATH . 'public/img/presentation.png" class="figure-img img-fluid rounded" alt="Représentation d\'un téléviseur">
+    					<figcaption class="figure-caption">Représentation d\'un téléviseur</figcaption>
+    				</figure>
+    			</div>
+    		</div>';
     }
 
     /**
