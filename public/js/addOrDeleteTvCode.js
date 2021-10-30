@@ -1,10 +1,10 @@
-let count = 0;
+let countTVs = 0;
 
 /**
  * Create a new select to add a new group for the television
  */
 function addButtonTv() {
-    count = count + 1;
+    countTVs += 1;
     $.ajax({
         url: '/wp-content/plugins/plugin-ecran-connecte/public/js/utils/allCodes.php',
     }).done(function (data) {

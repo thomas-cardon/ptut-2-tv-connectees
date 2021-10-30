@@ -1,19 +1,10 @@
 /**
  * Scroll all schedule from the bottom to the top
  */
-$('.ticker1').easyTicker({
-    direction: 'up',
-    easing: 'swing',
-    speed: 'slow',
-    interval: 9000,
-    height: 'auto',
-    visible: 0,
-    mousePause: 1,
-    controls: {
-        up: '',
-        down: '',
-        toggle: '',
-        playText: 'Play',
-        stopText: 'Stop'
-    }
-});
+const ticker = Tickit({
+    data: ['item 1', 'item 2', 'item 3'],
+    selector: '#tickit',
+    duration: 10*1000,
+    initialPos: -15,
+    behavior: 'scroll'
+}).init();

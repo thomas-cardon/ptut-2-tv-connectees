@@ -55,22 +55,19 @@ function loadScriptsEcran()
       return;
     }
 
-    //jQuery | TODO: remplacer entièrement?
-    wp_enqueue_script('cash', 'https://cdnjs.cloudflare.com/ajax/libs/cash/8.1.0/cash.min.js');
-
-    //Bootstrap | TODO: remplacer entièrement?
+    //Bootstrap | 4.0 -> 5.1.3
     wp_enqueue_style('bootstrap_css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css');
     wp_enqueue_script('bootstrap_js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js', array(), false, true);
 
     // LIBRARY
     wp_enqueue_script('pdf-js', 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.2.228/build/pdf.min.js', array(), VERSION, false);
     //wp_enqueue_script('onesignal-js', 'https://cdn.onesignal.com/sdks/OneSignalSDK.js', array(), VERSION, false);
-    //wp_enqueue_script('plugin-jquerymin', TV_PLUG_PATH . 'public/js/vendor/jquery.min.js', array('jquery'), VERSION, true);
-    //wp_enqueue_script('plugin-JqueryEzMin', TV_PLUG_PATH . 'public/js/vendor/jquery.easing.min.js', array('jquery'), VERSION, true);
-    //wp_enqueue_script('plugin-jqueryEzTic', TV_PLUG_PATH . 'public/js/vendor/jquery.easy-ticker.js', array('jquery'), VERSION, true);
-    //wp_enqueue_script('plugin-jqueryEzMinTic', TV_PLUG_PATH . 'public/js/vendor/jquery.easy-ticker.min.js', array('jquery'), VERSION, true);
-    //wp_enqueue_script('plugin-marquee', TV_PLUG_PATH . 'public/js/vendor/jquery.marquee.js', array('jquery'), VERSION, true);
-    //wp_enqueue_script('plugin-ticker', TV_PLUG_PATH . 'public/js/vendor/jquery.tickerNews.js', array('jquery'), VERSION, true);
+
+    wp_enqueue_script('plugin-marquee', TV_PLUG_PATH . 'public/js/vendor/marquee.js', array(), VERSION, true);
+    wp_enqueue_script('plugin-tickit', TV_PLUG_PATH . 'public/js/vendor/tickit.js', array(), VERSION, true);
+
+    wp_enqueue_style('style-marquee', TV_PLUG_PATH . 'public/js/vendor/marquee.css', array(), VERSION, true);
+    wp_enqueue_style('style-tickit', TV_PLUG_PATH . 'public/js/vendor/tickit.css', array(), VERSION, true);
 
     //CSS
     wp_enqueue_style('alert_ecran', TV_PLUG_PATH . 'public/css/alert.css', array(), VERSION);
