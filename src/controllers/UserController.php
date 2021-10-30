@@ -95,7 +95,7 @@ class UserController extends Controller
                 $message = ' <!DOCTYPE html>
                              <html lang="fr">
                              	<head>
-                               		<title>Désnscription à la télé-connecté</title>
+                               		<title>Désinscription à la télé-connecté</title>
                               	</head>
                               	<body>
                                		<p>Bonjour, vous avez décidé de vous désinscrire sur le site de la Télé Connecté</p>
