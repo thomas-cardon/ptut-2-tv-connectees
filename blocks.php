@@ -4,7 +4,6 @@ use Controllers\AlertController;
 use Controllers\CodeAdeController;
 use Controllers\InformationController;
 use Controllers\SecretaryController;
-use Controllers\StudentController;
 use Controllers\StudyDirectorController;
 use Controllers\TeacherController;
 use Controllers\TechnicianController;
@@ -12,7 +11,7 @@ use Controllers\TelevisionController;
 use Controllers\UserController;
 
 use Views\HelpMapView;
-use Views\UserView;
+use UserViews\UserView;
 
 use Views\TabletModeScheduleView;
 
@@ -188,12 +187,13 @@ add_action( 'init', 'block_code_ade' );
 *
 * @return string
 */
-function code_management_render_callback()
+function code_management_render_callback($attributes, $content)
 {
   if(is_page()) {
-    $code = new CodeAdeController();
-    $code->deleteCodes();
-    return $code->displayAllCodes();
+    $controller = new CodeAdeController();
+    $controller->deleteCodes();
+
+    return $controller->displayContent($content);
   }
 }
 
@@ -208,7 +208,7 @@ function block_code_management()
     array( 'wp-blocks', 'wp-element', 'wp-data' )
   );
 
-  register_block_type('tvconnecteeamu/manage-code', array(
+  register_block_type('tvconnecteeamu/manage-codes', array(
     'editor_script' => 'code_manage-script',
     'render_callback' => 'code_management_render_callback'
   ));
@@ -356,29 +356,24 @@ add_action( 'init', 'block_information_modify' );
 */
 function schedule_render_callback()
 {
+  $controller;
+
   if (members_current_user_has_role("television")) {
     $controller = new TelevisionController();
-    return $controller->displayMySchedule();
   }
   else if(members_current_user_has_role("directeuretude")) {
     $controller = new StudyDirectorController();
-    return $controller->displayMySchedule();
   } else if (members_current_user_has_role("enseignant")) {
     $controller = new TeacherController();
-    return $controller->displayMySchedule();
-  } else if (members_current_user_has_role("etudiant")) {
-    $controller = new StudentController();
-    return $controller->displayMySchedule();
   } else if (members_current_user_has_role("technicien")) {
     $controller = new TechnicianController();
-    return $controller->displayMySchedule();
   } else if (members_current_user_has_role("administrator") || members_current_user_has_role("secretaire")) {
     $controller = new SecretaryController();
-    return $controller->displayMySchedule();
   } else {
-    $user = new UserView();
-    return $user->displayHome();
+    $controller = new UserController();
   }
+
+  return $controller->displayContent();
 }
 
 /**
@@ -477,8 +472,8 @@ add_action('init', 'block_subscription');
 function creation_user_render_callback()
 {
   if(is_page()) {
-    $manageUser = new SecretaryController();
-    return $manageUser->createUsers();
+    $controller = new SecretaryController();
+    return $controller->createUsers();
   }
 }
 
@@ -592,38 +587,6 @@ function block_choose_account() {
   ));
 }
 add_action( 'init', 'block_choose_account' );
-
-/**
-* Function of the block
-*
-* @return string
-*/
-function code_account_render_callback()
-{
-  $current_user = wp_get_current_user();
-  if(is_page() && in_array('etudiant', $current_user->roles)) {
-    $myAccount = new StudentController();
-    $myAccount->modifyCodes();
-  }
-}
-
-/**
-* Build a block
-*/
-function block_code_account()
-{
-  wp_register_script(
-    'code_account-script',
-    plugins_url( 'block.js', __FILE__ ),
-    array( 'wp-blocks', 'wp-element', 'wp-data' )
-  );
-
-  register_block_type('tvconnecteeamu/code-account', array(
-    'editor_script' => 'code_account-script',
-    'render_callback' => 'code_account_render_callback'
-  ));
-}
-add_action( 'init', 'block_code_account' );
 
 /**
 * Function of the block
