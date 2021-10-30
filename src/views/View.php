@@ -36,6 +36,31 @@ class View
     }
 
     /**
+     * Displays a hero header for a page
+     * @author Thomas Cardon
+     * @param $title
+     * @param $p - The descriptions
+     * @param $url - The side image URL
+     * @return string - Container HTML data
+     */
+    public function renderHeroHeader($title = 'Page sans titre', $p, $url = URL_PATH . TV_PLUG_PATH . 'public/img/alert.png') {
+      return '
+      <section class="container col-xxl-10 py-5">
+          <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+            <div class="col-10 col-sm-8 col-lg-6">
+              <img draggable="false" src="' . $url . '" class="d-block mx-lg-auto img-fluid" loading="lazy" width="256">
+            </div>
+            <div class="col-lg-6">
+              <h1 class="display-5 fw-bold title-bold">' . $title . '</h1>
+              <p class="lead">
+                ' . $p . '
+              </p>
+            </div>
+          </div>
+        </section>';
+    }
+
+    /**
      * Display a table, showing all element from a database
      *
      * @param $name

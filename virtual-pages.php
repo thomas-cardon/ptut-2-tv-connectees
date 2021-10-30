@@ -131,10 +131,6 @@ add_action( 'ec_virtual_pages', function( $controller ) {
   $controller->addPage( new \EC\VirtualPages\Page( "/gerer-les-informations" ) )
     ->setTitle( 'Gérer les informations' )
     ->setContent( '
-    <!-- wp:heading {"level":1} -->
-    <h1>Gestion des informations</h1>
-    <!-- /wp:heading -->
-
     <!-- wp:tvconnecteeamu/manage-information -->
     test
     <!-- /wp:tvconnecteeamu/manage-information -->

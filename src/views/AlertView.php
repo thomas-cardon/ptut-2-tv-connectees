@@ -128,24 +128,14 @@ class AlertView extends View
 		</div>';
     }
 
-    public function contextDisplayAll() {
-        return '<section class="container col-xxl-10 py-5">
-            <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
-              <div class="col-10 col-sm-8 col-lg-6">
-                <img draggable="false" src="' . URL_PATH . TV_PLUG_PATH . 'public/img/alert.png" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" loading="lazy" width="256">
-              </div>
-              <div class="col-lg-6">
-                <h1 class="display-5 fw-bold title-bold">Gestion des alertes</h1>
-                <p class="lead">
-                  Vous pouvez retrouver ici toutes les alertes qui ont été créées sur ce site.
-                  <br /> <br />
-                  Les alertes sont triées de la plus vieille à la plus récente.
-                  Vous pouvez modifier une alerte en cliquant sur "Modifier" à la ligne correspondante à l\'alerte.
-                  Vous souhaitez <b>supprimer une / plusieurs alerte(s)</b> ? Cochez les cases des alertes puis cliquez sur "Supprimer" le bouton ce situe en bas du tableau.
-                </p>
-              </div>
-            </div>
-          </section>';
+    public function getHeader() {
+      return $this->renderHeroHeader('Gestion des alertes', '
+      Vous pouvez retrouver ici toutes les alertes qui ont été créées sur ce site.
+      <br /> <br />
+      Les alertes sont triées de la plus vieille à la plus récente.
+      Vous pouvez modifier une alerte en cliquant sur "Modifier" à la ligne correspondante à l\'alerte.
+      Vous souhaitez <b>supprimer une / plusieurs alerte(s)</b> ? Cochez les cases des alertes puis cliquez sur "Supprimer" en dessous du tableau.',
+      URL_PATH . TV_PLUG_PATH . 'public/img/alert.png');
     }
 
     /**

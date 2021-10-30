@@ -319,7 +319,7 @@ class InformationController extends Controller
         }
 
         $name = 'Info';
-        $header = ['Titre', 'Contenu', 'Date de création', 'Date d\'expiration', 'Auteur', 'Type', 'Modifier'];
+        $header = ['Titre', 'Contenu', 'Créé le', 'Expire le', 'Auteur', 'Type', ''];
         $dataList = [];
         $row = $begin;
         $imgExtension = ['jpg', 'jpeg', 'gif', 'png', 'svg'];
@@ -378,11 +378,12 @@ class InformationController extends Controller
                 $this->view->refreshPage();
             }
         }
-        $returnString = "";
-        if ($pageNumber == 1) {
-            $returnString = $this->view->contextDisplayAll();
-        }
-        return $returnString . $this->view->displayAll($name, 'Informations', $header, $dataList) . $this->view->pageNumber($maxPage, $pageNumber, esc_url(get_permalink(get_page_by_title('Gestion des informations'))), $number);
+
+        return ($pageNumber == 1 ? $this->view->getHeader() : '') .
+        $this->view->renderContainerDivider() .
+        $this->view->renderContainer(
+          $this->view->displayAll($name, 'Informations', $header, $dataList) . $this->view->pageNumber($maxPage, $pageNumber, home_url('/gerer-les-informations'), $number)
+        , '', 'container-xl py-5 my-5 text-center');
     }
 
 

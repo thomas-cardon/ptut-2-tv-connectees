@@ -203,7 +203,7 @@ class AlertController extends Controller
             $alertList = $this->model->getAuthorListAlert($current_user->ID, $begin, $number);
         }
         $name = 'Alert';
-        $header = ['Contenu', 'Date de création', 'Date d\'expiration', 'Auteur', 'Modifier'];
+        $header = ['Contenu', 'Date de création', 'Date d\'expiration', 'Auteur', ''];
         $dataList = [];
         $row = $begin;
         foreach ($alertList as $alert) {
@@ -222,14 +222,11 @@ class AlertController extends Controller
                 $this->view->refreshPage();
             }
         }
-        if ($pageNumber == 1) {
-            $returnString = $this->view->contextDisplayAll();
-        }
 
-        return $returnString
-        . $this->view->renderContainerDivider() .
+        return ($pageNumber == 1 ? $this->view->getHeader() : '') .
+        $this->view->renderContainerDivider() .
         $this->view->renderContainer(
-          $this->view->displayAll($name, 'Alertes', $header, $dataList) . $this->view->pageNumber($maxPage, $pageNumber, esc_url(get_permalink(get_page_by_title('Gestion des alertes'))), $number)
+          $this->view->displayAll($name, 'Alertes', $header, $dataList) . $this->view->pageNumber($maxPage, $pageNumber, home_url('/gerer-les-alertes'), $number)
         , '', 'container-xl py-5 my-5 text-center');
     }
 
