@@ -87,7 +87,29 @@ class SecretaryController extends UserController
         return $this->view->displayAllSecretary($users);
     }
 
-    /*** MANAGE USERS ***/
+    public function displayUserCreationView() {
+      $teacher = new TeacherController();
+      /*$studyDirector = new StudyDirectorController();
+      $secretary = new SecretaryController();
+      $technician = new TechnicianController();
+      $television = new TelevisionController();*/
+
+      return $this->view->getHeader() . '' . $this->view->renderContainerDivider() . '' . $this->view->renderContainer(
+          $this->view->displayStartMultiSelect()
+        . $this->view->displayTitleSelect('teacher', 'Enseignants', true)
+        . $this->view->displayTitleSelect('studyDirector', 'Directeurs d\'études')
+        . $this->view->displayTitleSelect('secretary', 'Secrétaires')
+        . $this->view->displayTitleSelect('technician', 'Technicien')
+        . $this->view->displayTitleSelect('television', 'Télévisions')
+        . $this->view->displayEndOfTitle()
+        . $this->view->displayContentSelect('teacher', '$teacher->insert()', true)
+        . $this->view->displayContentSelect('studyDirector', '$studyDirector->insert()')
+        . $this->view->displayContentSelect('secretary', '$secretary->insert()')
+        . $this->view->displayContentSelect('technician', '$technician->insert()')
+        . $this->view->displayContentSelect('television', '$television->insert()')
+        . $this->view->displayEndDiv()
+      );
+    }
 
     /**
      * Create an user
@@ -104,19 +126,19 @@ class SecretaryController extends UserController
             $this->view->getHeader() .
             $this->view->renderContainerDivider() .
             $this->view->renderContainer(
-              $this->view->displayStartMultiSelect() .
-              $this->view->displayTitleSelect('teacher', 'Enseignants', true) .
-              $this->view->displayTitleSelect('studyDirector', 'Directeurs d\'études') .
-              $this->view->displayTitleSelect('secretary', 'Secrétaires') .
-              $this->view->displayTitleSelect('technician', 'Technicien') .
-              $this->view->displayTitleSelect('television', 'Télévisions') .
-              $this->view->displayEndOfTitle() .
-              $this->view->displayContentSelect('teacher', $teacher->insert(), true) .
-              $this->view->displayContentSelect('studyDirector', $studyDirector->insert()) .
-              $this->view->displayContentSelect('secretary', $secretary->insert()) .
-              $this->view->displayContentSelect('technician', $technician->insert()) .
-              $this->view->displayContentSelect('television', $television->insert()) .
-              $this->view->displayEndDiv()
+                $this->view->displayStartMultiSelect() .
+                $this->view->displayTitleSelect('teacher', 'Enseignants', true) .
+                $this->view->displayTitleSelect('studyDirector', 'Directeurs d\'études') .
+                $this->view->displayTitleSelect('secretary', 'Secrétaires') .
+                $this->view->displayTitleSelect('technician', 'Technicien') .
+                $this->view->displayTitleSelect('television', 'Télévisions') .
+                $this->view->displayEndOfTitle() .
+                $this->view->displayContentSelect('teacher', $teacher->insert(), true) .
+                $this->view->displayContentSelect('studyDirector', $studyDirector->insert()) .
+                $this->view->displayContentSelect('secretary', $secretary->insert()) .
+                $this->view->displayContentSelect('technician', $technician->insert()) .
+                $this->view->displayContentSelect('television', $television->insert()) .
+                $this->view->displayEndDiv()
             );
     }
 

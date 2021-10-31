@@ -155,6 +155,7 @@ class TeacherController extends UserController implements Schedule
                 $this->view->displayWrongExtension();
             }
         }
+        
         return $this->view->displayInsertImportFileTeacher();
     }
 

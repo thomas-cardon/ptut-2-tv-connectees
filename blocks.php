@@ -9,19 +9,18 @@ use Controllers\TeacherController;
 use Controllers\TechnicianController;
 use Controllers\TelevisionController;
 use Controllers\UserController;
+use Controllers\TabletModeController;
 
 use Views\HelpMapView;
-use UserViews\UserView;
-
 use Views\TabletModeScheduleView;
+
+use UserViews\UserView;
 
 /*
 * TABLET VIEW BLOCKS
 */
 
-/**
-* Build a block
-*/
+/* Schedule render function */
 function tablet_schedule_render_callback()
 {
   if(is_page()) {
@@ -30,9 +29,7 @@ function tablet_schedule_render_callback()
   }
 }
 
-/**
-* Build a block
-*/
+/* Schedule */
 function block_tablet_schedule()
 {
   wp_register_script(
@@ -48,6 +45,34 @@ function block_tablet_schedule()
 }
 
 add_action('init', 'block_tablet_schedule');
+
+/* Select year render function */
+function tablet_select_year_render_callback()
+{
+  if(is_page()) {
+    $controller = new TabletModeController();
+    echo $controller->displayYearSelector();
+  }
+
+  return 'hello world';
+}
+
+/* Select year */
+function block_tablet_mode_select_year()
+{
+  wp_register_script(
+    'tablet-year-script',
+    plugins_url( 'blocks/tablet-mode/select-year/index.js', __FILE__ ),
+    array( 'wp-blocks', 'wp-element', 'wp-data' )
+  );
+
+  register_block_type('tvconnecteeamu/tablet-select-year', array(
+    'editor_script' => 'tablet-year-script',
+    'render_callback' => 'tablet_select_year_render_callback'
+  ));
+}
+
+add_action('init', 'block_tablet_mode_select_year');
 
 /*
 * ALERT BLOCKS
@@ -438,7 +463,7 @@ function creation_user_render_callback()
 {
   if(is_page()) {
     $controller = new SecretaryController();
-    return $controller->createUsers();
+    return $controller->displayUserCreationView();
   }
 }
 

@@ -221,7 +221,11 @@ add_action( 'ec_virtual_pages', function( $controller ) {
    */
   $controller->addPage( new \EC\VirtualPages\Page( "/tablet-view" ) )
     ->setTitle( 'tablet-view' )
-    ->setContent( '' )
+    ->setContent( '
+    <!-- wp:tvconnecteeamu/tablet-select-year -->
+    test
+    <!-- /wp:tvconnecteeamu/tablet-select-year -->
+    ' )
     ->setTemplate( 'page-tablet.php' );
 
   /**
