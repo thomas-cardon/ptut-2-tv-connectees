@@ -493,9 +493,9 @@ add_action( 'init', 'block_creation_user' );
 function management_user_render_callback()
 {
   if(is_page()) {
-    $manageUser = new SecretaryController();
-    $manageUser->deleteUsers();
-    return $manageUser->displayUsers();
+    $controller = new SecretaryController();
+    $controller->deleteUsers();
+    return $controller->displayUsers();
   }
 }
 
