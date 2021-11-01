@@ -11,6 +11,11 @@ class TabletModeView extends View
 {
 
   public function displayYearSelector($years) {
-    return '' . var_dump($years);
+    $data = '';
+    
+    foreach ($years as $year)
+      $data .= $year->getTitle() . ': ' . $year->getId() . '<br />';
+
+    return $data;
   }
 }

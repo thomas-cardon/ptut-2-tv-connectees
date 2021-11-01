@@ -34,7 +34,7 @@ class TabletModeController extends Controller
     }
 
     public function displayYearSelector() {
-      $years = $this->$model->getAllFromType('year');
-      return $this->$view->displayYearSelector($years);
+      $years = $this->model->getAllFromType('year');
+      return $this->view->displayYearSelector($years);
     }
 }

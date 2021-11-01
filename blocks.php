@@ -51,10 +51,8 @@ function tablet_select_year_render_callback()
 {
   if(is_page()) {
     $controller = new TabletModeController();
-    echo $controller->displayYearSelector();
+    return $controller->displayYearSelector();
   }
-
-  return 'hello world';
 }
 
 /* Select year */
