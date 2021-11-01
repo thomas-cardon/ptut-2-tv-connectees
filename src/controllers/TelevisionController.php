@@ -187,8 +187,8 @@ class TelevisionController extends UserController implements Schedule
      *
      * @return string
      */
-    public function displayAllTv() {
+    public function displayTableTv() {
         $users = $this->model->getUsersByRole('television');
-        return $this->view->displayAllTv($users);
+        return $this->view->displayTableTv($users);
     }
 }

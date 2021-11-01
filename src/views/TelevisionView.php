@@ -59,7 +59,7 @@ class TelevisionView extends UserView
      *
      * @return string
      */
-    public function displayAllTv($users) {
+    public function displayTableTv($users) {
         $page = get_page_by_title('Modifier un utilisateur');
         $linkManageUser = get_permalink($page->ID);
 
@@ -74,7 +74,7 @@ class TelevisionView extends UserView
             $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), sizeof($user->getCodes()), $this->buildLinkForModify($linkManageUser . '?id=' . $user->getId())];
         }
 
-        return $this->displayAll($name, $title, $header, $row, 'tele');
+        return $this->displayTable($name, $title, $header, $row, 'tele');
     }
 
     /**

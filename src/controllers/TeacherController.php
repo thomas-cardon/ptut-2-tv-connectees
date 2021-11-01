@@ -190,9 +190,9 @@ class TeacherController extends UserController implements Schedule
     /**
      * Display all teachers in a table
      */
-    public function displayAllTeachers() {
+    public function displayTableTeachers() {
         $users = $this->model->getUsersByRole('enseignant');
         $users = $this->model->getMyCodes($users);
-        return $this->view->displayAllTeachers($users);
+        return $this->view->displayTableTeachers($users);
     }
 }

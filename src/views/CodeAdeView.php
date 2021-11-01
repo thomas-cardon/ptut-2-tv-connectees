@@ -131,7 +131,7 @@ class CodeAdeView extends View
      *
      * @return          string
      */
-    public function displayAllCode($years, $groups, $halfGroups) {
+    public function displayTableCode($years, $groups, $halfGroups) {
         $page = get_page_by_title('Modifier un code ADE');
         $linkManageCodeAde = get_permalink($page->ID);
 
@@ -157,7 +157,7 @@ class CodeAdeView extends View
             }
         }
 
-        return $this->displayAll($name, $title, $header, $row, 'code');
+        return $this->displayTable($name, $title, $header, $row, 'code');
     }
 
     /**

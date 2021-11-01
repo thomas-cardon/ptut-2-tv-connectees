@@ -91,8 +91,8 @@ class TechnicianController extends UserController implements Schedule
      *
      * @return string
      */
-    public function displayAllTechnician() {
+    public function displayTableTechnician() {
         $users = $this->model->getUsersByRole('technicien');
-        return $this->view->displayAllTechnicians($users);
+        return $this->view->displayTableTechnicians($users);
     }
 }

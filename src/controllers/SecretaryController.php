@@ -82,9 +82,9 @@ class SecretaryController extends UserController
      * Display all secretary
      * @return string
      */
-    public function displayAllSecretary() {
+    public function displayTableSecretary() {
         $users = $this->model->getUsersByRole('secretaire');
-        return $this->view->displayAllSecretary($users);
+        return $this->view->displayTableSecretary($users);
     }
 
     public function displayUserCreationView() {
@@ -156,11 +156,11 @@ class SecretaryController extends UserController
               $this->view->displayTitleSelect('technician', 'Technicien') .
               $this->view->displayTitleSelect('television', 'Télévisions') .
               $this->view->displayEndOfTitle() .
-              $this->view->displayContentSelect('teacher', $teacher->displayAllTeachers(), true) .
-              $this->view->displayContentSelect('studyDirector', $studyDirector->displayAllStudyDirector()) .
-              $this->view->displayContentSelect('secretary', $secretary->displayAllSecretary()) .
-              $this->view->displayContentSelect('technician', $technician->displayAllTechnician()) .
-              $this->view->displayContentSelect('television', $television->displayAllTv()) .
+              $this->view->displayContentSelect('teacher', $teacher->displayTableTeachers(), true) .
+              $this->view->displayContentSelect('studyDirector', $studyDirector->displayTableStudyDirector()) .
+              $this->view->displayContentSelect('secretary', $secretary->displayTableSecretary()) .
+              $this->view->displayContentSelect('technician', $technician->displayTableTechnician()) .
+              $this->view->displayContentSelect('television', $television->displayTableTv()) .
               $this->view->displayEndDiv(), '', 'container-sm px-4 pb-5 my-5 text-center'
             );
     }

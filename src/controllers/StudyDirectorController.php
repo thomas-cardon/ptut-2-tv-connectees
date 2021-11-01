@@ -119,9 +119,9 @@ class StudyDirectorController extends UserController implements Schedule
     /**
      * Display all study directors
      */
-    public function displayAllStudyDirector() {
+    public function displayTableStudyDirector() {
         $users = $this->model->getUsersByRole('directeuretude');
         $users = $this->model->getMyCodes($users);
-        return $this->view->displayAllStudyDirector($users);
+        return $this->view->displayTableStudyDirector($users);
     }
 }

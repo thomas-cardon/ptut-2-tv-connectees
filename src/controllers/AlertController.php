@@ -180,7 +180,7 @@ class AlertController extends Controller
     }
 
 
-    public function displayAll() {
+    public function displayTable() {
         $numberAllEntity = $this->model->countAll();
         $url = $this->getPartOfUrl();
         $number = filter_input(INPUT_GET, 'number');
@@ -226,7 +226,7 @@ class AlertController extends Controller
         return ($pageNumber == 1 ? $this->view->getHeader() : '') .
         $this->view->renderContainerDivider() .
         $this->view->renderContainer(
-          $this->view->displayAll($name, 'Alertes', $header, $dataList) . $this->view->pageNumber($maxPage, $pageNumber, home_url('/gerer-les-alertes'), $number)
+          $this->view->displayTable($name, 'Alertes', $header, $dataList) . $this->view->pageNumber($maxPage, $pageNumber, home_url('/gerer-les-alertes'), $number)
         , '', 'container-xl py-5 my-5 text-center');
     }
 

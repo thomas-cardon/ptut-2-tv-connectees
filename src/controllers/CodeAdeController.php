@@ -139,7 +139,7 @@ class CodeAdeController extends Controller
           </p>', 'Suivre des codes ADE')
           . $this->view->renderContainerDivider() .
           $this->view->renderContainer(
-            $this->view->displayAllCode($years, $groups, $halfGroups)
+            $this->view->displayTableCode($years, $groups, $halfGroups)
           );
     }
 

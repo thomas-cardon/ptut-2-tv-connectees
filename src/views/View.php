@@ -79,7 +79,7 @@ class View
      *
      * @return string
      */
-    public function displayAll($name, $title, $dataHeader, $dataList, $idTable = '') {
+    public function displayTable($name, $title, $dataHeader, $dataList, $idTable = '', $create = '<a type="submit" class="btn btn-primary disabled" role="button" aria-disabled="true">Créer</a>') {
         $name = '\'' . $name . '\'';
         $table = '
     		<h2>' . $title . '</h2>
@@ -119,7 +119,7 @@ class View
         $table .= '
         <div class="row d-flex justify-content-center">
           <div class="col-auto my-auto">
-            <a type="submit" href="' . home_url('/creer-une-alerte') . '"  class="btn btn-primary" role="button">Créer</a>
+            ' . $create . '
             <button type="submit" class="btn btn-danger" name="delete" onclick="return confirm(\' Voulez-vous supprimer le(s) élément(s) sélectionné(s) ?\');">Supprimer</button>
           </div>
           <div class="col-auto my-auto">

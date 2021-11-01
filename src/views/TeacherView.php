@@ -67,7 +67,7 @@ class TeacherView extends UserView
      *
      * @return string
      */
-    public function displayAllTeachers($teachers) {
+    public function displayTableTeachers($teachers) {
         $page = get_page_by_title('Modifier un utilisateur');
         $linkManageUser = get_permalink($page->ID);
 
@@ -82,6 +82,6 @@ class TeacherView extends UserView
             $row[] = [$count, $this->buildCheckbox($name, $teacher->getId()), $teacher->getLogin(), $teacher->getCodes()[0]->getCode(), $this->buildLinkForModify($linkManageUser . '?id=' . $teacher->getId())];
         }
 
-        return $this->displayAll($name, $title, $header, $row, 'teacher');
+        return $this->displayTable($name, $title, $header, $row, 'teacher');
     }
 }

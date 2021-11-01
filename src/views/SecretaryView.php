@@ -68,8 +68,8 @@ class SecretaryView extends UserView
           <div class="h-100 p-5 bg-light border rounded-3">
             <h2 class="title-block title-bold">👷 Personnel</h2>
             <p>Ajoutez des utilisateurs qui pourront à leur tour des informations, alertes, etc.</p>
-            <a href="' . home_url('/creation-des-comptes') . '" class="btn btn-danger" role="button">Créer</a>
-            <a href="' . home_url('/gestion-des-utilisateurs') . '" class="btn btn-dark" role="button">Voir</a>
+            <a href="' . home_url('/creer-utilisateur') . '" class="btn btn-danger" role="button">Créer</a>
+            <a href="' . home_url('/liste-utilisateur') . '" class="btn btn-dark" role="button">Voir</a>
           </div>
         </div>
         <div class="col-md-6">
@@ -90,7 +90,7 @@ class SecretaryView extends UserView
      *
      * @return string
      */
-    public function displayAllSecretary($users) {
+    public function displayTableSecretary($users) {
         $title = '<b>Rôle affiché: </b> Secrétaire';
         $name = 'Secre';
         $header = ['Login'];
@@ -102,7 +102,7 @@ class SecretaryView extends UserView
             $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin()];
         }
 
-        return $this->displayAll($name, $title, $header, $row, 'Secre');
+        return $this->displayTable($name, $title, $header, $row, 'Secre', '<a type="submit" class="btn btn-primary disabled" href="' . home_url('/creer-utilisateur') . '" role="button" aria-disabled="true">Créer</a>');
     }
 
     /**

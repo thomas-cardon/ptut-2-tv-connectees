@@ -55,7 +55,7 @@ class StudyDirectorView extends UserView
      *
      * @return string
      */
-    public function displayAllStudyDirector($users) {
+    public function displayTableStudyDirector($users) {
         $page = get_page_by_title('Modifier un utilisateur');
         $linkManageUser = get_permalink($page->ID);
 
@@ -77,7 +77,7 @@ class StudyDirectorView extends UserView
             $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), $code, $this->buildLinkForModify($linkManageUser . '?id=' . $user->getId())];
         }
 
-        return $this->displayAll($name, $title, $header, $row, 'director');
+        return $this->displayTable($name, $title, $header, $row, 'director');
     }
 
     /**

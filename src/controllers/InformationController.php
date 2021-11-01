@@ -295,7 +295,7 @@ class InformationController extends Controller
         wp_delete_file($source);
     }
 
-    public function displayAll() {
+    public function displayTable() {
         $numberAllEntity = $this->model->countAll();
         $url = $this->getPartOfUrl();
         $number = filter_input(INPUT_GET, 'number');
@@ -382,7 +382,7 @@ class InformationController extends Controller
         return ($pageNumber == 1 ? $this->view->getHeader() : '') .
         $this->view->renderContainerDivider() .
         $this->view->renderContainer(
-          $this->view->displayAll($name, 'Informations', $header, $dataList) . $this->view->pageNumber($maxPage, $pageNumber, home_url('/gerer-les-informations'), $number)
+          $this->view->displayTable($name, 'Informations', $header, $dataList) . $this->view->pageNumber($maxPage, $pageNumber, home_url('/gerer-les-informations'), $number)
         , '', 'container-xl py-5 my-5 text-center');
     }
 
