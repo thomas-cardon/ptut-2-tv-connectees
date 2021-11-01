@@ -64,8 +64,8 @@ class View
      * Displays the view's header
      * @author Thomas Cardon
     */
-    public function getHeader() {
-      return $this->renderHeroHeader('Vue inconnue');
+    public function getHeader($title = '', $p = '', $icon = URL_PATH . TV_PLUG_PATH . 'public/img/alert.png') {
+      return $this->renderHeroHeader($title, $p, $icon);
     }
 
     /**
