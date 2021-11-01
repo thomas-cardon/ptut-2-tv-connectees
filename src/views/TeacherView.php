@@ -71,7 +71,7 @@ class TeacherView extends UserView
         $page = get_page_by_title('Modifier un utilisateur');
         $linkManageUser = get_permalink($page->ID);
 
-        $title = 'Enseignants';
+        $title = '<b>Rôle affiché: </b> Enseignants';
         $name = 'Teacher';
         $header = ['Numéro Ent', 'Code ADE', 'Modifier'];
 

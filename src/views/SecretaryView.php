@@ -13,7 +13,6 @@ use Models\User;
  */
 class SecretaryView extends UserView
 {
-
     /**
      * Display the creation form
      *
@@ -92,7 +91,7 @@ class SecretaryView extends UserView
      * @return string
      */
     public function displayAllSecretary($users) {
-        $title = 'Secrétaires';
+        $title = '<b>Rôle affiché: </b> Secrétaire';
         $name = 'Secre';
         $header = ['Login'];
 

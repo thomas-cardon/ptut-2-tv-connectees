@@ -89,10 +89,10 @@ class SecretaryController extends UserController
 
     public function displayUserCreationView() {
       $teacher = new TeacherController();
-      /*$studyDirector = new StudyDirectorController();
+      $studyDirector = new StudyDirectorController();
       $secretary = new SecretaryController();
       $technician = new TechnicianController();
-      $television = new TelevisionController();*/
+      $television = new TelevisionController();
 
       return $this->view->getHeader() . '' . $this->view->renderContainerDivider() . '' . $this->view->renderContainer(
           $this->view->displayStartMultiSelect()
@@ -102,71 +102,54 @@ class SecretaryController extends UserController
         . $this->view->displayTitleSelect('technician', 'Technicien')
         . $this->view->displayTitleSelect('television', 'Télévisions')
         . $this->view->displayEndOfTitle()
-        . $this->view->displayContentSelect('teacher', '$teacher->insert()', true)
-        . $this->view->displayContentSelect('studyDirector', '$studyDirector->insert()')
-        . $this->view->displayContentSelect('secretary', '$secretary->insert()')
-        . $this->view->displayContentSelect('technician', '$technician->insert()')
-        . $this->view->displayContentSelect('television', '$television->insert()')
+        . $this->view->displayContentSelect('teacher', $teacher->insert(), true)
+        . $this->view->displayContentSelect('studyDirector', $studyDirector->insert())
+        . $this->view->displayContentSelect('secretary', $secretary->insert())
+        . $this->view->displayContentSelect('technician', $technician->insert())
+        . $this->view->displayContentSelect('television', $television->insert())
         . $this->view->displayEndDiv()
       );
-    }
-
-    /**
-     * Create an user
-     *
-     * @return string
-     */
-    public function createUsers() {
-        $teacher = new TeacherController();
-        $studyDirector = new StudyDirectorController();
-        $secretary = new SecretaryController();
-        $technician = new TechnicianController();
-        $television = new TelevisionController();
-        return
-            $this->view->getHeader() .
-            $this->view->renderContainerDivider() .
-            $this->view->renderContainer(
-                $this->view->displayStartMultiSelect() .
-                $this->view->displayTitleSelect('teacher', 'Enseignants', true) .
-                $this->view->displayTitleSelect('studyDirector', 'Directeurs d\'études') .
-                $this->view->displayTitleSelect('secretary', 'Secrétaires') .
-                $this->view->displayTitleSelect('technician', 'Technicien') .
-                $this->view->displayTitleSelect('television', 'Télévisions') .
-                $this->view->displayEndOfTitle() .
-                $this->view->displayContentSelect('teacher', $teacher->insert(), true) .
-                $this->view->displayContentSelect('studyDirector', $studyDirector->insert()) .
-                $this->view->displayContentSelect('secretary', $secretary->insert()) .
-                $this->view->displayContentSelect('technician', $technician->insert()) .
-                $this->view->displayContentSelect('television', $television->insert()) .
-                $this->view->displayEndDiv()
-            );
     }
 
     /**
      * Displays users by roles
      */
     public function displayUsers() {
+      error_reporting(E_ALL);
+      ini_set('display_errors', '1');
+
         $teacher = new TeacherController();
         $studyDirector = new StudyDirectorController();
         $secretary = new SecretaryController();
         $technician = new TechnicianController();
         $television = new TelevisionController();
 
-        return
-            $this->view->renderContainer(
+        return $this->view->getHeader('Liste des utilisateurs', '
+        Il y a plusieurs types d\'utilisateurs :
+        <br />
+        Les <s>étudiants</s>, enseignants, directeurs d\'études, secrétaires, techniciens, télévisions.
+
+        <br /> <br />
+        Les <b>étudiants</b> ont accès à leur emploi du temps et reçoivent les alertes les concernants et les informations. <br />
+        Les <b>enseignants</b> ont accès à leur emploi du temps et peuvent poster des alertes. <br />
+        Les <b>directeurs d\'études</b> ont accès à leur emploi du temps et peuvent poster des alertes et des informations. <br />
+        Les <b>secrétaires</b> peuvent poster des alertes et des informations. Ils peuvent aussi créer des utilisateurs. <br />
+        Les <b>techniciens</b> ont accès aux emplois du temps des promotions. <br />
+        Les <b>télévisions</b> sont les utilisateurs utilisés pour afficher ce site sur les téléviseurs. Les comptes télévisions peuvent afficher autant d\'emploi du temps que souhaité.
+    ', URL_PATH . TV_PLUG_PATH . 'public/img/gestion.png') . '' . $this->view->renderContainerDivider() . '' . $this->view->renderContainer(
               $this->view->displayStartMultiSelect() .
-              $this->view->displayTitleSelect('teacher', 'Enseignants') .
+              $this->view->displayTitleSelect('teacher', 'Enseignants', true) .
               $this->view->displayTitleSelect('studyDirector', 'Directeurs d\'études') .
               $this->view->displayTitleSelect('secretary', 'Secrétaires') .
               $this->view->displayTitleSelect('technician', 'Technicien') .
               $this->view->displayTitleSelect('television', 'Télévisions') .
               $this->view->displayEndOfTitle() .
-              $this->view->displayContentSelect('teacher', $teacher->displayAllTeachers()) .
+              $this->view->displayContentSelect('teacher', $teacher->displayAllTeachers(), true) .
               $this->view->displayContentSelect('studyDirector', $studyDirector->displayAllStudyDirector()) .
               $this->view->displayContentSelect('secretary', $secretary->displayAllSecretary()) .
               $this->view->displayContentSelect('technician', $technician->displayAllTechnician()) .
               $this->view->displayContentSelect('television', $television->displayAllTv()) .
-              $this->view->displayEndDiv(), 'Créer un compte'
+              $this->view->displayEndDiv(), '', 'container-sm px-4 pb-5 my-5 text-center'
             );
     }
 

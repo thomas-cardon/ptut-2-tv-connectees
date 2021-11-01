@@ -63,7 +63,7 @@ class TelevisionView extends UserView
         $page = get_page_by_title('Modifier un utilisateur');
         $linkManageUser = get_permalink($page->ID);
 
-        $title = 'Televisions';
+        $title = '<b>Rôle affiché: </b> Télévision';
         $name = 'Tele';
         $header = ['Login', 'Nombre d\'emplois du temps ', 'Modifier'];
 

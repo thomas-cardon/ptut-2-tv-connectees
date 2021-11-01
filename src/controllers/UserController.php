@@ -6,8 +6,10 @@ use Models\Alert;
 use Models\CodeAde;
 use Models\Information;
 use Models\User;
-use R34ICS;
+
 use Views\UserView;
+
+use R34ICS;
 
 /**
  * Class UserController

@@ -35,7 +35,7 @@ class TechnicianView extends UserView
      * @return string
      */
     public function displayAllTechnicians($users) {
-        $title = 'Techniciens';
+        $title = '<b>Rôle affiché: </b> Technicien';
         $name = 'Tech';
         $header = ['Login'];
 
