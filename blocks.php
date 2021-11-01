@@ -119,7 +119,7 @@ function alert_management_render_callback()
 {
   if(is_page()) {
     $alert = new AlertController();
-    return $alert->displayAll();
+    return $alert->displayTable();
   }
 }
 
@@ -316,7 +316,7 @@ function information_management_render_callback()
 {
   if(is_page()) {
     $information = new InformationController();
-    return $information->displayAll();
+    return $information->displayTable();
   }
 }
 
