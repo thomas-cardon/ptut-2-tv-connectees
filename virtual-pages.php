@@ -67,29 +67,9 @@ add_action( 'ec_virtual_pages', function( $controller ) {
   $controller->addPage( new \EC\VirtualPages\Page( "/gestion-des-utilisateurs" ) )
     ->setTitle( 'Gestion des utilisateurs' )
     ->setContent( '
-    <!-- wp:heading {"level":1} -->
-    <h1>Gestion des utilisateurs</h1>
-    <!-- /wp:heading -->
-
     <!-- wp:tvconnecteeamu/management-user -->
     test
     <!-- /wp:tvconnecteeamu/management-user -->
-    ' )
-    ->setTemplate( 'page.php' );
-
-    /**
-     *  Page: /inscription
-     */
-  $controller->addPage( new \EC\VirtualPages\Page( "/inscription" ) )
-    ->setTitle( 'Inscription' )
-    ->setContent( '
-    <!-- wp:heading {"level":1} -->
-    <h1>Inscription</h1>
-    <!-- /wp:heading -->
-
-    <!-- wp:tvconnecteeamu/inscr-student -->
-    test
-    <!-- /wp:tvconnecteeamu/inscr-student -->
     ' )
     ->setTemplate( 'page.php' );
 
