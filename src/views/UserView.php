@@ -9,20 +9,6 @@ use Models\User;
 class UserView extends View
 {
 
-  public function getHeader() {
-    return $this->renderHeroHeader('Créer un utilisateur', '
-      Vous pouvez créer ici les utilisateurs
-      Il y a plusieurs types d\'utilisateur : Les <s>étudiants</s>, enseignants, directeurs d\'études, scrétaires, techniciens, télévisions.
-      Les étudiants ont accès à leur emploi du temps et reçoivent les alertes les concernants et les informations.
-      Les enseignants ont accès à leur emploi du temps et peuvent poster des alertes.
-      Les directeurs d\'études ont accès à leur emploi du temps et peuvent poster des alertes et des informations.
-      Les secrétaires peuvent poster des alertes et des informations. Ils peuvent aussi créer des utilisateurs.
-      Les techniciens ont accès aux emplois du temps des promotions.
-      Les télévisions sont les utilisateurs utilisés pour afficher ce site sur les téléviseurs. Les comptes télévisions peuvent afficher autant d\'emploi du temps que souhaité.
-    ');
-  }
-
-
     /**
      * Display a creation form
      *
