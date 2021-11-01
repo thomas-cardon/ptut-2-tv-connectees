@@ -382,7 +382,7 @@ class InformationController extends Controller
         return ($pageNumber == 1 ? $this->view->getHeader() : '') .
         $this->view->renderContainerDivider() .
         $this->view->renderContainer(
-          $this->view->displayTable($name, 'Informations', $header, $dataList) . $this->view->pageNumber($maxPage, $pageNumber, home_url('/gerer-les-informations'), $number)
+          $this->view->displayTable($name, 'Informations', $header, $dataList, '', '<a type="submit" class="btn btn-primary" href="' . home_url('/creer-information') . '" role="button" aria-disabled="true">Créer</a>') . $this->view->pageNumber($maxPage, $pageNumber, home_url('/gerer-les-informations'), $number)
         , '', 'container-xl py-5 my-5 text-center');
     }
 
