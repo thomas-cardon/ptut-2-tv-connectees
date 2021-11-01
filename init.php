@@ -14,6 +14,9 @@ include 'widgets/WidgetInformation.php';
 // Login for viewer
 require 'config.php';
 
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+
 /**
  * Create all directory
  * (For ICS file and media)
