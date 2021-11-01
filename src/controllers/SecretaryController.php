@@ -94,7 +94,19 @@ class SecretaryController extends UserController
       $technician = new TechnicianController();
       $television = new TelevisionController();
 
-      return $this->view->getHeader() . '' . $this->view->renderContainerDivider() . '' . $this->view->renderContainer(
+      return $this->view->getHeader('Création des utilisateurs', '
+      Il y a plusieurs types d\'utilisateurs :
+      <br />
+      Les <s>étudiants</s>, enseignants, directeurs d\'études, secrétaires, techniciens, télévisions.
+
+      <br /> <br />
+      Les <b>étudiants</b> ont accès à leur emploi du temps et reçoivent les alertes les concernants et les informations. <br />
+      Les <b>enseignants</b> ont accès à leur emploi du temps et peuvent poster des alertes. <br />
+      Les <b>directeurs d\'études</b> ont accès à leur emploi du temps et peuvent poster des alertes et des informations. <br />
+      Les <b>secrétaires</b> peuvent poster des alertes et des informations. Ils peuvent aussi créer des utilisateurs. <br />
+      Les <b>techniciens</b> ont accès aux emplois du temps des promotions. <br />
+      Les <b>télévisions</b> sont les utilisateurs utilisés pour afficher ce site sur les téléviseurs. Les comptes télévisions peuvent afficher autant d\'emploi du temps que souhaité.
+  ', URL_PATH . TV_PLUG_PATH . 'public/img/gestion.png') . '' . $this->view->renderContainerDivider() . '' . $this->view->renderContainer(
           $this->view->displayStartMultiSelect()
         . $this->view->displayTitleSelect('teacher', 'Enseignants', true)
         . $this->view->displayTitleSelect('studyDirector', 'Directeurs d\'études')
