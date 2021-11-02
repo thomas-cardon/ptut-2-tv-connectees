@@ -49,6 +49,15 @@ add_action( 'ec_virtual_pages', function( $controller ) {
     ' )
     ->setTemplate( 'page.php' );
 
+  $controller->addPage( new \EC\VirtualPages\Page( "/tv-mode" ) )
+    ->setTitle( 'Accueil' )
+    ->setContent( '
+    <!-- wp:tvconnecteeamu/tv-mode -->
+    test
+    <!-- /wp:tvconnecteeamu/tv-mode -->
+    ' )
+    ->setTemplate( 'page-tv.php' );
+
     /**
      *  Page: /creer-utilisateur
      */

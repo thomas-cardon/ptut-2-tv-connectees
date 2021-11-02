@@ -376,4 +376,12 @@ class View
     public function errorMessageCantAdd() {
         $this->buildModal('L\'ajout a échoué', '<p class="alert alert-danger">Une erreur s\'est produite lors de l\'envoie du formulaire, veuillez réessayer après avoir vérifié vos informations.</p>');
     }
+
+    /**
+     * Displays an error page for the users that doesn't have access to that page
+     * @return string
+     */
+    public function displayForbiddenAccess() {
+        return "<p>Vous n'avez pas les permissions requises pour accéder à cette page.</p>";
+    }
 }

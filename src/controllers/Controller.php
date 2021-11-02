@@ -126,4 +126,19 @@ class Controller
         list($year, $month, $day) = explode('-', $date);
         return checkdate($month, $day, $year);
     }
+
+    /**
+     * Sends error (WIP) and redirects user if needed
+     *
+     * @param $httpCode, $msg
+     *
+     * @return string
+     */
+    public function error($httpCode = '200', $msg = 'Test') {
+      if ($httpCode == 403) {
+        echo("<script>location.href = '". home_url('/') . "'</script>");
+        exit;
+      }
+      else return $msg;
+    }
 }

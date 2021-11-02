@@ -76,7 +76,9 @@ class SecretaryView extends UserView
           <div class="h-100 p-5 text-white bg-info rounded-3">
             <h2 class="title-block">Emploi du temps</h2>
             <p>Forcez l\'actualisation des emplois du temps.</p>
-            <button type="submit" class="btn btn-outline-light" name="updatePluginEcranConnecte">🔄️ Actualiser</a>
+            <form method="post" id="dlAllEDT">
+              <input id="dlEDT" class="btn btn-outline-light" type="submit" name="dlEDT" value="🔄️ Actualiser" />
+            </form>
           </div>
         </div>
       </div>
