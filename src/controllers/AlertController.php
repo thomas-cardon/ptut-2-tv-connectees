@@ -2,12 +2,9 @@
 
 namespace Controllers;
 
-include __DIR__ . '/../utils/OneSignalPush.php';
-
 use Models\Alert;
 use Models\CodeAde;
 use Models\User;
-use Utils\OneSignalPush;
 use Views\AlertView;
 
 /**
@@ -82,15 +79,6 @@ class AlertController extends Controller
                 // Insert
                 if ($id = $this->model->insert()) {
                     $this->view->displayAddValidate();
-
-                    // Send the push notification
-                    $oneSignalPush = new OneSignalPush();
-
-                    if ($this->model->isForEveryone()) {
-                        $oneSignalPush->sendNotification(null, $this->model->getContent());
-                    } else {
-                        $oneSignalPush->sendNotification($codesAde, $this->model->getContent());
-                    }
                 } else {
                     $this->view->errorMessageCantAdd();
                 }
