@@ -134,7 +134,7 @@ class AlertView extends View
     Les alertes sont triées de la plus vieille à la plus récente.
     Vous pouvez modifier une alerte en cliquant sur "Modifier" à la ligne correspondante à l\'alerte.
     Vous souhaitez <b>supprimer une / plusieurs alerte(s)</b> ? Cochez les cases des alertes puis cliquez sur "Supprimer" en dessous du tableau.', $i = URL_PATH . TV_PLUG_PATH . 'public/img/alert.png') {
-      return $this->getHeader($t, $p, $i);
+      return parent::getHeader($t, $p, $i);
     }
 
     /**

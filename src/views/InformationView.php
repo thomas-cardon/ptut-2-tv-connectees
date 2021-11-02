@@ -345,13 +345,13 @@ class InformationView extends View
         echo '</div>';
     }
 
-    public function getHeader() {
-      return $this->renderHeroHeader('Gestion des informations', '
-      Vous pouvez retrouver ici toutes les informations qui ont été créées sur ce site.
-      <br /> <br />
-      Les alertes sont triées de la plus vieille à la plus récente.
-      Vous pouvez modifier une information en cliquant sur « Modifier » à la ligne correspondante à l’information.
-      Vous souhaitez <b>supprimer une / plusieurs information(s)</b> ? Cochez les cases des infos puis cliquez sur "Supprimer", en dessous du tableau.');
+    public function getHeader($t = 'Gestion des informations', $p = '
+    Vous pouvez retrouver ici toutes les informations qui ont été créées sur ce site.
+    <br /> <br />
+    Les informations sont triées de la plus vieille à la plus récente.
+    Vous pouvez modifier une alerte en cliquant sur "Modifier" à la ligne correspondante à l\'l’information.
+    Vous souhaitez <b>supprimer une / plusieurs l’information(s)</b> ? Cochez les cases des infos puis cliquez sur "Supprimer" en dessous du tableau.', $i = URL_PATH . TV_PLUG_PATH . 'public/img/info.png') {
+      return parent::getHeader($t, $p, $i);
     }
 
     public function noInformation() {
