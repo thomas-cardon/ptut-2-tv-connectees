@@ -380,7 +380,6 @@ add_action( 'init', 'block_information_modify' );
 function schedule_render_callback()
 {
   $controller;
-
   if (members_current_user_has_role("television")) {
     $controller = new TelevisionController();
   }

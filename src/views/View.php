@@ -81,16 +81,7 @@ class View
      */
     public function displayTable($name, $title, $dataHeader, $dataList, $idTable = '', $create = '<a type="submit" class="btn btn-primary disabled" role="button" aria-disabled="true">Créer</a>') {
         $name = '\'' . $name . '\'';
-        $table = '
-    		<h2>' . $title . '</h2>
-        <div class="row g-3 align-items-center">
-          <div class="col-auto">
-            <label for="key' . $idTable . '" class="col-form-label">Rechercher</label>
-          </div>
-          <div class="col-auto">
-            <input class="form-control form-control-sm" type="text" id="key' . $idTable . '" name="key" onkeyup="search(\'' . $idTable . '\')" placeholder="Entrez un mot-clé...">
-          </div>
-        </div>
+        $table = ($title ? '<h2>' . $title . '</h2' : '') . '
     		<form method="post">
     			<div class="table-responsive">
     				<table class="table table-striped table-hover" id="table' . $idTable . '">
@@ -128,24 +119,29 @@ class View
             </span>
           </div>
         </div>
-	    </form>';
-        return $table;
+	    </form>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="key' . $idTable . '" class="col-form-label">Rechercher</label>
+        </div>
+        <div class="col-auto">
+          <input class="form-control form-control-sm" type="text" id="key' . $idTable . '" name="key" onkeyup="search(\'' . $idTable . '\')" placeholder="Entrez un mot-clé...">
+        </div>
+      </div>';
+
+      return $table;
     }
 
     public function pageNumber($pageNumber, $currentPage, $url, $numberElement = null) {
         $pagination = '
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">';
+        <nav aria-label="Naviguer">
+            <ul class="pagination">
+              <li class="page-item' . ($currentPage == 1 ? ' disabled' : '') . '">
+                <a class="page-link" href="' . $url . '/' . ($currentPage - 1) . '/?number=' . $numberElement . '" aria-label="Précédent">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>';
 
-        if ($currentPage > 1) {
-            $pagination .= '
-            <li class="page-item">
-              <a class="page-link" href="' . $url . '/' . ($currentPage - 1) . '/?number=' . $numberElement . '" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-            <li class="page-item"><a class="page-link" href="' . $url . '/1/?number=' . $numberElement . '">1</a></li>';
-        }
         if ($currentPage > 3) {
             $pagination .= '<li class="page-item page-link disabled">...</li>';
         }
@@ -154,28 +150,23 @@ class View
                 $pagination .= '<li class="page-item"><a class="page-link" href="' . $url . $i . '/?number=' . $numberElement . '">' . $i . '</a></li>';
             }
         }
+
         $pagination .= '
-        <li class="page-item active_ecran" aria-current="page">
-          <a class="page-link" href="' . $url . $currentPage . '/?number=' . $numberElement . '">' . $currentPage . '<span class="sr-only">(current)</span></a>
+        <li class="page-item active" aria-current="page">
+          <a class="page-link">' . $currentPage . '</a>
         </li>';
         for ($i = $currentPage + 1; $i < $currentPage + 3; ++$i) {
             if ($i < $pageNumber) {
                 $pagination .= '<li class="page-item"><a class="page-link" href="' . $url . '/' . $i . '/?number=' . $numberElement . '">' . $i . '</a></li>';
             }
         }
-        if ($currentPage < $pageNumber) {
-            if ($pageNumber - $currentPage > 3) {
-                $pagination .= '<li class="page-item page-link disabled">...</li>';
-            }
-            $pagination .= '
-            <li class="page-item"><a class="page-link" href="' . $url . '/' . $pageNumber . '/?number=' . $numberElement . '">' . $pageNumber . '</a></li>
+
+        $pagination .= '
             <li class="page-item">
-              <a class="page-link" href="' . $url . '/' . ($currentPage + 1) . '/?number=' . $numberElement . '" aria-label="Next">
+              <a class="page-link' . ($currentPage < $pageNumber ? '' : ' disabled') . '" href="' . $url . '/' . ($currentPage + 1) . '/?number=' . $numberElement . '" aria-label="Suivant">
                 <span aria-hidden="true">&raquo;</span>
               </a>
-            </li>';
-        }
-        $pagination .= '
+            </li>
           </ul>
         </nav>';
         return $pagination;
