@@ -23,3 +23,5 @@ wp-content/plugins/hello.php
 config.php
 
 vendor/composer/
+
+tools/php-cs-fixer/
