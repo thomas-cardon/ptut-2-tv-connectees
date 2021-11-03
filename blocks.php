@@ -400,7 +400,7 @@ function schedule_render_callback()
 
 /* TV Mode */
 function tv_mode_render_callback() {
-  error_reporting(E_ALL);
+  error_reporting(E_ERROR);
   ini_set('display_errors', '1');
 
   $controller = new TelevisionController();
