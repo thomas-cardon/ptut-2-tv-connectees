@@ -25,7 +25,7 @@ class ICSView extends View
     public function displaySchedule($ics_data, $title, $allDay) {
         $current_user = wp_get_current_user();
         if (isset($ics_data['events'])) {
-            $string = '<h1>' . $title . '</h1>';
+            $string = '<h1 style="color: #6F7AD9;">' . $title . '</h1>';
             $current_study = 0;
             foreach (array_keys((array)$ics_data['events']) as $year) {
                 for ($m = 1; $m <= 12; $m++) {
@@ -131,7 +131,7 @@ class ICSView extends View
      */
     public function displayStartSchedule($current_user) {
         $string = '<div class="table-responsive">
-                   	<table class="table tabSchedule">
+                   	<table class="table tabSchedule schedule">
                     	<thead class="headerTab">
                         	<tr>
                             	<th scope="col" class="text-center">Horaire</th>';
