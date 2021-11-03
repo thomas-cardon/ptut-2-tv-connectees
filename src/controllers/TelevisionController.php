@@ -15,7 +15,6 @@ use Views\TelevisionView;
  */
 class TelevisionController extends UserController implements Schedule
 {
-
     /**
      * @var User
      */
@@ -29,7 +28,8 @@ class TelevisionController extends UserController implements Schedule
     /**
      * Constructor of TelevisionController
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->model = new User();
         $this->view = new TelevisionView();
@@ -40,11 +40,13 @@ class TelevisionController extends UserController implements Schedule
      * @author Thomas Cardon
      * @return mixed|string
      */
-    public function displayContent() {
+    public function displayContent()
+    {
         return $this->displayMySchedule();
     }
 
-    public function displayMySchedule() {
+    public function displayMySchedule()
+    {
         $current_user = wp_get_current_user();
         $user = $this->model->get($current_user->ID);
         $user = $this->model->getMycodes([$user])[0];
@@ -95,13 +97,13 @@ class TelevisionController extends UserController implements Schedule
      *
      * @return string
      */
-    public function insert() {
+    public function insert()
+    {
         $action = filter_input(INPUT_POST, 'createTv');
 
         $codeAde = new CodeAde();
 
         if (isset($action)) {
-
             $login = filter_input(INPUT_POST, 'loginTv');
             $password = filter_input(INPUT_POST, 'pwdTv');
             $passwordConfirm = filter_input(INPUT_POST, 'pwdConfirmTv');
@@ -110,7 +112,6 @@ class TelevisionController extends UserController implements Schedule
             if (is_string($login) && strlen($login) >= 4 && strlen($login) <= 25 &&
                 is_string($password) && strlen($password) >= 8 && strlen($password) <= 25 &&
                 $password === $passwordConfirm) {
-
                 $codesAde = array();
                 foreach ($codes as $code) {
                     if (is_numeric($code) && $code > 0) {
@@ -152,7 +153,8 @@ class TelevisionController extends UserController implements Schedule
      *
      * @return string
      */
-    public function modify($user) {
+    public function modify($user)
+    {
         $page = get_page_by_title('Gestion des utilisateurs');
         $linkManageUser = get_permalink($page->ID);
 
@@ -191,7 +193,8 @@ class TelevisionController extends UserController implements Schedule
      *
      * @return string
      */
-    public function displayTableTv() {
+    public function displayTableTv()
+    {
         $users = $this->model->getUsersByRole('television');
         return $this->view->displayTableTv($users);
     }

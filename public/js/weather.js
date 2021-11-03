@@ -13,28 +13,31 @@ function refreshWeather(lon = 5.4510, lat = 43.5156) {
 }
 
 function render(json) {
-    let temp = Math.round(getTemp(json));
-    let vent = getWind(json).toFixed(0);
+    console.log('Météo -> Données chargées');
+    console.dir(json);
 
-    if (document.getElementById('Weather') !== null) {
-      document.querySelector('.Infos')
-      .style
-      .backgroundImage = `url("${location.pathname}wp-content/plugins/plugin-ecran-connecte/public/img/Card ${getCondition(json)} ${new Date().getHours() >= 18 ? 'Night' : 'Day'}@3x.png"), url("${location.pathname}wp-content/plugins/plugin-ecran-connecte/public/img/Card Clear ${new Date().getHours() >= 18 ? 'Night' : 'Day'}@3x.png")`;
+    /**
+    * On transforme le tableau DOM primitif en réel tableau JS pour pouvoir utiliser les fonctions Array.filter(), Array.forEach
+    * On filtre les classes qui commencent par le nom gradient, et on les retire avec #forEach
+    */
+    Array.from(document.getElementById('weather-card').classList)
+    .filter(c => c.startsWith('gradient'))
+    .forEach(g => document.getElementById('weather-card').classList.remove(g));
 
-        let div = document.getElementById('Weather');
-        div.innerHTML = "";
-        let weather = document.createElement('div');
-        weather.innerHTML = temp + "<span class=\"degree\">&nbsp;°C</span>";
-        weather.id = "weather";
+    document.getElementById('weather-card').classList.add('gradient-' + getIcon(json))
 
-        let wind = document.createElement('div');
-        wind.innerHTML = vent + "<span class=\"kmh\">&nbsp;km/h</span>";
-        wind.id = "wind";
-        div.appendChild(weather);
-        div.appendChild(wind);
+    document.getElementById('temperature').innerText = Math.round(getTemp(json)) + '°C';
+    document.getElementById('city').innerText = getCity(json);
+    document.getElementById('country').innerText = getCountry(json);
 
-        setTimeout(refreshWeather, 900000);
-    }
+    document.getElementById('condition-icon')
+    .setAttribute(
+      'src',
+      `${URL}/conditions/${getIcon(json)}.png`
+      //`${URL}/Card ${getCondition(json)} ${new Date().getHours() >= 18 ? 'Night' : 'Day'}@3x.png"), url("${location.pathname}wp-content/plugins/plugin-ecran-connecte/public/img/Card Clear ${new Date().getHours() >= 18 ? 'Night' : 'Day'}@3x.png"`
+    );
+
+    setTimeout(refreshWeather, 900000);
 };
 
 /** Getter **/
@@ -47,13 +50,13 @@ function getAlt(json) {
  * getCondition - returns weather state
  */
 const getCondition = json => json['weather'][0]['main'];
+const getCountry = json => json.sys.country;
+const getCity = json => json.name;
+const getIcon = json => json.weather[0].icon;
 
 /* TODO: remplacer toute les fonctions de ce type par des fonctions
-fléchées comme getCondition, fonctionnalité ES6/7 faite pour ce genre de cas */
-function getIcon(json) {
-    return cutIcon(json["weather"][0]["icon"]);
-}
-
+         fléchées comme getCondition, fonctionnalité ES6/7 faite pour ce genre de cas
+*/
 function cutIcon(str) {
     return str.substr(0, str.length - 1);
 }
@@ -75,6 +78,6 @@ function msToKmh(speed) {
 }
 
 docReady(() => {
-  if (document.getElementById('Weather') !== null)
+  if (document.getElementById('temperature') !== null)
   refreshWeather();
 })

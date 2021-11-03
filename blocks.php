@@ -398,6 +398,35 @@ function schedule_render_callback()
   return $controller->displayContent();
 }
 
+/* TV Mode */
+function tv_mode_render_callback() {
+  error_reporting(E_ERROR);
+  ini_set('display_errors', '1');
+
+  $controller = new TelevisionController();
+  if (members_current_user_has_role("television")) {
+    return $controller->displayContent();
+  }
+
+  return $controller->error(403, "Vous n'avez pas les permissions requises pour accéder à cette page.");
+}
+
+function block_tv_mode()
+{
+  wp_register_script(
+    'tv-mode-script',
+    plugins_url('/blocks/schedule/tv.js', __FILE__),
+    array('wp-blocks', 'wp-element', 'wp-data')
+  );
+
+  register_block_type('tvconnecteeamu/tv-mode', array(
+    'editor_script' => 'tv-mode-script',
+    'render_callback' => 'tv_mode_render_callback'
+  ));
+}
+
+add_action('init', 'block_tv_mode');
+
 /**
 * Build a block
 */

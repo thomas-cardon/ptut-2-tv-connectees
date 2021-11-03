@@ -50,35 +50,30 @@ if (!file_exists(PATH . TV_ICSFILE_PATH . 'file3')) {
 
 function loadScriptsEcran()
 {
+    /**
+    * Chargement conditionnel
+    * Cette technique permet de charger les scripts et styles nécessaires à une page spéciale UNIQUEMENT à cette page,
+    * pour améliorer les performances
+    * @author Thomas Cardon
+    */
     if (is_page('tablet-view')) {
-      wp_enqueue_script('tablet-search', TV_PLUG_PATH . 'public/js/tablet-view/search.js', array(), VERSION, true);
-      return;
+        wp_enqueue_script('tablet-search', TV_PLUG_PATH . 'public/js/tablet-view/search.js', array(), VERSION, true);
+        return;
     }
 
-    //Bootstrap | 4.0 -> 5.1.3
+    /**
+    * Bootstrap
+    * Mise-à-jour 2021: passage de Bootstrap 4.1.3 à Bootstrap 5
+    * @author Thomas Cardon
+    */
     wp_enqueue_style('bootstrap_css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css');
     wp_enqueue_script('bootstrap_js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js', array(), false, true);
 
-    // LIBRARY
+    /* THIRD PARTY LIBRARIES */
     wp_enqueue_script('pdf-js', 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.2.228/build/pdf.min.js', array(), VERSION, false);
-    //wp_enqueue_script('onesignal-js', 'https://cdn.onesignal.com/sdks/OneSignalSDK.js', array(), VERSION, false);
 
-    wp_enqueue_script('plugin-marquee', TV_PLUG_PATH . 'public/js/vendor/marquee.js', array(), VERSION, true);
-    wp_enqueue_script('plugin-tickit', TV_PLUG_PATH . 'public/js/vendor/tickit.js', array(), VERSION, true);
-
-    wp_enqueue_style('style-marquee', TV_PLUG_PATH . 'public/js/vendor/marquee.css', array(), VERSION, true);
-    wp_enqueue_style('style-tickit', TV_PLUG_PATH . 'public/js/vendor/tickit.css', array(), VERSION, true);
-
-    //CSS
-    wp_enqueue_style('alert_ecran', TV_PLUG_PATH . 'public/css/alert.css', array(), VERSION);
-    wp_enqueue_style('info_ecran', TV_PLUG_PATH . 'public/css/information.css', array(), VERSION);
-    wp_enqueue_style('schedule_ecran', TV_PLUG_PATH . 'public/css/schedule.css', array(), VERSION);
-    wp_enqueue_style('style_ecran', TV_PLUG_PATH . 'public/css/style.css', array(), VERSION);
-    wp_enqueue_style('weather_ecran', TV_PLUG_PATH . 'public/css/weather.css', array(), VERSION);
-
-    // SCRIPT
-
-    wp_enqueue_script('global_ecran', TV_PLUG_PATH . 'public/js/global.js', array(), VERSION, true);
+    /* SCRIPTS */
+    wp_enqueue_script('global_script', TV_PLUG_PATH . 'public/js/global.js', array(), VERSION, true);
 
     wp_enqueue_script('addCheckBox_script_ecran', TV_PLUG_PATH . 'public/js/addAllCheckBox.js', array('jquery'), VERSION, true);
     wp_enqueue_script('addCodeAlert_script_ecran', TV_PLUG_PATH . 'public/js/addOrDeleteAlertCode.js', array('jquery'), VERSION, true);
@@ -91,8 +86,26 @@ function loadScriptsEcran()
     wp_enqueue_script('search_script_ecran', TV_PLUG_PATH . 'public/js/search.js', array('jquery'), VERSION, true);
     wp_enqueue_script('slideshow_script_ecran', TV_PLUG_PATH . 'public/js/slideshow.js', array('jquery'), '2.0', true);
     wp_enqueue_script('sortTable_script_ecran', TV_PLUG_PATH . 'public/js/sortTable.js', array('jquery'), VERSION, true);
-    wp_enqueue_script('weather_script_ecran', TV_PLUG_PATH . 'public/js/weather.js', array('jquery'), VERSION, true);
-    wp_enqueue_script('weatherTime_script_ecran', TV_PLUG_PATH . 'public/js/weather_and_time.js', array('jquery'), VERSION, true);
+
+    if (is_page('tv-mode')) {
+        /* STYLESHEETS */
+        wp_enqueue_style('alert_ecran', TV_PLUG_PATH . 'public/css/alert.css', array(), VERSION);
+        wp_enqueue_style('info_ecran', TV_PLUG_PATH . 'public/css/information.css', array(), VERSION);
+        wp_enqueue_style('schedule_ecran', TV_PLUG_PATH . 'public/css/schedule.css', array(), VERSION);
+        wp_enqueue_style('style_ecran', TV_PLUG_PATH . 'public/css/style.css', array(), VERSION);
+        wp_enqueue_style('weather_ecran', TV_PLUG_PATH . 'public/css/weather.css', array(), VERSION);
+
+        /* SCRIPTS */
+        wp_enqueue_script('weather_script_ecran', TV_PLUG_PATH . 'public/js/weather.js', array('jquery'), VERSION, true);
+        wp_enqueue_script('weatherTime_script_ecran', TV_PLUG_PATH . 'public/js/weather_and_time.js', array('jquery'), VERSION, true);
+
+        /* THIRD PARTY LIBRARIES */
+        wp_enqueue_script('plugin-marquee', TV_PLUG_PATH . 'public/js/vendor/marquee.js', array(), VERSION, true);
+        wp_enqueue_script('plugin-tickit', TV_PLUG_PATH . 'public/js/vendor/tickit.js', array(), VERSION, true);
+
+        wp_enqueue_style('style-marquee', TV_PLUG_PATH . 'public/js/vendor/marquee.css', array(), VERSION, true);
+        wp_enqueue_style('style-tickit', TV_PLUG_PATH . 'public/js/vendor/tickit.css', array(), VERSION, true);
+    }
 }
 
 add_action('wp_enqueue_scripts', 'loadScriptsEcran');
