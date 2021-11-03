@@ -2,7 +2,6 @@
 
 namespace Views;
 
-
 use Controllers\InformationController;
 use Models\Information;
 
@@ -15,7 +14,6 @@ use Models\Information;
  */
 class InformationView extends View
 {
-
     /**
      * Display a form to create an information with text
      *
@@ -26,9 +24,10 @@ class InformationView extends View
      *
      * @return string
      */
-    public function displayFormText($title = null, $content = null, $endDate = null, $type = "createText") {
-      $dateMin = date('Y-m-d', strtotime("+1 day"));
-      $form = '
+    public function displayFormText($title = null, $content = null, $endDate = null, $type = "createText")
+    {
+        $dateMin = date('Y-m-d', strtotime("+1 day"));
+        $form = '
       <form method="post">
         <div class="mb-3">
           <label for="title">Titre <span class="text-muted">(Optionnel)</span></label>
@@ -44,11 +43,11 @@ class InformationView extends View
         </div>
         <button class="btn button_ecran" type="submit" name="' . $type . '">Valider</button>';
 
-         if ($type == 'submit') {
-             $form .= '<button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
-         }
+        if ($type == 'submit') {
+            $form .= '<button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
+        }
 
-         return $form . '</form>';
+        return $form . '</form>';
     }
 
     /**
@@ -61,7 +60,8 @@ class InformationView extends View
      *
      * @return string
      */
-    public function displayFormImg($title = null, $content = null, $endDate = null, $type = "createImg") {
+    public function displayFormImg($title = null, $content = null, $endDate = null, $type = "createImg")
+    {
         $dateMin = date('Y-m-d', strtotime("+1 day"));
 
         $form = '<form method="post" enctype="multipart/form-data">
@@ -110,7 +110,8 @@ class InformationView extends View
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
-    public function displayFormTab($title = null, $content = null, $endDate = null, $type = "createTab") {
+    public function displayFormTab($title = null, $content = null, $endDate = null, $type = "createTab")
+    {
         $dateMin = date('Y-m-d', strtotime("+1 day"));
 
         $form = '<form method="post" enctype="multipart/form-data">
@@ -159,7 +160,8 @@ class InformationView extends View
      *
      * @return string
      */
-    public function displayFormPDF($title = null, $content = null, $endDate = null, $type = "createPDF") {
+    public function displayFormPDF($title = null, $content = null, $endDate = null, $type = "createPDF")
+    {
         $dateMin = date('Y-m-d', strtotime("+1 day"));
 
         $form = '<form method="post" enctype="multipart/form-data">
@@ -205,7 +207,8 @@ class InformationView extends View
      *
      * @return string
      */
-    public function displayFormEvent($endDate = null, $type = "createEvent") {
+    public function displayFormEvent($endDate = null, $type = "createEvent")
+    {
         $dateMin = date('Y-m-d', strtotime("+1 day"));
         $form = '
 		<form method="post" enctype="multipart/form-data">
@@ -223,12 +226,12 @@ class InformationView extends View
       </div>
       <button class="btn button_ecran" type="submit" name="' . $type . '">Valider</button>';
 
-      if ($type == 'submit') {
-          $form .= '<button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
-      }
+        if ($type == 'submit') {
+            $form .= '<button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
+        }
 
-      $form .= '</form>';
-      return $form;
+        $form .= '</form>';
+        return $form;
     }
 
     /**
@@ -236,8 +239,9 @@ class InformationView extends View
      *
      * @return string
      */
-    public function contextCreateInformation() {
-      return '
+    public function contextCreateInformation()
+    {
+        return '
     		<div>
     			<h2 style="color: var(--color-secondary) !important;">Les informations</h2>
     			<p class="lead mb-4">
@@ -265,7 +269,8 @@ class InformationView extends View
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
-    public function displayModifyInformationForm($title, $content, $endDate, $type) {
+    public function displayModifyInformationForm($title, $content, $endDate, $type)
+    {
         if ($type == "text") {
             return '<a href="' . esc_url(get_permalink(get_page_by_title('Gestion des informations'))) . '">< Retour</a>' . $this->displayFormText($title, $content, $endDate, 'submit');
         } elseif ($type == "img") {
@@ -290,11 +295,20 @@ class InformationView extends View
     /**
      * Display the begin of the slideshow
      */
-    public function displayStartSlideshow() {
+    public function displayStartSlideshow()
+    {
         echo '
-          <img class="iut" src="wp-content/plugins/plugin-ecran-connecte/public/img/iut.png" />
-          <div class="slideshow-container">
+          <img class="iut" src="' . URL_PATH . TV_PLUG_PATH . 'public/img/iut.png" />
+          <section class="slideshow-container">
         ';
+    }
+
+    /**
+     * Display the end of the slideshow
+     */
+    public function displayEndSlideshow()
+    {
+        echo '</section>';
     }
 
     /**
@@ -305,12 +319,13 @@ class InformationView extends View
      * @param $type
      * @param bool $adminSite
      */
-    public function displaySlide($title, $content, $type, $adminSite = false) {
+    public function displaySlide($title, $content, $type, $adminSite = false)
+    {
         echo '<div class="myInfoSlides text-center">';
 
         // If the title is empty
         if ($title != "Sans titre") {
-            echo '<h2 class="titleInfo">' . $title . '</h2>';
+            echo '<h2 class="display-6 fw-bold" style="font-family: var(--bs-font-sans-serif);">' . $title . '</h2>';
         }
 
         $url = TV_UPLOAD_PATH;
@@ -329,9 +344,9 @@ class InformationView extends View
 			</div>';
         } elseif ($type == "img" || $type == "event") {
             echo '<img class="img-thumbnail" src="' . $url . $content . '" alt="' . $title . '">';
-        } else if ($type == 'text') {
+        } elseif ($type == 'text') {
             echo '<p class="lead">' . $content . '</p>';
-        } else if ($type == 'special') {
+        } elseif ($type == 'special') {
             $func = explode('(Do this(function:', $content);
             $text = explode('.', $func[0]);
             foreach ($text as $value) {
@@ -350,11 +365,13 @@ class InformationView extends View
     <br /> <br />
     Les informations sont triées de la plus vieille à la plus récente.
     Vous pouvez modifier une alerte en cliquant sur "Modifier" à la ligne correspondante à l\'l’information.
-    Vous souhaitez <b>supprimer une / plusieurs l’information(s)</b> ? Cochez les cases des infos puis cliquez sur "Supprimer" en dessous du tableau.', $i = URL_PATH . TV_PLUG_PATH . 'public/img/info.png') {
-      return parent::getHeader($t, $p, $i);
+    Vous souhaitez <b>supprimer une / plusieurs l’information(s)</b> ? Cochez les cases des infos puis cliquez sur "Supprimer" en dessous du tableau.', $i = URL_PATH . TV_PLUG_PATH . 'public/img/info.png')
+    {
+        return parent::getHeader($t, $p, $i);
     }
 
-    public function noInformation() {
+    public function noInformation()
+    {
         return '
 		<a href="' . esc_url(get_permalink(get_page_by_title('Gestion des informations'))) . '">< Retour</a>
 		<div>
@@ -367,7 +384,8 @@ class InformationView extends View
     /**
      * Start the slideshow
      */
-    public function displayStartSlideEvent() {
+    public function displayStartSlideEvent()
+    {
         echo '
             <div id="slideshow-container" class="slideshow-container">';
     }
@@ -375,7 +393,8 @@ class InformationView extends View
     /**
      * Start a slide
      */
-    public function displaySlideBegin() {
+    public function displaySlideBegin()
+    {
         echo '
 			<div class="mySlides event-slide">';
     }
@@ -383,7 +402,8 @@ class InformationView extends View
     /**
      * Display a modal to validate the creation of an information
      */
-    public function displayCreateValidate() {
+    public function displayCreateValidate()
+    {
         $page = get_page_by_title('Gestion des informations');
         $linkManageInfo = get_permalink($page->ID);
         $this->buildModal('Ajout d\'information validé', '<p class="alert alert-success"> L\'information a été ajoutée </p>', $linkManageInfo);
@@ -393,7 +413,8 @@ class InformationView extends View
      * Display a modal to validate the modification of an information
      * Redirect to manage page
      */
-    public function displayModifyValidate() {
+    public function displayModifyValidate()
+    {
         $page = get_page_by_title('Gestion des informations');
         $linkManageInfo = get_permalink($page->ID);
         $this->buildModal('Modification d\'information validée', '<p class="alert alert-success"> L\'information a été modifiée </p>', $linkManageInfo);
@@ -402,11 +423,13 @@ class InformationView extends View
     /**
      * Display a message if the insertion of the information doesn't work
      */
-    public function displayErrorInsertionInfo() {
+    public function displayErrorInsertionInfo()
+    {
         echo '<p>Il y a eu une erreur durant l\'insertion de l\'information</p>';
     }
 
-    public function informationNotAllowed() {
+    public function informationNotAllowed()
+    {
         return '
 		<a href="' . esc_url(get_permalink(get_page_by_title('Gestion des informations'))) . '">< Retour</a>
 		<div>
