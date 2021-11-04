@@ -379,10 +379,12 @@ add_action( 'init', 'block_information_modify' );
 */
 function schedule_render_callback()
 {
+  error_reporting(E_ERROR);
+  ini_set('display_errors', '1');
+
   $controller;
-  if (members_current_user_has_role("television")) {
+  if (members_current_user_has_role("television"))
     $controller = new TelevisionController();
-  }
   else if(members_current_user_has_role("directeuretude")) {
     $controller = new StudyDirectorController();
   } else if (members_current_user_has_role("enseignant")) {
@@ -405,7 +407,7 @@ function tv_mode_render_callback() {
 
   $controller = new TelevisionController();
   if (members_current_user_has_role("television")) {
-    return $controller->displayContent();
+    return $controller->displayTVInterface();
   }
 
   return $controller->error(403, "Vous n'avez pas les permissions requises pour accéder à cette page.");
