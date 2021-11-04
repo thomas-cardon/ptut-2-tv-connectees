@@ -39,7 +39,7 @@ class StudyDirectorController extends UserController implements Schedule
      * @author Thomas Cardon
      * @return mixed|string
      */
-    public function displayMySchedule() {
+    public function displayContent() {
         $current_user = wp_get_current_user();
         $user = $this->model->get($current_user->ID);
         if (sizeof($user->getCodes()) > 0) {

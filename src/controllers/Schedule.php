@@ -22,5 +22,5 @@ interface Schedule
      *
      * @return mixed
      */
-    public function displayMySchedule();
+    public function displayContent();
 }

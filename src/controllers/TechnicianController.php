@@ -40,7 +40,7 @@ class TechnicianController extends UserController implements Schedule
      * @author Thomas Cardon
      * @return mixed|string
      */
-    public function displayMySchedule() {
+    public function displayContent() {
         $codeAde = new CodeAde();
 
         $years = $codeAde->getAllFromType('year');
