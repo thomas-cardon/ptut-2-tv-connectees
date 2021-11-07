@@ -17,7 +17,7 @@ use Controllers\InformationController;
 use Models\CodeAde;
 use Models\User;
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
 	exit(1);
 }
 
@@ -52,7 +52,7 @@ function downloadFileICS_func()
 {
     move_fileICS_schedule();
 
-	$controllerAde = new CodeAdeController();
+		$controllerAde = new CodeAdeController();
     $model = new CodeAde();
 
     $codesAde = $model->getList();

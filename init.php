@@ -60,6 +60,13 @@ function loadScriptsEcran()
         wp_enqueue_script('tablet-search', TV_PLUG_PATH . 'public/js/tablet-view/search.js', array(), VERSION, true);
         return;
     }
+    
+    /**
+     * 
+     * 
+     * @author Thomas Cardon
+     */
+     if (!is_admin()) wp_deregister_script('jquery');
 
     /**
     * Bootstrap
@@ -96,8 +103,8 @@ function loadScriptsEcran()
         wp_enqueue_style('weather_ecran', TV_PLUG_PATH . 'public/css/weather.css', array(), VERSION);
 
         /* SCRIPTS */
-        wp_enqueue_script('weather_script_ecran', TV_PLUG_PATH . 'public/js/weather.js', array('jquery'), VERSION, true);
-        wp_enqueue_script('weatherTime_script_ecran', TV_PLUG_PATH . 'public/js/weather_and_time.js', array('jquery'), VERSION, true);
+        wp_enqueue_script('weather_script_ecran', TV_PLUG_PATH . 'public/js/weather.js', array(), VERSION, true);
+        wp_enqueue_script('weatherTime_script_ecran', TV_PLUG_PATH . 'public/js/weather_and_time.js', array(), VERSION, true);
 
         /* THIRD PARTY LIBRARIES */
         wp_enqueue_script('plugin-marquee', TV_PLUG_PATH . 'public/js/vendor/marquee.js', array(), VERSION, true);
