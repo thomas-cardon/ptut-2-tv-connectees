@@ -14,6 +14,12 @@ use Models\Information;
  */
 class InformationView extends View
 {
+    public $carousel;
+    
+    public function __construct() {
+      $this->carousel = new CarouselView();
+    }
+
     /**
      * Display a form to create an information with text
      *
@@ -297,10 +303,7 @@ class InformationView extends View
      */
     public function displayStartSlideshow()
     {
-        echo '
-          <img class="iut" src="' . URL_PATH . TV_PLUG_PATH . 'public/img/iut.png" />
-          <section class="slideshow-container">
-        ';
+        echo '<img class="iut" src="' . URL_PATH . TV_PLUG_PATH . 'public/img/iut.png" />';
     }
 
     /**
@@ -308,7 +311,7 @@ class InformationView extends View
      */
     public function displayEndSlideshow()
     {
-        echo '</section>';
+        echo '';
     }
 
     /**

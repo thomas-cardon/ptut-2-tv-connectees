@@ -134,7 +134,7 @@ class Controller
      *
      * @return string
      */
-    public function error($httpCode = '200', $msg = 'Test') {
+    public function error($httpCode = '200', $msg = 'Test', $redirect_url = '/') {
       if ($httpCode == 403) {
         echo("<script>location.href = '". home_url('/') . "'</script>");
         exit;

@@ -2,6 +2,6 @@
     width: 25%;
 }
 
-.img-thumbnail {
-    max-height: 70vh;
+.carousel-item-info {
+    height: 75vh;
 }

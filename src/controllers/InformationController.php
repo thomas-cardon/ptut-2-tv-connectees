@@ -363,7 +363,7 @@ class InformationController extends Controller
             } elseif ($information->getType() === 'tab') {
                 $type = 'Table Excel';
             }
-            $dataList[] = [$row, $this->view->buildCheckbox($name, $information->getId()), $information->getTitle(), $content, $information->getCreationDate(), $information->getExpirationDate(), $information->getAuthor()->getLogin(), $type, $this->view->buildLinkForModify(esc_url(get_permalink(get_page_by_title('Modifier une information'))) . '?id=' . $information->getId())];
+            $dataList[] = [$row, $this->view->buildCheckbox($name, $information->getId()), $information->getTitle(), $content, $information->getCreationDate(), $information->getExpirationDate(), 'inconnu' /* $information->getAuthor()->getLogin() */, $type, $this->view->buildLinkForModify(esc_url(get_permalink(get_page_by_title('Modifier une information'))) . '?id=' . $information->getId())];
         }
 
         $submit = filter_input(INPUT_POST, 'delete');
@@ -410,6 +410,22 @@ class InformationController extends Controller
             $information->delete();
         }
     }
+    
+    /**
+     * Displays the information slideshow
+     * 
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     * @author Thomas Cardon
+     */
+     public function displaySlideshow() {
+       $info = $this->model->getList();
+       
+       foreach ($info as $i)
+         $this->view->carousel->add($i->getTitle(), $i->getContent(), $i->getType());
+         
+       echo $this->view->carousel->build();
+     }
 
     /**
      * Display a slideshow
@@ -438,6 +454,7 @@ class InformationController extends Controller
                 if (is_null($information->getAdminId())) {
                     $adminSite = false;
                 }
+                
                 $this->view->displaySlide($information->getTitle(), $information->getContent(), $information->getType(), $adminSite);
             }
         }

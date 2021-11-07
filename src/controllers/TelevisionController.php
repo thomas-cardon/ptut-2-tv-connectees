@@ -34,18 +34,24 @@ class TelevisionController extends UserController implements Schedule
         $this->model = new User();
         $this->view = new TelevisionView();
     }
-
+    
     /**
-     * Displays the TV schedule
+     * Redirects from / to /tv-mode if user is a TV
      * @author Thomas Cardon
      * @return mixed|string
      */
     public function displayContent()
     {
-        return $this->displayMySchedule();
+      return "";
+      return "<script>location.href = '". home_url('/tv-mode') . "'</script>";
     }
-
-    public function displayMySchedule()
+    
+    /**
+     * Displays the TV schedule
+     * @author Thomas Cardon
+     * @return mixed|string
+     */
+    public function displayTVInterface()
     {
         $current_user = wp_get_current_user();
         $user = $this->model->get($current_user->ID);
