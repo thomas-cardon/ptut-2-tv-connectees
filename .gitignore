@@ -21,7 +21,3 @@ wp-content/plugins/hello.php
 .idea/**
 
 config.php
-
-vendor/composer/
-
-tools/php-cs-fixer/
