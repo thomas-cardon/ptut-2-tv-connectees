@@ -127,9 +127,6 @@ class SecretaryController extends UserController
      * Displays users by roles
      */
     public function displayUsers() {
-      error_reporting(E_ALL);
-      ini_set('display_errors', '1');
-
         $teacher = new TeacherController();
         $studyDirector = new StudyDirectorController();
         $secretary = new SecretaryController();
