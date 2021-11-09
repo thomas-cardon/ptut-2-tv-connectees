@@ -379,9 +379,6 @@ add_action( 'init', 'block_information_modify' );
 */
 function schedule_render_callback()
 {
-  error_reporting(E_ERROR);
-  ini_set('display_errors', '1');
-
   $controller;
   if (members_current_user_has_role("television"))
     $controller = new TelevisionController();
@@ -402,9 +399,6 @@ function schedule_render_callback()
 
 /* TV Mode */
 function tv_mode_render_callback() {
-  error_reporting(E_ERROR);
-  ini_set('display_errors', '1');
-
   $controller = new TelevisionController();
   if (members_current_user_has_role("television")) {
     return $controller->displayTVInterface();

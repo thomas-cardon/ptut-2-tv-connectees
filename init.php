@@ -5,7 +5,6 @@ use Controllers\CodeAdeRestController;
 use Controllers\InformationRestController;
 use Controllers\ProfileRestController;
 
-//include __DIR__ . '/config-notifs.php';
 include_once 'vendor/R34ICS/R34ICS.php';
 include 'widgets/WidgetAlert.php';
 include 'widgets/WidgetWeather.php';
