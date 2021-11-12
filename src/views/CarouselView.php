@@ -1,6 +1,4 @@
-<?php
-
-namespace Views;
+<?php namespace Views;
 
 class CarouselView extends View
 {
@@ -15,7 +13,7 @@ class CarouselView extends View
           $img = '<object data="' . URL_PATH . TV_UPLOAD_PATH . $content . '#toolbar=0&page=1&navpanes=0&zoom=62&view=Fit&scrollbar=0" class="d-block w-100 h-100" type="application/pdf"></object>';
           break;
         default:
-          $img = '<img src="' . URL_PATH . TV_UPLOAD_PATH . $content . '" class="d-block w-100 h-100">';
+          $img = '<img loading="lazy" src="' . URL_PATH . TV_UPLOAD_PATH . $content . '" class="d-block w-100 h-100">';
       }
             
       array_push($this->infos, '
