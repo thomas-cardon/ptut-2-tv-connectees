@@ -41,31 +41,6 @@
   position: absolute;
 }
 
-.table-responsive {
-  border-radius: 10px;
-}
-
-table {
-  background-color: var(--color-button-text);
-}
-
-thead, thead tr {
-    background-color: var(--color-secondary);
-    color: var(--color-button-text);
-}
-
-td, th {
-  border: none !important;
-}
-
-tr {
-  font-family: 'Lato', sans-serif;
-}
-
-tr:nth-child(even) {
-    background-color: #f8f6ff !important;
-}
-
 .sidebar {
   background-color: var(--color-secondary) !important;
   border-radius: 0 !important;

@@ -1,38 +1,35 @@
-/**
-CSS de l'emploi du temps
- */
+/** CSS de l'emploi du temps */
 
-.shedule_tech{
-    width: 50%;
+.schedule {
+  border-radius: 10px;
+  margin-bottom: 0;
+  max-height: 86vh;
+  position: relative;
 }
 
-.tv-schedule {
-    width: 100%;
+table {
+  background-color: var(--color-button-text);
 }
 
-/* TABLE */
-.errorNotRegister {
-    font-weight: bold;
-    color: white;
-    background-color: red;
+thead, thead tr {
+    background-color: var(--color-secondary);
+    color: var(--color-button-text);
 }
 
-/* SLIDESHOW */
-.slideshow-container {
-    position: relative;
-    margin: auto;
+td, th {
+  border: none !important;
 }
 
-.mySlides {
-    display: block;
+tr {
+  font-family: 'Lato', sans-serif;
 }
 
-@media (max-width: 1200px) {
-    .shedule_tech{
-        width: 100%;
-    }
+tr:nth-child(even) {
+    background-color: #f8f6ff !important;
 }
 
-.firstSelect {
-    max-width: 70%;
+.table-responsive {
+  border-radius: 10px;
+  max-height: 80vh;
+  overflow: hidden;
 }
