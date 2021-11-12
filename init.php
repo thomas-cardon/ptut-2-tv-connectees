@@ -61,19 +61,14 @@ function loadScriptsEcran()
     }
     
     /**
-     * 
-     * 
+     * Désactivation complète de jQuery
+     * hors tableau spécial administrateur
+     * pour gain de performances
+     * (endpoint /wp-admin)
      * @author Thomas Cardon
      */
      if (!is_admin()) wp_deregister_script('jquery');
 
-    /**
-    * Bootstrap
-    * Mise-à-jour 2021: passage de Bootstrap 4.1.3 à Bootstrap 5
-    * @author Thomas Cardon
-    */
-    wp_enqueue_style('bootstrap_css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css');
-    wp_enqueue_script('bootstrap_js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js', array(), false, true);
 
     /* SCRIPTS */
     wp_enqueue_script('global_script', TV_PLUG_PATH . 'public/js/global.js', array(), VERSION, true);
@@ -100,6 +95,8 @@ function loadScriptsEcran()
         /* SCRIPTS */
         wp_enqueue_script('weather_script_ecran', TV_PLUG_PATH . 'public/js/weather.js', array(), VERSION, true);
         wp_enqueue_script('weatherTime_script_ecran', TV_PLUG_PATH . 'public/js/weather_and_time.js', array(), VERSION, true);
+        //wp_enqueue_script('refresh_script_ecran', TV_PLUG_PATH . 'public/js/refresh.js', array(), VERSION, true);
+
     }
 }
 
