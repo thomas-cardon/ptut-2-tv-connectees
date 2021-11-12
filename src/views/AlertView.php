@@ -14,6 +14,12 @@ use Models\CodeAde;
  */
 class AlertView extends View
 {
+    public $carousel;
+    
+    public function __construct() {
+      $this->carousel = new AlertCarouselView();
+    }
+
 
     /**
      * Display creation form
@@ -137,27 +143,6 @@ class AlertView extends View
       return parent::getHeader($t, $p, $i);
     }
 
-    /**
-     * Display alerts
-     *
-     * @param $texts      array
-     */
-    public function displayAlertMain($texts) {
-        echo '
-        <div class="alerts" id="alert">
-             <div class="ti_wrapper">
-                <div class="ti_slide">
-                    <div class="ti_content">';
-        for ($i = 0; $i < sizeof($texts); ++$i) {
-            echo '<div class="ti_news"><span>' . $texts[$i] . '</span></div>';
-        }
-        echo '
-                    </div>
-                </div>
-            </div>
-        </div>
-        ';
-    }
 
     /**
      * Build a select with all codes Ade
@@ -207,7 +192,7 @@ class AlertView extends View
 		<a href="' . esc_url(get_permalink(get_page_by_title('Gestion des alertes'))) . '">< Retour</a>
 		<div>
 			<h3>Alerte non trouvée</h3>
-			<p>Cette alerte n\'éxiste pas, veuillez bien vérifier d\'avoir bien cliqué sur une alerte.</p>
+			<p>Cette alerte n\'existe pas, veuillez bien vérifier d\'avoir bien cliqué sur une alerte.</p>
 			<a href="' . esc_url(get_permalink(get_page_by_title('Créer une alerte'))) . '">Créer une alerte</a>
 		</div>';
     }

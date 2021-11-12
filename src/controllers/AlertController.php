@@ -217,33 +217,23 @@ class AlertController extends Controller
           $this->view->displayTable($name, 'Alertes', $header, $dataList) . $this->view->pageNumber($maxPage, $pageNumber, home_url('/gerer-les-alertes'), $number)
         , '', 'container-xl py-5 my-5 text-center');
     }
-
-
+    
     /**
-     * Display all alerts link to the user
+     * displayAlerts()
+     * Displays all alerts in an horizontal list
+     * @author Thomas Cardon
      */
-    public function alertMain() {
-        // Get codes from current user
-        $current_user = wp_get_current_user();
-        $alertsUser = $this->model->getForUser($current_user->ID);
-        //$alertsUser = array_unique($alertsUser); // Delete duplicate
+    public function displayAlerts() {
+      $alerts = $this->model->getForEveryone();
+      $userAlerts = $this->model->getForUser(wp_get_current_user()->ID);
+            
+      foreach ($alerts as $i)
+        $this->view->carousel->add($i->getAuthor(), $i->getContent());
+        
+      foreach ($userAlerts as $i)
+        $this->view->carousel->add($i->getAuthor(), $i->getContent());
 
-        foreach ($this->model->getForEveryone() as $alert) {
-            $alertsUser[] = $alert;
-        }
-
-        $contentList = array();
-        foreach ($alertsUser as $alert) {
-            $endDate = date('Y-m-d', strtotime($alert->getExpirationDate()));
-            $this->endDateCheckAlert($alert->getId(), $endDate); // Check alert
-
-            $content = $alert->getContent() . '&emsp;&emsp;&emsp;&emsp;';
-            array_push($contentList, $content);
-        }
-
-        if (isset($content)) {
-            $this->view->displayAlertMain($contentList);
-        }
+      echo $this->view->carousel->build();
     }
 
     public function registerNewAlert() {
