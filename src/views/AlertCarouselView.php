@@ -11,7 +11,8 @@ class AlertCarouselView extends View
 
     public function build(): String
     {
-      
+        if (empty($this->infos)) return '';
+        
         return '
         <div class="marquee fixed-bottom">
         ' . join('', $this->infos) . '
