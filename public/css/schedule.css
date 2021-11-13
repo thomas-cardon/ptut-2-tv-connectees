@@ -1,5 +1,9 @@
 /** CSS de l'emploi du temps */
 
+.group-title {
+  color: #6F7DA9;
+}
+
 .schedule {
   border-radius: 10px;
   margin-bottom: 0;

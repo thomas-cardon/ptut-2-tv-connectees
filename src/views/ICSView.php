@@ -25,7 +25,7 @@ class ICSView extends View
     public function displaySchedule($ics_data, $title, $allDay) {
         $current_user = wp_get_current_user();
         if (isset($ics_data['events'])) {
-            $string = '<h1 style="color: #6F7AD9;">' . $title . '</h1>';
+            $string = '<h1 class="group-title">' . $title . '</h1>';
             $current_study = 0;
             foreach (array_keys((array)$ics_data['events']) as $year) {
                 for ($m = 1; $m <= 12; $m++) {
@@ -113,10 +113,10 @@ class ICSView extends View
             }
             // IF NO SCHEDULE
             if ($current_study < 1) {
-                return $this->displayNoSchedule($title, $current_user);
+                return $this->displayNoSchedule($title);
             }
         } else {
-            return $this->displayNoSchedule($title, $current_user);
+            return $this->displayNoSchedule($title);
         }
 
         return $string;
@@ -245,13 +245,20 @@ class ICSView extends View
      *
      * @return bool|string
      */
-    public function displayNoSchedule($title, $current_user) {
-        if (get_theme_mod('ecran_connecte_schedule_msg', 'show') == 'show' && in_array('television', $current_user->roles)) {
-            return '<h1>' . $title . '</h1><p> Vous n\'avez pas cours !</p>';
-        } else if (!in_array('television', $current_user->roles)) {
-            return '<h1>' . $title . '</h1><p> Vous n\'avez pas cours !</p>';
-        } else {
-            return false;
+    public function displayNoSchedule($title) {
+        if (members_current_user_has_role('television')) {
+            return '<div class="col-5 mx-auto my-auto text-center">
+                      <h1 class="group-title">' . $title . '</h1>
+                      <div class="alert alert-warning" role="alert">
+                        <b>⚠️ Ce groupe n\'a pas cours.</b>
+                      </div>
+                    </div>';
         }
+        
+        return '
+        <h1 class="group-title">' . $title . '</h1>
+        <div class="alert alert-warning" role="alert">
+          <b>⚠️ Ce groupe n\'a pas cours.</b>
+        </div>';
     }
 }
