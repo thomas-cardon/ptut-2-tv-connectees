@@ -6,7 +6,7 @@ class AlertCarouselView extends View
 
     public function add($author, $content): void
     {
-      array_push($this->infos, '<p>' . $content . '</p>');
+      array_push($this->infos, $content);
     }
 
     public function build(): String
@@ -15,7 +15,7 @@ class AlertCarouselView extends View
         
         return '
         <div class="marquee fixed-bottom">
-        ' . join('', $this->infos) . '
+          <p>' . join(' — ', $this->infos) . '</p>
         </div>';
     }
 }
