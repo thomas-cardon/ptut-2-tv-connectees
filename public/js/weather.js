@@ -1,11 +1,14 @@
 /**
- * refreshWeather - Displays the weather, updated using the last ECMAScript specs (fetch > XMLHttpRequest, especially in 2021)
+ * refreshWeather
+ * Displays the weather, updated using the last ECMAScript specs (fetch > XMLHttpRequest, especially in 2021)
+ * Now includes hourly forecast
+ * @author Thomas Cardon
  */
 function refreshWeather(lon = 5.4510, lat = 43.5156) {
     let myHeaders = new Headers();
     myHeaders.append("Accept", "application/json");
 
-    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&lang=fr&APPID=ae546c64c1c36e47123b3d512efa723e`,
+    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&lang=fr&APPID=ae546c64c1c36e47123b3d512efa723e&exclude=minutely,daily`,
     { method: 'GET', headers: myHeaders })
     .then(res => res.json())
     .then(render)
@@ -34,8 +37,20 @@ function render(json) {
     .setAttribute(
       'src',
       `${URL}/conditions/${getIcon(json)}.png`
-      //`${URL}/Card ${getCondition(json)} ${new Date().getHours() >= 18 ? 'Night' : 'Day'}@3x.png"), url("${location.pathname}wp-content/plugins/plugin-ecran-connecte/public/img/Card Clear ${new Date().getHours() >= 18 ? 'Night' : 'Day'}@3x.png"`
     );
+    
+    json.hourly.slice(0, 5).forEach((hour, i) => {
+      let h = new Date(hour.dt * 1000).toLocaleTimeString().slice(0, 5); // Conversion unix DT vers JS DT
+      
+      document.querySelector(`#forecast-${i} strong`).innerText = h;
+      document.querySelector(`#forecast-${i} h6`).innerText = Math.round(kelvinToC(hour.temp)) + '°C';
+      
+      document.querySelector(`#forecast-${i} img`)
+      .setAttribute(
+        'src',
+        `${URL}/conditions/${hour.weather[0].icon}.png`
+      );
+    });
 
     setTimeout(refreshWeather, 900000);
 };
@@ -47,37 +62,21 @@ function getAlt(json) {
 
 
 /**
- * getCondition - returns weather state
+ * Constant arrow functions - work for current data, not hourly forecast
  */
-const getCondition = json => json['weather'][0]['main'];
-const getCountry = json => json.sys.country;
-const getCity = json => json.name;
-const getIcon = json => json.weather[0].icon;
+const getCountry = () => 'France'; // L'API ne contient plus le pays
+const getCity = () => 'Aix-en-Provence'; // L'API ne contient plus la ville
 
-/* TODO: remplacer toute les fonctions de ce type par des fonctions
-         fléchées comme getCondition, fonctionnalité ES6/7 faite pour ce genre de cas
-*/
-function cutIcon(str) {
-    return str.substr(0, str.length - 1);
-}
+const getCondition = json => json.current.weather[0].main;
+const getIcon = json => json.current.weather[0].icon;
 
-function getTemp(json) {
-    return kelvinToC(json["main"]["temp"]);
-}
+const getTemp = json => kelvinToC(json.current.temp);
+const getWind = json => msToKmh(json.current.wind_speed);
 
-function kelvinToC(kelvin) {
-    return kelvin - 273.15;
-}
-
-function getWind(json) {
-    return msToKmh(json["wind"]["speed"]);
-}
-
-function msToKmh(speed) {
-    return speed * 3.6;
-}
+const kelvinToC = k => k - 273.15;
+const msToKmh = speed => speed * 3.6;
 
 docReady(() => {
-  if (document.getElementById('temperature') !== null)
+  if (document.getElementById('temperature') == null) return;
   refreshWeather();
 })
