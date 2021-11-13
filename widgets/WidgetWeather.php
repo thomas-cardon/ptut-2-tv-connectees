@@ -56,13 +56,14 @@ class WidgetWeather extends WP_Widget
                       <div class="d-flex justify-content-between my-3 pb-2">
                         <div>
                           <h2 class="display-2"><strong id="temperature">00°C</strong></h2>
-                          <p class="mb-0">
+                          <small class="mb-0">
                             <span id="city">Ville</span>, <span id="country">Pays</span>
-                          </p>
-                          <p class="mb-0">
+                          </small>
+                          <br />
+                          <small class="mb-0">
                             <span id="time">HH:MM:SS</span> —
                             <span id="date">Lundi 1 septembre 1900</span>
-                          </p>
+                          </small>
                         </div>
                         <div>
                         <img id="condition-icon" width="150px" />
