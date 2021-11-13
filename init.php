@@ -94,7 +94,7 @@ function loadScriptsEcran()
 
         /* SCRIPTS */
         wp_enqueue_script('weather_script_ecran', TV_PLUG_PATH . 'public/js/weather.js', array(), VERSION, true);
-        wp_enqueue_script('weatherTime_script_ecran', TV_PLUG_PATH . 'public/js/weather_and_time.js', array(), VERSION, true);
+        wp_enqueue_script('time_script_ecran', TV_PLUG_PATH . 'public/js/time.js', array(), VERSION, true);
         //wp_enqueue_script('refresh_script_ecran', TV_PLUG_PATH . 'public/js/refresh.js', array(), VERSION, true);
 
     }
