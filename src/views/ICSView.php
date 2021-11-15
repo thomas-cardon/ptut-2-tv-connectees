@@ -238,14 +238,13 @@ class ICSView extends View
 
 
     /**
-     * Display an message if there is no lesson
+     * Display an message if there is no courses of the day
      *
      * @param $title            string
-     * @param $current_user     WP_User
-     *
-     * @return bool|string
+     * @author Thomas Cardon
+     * @return string
      */
-    public function displayNoSchedule($title) {
+    public function displayNoSchedule($title = '') {
         if (members_current_user_has_role('television')) {
             return '<div class="col-5 mx-auto my-auto text-center">
                       <h1 class="group-title">' . $title . '</h1>

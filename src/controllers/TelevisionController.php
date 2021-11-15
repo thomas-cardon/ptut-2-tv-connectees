@@ -55,13 +55,24 @@ class TelevisionController extends UserController implements Schedule
         $current_user = wp_get_current_user();
         $user = $this->model->get($current_user->ID);
         $user = $this->model->getMycodes([$user])[0];
+        
+        $c = count($user->getCodes());
 
-        if (!empty($user->getCodes()[0])) {
-            foreach ($user->getCodes() as $code) {
-              $string .= $this->displaySchedule($code->getCode());
+        if ($c > 0) {
+            $string .= '<div class="row">';
+            
+            if ($c == 1) $string .= $this->displaySchedule($user->getCodes()[0]->getCode());
+            else {
+              foreach ($user->getCodes() as $code) {
+                $string .= '<div class="col-6">';
+                $string .= $this->displaySchedule($code->getCode());
+                $string .= '</div>';
+              }
             }
+            
+            $string .= '</div>';
         } else {
-            $string .= '<p>Vous n\'avez pas cours </p>';
+            $string .= $this->view->displayNoSchedule();
         }
         
         return $string;
