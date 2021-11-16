@@ -8,7 +8,7 @@ class CarouselView extends View
     {
       $data;
       
-      if (!file_exists(PATH . TV_UPLOAD_PATH . $content)) {
+      if ($type !== 'text' && !file_exists(PATH . TV_UPLOAD_PATH . $content)) {
         $data = '
           <div class="bg-warning bg-gradient w-100 h-100 text-center py-5">
             <h1>Erreur</h1>
@@ -24,6 +24,12 @@ class CarouselView extends View
           case 'pdf':
             $data = '<object data="' . URL_PATH . TV_UPLOAD_PATH . $content . '#toolbar=0&page=1&navpanes=0&zoom=50&view=Fit&scrollbar=0" class="d-block w-100 h-100" type="application/pdf"></object>';
             break;
+          case 'text':
+            $data = '
+              <div class="bg-info bg-gradient w-100 h-100 text-center py-5">
+                <p class="lead">' . strip_tags($content) . '</p>
+              </div>';
+            break;
           default:
             $data = '<img loading="lazy" src="' . URL_PATH . TV_UPLOAD_PATH . $content . '" class="d-block w-100 h-100">';
         }
@@ -32,7 +38,7 @@ class CarouselView extends View
       array_push($this->infos, '
       <div class="carousel-item carousel-item-info' . (count($this->infos) == 0 ? ' active' : '') . '">
         ' . $data . '
-        <div class="carousel-caption d-block bg-black opacity-50 text-white w-100 start-0 bottom-0 py-3 pb-4" style="letter-spacing: 1.2px;">
+        <div class="' . (strlen($title) > 32 ? 'marquee ' : '') . 'carousel-caption d-block bg-black opacity-75 text-white text-uppercase w-100 start-0 bottom-0 pb-4 pt-3 px-2" style="font-size: 1.15rem; white-space: nowrap; text-overflow:ellipsis;">
           <h5>' . $title . '</h5>
         </div>
       </div>');
