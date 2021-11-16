@@ -137,7 +137,8 @@ class ICSView extends View
                             	<th scope="col" class="text-center">Horaire</th>';
         if (!in_array("technicien", $current_user->roles)) {
             $string .= '<th scope="col" class="text-center" >Cours</th>
-                        <th scope="col" class="text-center">Groupe/Enseignant</th>';
+                        <th scope="col" class="text-center">Groupe</th>
+                        <th scope="col" class="text-center">Enseignant</th>';
         }
         $string .= '<th scope="col" class="text-center">Salle</th>
                  </tr>
@@ -213,12 +214,24 @@ class ICSView extends View
      */
     public function displayLineSchedule($datas, $active = false) {
         if ($active) {
-            $string = '<tr scope="row">';
+            $string = '<tr class="table-success">';
         } else {
-            $string = '<tr scope="row">';
+            $string = '<tr>';
         }
-        foreach ($datas as $data) {
-            $string .= '<td class="text-center">' . $data . '</td>';
+        
+         /* Nettoyage données ADE */
+        foreach ($datas as $key => $data) {
+            if ($key === 1) {
+              $data = str_replace(array(' (INFO)', ' G1', ' G2', ' G3', ' G4', ' 4h', ' 2h'), '', $data);
+              $string .= '<td class="text-center">' . $data . '</td>';
+            }
+            elseif ($key === 2) {
+              $group = str_replace(array(' an1', ' an2', ' an3'), '', explode("\n", $data)[0]);
+
+              $string .= '<td class="text-center">' . $group . '</td>';
+              $string .= '<td class="text-center">' . explode("\n", $data)[1] . '</td>';
+            }
+            else $string .= '<td class="text-center">' . $data . '</td>';
         }
 
         return $string . '</tr>';
