@@ -32,7 +32,7 @@ class CarouselView extends View
       array_push($this->infos, '
       <div class="carousel-item carousel-item-info' . (count($this->infos) == 0 ? ' active' : '') . '">
         ' . $data . '
-        <div class="carousel-caption d-block bg-black opacity-50 text-white w-100 start-0 py-3" style="letter-spacing: 1.2px;">
+        <div class="carousel-caption d-block bg-black opacity-50 text-white w-100 start-0 bottom-0 py-3 pb-4" style="letter-spacing: 1.2px;">
           <h5>' . $title . '</h5>
         </div>
       </div>');

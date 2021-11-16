@@ -40,7 +40,7 @@ class WidgetWeather extends WP_Widget
         if (is_user_logged_in()) {
             echo '
             <script>const URL = location.origin + "' . URL_PATH . TV_PLUG_PATH . 'public/img";</script>
-            <div id="weather-card" class="card d-flex align-content-center flex-wrap flex-grow-1">
+            <div id="weather-card" class="card d-flex align-content-center flex-wrap flex-grow-1" style="height: 13rem;">
               <div class="card-body">
 
                 <div id="weatherCardCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-touch="false">
