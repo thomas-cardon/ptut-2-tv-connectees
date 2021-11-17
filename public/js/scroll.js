@@ -5,10 +5,10 @@ docReady(() => {
     let inReverse = false;
     
     setInterval(() => {
-      if (schedule.clientHeight <= document.documentElement.clientHeight) return;
+      if (schedule.clientHeight <= schedule.parentElement.clientHeight) return;
       
       let val = schedule.style.top == '' ? -1 : parseInt(schedule.style.top.slice(0, -2));
-      let max = schedule.clientHeight;
+      let max = schedule.parentElement.clientHeight / 2;
       
       if (Math.abs(val) == max || val == 0) inReverse = !inReverse;
       
@@ -16,7 +16,7 @@ docReady(() => {
       
       if (inReverse) schedule.style.top = ++val + 'px';
       else schedule.style.top = --val + 'px';
-    }, 100);
+    }, 50);
 
   });
 
