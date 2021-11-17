@@ -26,7 +26,7 @@ class TelevisionView extends UserView
      */
     public function displayFormTelevision($years, $groups, $halfGroups) {
         $form = '
-        <h2> Compte télévision</h2>
+        <h2>Compte télévision</h2>
         <p class="lead">Pour créer des télévisions, remplissez ce formulaire avec les valeurs demandées.</p>
         <p class="lead">Vous pouvez mettre autant d\'emploi du temps que vous souhaitez, cliquez sur "Ajouter des emplois du temps</p>
         <form method="post" id="registerTvForm">
@@ -168,30 +168,27 @@ class TelevisionView extends UserView
      * @return string
      */
     public function modifyPassword() {
-        return '
-		<form method="post">
-		<label>Nouveau mot de passe </label>
-            <input  minlength="4" type="password" class="form-control text-center modal-sm" id="pwdTv" name="pwdTv" placeholder="Nouveau mot de passe" onkeyup=checkPwd("Tv")>
-            <input  minlength="4" type="password" class="form-control text-center modal-sm" id="pwdConfTv" name="pwdConfirmTv" placeholder="Confirmer le nouveau mot de passe" onkeyup=checkPwd("Tv")>
-		</form>';
+        return '<form method="post">
+              		<label>Nouveau mot de passe </label>
+                  <input minlength="4" type="password" class="form-control text-center modal-sm" id="pwdTv" name="pwdTv" placeholder="Nouveau mot de passe" onkeyup=checkPwd("Tv")>
+                  <input minlength="4" type="password" class="form-control text-center modal-sm" id="pwdConfTv" name="pwdConfirmTv" placeholder="Confirmer le nouveau mot de passe" onkeyup=checkPwd("Tv")>
+          		  </form>';
 
     }
-
+    
     /**
-     * Start a slideshow
+     * Display an message if there is no courses of the day
      *
+     * @param $title            string
+     * @author Thomas Cardon
      * @return string
      */
-    public function displayStartSlide() {
-        return '<div id="slideshow-container" class="slideshow-container">';
-    }
-
-    /**
-     * Separate all slide by this
-     *
-     * @return string
-     */
-    public function displayMidSlide() {
-        return '<div class="mySlides">';
+    public function displayNoSchedule() {
+      return '<div class="col-5 mx-auto my-auto text-center">
+                <h1 class="group-title">Télévision à configurer</h1>
+                <div class="alert alert-warning" role="alert">
+                  <b>⚠️ Aucun code ADE enregistré pour cet utilisateur.</b>
+                </div>
+              </div>';
     }
 }
