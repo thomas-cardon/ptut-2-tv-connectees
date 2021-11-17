@@ -38,7 +38,7 @@ class CarouselView extends View
       array_push($this->infos, '
       <div class="carousel-item carousel-item-info' . (count($this->infos) == 0 ? ' active' : '') . '">
         ' . $data . '
-        <div class="' . (strlen($title) > 32 ? 'marquee ' : '') . 'carousel-caption d-block bg-black opacity-75 text-white text-uppercase w-100 start-0 bottom-0 pb-4 pt-3 px-2" style="font-size: 1.15rem; white-space: nowrap; text-overflow:ellipsis;">
+        <div class="' . (strlen($title) > 32 ? 'marquee ' : '') . 'carousel-caption d-block bg-black opacity-75 text-white text-uppercase w-100 start-0 bottom-0 py-3 px-2" style="font-size: 1.15rem; white-space: nowrap; text-overflow:ellipsis;">
           <h5>' . $title . '</h5>
         </div>
       </div>');
