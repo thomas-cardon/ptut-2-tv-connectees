@@ -16,43 +16,28 @@
     --color-accent-disabled: #f5bfbf;
 }
 
-.button_ecran, .delete_button_ecran, .button_ecran:hover, .delete_button_ecran:hover, .active_ecran .page-link {
-  color: var(--color-button-text);
+table {
+  background-color: var(--color-button-text);
 }
 
-.button_ecran {
-    background-color: #00558b;
+thead, thead tr {
+    background-color: var(--color-secondary);
+    color: var(--color-button-text);
 }
 
-.delete_button_ecran {
-    background-color: #8e2525;
+td, th {
+  border: none !important;
 }
 
-.active_ecran .page-link {
-    background-color: #00558b;
+tr {
+  font-family: 'Lato', sans-serif;
 }
 
-.iut {
-  width: 85px;
-  margin-top: 74vh;
-  z-index: 99999;
-  display: block;
-  left: 14vw;
-  position: absolute;
+tr:nth-child(even) {
+    background-color: #f8f6ff !important;
 }
 
-.sidebar {
-  background-color: var(--color-secondary) !important;
-  border-radius: 0 !important;
-  margin-bottom: 0 !important;
-}
-
-.container.col-md-7 {
-  background-color: transparent !important;
-  margin-top: 5vh;
-  padding-top: 1vh;
-}
-
-.select_ecran {
-    width: 80%;
+.table-responsive {
+  border-radius: 10px;
+  overflow: hidden;
 }
