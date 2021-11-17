@@ -58,7 +58,7 @@ class TelevisionController extends UserController implements Schedule
         
         $string = '
         <div class="col d-flex flex-row align-items-center float-end">
-          <span id="time"></span>
+          <span id="time">00:00</span>
           <span id="date" class="ps-2 text-muted"></span>
         </div>
         <div class="row">

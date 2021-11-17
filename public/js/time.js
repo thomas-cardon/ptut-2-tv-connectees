@@ -24,7 +24,9 @@ function updateTime() {
       document.getElementById('time').innerHTML = lastDate.toLocaleTimeString().slice(0, 5);
 }
 
-setInterval(updateTime, 100); // Appel de la fonction updateTime toute les 100ms
-setInterval(updateDate, 60 * 1000); // Appel de la fonction updateDate toute les 60*1000 ms = 60s
+setTimeout(() => {
+    setInterval(updateTime, 1000) // Appel de la fonction updateTime toute les 1000ms
+    setInterval(updateDate, 60 * 1000); // Appel de la fonction updateDate toute les 60*1000 ms = 60s
+    updateDate();
+}, 1000 - new Date().getMilliseconds());
 
-updateDate();
