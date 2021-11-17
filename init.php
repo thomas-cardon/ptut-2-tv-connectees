@@ -77,8 +77,6 @@ function loadScriptsEcran()
     wp_enqueue_script('addCodeAlert_script_ecran', TV_PLUG_PATH . 'public/js/addOrDeleteAlertCode.js', array(), VERSION, true);
     wp_enqueue_script('addCodeTv_script_ecran', TV_PLUG_PATH . 'public/js/addOrDeleteTvCode.js', array(), VERSION, true);
     wp_enqueue_script('confPass_script_ecran', TV_PLUG_PATH . 'public/js/confirmPass.js', array(), VERSION, true);
-    //wp_enqueue_script('oneSignal_script_ecran', TV_PLUG_PATH . 'public/js/oneSignalPush.js', array('jquery'), VERSION, true);
-    //wp_add_inline_script('oneSignal_script_ecran', 'const ONESIGNAL_APP_ID = \'' . ONESIGNAL_APP_ID . '\';', 'before');
     wp_enqueue_script('scroll_script_ecran', TV_PLUG_PATH . 'public/js/scroll.js', array(), VERSION, true);
     wp_enqueue_script('search_script_ecran', TV_PLUG_PATH . 'public/js/search.js', array(), VERSION, true);
     wp_enqueue_script('sortTable_script_ecran', TV_PLUG_PATH . 'public/js/sortTable.js', array(), VERSION, true);
