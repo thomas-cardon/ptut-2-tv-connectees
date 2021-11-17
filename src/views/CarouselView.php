@@ -1,5 +1,12 @@
 <?php namespace Views;
 
+/**
+ * Class CarouselView
+ *
+ * Shows information on the home UI, only using HTML5 and CSS
+ * @author Thomas Cardon
+ * @package Views
+ */
 class CarouselView extends View
 {
     private $infos = array();
