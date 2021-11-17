@@ -37,6 +37,18 @@ tr:nth-child(even) {
     background-color: #f8f6ff !important;
 }
 
+th.no-sort {
+  pointer-events: none;
+}
+
+th.no-sort::after {
+  content: '' !important;
+}
+
+th.no-sort > * {
+  pointer-events: all;
+}
+
 .table-responsive {
   border-radius: 10px;
   overflow: hidden;

@@ -84,15 +84,21 @@ class View
         $table = ($title ? '<h2>' . $title . '</h2' : '') . '
     		<form method="post">
     			<div class="table-responsive">
-    				<table class="table table-striped table-hover" id="table' . $idTable . '">
+    				<table class="table table-hover sortable" id="table' . $idTable . '">
     					<thead>
     						<tr class="text-center">
-    							<th width="5%" class="text-center" onclick="sortTable(0, \'' . $idTable . '\')">#</th>
-    		                    <th scope="col" width="5%" class="text-center"><input type="checkbox" onClick="toggle(this, ' . $name . ')" /></th>';
-        $count = 1;
+    							<th width="5%" class="text-center">#</th>
+    		          <th scope="col" width="5%" class="text-center no-sort">
+                    <input type="checkbox" onClick="toggle(this, ' . $name . ')" />
+                  </th>';
+
         foreach ($dataHeader as $data) {
-            ++$count;
-            $table .= '<th scope="col" class="text-center" onclick="sortTable(' . $count . ', \'' . $idTable . '\')">' . $data . '</th>';
+            if (is_array($data) && $data[0] === true) {
+              $table .= '<th scope="col" class="text-center no-sort">' . $data . '</th>';
+              continue;
+            }
+            
+            $table .= '<th scope="col" class="text-center">' . $data . '</th>';
         }
 
         $table .= '</tr></thead><tbody>';
@@ -118,16 +124,14 @@ class View
               Supprime les éléments sélectionnés.
             </span>
           </div>
+          <div class="col-auto my-auto">
+            <label for="key' . $idTable . '" class="col-form-label">Rechercher</label>
+          </div>
+          <div class="col-auto my-auto">
+            <input class="form-control form-control-sm" type="text" id="key' . $idTable . '" name="key" onkeyup="search(\'' . $idTable . '\')" placeholder="Entrez un mot-clé...">
+          </div>
         </div>
-	    </form>
-      <div class="row g-3 align-items-center">
-        <div class="col-auto">
-          <label for="key' . $idTable . '" class="col-form-label">Rechercher</label>
-        </div>
-        <div class="col-auto">
-          <input class="form-control form-control-sm" type="text" id="key' . $idTable . '" name="key" onkeyup="search(\'' . $idTable . '\')" placeholder="Entrez un mot-clé...">
-        </div>
-      </div>';
+	    </form>';
 
       return $table;
     }
