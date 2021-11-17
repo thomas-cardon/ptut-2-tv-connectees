@@ -39,7 +39,14 @@ class WidgetWeather extends WP_Widget
     {
         if (is_user_logged_in()) {
             echo '
-            <script>const URL = location.origin + "' . URL_PATH . TV_PLUG_PATH . 'public/img";</script>
+            <script>
+              const weather = {
+                ASSETS_URL: location.origin + "' . URL_PATH . TV_PLUG_PATH . 'public/img",
+                lon: "' . WEATHER_LONGITUDE . '",
+                lat: "' . WEATHER_LATITUDE . '",
+                api_key: "' . WEATHER_API_KEY . '"
+              };
+            </script>
             <div id="weather-card" class="card d-flex align-content-center flex-wrap flex-grow-1" style="height: 12rem;">
               <div class="card-body">
 

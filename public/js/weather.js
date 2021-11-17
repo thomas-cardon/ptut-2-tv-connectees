@@ -4,11 +4,11 @@
  * Now includes hourly forecast
  * @author Thomas Cardon
  */
-function refreshWeather(lon = 5.4510, lat = 43.5156) {
+function refreshWeather() {
     let myHeaders = new Headers();
     myHeaders.append("Accept", "application/json");
 
-    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&lang=fr&APPID=ae546c64c1c36e47123b3d512efa723e&exclude=minutely`,
+    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${weather.lat}&lon=${weather.lon}&lang=fr&APPID=${weather.api_key}&exclude=minutely`,
     { method: 'GET', headers: myHeaders })
     .then(res => res.json())
     .then(render)
@@ -37,7 +37,7 @@ function render(json) {
     document.getElementById('condition-icon')
     .setAttribute(
       'src',
-      `${URL}/conditions/${getIcon(json)}.svg`
+      `${weather.ASSETS_URL}/conditions/${getIcon(json)}.svg`
     );
     
     /* Prévisions par jour */
@@ -50,7 +50,7 @@ function render(json) {
       document.querySelector(`#forecast-d${i} img`)
       .setAttribute(
         'src',
-        `${URL}/conditions/${day.weather[0].icon}.svg`
+        `${weather.ASSETS_URL}/conditions/${day.weather[0].icon}.svg`
       );
     });
     
@@ -64,7 +64,7 @@ function render(json) {
       document.querySelector(`#forecast-h${i} img`)
       .setAttribute(
         'src',
-        `${URL}/conditions/${hour.weather[0].icon}.svg`
+        `${weather.ASSETS_URL}/conditions/${hour.weather[0].icon}.svg`
       );
     });
 
