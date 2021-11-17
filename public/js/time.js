@@ -6,8 +6,10 @@ let lastDate = new Date();
  * @author Thomas Cardon
  */
 function updateDate() {
-  if (document.getElementById('date') !== null)
-      document.getElementById('date').innerHTML = lastDate.toLocaleDateString('fr-FR',  { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
+  if (document.getElementById('date') === null) return;
+  let d1 = lastDate.toLocaleDateString('fr-FR', { weekday: 'long' });
+  let d2 = lastDate.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
+  document.getElementById('date').innerHTML = d1 + '<br />' + d2;
 }
 
 /**
@@ -19,7 +21,7 @@ function updateTime() {
   lastDate = new Date();
   
   if (document.getElementById('time') !== null)
-      document.getElementById('time').innerHTML = lastDate.toLocaleTimeString();
+      document.getElementById('time').innerHTML = lastDate.toLocaleTimeString().slice(0, 5);
 }
 
 setInterval(updateTime, 100); // Appel de la fonction updateTime toute les 100ms

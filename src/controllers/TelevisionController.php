@@ -56,21 +56,24 @@ class TelevisionController extends UserController implements Schedule
         $user = $this->model->get($current_user->ID);
         $user = $this->model->getMycodes([$user])[0];
         
-        $c = count($user->getCodes());
-        $string = '<div class="row">';
+        $string = '
+        <div class="col d-flex flex-row align-items-center float-end">
+          <span id="time"></span>
+          <span id="date" class="ps-2 text-muted"></span>
+        </div>
+        <div class="row">
+          <div class="col-11">';
         
-        if ($c > 0) {            
-            if ($c == 1) $string .= $this->displaySchedule($user->getCodes()[0]->getCode());
-            else {
-              foreach ($user->getCodes() as $code) {
-                $string .= '<div class="col-6">';
-                $string .= $this->displaySchedule($code->getCode());
-                $string .= '</div>';
-              }
-            }
+        if (count($user->getCodes()) > 0) {            
+          foreach ($user->getCodes() as $code)
+            $string .= $this->displaySchedule($code->getCode());
         } else $string .= $this->view->displayNoSchedule();
         
-        $string .= '</div>';
+        $string .= '
+          </div>
+          <div class="col-auto">
+          </div>
+        </div>';
         
         return $string;
     }
