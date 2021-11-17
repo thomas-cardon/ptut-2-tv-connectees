@@ -112,12 +112,8 @@ class ICSView extends View
                 }
             }
             // IF NO SCHEDULE
-            if ($current_study < 1) {
-                return $this->displayNoSchedule($title);
-            }
-        } else {
-            return $this->displayNoSchedule($title);
-        }
+            if ($current_study === 0) return '';
+        } else return '';
 
         return $string;
     }
@@ -136,7 +132,7 @@ class ICSView extends View
                         	<tr>
                             	<th scope="col" class="text-center">Horaire</th>';
         if (!in_array("technicien", $current_user->roles)) {
-            $string .= '<th scope="col" class="text-center" >Cours</th>
+            $string .= '<th scope="col" class="text-center">Cours</th>
                         <th scope="col" class="text-center">Groupe</th>
                         <th scope="col" class="text-center">Enseignant</th>';
         }
@@ -242,35 +238,10 @@ class ICSView extends View
      *
      * @return string
      */
-    public
-    function displayEndSchedule() {
+    public function displayEndSchedule() {
         return '</tbody>
              </table>
           </div>';
     }
 
-
-    /**
-     * Display an message if there is no courses of the day
-     *
-     * @param $title            string
-     * @author Thomas Cardon
-     * @return string
-     */
-    public function displayNoSchedule($title = '') {
-        if (members_current_user_has_role('television')) {
-            return '<div class="col-5 mx-auto my-auto text-center">
-                      <h1 class="group-title">' . $title . '</h1>
-                      <div class="alert alert-warning" role="alert">
-                        <b>⚠️ Ce groupe n\'a pas cours.</b>
-                      </div>
-                    </div>';
-        }
-        
-        return '
-        <h1 class="group-title">' . $title . '</h1>
-        <div class="alert alert-warning" role="alert">
-          <b>⚠️ Ce groupe n\'a pas cours.</b>
-        </div>';
-    }
 }
