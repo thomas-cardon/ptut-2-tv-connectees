@@ -53,8 +53,8 @@ class WidgetWeather extends WP_Widget
                   <!-- Carousel inner -->
                   <div class="carousel-inner">
                     <div id="card-0" class="carousel-item active" style="height: 12rem;">
-                      <div class="d-flex justify-content-between pb-2">
-                        <div style="margin-top: -1rem;">
+                      <div class="d-flex justify-content-between py-2">
+                        <div>
                           <h2 class="display-2"><strong id="temperature">00°C</strong></h2>
                           <small class="mb-0">
                             <span id="wind">0 KM/H</span>&nbsp;—&nbsp;
@@ -72,7 +72,7 @@ class WidgetWeather extends WP_Widget
                     </div>
                     <div id="card-1" class="carousel-item" style="height: 12rem;">
                       <h3 class="text-center my-1">Prévisions par heure</h3>
-                      <div class="d-flex text-center justify-content-between my-3 pb-2">
+                      <div class="d-flex text-center justify-content-between my-3 py-2">
                         <div id="forecast-h0" class="flex-column mx-3">
                           <h6>99°C</h6>
                           <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
@@ -102,7 +102,7 @@ class WidgetWeather extends WP_Widget
                     </div>
                     <div id="card-2" class="carousel-item" style="height: 12rem;">
                       <h3 class="text-center my-1">Prévisions par jour</h3>
-                      <div class="d-flex text-center justify-content-between my-3 pb-2">
+                      <div class="d-flex text-center justify-content-between my-3 py-2">
                         <div id="forecast-d0" class="flex-column mx-3">
                           <h6>99°C</h6>
                           <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
