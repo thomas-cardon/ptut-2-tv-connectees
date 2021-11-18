@@ -34,7 +34,7 @@ class TelevisionController extends UserController implements Schedule
         $this->model = new User();
         $this->view = new TelevisionView();
     }
-    
+
     /**
      * Redirects from / to /tv-mode if user is a TV
      * @author Thomas Cardon
@@ -42,9 +42,9 @@ class TelevisionController extends UserController implements Schedule
      */
     public function displayContent()
     {
-      return "<script>location.href = '". home_url('/tv-mode') . "'</script>";
+        return "<script>location.href = '". home_url('/tv-mode') . "'</script>";
     }
-    
+
     /**
      * Displays the TV schedule
      * @author Thomas Cardon
@@ -55,26 +55,29 @@ class TelevisionController extends UserController implements Schedule
         $current_user = wp_get_current_user();
         $user = $this->model->get($current_user->ID);
         $user = $this->model->getMycodes([$user])[0];
-        
+
         $string = '
         <div class="col d-flex flex-row align-items-center float-end">
           <span id="time">00:00</span>
           <span id="date" class="ps-2 text-muted"></span>
         </div>
         <div class="row">
-          <div class="col-11">';
-        
-        if (count($user->getCodes()) > 0) {            
-          foreach ($user->getCodes() as $code)
-            $string .= $this->displaySchedule($code->getCode());
-        } else $string .= $this->view->displayNoSchedule();
-        
+          <div id="scheduleList" class="col-11">';
+
+        if (count($user->getCodes()) > 0) {
+            foreach ($user->getCodes() as $code) {
+                $string .= $this->displaySchedule($code->getCode());
+            }
+        } else {
+            $string .= $this->view->displayNoSchedule();
+        }
+
         $string .= '
           </div>
           <div class="col-auto">
           </div>
         </div>';
-        
+
         return $string;
     }
 
