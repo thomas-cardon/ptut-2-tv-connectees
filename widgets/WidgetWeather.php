@@ -113,17 +113,27 @@ class WidgetWeather extends WP_Widget
                         <div id="forecast-d0" class="flex-column mx-3">
                           <h6>99°C</h6>
                           <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
-                          <p class="mb-0 text-capitalize"><strong>Lundi</strong></p>
+                          <p class="mb-0 text-capitalize"><strong>Lun.</strong></p>
                         </div>
                         <div id="forecast-d1" class="flex-column mx-3">
                           <h6>99°C</h6>
                           <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
-                          <p class="mb-0 text-capitalize"><strong>Mardi</strong></p>
+                          <p class="mb-0 text-capitalize"><strong>Mar.</strong></p>
                         </div>
                         <div id="forecast-d2" class="flex-column mx-3">
                           <h6>99°C</h6>
                           <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
-                          <p class="mb-0 text-capitalize"><strong>Mercredi</strong></p>
+                          <p class="mb-0 text-capitalize"><strong>Mer.</strong></p>
+                        </div>
+                        <div id="forecast-d3" class="flex-column mx-3">
+                          <h6>99°C</h6>
+                          <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
+                          <p class="mb-0 text-capitalize"><strong>Jeu.</strong></p>
+                        </div>
+                        <div id="forecast-d4" class="flex-column mx-3">
+                          <h6>99°C</h6>
+                          <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
+                          <p class="mb-0 text-capitalize"><strong>Ven.</strong></p>
                         </div>
                       </div>
                     </div>

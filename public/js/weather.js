@@ -39,28 +39,28 @@ function render(json) {
       'src',
       `${weather.ASSETS_URL}/conditions/${getIcon(json)}.svg`
     );
-    
+
     /* Prévisions par jour */
-    json.daily.slice(1, 4).forEach((day, i) => {
+    json.daily.slice(1, 6).forEach((day, i) => {
       let d = new Date(day.dt * 1000); // Conversion unix DT vers JS DT
-      
-      document.querySelector(`#forecast-d${i} strong`).innerText = d.toLocaleDateString('fr-FR', { weekday: 'long' });
+
+      document.querySelector(`#forecast-d${i} strong`).innerText = d.toLocaleDateString('fr-FR', { weekday: 'short' });
       document.querySelector(`#forecast-d${i} h6`).innerText = Math.round(kelvinToC(day.temp.day)) + '°C';
-      
+
       document.querySelector(`#forecast-d${i} img`)
       .setAttribute(
         'src',
         `${weather.ASSETS_URL}/conditions/${day.weather[0].icon}.svg`
       );
     });
-    
+
     /* Prévisions par heure */
     json.hourly.slice(0, 5).forEach((hour, i) => {
       let h = getHourFromTimestamp(hour.dt * 1000); // Conversion unix DT vers JS DT
-      
+
       document.querySelector(`#forecast-h${i} strong`).innerText = h;
       document.querySelector(`#forecast-h${i} h6`).innerText = Math.round(kelvinToC(hour.temp)) + '°C';
-      
+
       document.querySelector(`#forecast-h${i} img`)
       .setAttribute(
         'src',
@@ -80,9 +80,6 @@ function getAlt(json) {
 /**
  * Constant arrow functions - work for current data, not hourly forecast
  */
-const getCountry = () => 'France'; // L'API ne contient plus le pays
-const getCity = () => 'Aix-en-Provence'; // L'API ne contient plus la ville
-
 const getCondition = json => json.current.weather[0].main;
 const getIcon = json => json.current.weather[0].icon;
 
