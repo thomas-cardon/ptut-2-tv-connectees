@@ -16,6 +16,23 @@
     --color-accent-disabled: #f5bfbf;
 }
 
+.auto-scroll {
+  animation: 40s ease-in 5s infinite normal slidein;
+}
+
+@keyframes slidein {
+  0%, 25%     { -webkit-transform: translateY(0%); }
+  25%, 35%     { -webkit-transform: translateY(0%); }
+  35%, 45%    { -webkit-transform: translateY(-12.5%); }
+  45%, 55%    { -webkit-transform: translateY(-12.5%); }
+  
+  55%, 65%    { -webkit-transform: translateY(-25%); }
+  55%, 65%    { -webkit-transform: translateY(-25%); }
+  
+  75%, 90%    { -webkit-transform: translateY(-50%); }
+  90%, 100%    { -webkit-transform: translateY(-50%); }
+}
+
 table {
   background-color: var(--color-button-text);
 }

@@ -1,23 +1,10 @@
 docReady(() => {
   console.log('Scroll => Chargé');
+  const el = document.getElementById('scheduleList');
+  const parent = document.getElementById('content-main');
   
-  Array.from(document.querySelectorAll('.schedule')).forEach(schedule => {
-    let inReverse = false;
-    
-    setInterval(() => {
-      if (schedule.clientHeight <= schedule.parentElement.clientHeight) return;
-      
-      let val = schedule.style.top == '' ? -1 : parseInt(schedule.style.top.slice(0, -2));
-      let max = schedule.parentElement.clientHeight / 2;
-      
-      if (Math.abs(val) == max || val == 0) inReverse = !inReverse;
-      
-      console.log(val, max, Math.abs(val) == max, inReverse, schedule.style.top);
-      
-      if (inReverse) schedule.style.top = ++val + 'px';
-      else schedule.style.top = --val + 'px';
-    }, 50);
-
-  });
-
+  console.log(el.clientHeight, parent.clientHeight);
+  if (el.clientHeight <= parent.clientHeight) return;
+  
+  el.classList.add('auto-scroll');
 });
