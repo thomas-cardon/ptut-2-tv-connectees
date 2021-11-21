@@ -59,10 +59,10 @@ class TelevisionController extends UserController implements Schedule
         $string = '
         <div class="col d-flex flex-row align-items-center float-end">
           <span id="time">00:00</span>
-          <span id="date" class="ps-2 text-muted"></span>
+          <span id="date" class="ps-2 text-muted">Jeudi<br />1er Janvier 1970</span>
         </div>
         <div class="row">
-          <div id="scheduleList" class="col-11">';
+          <div id="scheduleList" class="col-11 schedule-table">';
 
         if (count($user->getCodes()) > 0) {
             foreach ($user->getCodes() as $code) {

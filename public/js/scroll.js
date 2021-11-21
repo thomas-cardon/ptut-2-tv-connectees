@@ -1,10 +1,9 @@
 docReady(() => {
   console.log('Scroll => Chargé');
-  const el = document.getElementById('scheduleList');
-  const parent = document.getElementById('content-main');
-  
-  console.log(el.clientHeight, parent.clientHeight);
-  if (el.clientHeight <= parent.clientHeight) return;
-  
-  el.classList.add('auto-scroll');
+
+  Array.from(document.querySelectorAll('.schedule-table')).forEach(el => {
+    console.log('Scroll => actif');
+    el.classList.add('auto-scroll');
+  });
+
 });
