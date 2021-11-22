@@ -14,35 +14,44 @@ use Models\CodeAde;
 class CodeAdeView extends View
 {
 
+    private $typesDictionary = array(
+        'year' => 'Année',
+        'group' => 'Groupe',
+        'teacher' => 'Demi-Groupe',
+        'title' => 'Enseignant'
+    );
+
+
     /**
      * Display form for create code ade
      *
      * @return string
      */
     public function createForm() {
-        return '
+      $radios = '';
+      foreach ($this->typesDictionary as $value => $title){        
+        $radios .= '
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="type" id="' . $value . '" value="' . $value . '">
+            <label class="form-check-label" for="' . $value . '">' . $title . '</label>
+        </div>
+        ';
+      }
+
+      return '
         <form method="post">
-            <div class="mb-3">
-                <label for="title">Titre</label>
-                <input class="form-control" type="text" id="title" name="title" placeholder="Titre" required="" minlength="5" maxlength="29">
+            <div class="row justify-content-center gx-2 mb-2">
+              <div class="form-floating col-4">
+                  <input class="form-control" type="text" placeholder="Ex: Marc LAPORTE, Groupe 3, etc." id="title" name="title" required="" minlength="5" maxlength="29">
+                  <label for="title">Titre</label>
+              </div>
+              <div class="form-floating col-4">
+                  <input class="form-control" type="number" placeholder="Code à récupérer sur l\'interface ADE" id="code" name="code" required="" maxlength="19" pattern="\d+">
+                  <label for="code">Code ADE</label>
+              </div>
             </div>
             <div class="mb-3">
-                <label for="code">Code ADE</label>
-                <input class="form-control" type="text" id="code" name="code" placeholder="Code ADE" required="" maxlength="19" pattern="\d+">
-            </div>
-            <div class="mb-3">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="type" id="year" value="year">
-                    <label class="form-check-label" for="year">Année</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="type" id="group" value="group">
-                    <label class="form-check-label" for="group">Groupe</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="type" id="halfGroup" value="halfGroup">
-                    <label class="form-check-label" for="halfGroup">Demi-groupe</label>
-                </div>
+              ' . $radios . '
             </div>
           <button type="submit" class="btn btn-primary" name="submit">Ajouter</button>
         </form>';
@@ -93,30 +102,14 @@ class CodeAdeView extends View
     private function createTypeOption($selectedType) {
         $result = '';
 
-        // Declare available code types
-        $types = array(
-            array(
-                'value' => 'year',
-                'title' => 'Année',
-            ),
-            array(
-                'value' => 'group',
-                'title' => 'Groupe',
-            ),
-            array(
-                'value' => 'halfGroup',
-                'title' => 'Demi-Groupe',
-            ),
-        );
-
         // Build option list
-        foreach ($types as $type) {
-            $result .= '<option value="' . $type['value'] . '"';
+        foreach ($this->typesDictionary as $value => $title) {
+            $result .= '<option value="' . $value . '"';
 
-            if ($selectedType === $type['value'])
+            if ($selectedType === $value)
                 $result .= ' selected';
 
-            $result .= '>' . $type['title'] . '</option>' . PHP_EOL;
+            $result .= '>' . $title . '</option>' . PHP_EOL;
         }
 
         return $result;
@@ -145,15 +138,8 @@ class CodeAdeView extends View
 
         foreach ($codesAde as $codeAde) {
             foreach ($codeAde as $code) {
-                if ($code->getType() === 'year') {
-                    $code->setType('Année');
-                } else if ($code->getType() === 'group') {
-                    $code->setType('Groupe');
-                } else if ($code->getType() === 'halfGroup') {
-                    $code->setType('Demi-groupe');
-                }
                 ++$count;
-                $row[] = [$count, $this->buildCheckbox($name, $code->getId()), $code->getTitle(), $code->getCode(), $code->getType(), $this->buildLinkForModify($linkManageCodeAde . '?id=' . $code->getId())];
+                $row[] = [$count, $this->buildCheckbox($name, $code->getId()), $code->getTitle(), $code->getCode(), $this->typesDictionary[$code->getType()], $this->buildLinkForModify($linkManageCodeAde . '?id=' . $code->getId())];
             }
         }
 
