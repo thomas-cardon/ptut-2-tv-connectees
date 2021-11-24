@@ -21,7 +21,7 @@ class CodeAde extends Model implements Entity, JsonSerializable
     private $id;
 
     /**
-     * @var string (year | group | halfGroup)
+     * @var string (year | group | halfGroup | teacher)
      */
     private $type;
 

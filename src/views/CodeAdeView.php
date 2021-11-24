@@ -16,8 +16,8 @@ class CodeAdeView extends View
     private $typesDictionary = array(
         'year' => 'Année',
         'group' => 'Groupe',
-        'teacher' => 'Demi-Groupe',
-        'title' => 'Enseignant'
+        'halfGroup' => 'Demi-Groupe',
+        'teacher' => 'Enseignant'
     );
 
 
@@ -43,7 +43,7 @@ class CodeAdeView extends View
             <div class="row justify-content-center gx-2 mb-2">
               <div class="form-floating col-4">
                   <input class="form-control" type="text" placeholder="Ex: Marc LAPORTE, Groupe 3, etc." id="title" name="title" required="" minlength="5" maxlength="29">
-                  <label for="title">Titre</label>
+                  <label for="title">Titre (enseignant: Prénom NOM)</label>
               </div>
               <div class="form-floating col-4">
                   <input class="form-control" type="number" placeholder="Code à récupérer sur l\'interface ADE" id="code" name="code" required="" maxlength="19" pattern="\d+">
@@ -127,7 +127,7 @@ class CodeAdeView extends View
      *
      * @return          string
      */
-    public function displayTableCode($years, $groups, $halfGroups)
+    public function displayTableCode(...$groups)
     {
         $page = get_page_by_title('Modifier un code ADE');
         $linkManageCodeAde = get_permalink($page->ID);
@@ -135,12 +135,10 @@ class CodeAdeView extends View
         $name = 'Code';
         $header = ['Titre', 'Code', 'Type', 'Modifier'];
 
-        $codesAde = [$years, $groups, $halfGroups];
-
         $row = array();
         $count = 0;
 
-        foreach ($codesAde as $codeAde) {
+        foreach ($groups as $codeAde) {
             foreach ($codeAde as $code) {
                 ++$count;
                 $row[] = [$count, $this->buildCheckbox($name, $code->getId()), $code->getTitle(), $code->getCode(), $this->typesDictionary[$code->getType()], $this->buildLinkForModify($linkManageCodeAde . '?id=' . $code->getId())];

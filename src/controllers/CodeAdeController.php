@@ -50,7 +50,7 @@ class CodeAdeController extends Controller
             $title = filter_input(INPUT_POST, 'title');
             $code = filter_input(INPUT_POST, 'code');
             $type = filter_input(INPUT_POST, 'type');
-
+            
             if (is_string($title) && strlen($title) > 4 && strlen($title) < 30 &&
                 is_numeric($code) && is_string($code) && strlen($code) < 20 &&
                 in_array($type, $validTypes)) {
@@ -89,7 +89,7 @@ class CodeAdeController extends Controller
 
         $submit = filter_input(INPUT_POST, 'submit');
         if (isset($submit)) {
-            $validType = ['year', 'group', 'halfGroup'];
+            $validType = ['year', 'group', 'halfGroup', 'teacher'];
 
             $title = filter_input(INPUT_POST, 'title');
             $code = filter_input(INPUT_POST, 'code');
@@ -127,6 +127,7 @@ class CodeAdeController extends Controller
         $years = $this->model->getAllFromType('year');
         $groups = $this->model->getAllFromType('group');
         $halfGroups = $this->model->getAllFromType('halfGroup');
+        $teachers = $this->model->getAllFromType('teacher');
 
         return
           $this->view->renderContainer('
@@ -139,7 +140,7 @@ class CodeAdeController extends Controller
           </p>' . $content, 'Suivre des codes ADE')
           . $this->view->renderContainerDivider() .
           $this->view->renderContainer(
-            $this->view->displayTableCode($years, $groups, $halfGroups)
+            $this->view->displayTableCode($years, $groups, $halfGroups, $teachers)
           );
     }
 
