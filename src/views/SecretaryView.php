@@ -107,7 +107,7 @@ class SecretaryView extends UserView
             $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin()];
         }
 
-        return $this->displayTable($name, $title, $header, $row, 'Secre', '<a type="submit" class="btn btn-primary disabled" href="' . home_url('/creer-utilisateur') . '" role="button" aria-disabled="true">Créer</a>');
+        return $this->displayTable($name, $title, $header, $row, 'Secre', '<a type="submit" class="btn btn-primary" role="button" aria-disabled="true" href="' . home_url('/creer-utilisateur') . '">Créer</a>');
     }
 
     /**

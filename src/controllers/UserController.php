@@ -102,16 +102,16 @@ class UserController extends Controller
 
                 //Build Mail
                 $to = $current_user->user_email;
-                $subject = "Désinscription à la télé-connecté";
+                $subject = "Désinscription: TV Connectées";
                 $message = ' <!DOCTYPE html>
                              <html lang="fr">
                              	<head>
                                		<title>Désinscription à la télé-connecté</title>
                               	</head>
                               	<body>
-                               		<p>Bonjour, vous avez décidé de vous désinscrire sur le site de la Télé Connecté</p>
+                               		<p>Bonjour, vous avez décidé de vous désinscrire du système des TV Connectées</p>
                                		<p> Votre code de désinscription est : ' . $code . '.</p>
-                               		<p> Pour vous désinscrire, rendez-vous sur le site : <a href="' . home_url() . '/mon-compte/"> Tv Connectée.</p>
+                               		<p> Pour poursuivre, rendez-vous <a href="' . home_url() . '/mon-compte/">ici</p>.
                               	</body>
                              </html>';
 

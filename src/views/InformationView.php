@@ -47,10 +47,10 @@ class InformationView extends View
           <label for="expirationDate">Date d\'expiration</label>
           <input id="expirationDate" class="form-control" type="date" name="expirationDate" min="' . $dateMin . '" value="' . $endDate . '" required="true" />
         </div>
-        <button class="btn button_ecran" type="submit" name="' . $type . '">Valider</button>';
+        <button class="btn btn-primary" type="submit" name="' . $type . '">Créer une information</button>';
 
         if ($type == 'submit') {
-            $form .= '<button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
+            $form .= '<button type="submit" class="btn btn-danger" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
         }
 
         return $form . '</form>';
@@ -95,10 +95,10 @@ class InformationView extends View
         <label for="expirationDate" class="form-label">Date d\'expiration</label>
         <input id="expirationDate" class="form-control" type="date" name="expirationDate" min="' . $dateMin . '" value="' . $endDate . '" required >
       </div>
-			<button class="btn button_ecran" type="submit" name="' . $type . '">Valider</button>';
+			<button class="btn btn-primary" type="submit" name="' . $type . '">Créer une information</button>';
 
         if ($type == 'submit') {
-            $form .= '<button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
+            $form .= '<button type="submit" class="btn btn-danger" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
         }
 
         return $form . '</form>';
@@ -147,10 +147,10 @@ class InformationView extends View
           <label for="expirationDate" class="form-label">Date d\'expiration</label>
           <input id="expirationDate" class="form-control" type="date" name="expirationDate" min="' . $dateMin . '" value="' . $endDate . '" required >
         </div>
-			  <button class="btn button_ecran" type="submit" name="' . $type . '">Valider</button>';
+			  <button class="btn btn-primary" type="submit" name="' . $type . '">Créer une information</button>';
 
         if ($type == 'submit') {
-            $form .= '<button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
+            $form .= '<button type="submit" class="btn btn-danger" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
         }
 
         return $form . '</form>';
@@ -196,10 +196,10 @@ class InformationView extends View
           <label for="expirationDate" class="form-label">Date d\'expiration</label>
           <input id="expirationDate" class="form-control" type="date" name="expirationDate" min="' . $dateMin . '" value="' . $endDate . '" required >
         </div>
-			  <button class="btn button_ecran" type="submit" name="' . $type . '">Valider</button>';
+			  <button class="btn btn-primary" type="submit" name="' . $type . '">Créer une information</button>';
 
         if ($type == 'submit') {
-            $form .= '<button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
+            $form .= '<button type="submit" class="btn btn-danger" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
         }
 
         return $form . '</form>';
@@ -230,10 +230,10 @@ class InformationView extends View
         <label for="expirationDate" class="form-label">Date d\'expiration</label>
         <input id="expirationDate" class="form-control" type="date" name="expirationDate" min="' . $dateMin . '" value="' . $endDate . '" required >
       </div>
-      <button class="btn button_ecran" type="submit" name="' . $type . '">Valider</button>';
+      <button class="btn btn-primary" type="submit" name="' . $type . '">Créer une information</button>';
 
         if ($type == 'submit') {
-            $form .= '<button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
+            $form .= '<button type="submit" class="btn btn-danger" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette information ?\');">Supprimer</button>';
         }
 
         $form .= '</form>';
@@ -379,7 +379,7 @@ class InformationView extends View
 		<a href="' . esc_url(get_permalink(get_page_by_title('Gestion des informations'))) . '">< Retour</a>
 		<div>
 			<h3>Information non trouvée</h3>
-			<p>Cette information n\'éxiste pas, veuillez bien vérifier d\'avoir bien cliqué sur une information.</p>
+			<p>Cette information n\'existe pas, veuillez bien vérifier d\'avoir bien cliqué sur une information.</p>
 			<a href="' . esc_url(get_permalink(get_page_by_title('Créer une information'))) . '">Créer une information</a>
 		</div>';
     }
@@ -434,7 +434,7 @@ class InformationView extends View
     public function informationNotAllowed()
     {
         return '
-		<a href="' . esc_url(get_permalink(get_page_by_title('Gestion des informations'))) . '">< Retour</a>
+		<a href="' . esc_url(get_permalink(get_page_by_title('Gestion des informations'))) . '"><Retour</a>
 		<div>
 			<h3>Vous ne pouvez pas modifier cette alerte</h3>
 			<p>Cette information appartient à quelqu\'un d\'autre, vous ne pouvez donc pas modifier cette information.</p>

@@ -46,6 +46,6 @@ class TechnicianView extends UserView
             $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin()];
         }
 
-        return $this->displayTable($name, $title, $header, $row, $name);
+        return $this->displayTable($name, $title, $header, $row, $name, '<a type="submit" class="btn btn-primary" role="button" aria-disabled="true" href="' . home_url('/creer-utilisateur') . '">Créer</a>');
     }
 }

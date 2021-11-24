@@ -34,7 +34,7 @@ class UserView extends View
                     <input class="form-control" minlength="8" maxlength="25" type="password" id="pwdConf' . $name . '" name="pwdConfirm' . $name . '" placeholder="Confirmer le Mot de passe" minlength="8" maxlength="25" required="" onkeyup=checkPwd("' . $name . '")>
                 	<small id="passwordHelpBlock" class="form-text text-muted">Votre mot de passe doit contenir entre 8 et 25 caractère</small>
                 </div>
-                <button type="submit" class="btn button_ecran" id="valid' . $name . '" name="create' . $name . '">Créer</button>
+                <button type="submit" class="btn btn-primary" id="valid' . $name . '" name="create' . $name . '">Créer</button>
             </form>';
     }
 
@@ -163,7 +163,7 @@ class UserView extends View
         $form .= '
                 </optgroup>
             </select>
-            <button name="modifvalider" type="submit" class="btn button_ecran">Valider</button>
+            <button name="modifvalider" type="submit" class="btn btn-primary">Valider</button>
          </form>';
 
         return $form;

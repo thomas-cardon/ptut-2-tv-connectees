@@ -45,8 +45,8 @@ class TelevisionView extends UserView
             	<label>Premier emploi du temps</label>' .
             $this->buildSelectCode($years, $groups, $halfGroups) . '
             </div>
-            <input type="button" class="btn button_ecran" onclick="addButtonTv()" value="Ajouter des emplois du temps">
-            <button type="submit" class="btn button_ecran" id="validTv" name="createTv">Créer</button>
+            <input type="button" class="btn btn-primary" onclick="addButtonTv()" value="Ajouter des emplois du temps">
+            <button type="submit" class="btn btn-primary" id="validTv" name="createTv">Créer</button>
         </form>';
 
         return $form;
@@ -74,7 +74,7 @@ class TelevisionView extends UserView
             $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), sizeof($user->getCodes()), $this->buildLinkForModify($linkManageUser . '?id=' . $user->getId())];
         }
 
-        return $this->displayTable($name, $title, $header, $row, 'tele');
+        return $this->displayTable($name, $title, $header, $row, 'tele', '<a type="submit" class="btn btn-primary" role="button" aria-disabled="true" href="' . home_url('/creer-utilisateur') . '">Créer</a>');
     }
 
     /**
@@ -103,7 +103,7 @@ class TelevisionView extends UserView
                 $string .= '
 					<div class="row">' .
                     $this->buildSelectCode($years, $groups, $halfGroups, $code, $count) .
-                    '<input type="button" id="selectId' . $count . '" onclick="deleteRow(this.id)" class="btn button_ecran" value="Supprimer">
+                    '<input type="button" id="selectId' . $count . '" onclick="deleteRow(this.id)" class="btn btn-primary" value="Supprimer">
 					</div>';
             }
         }
@@ -115,8 +115,8 @@ class TelevisionView extends UserView
         $page = get_page_by_title('Gestion des utilisateurs');
         $linkManageUser = get_permalink($page->ID);
         $string .= '
-            <input type="button" class="btn button_ecran" onclick="addButtonTv()" value="Ajouter des emplois du temps">
-            <button name="modifValidate" class="btn button_ecran" type="submit" id="validTv">Valider</button>
+            <input type="button" class="btn btn-primary" onclick="addButtonTv()" value="Ajouter des emplois du temps">
+            <button name="modifValidate" class="btn btn-primary" type="submit" id="validTv">Valider</button>
             <a href="' . $linkManageUser . '">Annuler</a>
         </form>';
         return $string;

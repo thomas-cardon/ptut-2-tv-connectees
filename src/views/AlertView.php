@@ -35,19 +35,26 @@ class AlertView extends View
 
         return '
         <form method="post" id="alert">
-          <div class="mb-3">
-            <label for="content">Contenu</label>
-            <input class="form-control" type="text" id="content" name="content" placeholder="280 caractères au maximum" minlength="4" maxlength="280" required>
-          </div>
-            <div class="mb-3">
-      				<label>Date d\'expiration</label>
-      				<input type="date" class="form-control" id="expirationDate" name="expirationDate" min="' . $dateMin . '" required>
-      			</div>
-            <div class="mb-3">
-                <label for="selectAlert">Année, groupe, demi-groupes concernés</label>
-                ' . $this->buildSelectCode($years, $groups, $halfGroups) . '
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="content" name="content" placeholder="Votre contenu" placeholder="280 caractères au maximum" minlength="4" maxlength="280" required>
+              <label for="content">Contenu (280 caractères max.)</label>
             </div>
-            <button type="button" onclick="addButtonAlert()" class="btn btn-primary" disabled>+</button>
+            
+            <div class="row g-2 mb-4">
+              <div class="col-md">
+                <div class="form-floating">
+                  <input type="date" class="form-control" id="expirationDate" name="expirationDate" placeholder="JJ/MM/AAAA" min="' . date('Y-m-d') . '">
+                  <label for="expirationDate">Date d\'expiration</label>
+                </div>
+              </div>
+              <div class="col-md">
+                <div class="form-floating">
+                  ' . $this->buildSelectCode($years, $groups, $halfGroups) . '
+                  <label for="selectAlert">Année, groupe, demi-groupes concernés</label>
+                </div>
+              </div>
+            </div>
+            
             <button type="submit" class="btn btn-primary" name="submit">Valider</button>
             <a role="button" class="btn btn-secondary" href="' . home_url('/gerer-les-alertes') . '">Voir les alertes</a>
         </form>';
@@ -68,7 +75,7 @@ class AlertView extends View
           </p>
           <div class="text-center">
             <figure class="figure">
-              <img src="' . URL_PATH . TV_PLUG_PATH . 'public/img/presentation.png" class="figure-img img-fluid rounded" alt="Représentation d\'un téléviseur">
+              <img src="' . URL_PATH . TV_PLUG_PATH . 'public/img/presentation.png" class="figure-img img-fluid rounded-3 shadow-lg" alt="Représentation d\'un téléviseur">
               <figcaption class="figure-caption">Représentation d\'un téléviseur</figcaption>
             </figure>
           </div>
@@ -101,8 +108,10 @@ class AlertView extends View
                 <input type="date" class="form-control" id="expirationDate" name="expirationDate" min="' . $dateMin . '" value = "' . $alert->getExpirationDate() . '" required>
             </div>
             <div class="mb-3">
-                <label for="selectId1">Année, groupe, demi-groupes concernés</label>' .
-            $this->buildSelectCode($years, $groups, $halfGroups, $codes[0], 1, $alert->getForEveryone()) . '
+                <div class="form-floating">' .
+                    $this->buildSelectCode($years, $groups, $halfGroups, $codes[0], 1, $alert->getForEveryone()) . '
+                    <label for="selectAlert">Année, groupe, demi-groupes concernés</label>
+                </div>
             </div>';
 
         if (!$alert->getForEveryone()) {
@@ -111,15 +120,15 @@ class AlertView extends View
                 $form .= '
 				<div class="row">' .
                     $this->buildSelectCode($years, $groups, $halfGroups, $code, $count)
-                    . '<input type="button" id="selectId' . $count . '" onclick="deleteRowAlert(this.id)" class="selectbtn" value="Supprimer">
+                    . '<input type="button" id="selectId' . $count . '" onclick="deleteRow(this.id)" class="selectbtn" value="Supprimer">
                   </div>';
                 $count = $count + 1;
             }
         }
 
         $form .= '<input type="button" onclick="addButtonAlert()" value="+">
-                  <button type="submit" class="btn button_ecran" name="submit">Valider</button>
-                  <button type="submit" class="btn delete_button_ecran" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette alerte ?\');">Supprimer</button>
+                  <button type="submit" class="btn btn-primary" name="submit">Valider</button>
+                  <button type="submit" class="btn btn-danger" name="delete" onclick="return confirm(\' Voulez-vous supprimer cette alerte ?\');">Supprimer</button>
                 </form>' . $this->contextModify();
 
         return $form;
@@ -156,7 +165,7 @@ class AlertView extends View
      * @return string
      */
     public function buildSelectCode($years, $groups, $halfGroups, $code = null, $count = 0, $forEveryone = 0) {
-        $select = '<select class="form-control" id="selectId' . $count . '" name="selectAlert[]" required="">';
+        $select = '<select class="form-select" id="selectAlert" name="selectAlert[]" required>';
 
         if ($forEveryone) {
             $select .= '<option value="all" selected>Tous</option>';
@@ -181,8 +190,10 @@ class AlertView extends View
         foreach ($halfGroups as $halfGroup) {
             $select .= '<option value="' . $halfGroup->getCode() . '">' . $halfGroup->getTitle() . '</option>';
         }
-        $select .= '</optgroup>
-			</select>';
+        
+        $select .= '
+          </optgroup>
+			  </select>';
 
         return $select;
     }

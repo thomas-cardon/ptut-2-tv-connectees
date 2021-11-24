@@ -283,11 +283,11 @@ class View
 		      </div>
 		      <div class="modal-footer">';
         if (empty($redirect)) {
-            $modal .= '<button type="button" class="btn button_ecran" onclick="bootstrap.Modal
+            $modal .= '<button type="button" class="btn btn-primary" onclick="bootstrap.Modal
             .getOrCreateInstance(document.querySelector("#' . $unique_id . '"))
             .show();">Fermer</button>';
         } else {
-            $modal .= '<button type="button" class="btn button_ecran" onclick="document.location.href =\' ' . $redirect . ' \'">Fermer</button>';
+            $modal .= '<button type="button" class="btn btn-primary" onclick="document.location.href =\' ' . $redirect . ' \'">Fermer</button>';
         }
         $modal .= '</div>
 		    </div>

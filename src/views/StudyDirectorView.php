@@ -21,7 +21,7 @@ class StudyDirectorView extends UserView
      */
     public function displayCreateDirector() {
         return '
-        <h2> Compte directeur d\'études</h2>
+        <h2>Compte directeur d\'études</h2>
         <p class="lead">Pour créer des directeurs d\'études, remplissez ce formulaire avec les valeurs demandées.</p>
         <p class="lead">Le code ADE demandé est son code provenant de l\'ADE, pour avoir ce code, suivez le ce trouvant dans la partie pour créer un enseignant.</p>
         <form class="cadre" method="post">
@@ -44,7 +44,7 @@ class StudyDirectorView extends UserView
                 <label for="codeADEDirec"> Code ADE</label>
                 <input type="text" class="form-control" placeholder="Code ADE" name="codeDirec" required="">
             </div>
-            <button type="submit" class="btn button_ecran" id="validDirec" name="createDirec" value="Créer">Créer</button>
+            <button type="submit" class="btn btn-primary" id="validDirec" name="createDirec" value="Créer">Créer</button>
         </form>';
     }
 
@@ -77,7 +77,7 @@ class StudyDirectorView extends UserView
             $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), $code, $this->buildLinkForModify($linkManageUser . '?id=' . $user->getId())];
         }
 
-        return $this->displayTable($name, $title, $header, $row, 'director');
+        return $this->displayTable($name, $title, $header, $row, 'director', '<a type="submit" class="btn btn-primary" role="button" aria-disabled="true" href="' . home_url('/creer-utilisateur') . '">Créer</a>');
     }
 
     /**
@@ -104,8 +104,8 @@ class StudyDirectorView extends UserView
                 <label for="modifCode">Code ADE</label>
                 <input type="text" class="form-control" id="modifCode" name="modifCode" placeholder="Entrer le Code ADE" value="' . $code . '" required="">
             </div>
-            <button class="btn button_ecran" name="modifValidate" type="submit" value="Valider">Valider</button>
-            <a class="btn delete_button_ecran" href="' . $linkManageUser . '">Annuler</a>
+            <button class="btn btn-primary" name="modifValidate" type="submit" value="Valider">Valider</button>
+            <a class="btn btn-danger" href="' . $linkManageUser . '">Annuler</a>
         </form>';
     }
 }

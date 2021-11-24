@@ -34,7 +34,7 @@ class TeacherView extends UserView
         <a href="' . URL_PATH . TV_PLUG_PATH . 'public/files/Ajout Profs.xlsx" download="Ajout Prof.xlsx">Télécharger le fichier excel ! </a>
         <form id="Prof" method="post" enctype="multipart/form-data">
             <input type="file" name="excelProf" class="inpFil" required=""/>
-            <button type="submit" class="btn button_ecran" name="importProf" value="Importer">Importer le fichier</button>
+            <button type="submit" class="btn btn-primary" name="importProf" value="Importer">Importer le fichier</button>
         </form>';
     }
 
@@ -55,7 +55,7 @@ class TeacherView extends UserView
         <form method="post">
             <label for="modifCode">Code ADE</label>
             <input type="text" class="form-control" id="modifCode" name="modifCode" placeholder="Entrer le Code ADE" value="' . $user->getCodes()[0]->getCode() . '" required="">
-            <button name="modifValidate" class="btn button_ecran" type="submit" value="Valider">Valider</button>
+            <button name="modifValidate" class="btn btn-primary" type="submit" value="Valider">Valider</button>
             <a href="' . $linkManageUser . '">Annuler</a>
         </form>';
     }
@@ -82,6 +82,6 @@ class TeacherView extends UserView
             $row[] = [$count, $this->buildCheckbox($name, $teacher->getId()), $teacher->getLogin(), $teacher->getCodes()[0]->getCode(), $this->buildLinkForModify($linkManageUser . '?id=' . $teacher->getId())];
         }
 
-        return $this->displayTable($name, $title, $header, $row, 'teacher');
+        return $this->displayTable($name, $title, $header, $row, 'teacher', '<a type="submit" class="btn btn-primary" role="button" aria-disabled="true" href="' . home_url('/creer-utilisateur') . '">Créer</a>');
     }
 }

@@ -214,7 +214,7 @@ class AlertController extends Controller
         return ($pageNumber == 1 ? $this->view->getHeader() : '') .
         $this->view->renderContainerDivider() .
         $this->view->renderContainer(
-          $this->view->displayTable($name, 'Alertes', $header, $dataList) . $this->view->pageNumber($maxPage, $pageNumber, home_url('/gerer-les-alertes'), $number)
+          $this->view->displayTable($name, 'Alertes', $header, $dataList, '', '<a type="submit" class="btn btn-primary" role="button" aria-disabled="true" href="' . home_url('/creer-une-alerte') . '">Créer</a>') . $this->view->pageNumber($maxPage, $pageNumber, home_url('/gerer-les-alertes'), $number)
         , '', 'container-xl py-5 my-5 text-center');
     }
     
