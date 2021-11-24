@@ -17,20 +17,20 @@
 }
 
 .auto-scroll {
-  animation: 10s ease-in 0s infinite alternate both running slidein;
+  /*animation: 10s ease-in-out 0s infinite alternate both running slidein;*/
 }
 
 @keyframes slidein {
-  0%, 25%     { -webkit-transform: translateY(0%); }
-  25%, 35%     { -webkit-transform: translateY(0%); }
-  35%, 45%    { -webkit-transform: translateY(12.5%); }
-  45%, 55%    { -webkit-transform: translateY(12.5%); }
+  0%, 30%     { -webkit-transform: translateY(0%); }
+  30%, 40%     { -webkit-transform: translateY(0%); }
+  40%, 50%    { -webkit-transform: translateY(-12.5%); }
+  50%, 60%    { -webkit-transform: translateY(-12.5%); }
   
-  55%, 65%    { -webkit-transform: translateY(25%); }
-  55%, 65%    { -webkit-transform: translateY(25%); }
+  60%, 70%    { -webkit-transform: translateY(-25%); }
+  70%, 80%    { -webkit-transform: translateY(-25%); }
   
-  75%, 90%    { -webkit-transform: translateY(50%); }
-  90%, 100%    { -webkit-transform: translateY(50%); }
+  80%, 90%    { -webkit-transform: translateY(-50%); }
+  90%, 100%    { -webkit-transform: translateY(-50%); }
 }
 
 table {

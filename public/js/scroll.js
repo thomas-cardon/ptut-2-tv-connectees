@@ -1,9 +1,15 @@
-docReady(() => {
-  console.log('Scroll => Chargé');
+function scrollStep(schedules, i) {
+  if (schedules[i] == null) i = 0;
+  
+  schedules[i].scrollIntoView({ behavior: "smooth", block: "end" });
+  setTimeout(() => scrollStep(schedules, i + 1), 3000);
+}
 
-  Array.from(document.querySelectorAll('.schedule-table')).forEach(el => {
-    console.log('Scroll => actif');
-    el.classList.add('auto-scroll');
-  });
+function startScrollAnimation() {
+  let schedules = Array.from(document.querySelectorAll('.table-responsive'));
+  
+  if (schedules.length > 0)
+    scrollStep(schedules, 0);
+}
 
-});
+docReady(startScrollAnimation);
