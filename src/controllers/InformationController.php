@@ -175,7 +175,7 @@ class InformationController extends Controller
         $current_user = wp_get_current_user();
         $information = $this->model->get($id);
 
-        if (!(in_array('administrator', $current_user->roles) || in_array('secretaire', $current_user->roles) || $information->getAuthor()->getId() == $current_user->ID)) {
+        if (!(members_current_user_has_role('administrator') || members_current_user_has_role('secretaire') || $information->getAuthor()->getId() == $current_user->ID)) {
             return $this->view->noInformation();
         }
 

@@ -109,9 +109,9 @@ class AlertController extends Controller
         }
         $current_user = wp_get_current_user();
         $alert = $this->model->get($id);
-        if (!in_array('administrator', $current_user->roles) && !in_array('secretaire', $current_user->roles) && $alert->getAuthor()->getId() != $current_user->ID) {
+        
+        if (!members_current_user_has_role('administrator') && !members_current_user_has_role('secretaire') && $alert->getAuthor()->getId() != $current_user->ID)
             return $this->view->alertNotAllowed();
-        }
 
         if ($alert->getAdminId()) {
             return $this->view->alertNotAllowed();
@@ -185,15 +185,16 @@ class AlertController extends Controller
             $pageNumber = $maxPage;
         }
         $current_user = wp_get_current_user();
-        if (in_array('administrator', $current_user->roles) || in_array('secretaire', $current_user->roles)) {
+        if (members_current_user_has_role('administrator') || members_current_user_has_role('secretaire'))
             $alertList = $this->model->getList($begin, $number);
-        } else {
-            $alertList = $this->model->getAuthorListAlert($current_user->ID, $begin, $number);
-        }
+         else
+           $alertList = $this->model->getAuthorListAlert($current_user->ID, $begin, $number);
+
         $name = 'Alert';
         $header = ['Contenu', 'Date de création', 'Date d\'expiration', 'Auteur', ''];
         $dataList = [];
         $row = $begin;
+        
         foreach ($alertList as $alert) {
             ++$row;
             $dataList[] = [$row, $this->view->buildCheckbox($name, $alert->getId()), $alert->getContent(), $alert->getCreationDate(), $alert->getExpirationDate(), $alert->getAuthor()->getLogin(), $this->view->buildLinkForModify(esc_url(get_permalink(get_page_by_title('Modifier une alerte'))) . '?id=' . $alert->getId())];

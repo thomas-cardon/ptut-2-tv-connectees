@@ -38,10 +38,9 @@ $dl2 = filter_input(INPUT_POST, 'dlEDT');
 
 if(isset($dl1) || isset($dl2)) {
     include_once(ABSPATH . 'wp-includes/pluggable.php');
-    $current_user = wp_get_current_user();
-    if(in_array('administrator', $current_user->roles) || in_array('secretaire', $current_user->roles)) {
+
+    if(members_current_user_has_role('administrator') || members_current_user_has_role('secretaire'))
 	    downloadFileICS_func();
-    }
 }
 
 /**
