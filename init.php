@@ -99,9 +99,8 @@ function loadScriptsEcran()
       wp_enqueue_script('sortable_script', TV_PLUG_PATH . 'public/vendor/sortable/sortable.min.js', array(), VERSION, true);
       wp_enqueue_style('sortable_style', TV_PLUG_PATH . 'public/vendor/sortable/sortable.min.css', array(), VERSION);
       
-      wp_enqueue_script('addCheckBox_script_ecran', TV_PLUG_PATH . 'public/js/addAllCheckBox.js', array(), VERSION, true);
-      wp_enqueue_script('addCodeAlert_script_ecran', TV_PLUG_PATH . 'public/js/addOrDeleteAlertCode.js', array(), VERSION, true);
-      wp_enqueue_script('addCodeTv_script_ecran', TV_PLUG_PATH . 'public/js/addOrDeleteTvCode.js', array(), VERSION, true);
+      wp_enqueue_script('addAllCheckBox_tv_script', TV_PLUG_PATH . 'public/js/addAllCheckBox.js', array(), VERSION, true);
+      wp_enqueue_script('deleteRow_tv_script', TV_PLUG_PATH . 'public/js/deleteRow.js', array(), VERSION, true);
       wp_enqueue_script('confPass_script_ecran', TV_PLUG_PATH . 'public/js/confirmPass.js', array(), VERSION, true);
       wp_enqueue_script('search_script_ecran', TV_PLUG_PATH . 'public/js/search.js', array(), VERSION, true);
     }
