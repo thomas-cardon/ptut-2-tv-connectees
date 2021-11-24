@@ -1,34 +1,38 @@
 /**
- * Search an element in the table
+ * Searches an element in the table
  *
  * @param idTable
  */
 function search(idTable)
 {
-    let input, filter, table, tr, td, allTd, j, i, txtValue, hide;
-    input = document.getElementById("key"+idTable);
-    filter = input.value.toUpperCase();
-    table = document.getElementById("table"+idTable);
-    tr = table.getElementsByTagName("tr");
-
-    console.log(tr);
-
-    for (i = 1; i < tr.length - 1; ++i) {
-        allTd = tr[i].getElementsByTagName("td");
-        for(j = 0; j < allTd.length; ++j) {
-            td = allTd[j];
-            if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    ++hide;
-                }
-            }
-        }
-        if(hide > 0) {
-            tr[i].style.display = "";
-        } else {
-            tr[i].style.display = "none";
-        }
-        hide = 0;
+    const table = document.getElementById('table' + idTable);
+    const input = document.getElementById('key' + idTable);
+    
+    const value = input.value.toLowerCase();
+    
+    const rows = table.children[1].getElementsByTagName('tr');
+        
+    for (let i = rows.length; i--;) {
+      let columns = rows[i].getElementsByTagName('td');
+      rows[i].style.removeProperty('display');
+      
+      if (value === '') continue;
+      let hide = 0;
+      
+      for (let j = columns.length; j--;) {
+        let td = columns[j];
+        let text = td.innerText.toLowerCase();
+                
+        if (isNaN(text) && isNaN(value) && !text.includes(value))
+          continue;
+        else if (!isNaN(text) && !isNaN(value) && text !== value)
+          continue;
+        else if (!text.toLowerCase().includes(value))
+          continue;
+        else hide += 1;
+      }
+      
+      if (hide == 0) rows[i].style.display = 'none';
     }
+    
 }
