@@ -223,8 +223,7 @@ class InformationRestController extends WP_REST_Controller
      * @return WP_Error|bool
      */
     public function get_items_permissions_check($request) {
-        $current_user = wp_get_current_user();
-        return in_array("administrator", $current_user->roles);
+        return true;
     }
 
     /**

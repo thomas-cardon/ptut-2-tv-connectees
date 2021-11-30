@@ -43,7 +43,7 @@ class Information extends Model implements Entity, JsonSerializable
     /**
      * @var string
      */
-    private $content;
+    private $content, $content_link;
 
     /**
      * @var string (Text | Image | excel | PDF | Event)
@@ -361,6 +361,7 @@ class Information extends Model implements Entity, JsonSerializable
      */
     public function setContent($content) {
         $this->content = $content;
+        $this->content_link = BASE_URL . TV_UPLOAD_PATH . $content;
     }
 
     /**

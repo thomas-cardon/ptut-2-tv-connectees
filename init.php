@@ -4,6 +4,7 @@ use Controllers\AlertRestController;
 use Controllers\CodeAdeRestController;
 use Controllers\InformationRestController;
 use Controllers\ProfileRestController;
+use Controllers\ScheduleRestController;
 
 include_once 'vendor/R34ICS/R34ICS.php';
 include 'widgets/WidgetAlert.php';
@@ -293,5 +294,8 @@ add_action('rest_api_init', function () {
     $controller->register_routes();
 
     $controller = new ProfileRestController();
+    $controller->register_routes();
+
+    $controller = new ScheduleRestController();
     $controller->register_routes();
 });

@@ -2,7 +2,7 @@ function scrollStep(schedules, i) {
   if (schedules[i] == null) i = 0;
   
   schedules[i].scrollIntoView({ behavior: "smooth", block: "end" });
-  setTimeout(() => scrollStep(schedules, i + 1), 3000);
+  setTimeout(() => scrollStep(schedules, i + 1), 10000);
 }
 
 function startScrollAnimation() {

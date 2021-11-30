@@ -4,6 +4,11 @@
   color: var(--color-primary-100);
 }
 
+.gradient-02d, .gradient-03d {
+  background: linear-gradient(to right, rgba(255, 255, 255, 1), rgb(204, 197, 187));
+  color: var(--color-primary-100);
+}
+
 .gradient-01n, .gradient-02n, .gradient-03n {
   background: linear-gradient(315deg, #7f5a83 0%, #0d324d 74%);
   color: var(--color-primary-800);

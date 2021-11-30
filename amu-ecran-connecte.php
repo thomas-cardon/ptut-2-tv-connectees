@@ -43,6 +43,12 @@ if(isset($dl1) || isset($dl2)) {
 	    downloadFileICS_func();
 }
 
+function add_cors_http_header(){
+    header("Access-Control-Allow-Origin: *");
+}
+add_action('init','add_cors_http_header');
+
+
 /**
  * Function for WPCron
  * Upload schedules
@@ -51,7 +57,7 @@ function downloadFileICS_func()
 {
     move_fileICS_schedule();
 
-		$controllerAde = new CodeAdeController();
+	$controllerAde = new CodeAdeController();
     $model = new CodeAde();
 
     $codesAde = $model->getList();
