@@ -123,6 +123,11 @@ class R34ICS extends Controller
 
             // Process events
             if ($ics_events = $ICal->events()) {
+
+                if (isset($args['disable_sorting']) && $args['disable_sorting'] === true) {
+                    return (array) $ics_events;
+                }
+
                 // Assemble events
                 foreach ((array)$ics_events as $event) {
                     // Get the start date and time
@@ -301,8 +306,10 @@ class R34ICS extends Controller
                     $month = substr($date, 4, 2);
                     $day = substr($date, 6, 2);
                     $ym = substr($date, 0, 6);
+
                     $ics_data['events'][$year][$month][$day] = $events;
                     unset($ics_data['events'][$date]);
+                    
                     if (empty($ics_data['earliest']) || $ym < $ics_data['earliest']) {
                         $ics_data['earliest'] = $ym;
                     }
@@ -324,7 +331,6 @@ class R34ICS extends Controller
         $model = new CodeAde();
         $title = $model->getByCode($code)->getTitle();
 
-        if ($ics) return $ics_data;
         return $this->view->displaySchedule($ics_data, $title, $allDay);
     }
 

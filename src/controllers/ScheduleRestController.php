@@ -108,17 +108,10 @@ class ScheduleRestController extends WP_REST_Controller
 
         $url = $this->getFilePath($code);
         $args = array(
-            'count' => 10,
-            'description' => null,
-            'eventdesc' => null,
-            'format' => null,
-            'hidetimes' => null,
-            'showendtimes' => null,
-            'title' => null,
-            'view' => 'list',
+            'disable_sorting' => true
         );
 
-        return $R34ICS->display_calendar($url, $code, $allDay, array(), true);
+        return $R34ICS->display_calendar($url, $code, $allDay, $args, true);
     }
 
     /**
