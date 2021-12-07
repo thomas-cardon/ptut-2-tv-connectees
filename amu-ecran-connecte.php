@@ -8,7 +8,7 @@
  * License:           GNU General Public License v2
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       ecran-connecte
- * GitHub Plugin URI: https://github.com/thomas-cardon/plugin-ecran-connecte (2021)
+ * GitHub Plugin URI: https://github.com/thomas-cardon/ptut-2-tv-connectees
  */
 
 use Controllers\AlertController;
