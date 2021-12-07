@@ -34,7 +34,7 @@ class CarouselView extends View
           case 'text':
             $data = '
               <div class="bg-info bg-gradient w-100 h-100 text-center py-5">
-                <p class="lead">' . strip_tags($content) . '</p>
+                <p style="font-weight: 300;font-size: x-large;text-align: start;padding: 2rem;">' . strip_tags($content) . '</p>
               </div>';
             break;
           default:
