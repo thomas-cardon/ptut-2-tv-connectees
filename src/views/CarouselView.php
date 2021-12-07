@@ -60,7 +60,7 @@ class CarouselView extends View
         }
         
         return '
-        <div id="informationCarousel" class="carousel carousel-dark slide" data-bs-ride="carousel" data-bs-touch="false" style="overflow: hidden;">
+        <div id="informationCarousel" class="carousel carousel-dark slide" data-bs-ride="carousel" data-bs-interval="20000" data-bs-touch="false" style="overflow: hidden;">
           <div class="carousel-indicators" style="top: 1px;">
             ' . $indicators . '
           </div>
