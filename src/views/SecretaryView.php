@@ -13,85 +13,78 @@ use Models\User;
  */
 class SecretaryView extends UserView
 {
-
     /**
      * Display the creation form
      *
      * @return string
      */
-    public function displayFormSecretary() {
+    public function displayFormSecretary()
+    {
         return '
-        <h2> Compte secrétaire </h2>
+        <h2>Compte secrétaire</h2>
         <p class="lead">Pour créer des secrétaires, remplissez ce formulaire avec les valeurs demandées.</p>
         ' . $this->displayBaseForm('Secre');
     }
 
     /**
-     * Display a button for download all schedules
+     * Displays the admin dashboard
+     * @author Thomas Cardon
      */
-    public function displayWelcomeAdmin() {
-        return '
-        <div class="row">
-            <div class="col-6 mx-auto col-md-6 order-md-1">
-                <img src="https://upload.wikimedia.org/wikipedia/fr/thumb/8/83/Univ_Aix-Marseille_-_IUT.svg/1200px-Univ_Aix-Marseille_-_IUT.svg.png" alt="Logo AMU" class="img-fluid mb-3 mb-md-0">
-            </div>
-            <div class="col-md-6 order-md-2 text-center text-md-left pr-md-5">
-                <h1 class="mb-3 bd-text-purple-bright">' . get_bloginfo("name") . '</h1>
-                <p class="lead">
-                    Créez des informations pour toutes les télévisions connectées, les informations seront affichées sur chaque télévisions en plus des informations déjà publiées.
-                    Les informations des télévisions peuvent contenir du texte, des images et même des pdf.
-                </p>
-                <p class="lead mb-4">Vous pouvez faire de même avec les alertes des télévisions connectées.</p>
-                <p class="lead mb-4">Les informations seront affichés dans la partie de droite des télévisions et les alertes dans la partie rouge en bas des téléviseurs.</p>
-            </div>
+    public function displayContent()
+    {
+        return '<section class="container col-xxl-10">
+      <div class="row flex-lg-row-reverse align-items-center g-5 mb-5">
+        <div class="col-10 col-sm-8 col-lg-6">
+          <img draggable="false" src="https://upload.wikimedia.org/wikipedia/fr/thumb/8/83/Univ_Aix-Marseille_-_IUT.svg/1200px-Univ_Aix-Marseille_-_IUT.svg.png" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" loading="lazy" width="700" height="500">
         </div>
-        <div class="masthead-followup row m-0 border border-white">
-            <div class="col-md-6 p-3 p-md-5 bg-light border border-white">
-                <h3><img src="' . URL_PATH . TV_PLUG_PATH . '/public/img/+.png" alt="Ajouter une information/alerte" class="logo">Ajouter</h3>
-                <p>Ajouter une information ou une alerte. Elles seront affichées le lendemain sur toutes les télévisions</p>
-                <a href="' . home_url( '/creer-information/' ) . '" class="btn btn-lg button_presentation_ecran w-100 mb-3">Créer une information</a>
-                <hr class="half-rule">
-                <a href="' . home_url( '/creer-alerte/' ) . '" class="btn btn-lg button_presentation_ecran w-100 mb-3">Créer une alerte</a>
-            </div>
-            <div class="col-md-6 p-3 p-md-5 bg-light border border-white">
-                <h3><img src="' . URL_PATH . TV_PLUG_PATH . '/public/img/gestion.png" alt="voir les informations/alertes" class="logo">Gérer</h3>
-                <p>Voir toutes les informations et alertes déjà publiées. Vous pouvez les supprimers, les modifiers ou bien juste les regarder</p>
-                <a href="' . home_url( '/gerer-les-informations/' ) . '" class="btn btn-lg button_presentation_ecran w-100 mb-3">Voir mes informations</a>
-                <hr class="half-rule">
-                <a href="' . home_url( '/gerer-les-alertes/' ) . '" class="btn btn-lg button_presentation_ecran w-100 mb-3">Voir mes alertes</a>
-            </div>
+        <div class="col-lg-6">
+          <h1 class="display-5 fw-bold title-bold">' . get_bloginfo("name") . '</h1>
+          <p class="lead">
+            Créez des informations pour toutes les télévisions connectées, les informations seront affichées sur chaque télévisions en plus des informations déjà publiées.
+            Les informations sur les télévisions peuvent contenir du texte, des images et même des pdf.
+            <br /> <br />
+            Vous pouvez faire de même avec les <b>alertes</b> des télévisions connectées.
+            Les informations seront affichées dans la partie droite, et les alertes dans le bandeau rouge en bas des TV.
+          </p>
         </div>
-        <div class="row">
-            <div class="col-6 mx-auto col-md-6 order-md-2">
-                <img src="' . URL_PATH . TV_PLUG_PATH . '/public/img/user.png" alt="Logo utilisateur" class="img-fluid mb-3 mb-md-0">
-            </div>
-            <div class="col-md-6 order-md-1 text-center text-md-left pr-md-5">
-                <h2 class="mb-3 bd-text-purple-bright">Les utilisateurs</h2>
-                <p class="lead">Vous pouvez ajouter des utilisateurs qui pourront à leur tour ajouter des informations et des alertes.</p>
-                <p class="lead mb-4">Ils pourront aussi gérer leurs informations et leurs alertes.</p>
-                <div class="row mx-n2">
-                    <div class="col-md px-2">
-                        <a href="' . home_url( '/gestion-des-utilisateurs/' ) . '" class="btn btn-lg button_presentation_ecran w-100 mb-3">Créer un utilisateur</a>
-                    </div>
-                    <div class="col-md px-2">
-                        <a href="' . home_url( '/creation-des-comptes/' ) . '" class="btn btn-lg button_presentation_ecran w-100 mb-3">Voir les utilisateurs</a>
-                    </div>
-                </div>
-            </div>
+      </div>
+      <div class="row align-items-md-stretch my-2">
+        <div class="col-md-6">
+          <div class="h-100 p-5 text-white bg-dark rounded-3">
+            <h2 class="title-block">(+) Ajouter</h2>
+            <p>Ajoutez une information ou une alerte.</p>
+            <a href="' . home_url('/creer-information') . '" class="btn btn-outline-light" role="button">Information</a>
+            <a href="' . home_url('/gerer-les-alertes') . '" class="btn btn-outline-light" role="button">Alerte</a>
+          </div>
         </div>
-        <div class="row">
-            <div class="col-6 mx-auto col-md-6 order-md-1">
-                <img src="' . URL_PATH . TV_PLUG_PATH . '/public/img/update.png" alt="Logo mise à jour" class="img-fluid mb-3 mb-md-0">
-            </div>
-            <div class="col-md-6 order-md-2 text-center text-md-left pr-md-5">
-                <h2 class="mb-3 bd-text-purple-bright">Mettre à jour</h2>
-                <p class="lead">Vous pouvez mettre à jour les emplois du temps du site.</p>
-                <p class="lead mb-4">Mettre à jour, permet aussi de synchroniser les informations et les alertes postées depuis le site de l\'administration</p>
-                <form method="post">
-                    <button type="submit" class="btn btn-lg button_presentation_ecran" name="updatePluginEcranConnecte">Mettre à jour</button>
-                </form>
-            </div>
-        </div>';
+        <div class="col-md-6">
+          <div class="h-100 p-5 text-white bg-danger border rounded-3">
+            <h2 class="title-block">Interface secrétaires</h2>
+            <p>Accédez au mode tablette.</p>
+            <a href="' . home_url('/tablet-view') . '" class="btn btn-dark" role="button">Voir</a>
+          </div>
+        </div>
+      </div>
+      <div class="row align-items-md-stretch my-2 mb-5">
+        <div class="col-md-6">
+          <div class="h-100 p-5 bg-light border rounded-3">
+            <h2 class="title-block title-bold">👷 Personnel</h2>
+            <p>Ajoutez des utilisateurs qui pourront à leur tour des informations, alertes, etc.</p>
+            <a href="' . home_url('/creer-utilisateur') . '" class="btn btn-danger" role="button">Créer</a>
+            <a href="' . home_url('/liste-utilisateur') . '" class="btn btn-dark" role="button">Voir</a>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="h-100 p-5 text-white bg-info rounded-3">
+            <h2 class="title-block">Emploi du temps</h2>
+            <p>Forcez l\'actualisation des emplois du temps.</p>
+            <form method="post" id="dlAllEDT">
+              <input id="dlEDT" class="btn btn-outline-light" type="submit" name="dlEDT" value="🔄️ Actualiser" />
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>';
     }
 
     /**
@@ -101,8 +94,9 @@ class SecretaryView extends UserView
      *
      * @return string
      */
-    public function displayAllSecretary($users) {
-        $title = 'Secrétaires';
+    public function displayTableSecretary($users)
+    {
+        $title = '<b>Rôle affiché: </b> Secrétaire';
         $name = 'Secre';
         $header = ['Login'];
 
@@ -113,13 +107,14 @@ class SecretaryView extends UserView
             $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin()];
         }
 
-        return $this->displayAll($name, $title, $header, $row, 'Secre');
+        return $this->displayTable($name, $title, $header, $row, 'Secre', '<a type="submit" class="btn btn-primary" role="button" aria-disabled="true" href="' . home_url('/creer-utilisateur') . '">Créer</a>');
     }
 
     /**
      * Ask to the user to choose an user
      */
-    public function displayNoUser() {
-        return '<p class="alert alert-danger">Veuillez choisir un utilisateur </p>';
+    public function displayNoUser()
+    {
+        return '<p class="alert alert-danger">Veuillez choisir un utilisateur</p>';
     }
 }

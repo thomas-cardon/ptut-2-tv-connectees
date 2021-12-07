@@ -40,8 +40,8 @@ class WidgetInformation extends WP_Widget
 	 */
     public function widget($args, $instance)
     {
-        $view = new InformationController();
-        $view->informationMain();
+        $controller = new InformationController();
+        $controller->displaySlideshow();
     }
 
 	/**

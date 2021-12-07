@@ -4,25 +4,23 @@ use Controllers\AlertController;
 use Controllers\CodeAdeController;
 use Controllers\InformationController;
 use Controllers\SecretaryController;
-use Controllers\StudentController;
 use Controllers\StudyDirectorController;
 use Controllers\TeacherController;
 use Controllers\TechnicianController;
 use Controllers\TelevisionController;
 use Controllers\UserController;
+use Controllers\TabletModeController;
 
 use Views\HelpMapView;
-use Views\UserView;
-
 use Views\TabletModeScheduleView;
+
+use UserViews\UserView;
 
 /*
 * TABLET VIEW BLOCKS
 */
 
-/**
-* Build a block
-*/
+/* Schedule render function */
 function tablet_schedule_render_callback()
 {
   if(is_page()) {
@@ -31,9 +29,7 @@ function tablet_schedule_render_callback()
   }
 }
 
-/**
-* Build a block
-*/
+/* Schedule */
 function block_tablet_schedule()
 {
   wp_register_script(
@@ -49,6 +45,32 @@ function block_tablet_schedule()
 }
 
 add_action('init', 'block_tablet_schedule');
+
+/* Select year render function */
+function tablet_select_year_render_callback()
+{
+  if(is_page()) {
+    $controller = new TabletModeController();
+    return $controller->displayYearSelector();
+  }
+}
+
+/* Select year */
+function block_tablet_mode_select_year()
+{
+  wp_register_script(
+    'tablet-year-script',
+    plugins_url( 'blocks/tablet-mode/select-year/index.js', __FILE__ ),
+    array( 'wp-blocks', 'wp-element', 'wp-data' )
+  );
+
+  register_block_type('tvconnecteeamu/tablet-select-year', array(
+    'editor_script' => 'tablet-year-script',
+    'render_callback' => 'tablet_select_year_render_callback'
+  ));
+}
+
+add_action('init', 'block_tablet_mode_select_year');
 
 /*
 * ALERT BLOCKS
@@ -95,7 +117,7 @@ function alert_management_render_callback()
 {
   if(is_page()) {
     $alert = new AlertController();
-    return $alert->displayAll();
+    return $alert->displayTable();
   }
 }
 
@@ -188,12 +210,13 @@ add_action( 'init', 'block_code_ade' );
 *
 * @return string
 */
-function code_management_render_callback()
+function code_management_render_callback($attributes, $content)
 {
   if(is_page()) {
-    $code = new CodeAdeController();
-    $code->deleteCodes();
-    return $code->displayAllCodes();
+    $controller = new CodeAdeController();
+    $controller->deleteCodes();
+
+    return $controller->displayContent($content);
   }
 }
 
@@ -208,7 +231,7 @@ function block_code_management()
     array( 'wp-blocks', 'wp-element', 'wp-data' )
   );
 
-  register_block_type('tvconnecteeamu/manage-code', array(
+  register_block_type('tvconnecteeamu/manage-codes', array(
     'editor_script' => 'code_manage-script',
     'render_callback' => 'code_management_render_callback'
   ));
@@ -291,7 +314,7 @@ function information_management_render_callback()
 {
   if(is_page()) {
     $information = new InformationController();
-    return $information->displayAll();
+    return $information->displayTable();
   }
 }
 
@@ -356,30 +379,49 @@ add_action( 'init', 'block_information_modify' );
 */
 function schedule_render_callback()
 {
-  if (members_current_user_has_role("television")) {
+  $controller;
+  if (members_current_user_has_role("television"))
     $controller = new TelevisionController();
-    return $controller->displayMySchedule();
-  }
   else if(members_current_user_has_role("directeuretude")) {
     $controller = new StudyDirectorController();
-    return $controller->displayMySchedule();
   } else if (members_current_user_has_role("enseignant")) {
     $controller = new TeacherController();
-    return $controller->displayMySchedule();
-  } else if (members_current_user_has_role("etudiant")) {
-    $controller = new StudentController();
-    return $controller->displayMySchedule();
   } else if (members_current_user_has_role("technicien")) {
     $controller = new TechnicianController();
-    return $controller->displayMySchedule();
   } else if (members_current_user_has_role("administrator") || members_current_user_has_role("secretaire")) {
     $controller = new SecretaryController();
-    return $controller->displayMySchedule();
   } else {
-    $user = new UserView();
-    return $user->displayHome();
+    $controller = new UserController();
   }
+
+  return $controller->displayContent();
 }
+
+/* TV Mode */
+function tv_mode_render_callback() {
+  $controller = new TelevisionController();
+  if (members_current_user_has_role("television")) {
+    return $controller->displayTVInterface();
+  }
+
+  return $controller->error(403, "Vous n'avez pas les permissions requises pour accéder à cette page.");
+}
+
+function block_tv_mode()
+{
+  wp_register_script(
+    'tv-mode-script',
+    plugins_url('/blocks/schedule/tv.js', __FILE__),
+    array('wp-blocks', 'wp-element', 'wp-data')
+  );
+
+  register_block_type('tvconnecteeamu/tv-mode', array(
+    'editor_script' => 'tv-mode-script',
+    'render_callback' => 'tv_mode_render_callback'
+  ));
+}
+
+add_action('init', 'block_tv_mode');
 
 /**
 * Build a block
@@ -431,41 +473,6 @@ function block_schedules()
 add_action( 'init', 'block_schedules' );
 
 /*
-*
-*/
-
-/**
-* Function of the block
-*
-* @return string
-*/
-function subscription_render_callback()
-{
-  if(is_page()) {
-    $view = new UserView();
-    return $view->displayButtonSubscription();
-  }
-}
-
-/**
-* Build a block
-*/
-function block_subscription()
-{
-  wp_register_script(
-    'subscription-script',
-    plugins_url( '/blocks/subscriptionPush/subscriptionPush.js', __FILE__ ),
-    array( 'wp-blocks', 'wp-element', 'wp-data' )
-  );
-
-  register_block_type('tvconnecteeamu/subscription', array(
-    'editor_script' => 'subscription-script',
-    'render_callback' => 'subscription_render_callback'
-  ));
-}
-add_action('init', 'block_subscription');
-
-/*
 * USER BLOCKS
 */
 
@@ -477,8 +484,8 @@ add_action('init', 'block_subscription');
 function creation_user_render_callback()
 {
   if(is_page()) {
-    $manageUser = new SecretaryController();
-    return $manageUser->createUsers();
+    $controller = new SecretaryController();
+    return $controller->displayUserCreationView();
   }
 }
 
@@ -508,9 +515,9 @@ add_action( 'init', 'block_creation_user' );
 function management_user_render_callback()
 {
   if(is_page()) {
-    $manageUser = new SecretaryController();
-    $manageUser->deleteUsers();
-    return $manageUser->displayUsers();
+    $controller = new SecretaryController();
+    $controller->deleteUsers();
+    return $controller->displayUsers();
   }
 }
 
@@ -572,7 +579,7 @@ function choose_account_render_callback()
 {
   if(is_page()) {
     $user = new UserController();
-    return $user->chooseModif();
+    return $user->edit();
   }
 }
 
@@ -592,38 +599,6 @@ function block_choose_account() {
   ));
 }
 add_action( 'init', 'block_choose_account' );
-
-/**
-* Function of the block
-*
-* @return string
-*/
-function code_account_render_callback()
-{
-  $current_user = wp_get_current_user();
-  if(is_page() && in_array('etudiant', $current_user->roles)) {
-    $myAccount = new StudentController();
-    $myAccount->modifyCodes();
-  }
-}
-
-/**
-* Build a block
-*/
-function block_code_account()
-{
-  wp_register_script(
-    'code_account-script',
-    plugins_url( 'block.js', __FILE__ ),
-    array( 'wp-blocks', 'wp-element', 'wp-data' )
-  );
-
-  register_block_type('tvconnecteeamu/code-account', array(
-    'editor_script' => 'code_account-script',
-    'render_callback' => 'code_account_render_callback'
-  ));
-}
-add_action( 'init', 'block_code_account' );
 
 /**
 * Function of the block

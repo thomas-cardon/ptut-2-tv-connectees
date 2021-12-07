@@ -4,8 +4,8 @@ use Controllers\AlertRestController;
 use Controllers\CodeAdeRestController;
 use Controllers\InformationRestController;
 use Controllers\ProfileRestController;
+use Controllers\ScheduleRestController;
 
-//include __DIR__ . '/config-notifs.php';
 include_once 'vendor/R34ICS/R34ICS.php';
 include 'widgets/WidgetAlert.php';
 include 'widgets/WidgetWeather.php';
@@ -15,7 +15,7 @@ include 'widgets/WidgetInformation.php';
 require 'config.php';
 
 /**
- * Create all directory
+ * Create all direcstory
  * (For ICS file and media)
  */
 
@@ -50,52 +50,61 @@ if (!file_exists(PATH . TV_ICSFILE_PATH . 'file3')) {
 
 function loadScriptsEcran()
 {
+    /* SCRIPTS */
+    wp_enqueue_script('global_script', TV_PLUG_PATH . 'public/js/global.js', array(), VERSION, true);
+
+    /**
+    * Chargement conditionnel
+    * Cette technique permet de charger les scripts et styles nécessaires à une page spéciale UNIQUEMENT à cette page,
+    * pour améliorer les performances
+    * @author Thomas Cardon
+    */
     if (is_page('tablet-view')) {
-      wp_enqueue_script('tablet-search', TV_PLUG_PATH . 'public/js/tablet-view/search.js', array(), VERSION, true);
-      return;
+        wp_enqueue_script('tablet-search', TV_PLUG_PATH . 'public/js/tablet-view/search.js', array(), VERSION, true);
+        return;
     }
+    
+    /**
+     * Désactivation complète de jQuery
+     * hors tableau spécial administrateur
+     * pour gain de performances
+     * (endpoint /wp-admin)
+     * @author Thomas Cardon
+     */
+     if (!is_admin()) wp_deregister_script('jquery');
+     
+     wp_enqueue_style('style_ecran', TV_PLUG_PATH . 'public/css/style.css', array(), VERSION);
+    
+    if (is_page('tv-mode')) {
+        /* STYLESHEETS */
+        wp_enqueue_style('alert_ecran', TV_PLUG_PATH . 'public/css/alert.css', array(), VERSION);
+        wp_enqueue_style('info_ecran', TV_PLUG_PATH . 'public/css/information.css', array(), VERSION);
+        wp_enqueue_style('schedule_ecran', TV_PLUG_PATH . 'public/css/schedule.css', array(), VERSION);
+        wp_enqueue_style('weather_ecran', TV_PLUG_PATH . 'public/css/weather.css', array(), VERSION);
 
-    //jQuery | TODO: remplacer entièrement?
-    wp_enqueue_script('jquery_cdn', 'https://code.jquery.com/jquery-3.4.1.slim.min.js');
-
-    //Bootstrap | TODO: remplacer entièrement?
-    wp_enqueue_style('bootstrap_css', 'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css');
-    wp_enqueue_script('bootstrap_js', 'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js', array('jquery_cdn'), VERSION, true);
-
-    // LIBRARY
-    wp_enqueue_script('pdf-js', 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.2.228/build/pdf.min.js', array(), VERSION, false);
-    //wp_enqueue_script('onesignal-js', 'https://cdn.onesignal.com/sdks/OneSignalSDK.js', array(), VERSION, false);
-    wp_enqueue_script('plugin-jquerymin', TV_PLUG_PATH . 'public/js/vendor/jquery.min.js', array('jquery'), VERSION, true);
-    wp_enqueue_script('plugin-JqueryEzMin', TV_PLUG_PATH . 'public/js/vendor/jquery.easing.min.js', array('jquery'), VERSION, true);
-    wp_enqueue_script('plugin-jqueryEzTic', TV_PLUG_PATH . 'public/js/vendor/jquery.easy-ticker.js', array('jquery'), VERSION, true);
-    wp_enqueue_script('plugin-jqueryEzMinTic', TV_PLUG_PATH . 'public/js/vendor/jquery.easy-ticker.min.js', array('jquery'), VERSION, true);
-    wp_enqueue_script('plugin-marquee', TV_PLUG_PATH . 'public/js/vendor/jquery.marquee.js', array('jquery'), VERSION, true);
-    wp_enqueue_script('plugin-ticker', TV_PLUG_PATH . 'public/js/vendor/jquery.tickerNews.js', array('jquery'), VERSION, true);
-
-    //CSS
-    wp_enqueue_style('alert_ecran', TV_PLUG_PATH . 'public/css/alert.css', array(), VERSION);
-    wp_enqueue_style('info_ecran', TV_PLUG_PATH . 'public/css/information.css', array(), VERSION);
-    wp_enqueue_style('schedule_ecran', TV_PLUG_PATH . 'public/css/schedule.css', array(), VERSION);
-    wp_enqueue_style('style_ecran', TV_PLUG_PATH . 'public/css/style.css', array(), VERSION);
-    wp_enqueue_style('weather_ecran', TV_PLUG_PATH . 'public/css/weather.css', array(), VERSION);
-
-    // SCRIPT
-
-    wp_enqueue_script('global_ecran', TV_PLUG_PATH . 'public/js/global.js', array(), VERSION, true);
-
-    wp_enqueue_script('addCheckBox_script_ecran', TV_PLUG_PATH . 'public/js/addAllCheckBox.js', array('jquery'), VERSION, true);
-    wp_enqueue_script('addCodeAlert_script_ecran', TV_PLUG_PATH . 'public/js/addOrDeleteAlertCode.js', array('jquery'), VERSION, true);
-    wp_enqueue_script('addCodeTv_script_ecran', TV_PLUG_PATH . 'public/js/addOrDeleteTvCode.js', array('jquery'), VERSION, true);
-    wp_enqueue_script('alertTicker_script_ecran', TV_PLUG_PATH . 'public/js/alertTicker.js', array('jquery'), VERSION, true);
-    wp_enqueue_script('confPass_script_ecran', TV_PLUG_PATH . 'public/js/confirmPass.js', array('jquery'), VERSION, true);
-    //wp_enqueue_script('oneSignal_script_ecran', TV_PLUG_PATH . 'public/js/oneSignalPush.js', array('jquery'), VERSION, true);
-    //wp_add_inline_script('oneSignal_script_ecran', 'const ONESIGNAL_APP_ID = \'' . ONESIGNAL_APP_ID . '\';', 'before');
-    wp_enqueue_script('scroll_script_ecran', TV_PLUG_PATH . 'public/js/scroll.js', array('plugin-jquerymin', 'plugin-jqueryEzTic', 'plugin-jqueryEzMinTic', 'plugin-JqueryEzMin'), VERSION, true);
-    wp_enqueue_script('search_script_ecran', TV_PLUG_PATH . 'public/js/search.js', array('jquery'), VERSION, true);
-    wp_enqueue_script('slideshow_script_ecran', TV_PLUG_PATH . 'public/js/slideshow.js', array('jquery'), '2.0', true);
-    wp_enqueue_script('sortTable_script_ecran', TV_PLUG_PATH . 'public/js/sortTable.js', array('jquery'), VERSION, true);
-    wp_enqueue_script('weather_script_ecran', TV_PLUG_PATH . 'public/js/weather.js', array('jquery'), VERSION, true);
-    wp_enqueue_script('weatherTime_script_ecran', TV_PLUG_PATH . 'public/js/weather_and_time.js', array('jquery'), VERSION, true);
+        /* SCRIPTS */
+        wp_enqueue_script('weather_script_ecran', TV_PLUG_PATH . 'public/js/weather.js', array(), VERSION, true);
+        wp_enqueue_script('time_script_ecran', TV_PLUG_PATH . 'public/js/time.js', array(), VERSION, true);
+        wp_enqueue_script('scroll_script_ecran', TV_PLUG_PATH . 'public/js/scroll.js', array(), VERSION, true);
+        
+        if (TV_REFRESH)
+          wp_enqueue_script('refresh_script_ecran', TV_PLUG_PATH . 'public/js/refresh.js', array(), VERSION, true);
+    }
+    else {
+      /**
+       * Sortable: a tiny, vanilla JS table sorter
+       * @author tofsjonas
+       * @see https://github.com/tofsjonas/sortable
+       */
+       
+      wp_enqueue_script('sortable_script', TV_PLUG_PATH . 'public/vendor/sortable/sortable.min.js', array(), VERSION, true);
+      wp_enqueue_style('sortable_style', TV_PLUG_PATH . 'public/vendor/sortable/sortable.min.css', array(), VERSION);
+      
+      wp_enqueue_script('addAllCheckBox_tv_script', TV_PLUG_PATH . 'public/js/addAllCheckBox.js', array(), VERSION, true);
+      wp_enqueue_script('deleteRow_tv_script', TV_PLUG_PATH . 'public/js/deleteRow.js', array(), VERSION, true);
+      wp_enqueue_script('confPass_script_ecran', TV_PLUG_PATH . 'public/js/confirmPass.js', array(), VERSION, true);
+      wp_enqueue_script('search_script_ecran', TV_PLUG_PATH . 'public/js/search.js', array(), VERSION, true);
+    }
 }
 
 add_action('wp_enqueue_scripts', 'loadScriptsEcran');
@@ -285,5 +294,8 @@ add_action('rest_api_init', function () {
     $controller->register_routes();
 
     $controller = new ProfileRestController();
+    $controller->register_routes();
+
+    $controller = new ScheduleRestController();
     $controller->register_routes();
 });

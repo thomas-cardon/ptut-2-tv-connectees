@@ -317,6 +317,8 @@ class ICal
      */
     protected function initLines(array $lines)
     {
+        error_reporting(E_ALL & ~E_NOTICE);
+        
         $lines = $this->unfold($lines);
 
         if (stristr($lines[0], 'BEGIN:VCALENDAR') !== false) {
@@ -330,10 +332,10 @@ class ICal
                 }
 
                 $add = $this->keyValueFromString($line);
-
+                                
                 $keyword = $add[0];
                 $values  = $add[1]; // May be an array containing multiple values
-
+                
                 if (!is_array($values)) {
                     if (!empty($values)) {
                         $values = array($values); // Make an array as not already

@@ -37,9 +37,10 @@ class TeacherController extends UserController implements Schedule
     }
 
     /**
-     * Display the schedule of the teacher
+     * Displays the schedule of the teacher
+     * @author Thomas Cardon
      */
-    public function displayMySchedule() {
+    public function displayContent() {
         $current_user = wp_get_current_user();
         $user = $this->model->get($current_user->ID);
         $schedule = $this->displaySchedule($user->getCodes()[0]->getCode());
@@ -154,6 +155,7 @@ class TeacherController extends UserController implements Schedule
                 $this->view->displayWrongExtension();
             }
         }
+
         return $this->view->displayInsertImportFileTeacher();
     }
 
@@ -188,9 +190,9 @@ class TeacherController extends UserController implements Schedule
     /**
      * Display all teachers in a table
      */
-    public function displayAllTeachers() {
+    public function displayTableTeachers() {
         $users = $this->model->getUsersByRole('enseignant');
         $users = $this->model->getMyCodes($users);
-        return $this->view->displayAllTeachers($users);
+        return $this->view->displayTableTeachers($users);
     }
 }

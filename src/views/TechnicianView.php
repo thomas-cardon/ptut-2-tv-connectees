@@ -34,8 +34,8 @@ class TechnicianView extends UserView
      *
      * @return string
      */
-    public function displayAllTechnicians($users) {
-        $title = 'Techniciens';
+    public function displayTableTechnicians($users) {
+        $title = '<b>Rôle affiché: </b> Technicien';
         $name = 'Tech';
         $header = ['Login'];
 
@@ -46,6 +46,6 @@ class TechnicianView extends UserView
             $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin()];
         }
 
-        return $this->displayAll($name, $title, $header, $row, $name);
+        return $this->displayTable($name, $title, $header, $row, $name, '<a type="submit" class="btn btn-primary" role="button" aria-disabled="true" href="' . home_url('/creer-utilisateur') . '">Créer</a>');
     }
 }

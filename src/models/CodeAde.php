@@ -21,7 +21,7 @@ class CodeAde extends Model implements Entity, JsonSerializable
     private $id;
 
     /**
-     * @var string (year | group | halfGroup)
+     * @var string (year | group | halfGroup | teacher)
      */
     private $type;
 
@@ -213,7 +213,7 @@ class CodeAde extends Model implements Entity, JsonSerializable
      * @param $code
      */
     public function setCode($code) {
-        $this->code = $code;
+        $this->code = intval($code);
     }
 
     /**
@@ -227,7 +227,7 @@ class CodeAde extends Model implements Entity, JsonSerializable
      * @param $id
      */
     public function setId($id) {
-        $this->id = $id;
+        $this->id = intval($id);
     }
 
     /**

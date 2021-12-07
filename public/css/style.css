@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato,Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,400&display=swap');
-
 :root {
     font-size: 16px;
     --color-button-text: #fff;
@@ -18,47 +16,21 @@
     --color-accent-disabled: #f5bfbf;
 }
 
-header {
-  display: none;
-  font-family: 'Source Sans Pro', sans-serif;
+.auto-scroll {
+  /*animation: 10s ease-in-out 0s infinite alternate both running slidein;*/
 }
 
-.button_ecran, .delete_button_ecran, .button_ecran:hover, .delete_button_ecran:hover, .active_ecran .page-link {
-  color: var(--color-button-text);
-}
-
-.button_ecran {
-    background-color: #00558b;
-}
-
-.delete_button_ecran {
-    background-color: #8e2525;
-}
-
-.active_ecran .page-link {
-    background-color: #00558b;
-}
-
-h1 {
-  color: var(--color-secondary) !important;
-}
-
-h2 {
-  color: var(--color-button-text) !important;
-  font-weight: bold;
-}
-
-.iut {
-  width: 85px;
-  margin-top: 74vh;
-  z-index: 99999;
-  display: block;
-  left: 14vw;
-  position: absolute;
-}
-
-.table-responsive {
-  border-radius: 10px;
+@keyframes slidein {
+  0%, 30%     { -webkit-transform: translateY(0%); }
+  30%, 40%     { -webkit-transform: translateY(0%); }
+  40%, 50%    { -webkit-transform: translateY(-12.5%); }
+  50%, 60%    { -webkit-transform: translateY(-12.5%); }
+  
+  60%, 70%    { -webkit-transform: translateY(-25%); }
+  70%, 80%    { -webkit-transform: translateY(-25%); }
+  
+  80%, 90%    { -webkit-transform: translateY(-50%); }
+  90%, 100%    { -webkit-transform: translateY(-50%); }
 }
 
 table {
@@ -82,18 +54,19 @@ tr:nth-child(even) {
     background-color: #f8f6ff !important;
 }
 
-.sidebar {
-  background-color: var(--color-secondary) !important;
-  border-radius: 0 !important;
-  margin-bottom: 0 !important;
+th.no-sort {
+  pointer-events: none;
 }
 
-.container.col-md-7 {
-  background-color: transparent !important;
-  margin-top: 5vh;
-  padding-top: 1vh;
+th.no-sort::after {
+  content: '' !important;
 }
 
-.select_ecran {
-    width: 80%;
+th.no-sort > * {
+  pointer-events: all;
+}
+
+.table-responsive {
+  border-radius: 10px;
+  overflow: hidden;
 }

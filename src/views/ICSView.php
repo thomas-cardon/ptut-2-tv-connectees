@@ -25,7 +25,7 @@ class ICSView extends View
     public function displaySchedule($ics_data, $title, $allDay) {
         $current_user = wp_get_current_user();
         if (isset($ics_data['events'])) {
-            $string = '<h1>' . $title . '</h1>';
+            $string = '<h1 class="group-title">' . $title . '</h1>';
             $current_study = 0;
             foreach (array_keys((array)$ics_data['events']) as $year) {
                 for ($m = 1; $m <= 12; $m++) {
@@ -112,12 +112,8 @@ class ICSView extends View
                 }
             }
             // IF NO SCHEDULE
-            if ($current_study < 1) {
-                return $this->displayNoSchedule($title, $current_user);
-            }
-        } else {
-            return $this->displayNoSchedule($title, $current_user);
-        }
+            if ($current_study === 0) return '';
+        } else return '';
 
         return $string;
     }
@@ -131,13 +127,14 @@ class ICSView extends View
      */
     public function displayStartSchedule($current_user) {
         $string = '<div class="table-responsive">
-                   	<table class="table tabSchedule">
+                   	<table class="table tabSchedule schedule">
                     	<thead class="headerTab">
                         	<tr>
                             	<th scope="col" class="text-center">Horaire</th>';
         if (!in_array("technicien", $current_user->roles)) {
-            $string .= '<th scope="col" class="text-center" >Cours</th>
-                        <th scope="col" class="text-center">Groupe/Enseignant</th>';
+            $string .= '<th scope="col" class="text-center">Cours</th>
+                        <th scope="col" class="text-center">Groupe</th>
+                        <th scope="col" class="text-center">Enseignant</th>';
         }
         $string .= '<th scope="col" class="text-center">Salle</th>
                  </tr>
@@ -213,12 +210,24 @@ class ICSView extends View
      */
     public function displayLineSchedule($datas, $active = false) {
         if ($active) {
-            $string = '<tr scope="row">';
+            $string = '<tr class="table-success">';
         } else {
-            $string = '<tr scope="row">';
+            $string = '<tr>';
         }
-        foreach ($datas as $data) {
-            $string .= '<td class="text-center">' . $data . '</td>';
+        
+         /* Nettoyage données ADE */
+        foreach ($datas as $key => $data) {
+            if ($key === 1) {
+              $data = str_replace(array(' (INFO)', ' G1', ' G2', ' G3', ' G4', ' 4h', ' 2h'), '', $data);
+              $string .= '<td class="text-center">' . $data . '</td>';
+            }
+            elseif ($key === 2) {
+              $group = str_replace(array(' an1', ' an2', ' an3'), '', explode("\n", $data)[0]);
+
+              $string .= '<td class="text-center">' . $group . '</td>';
+              $string .= '<td class="text-center">' . explode("\n", $data)[1] . '</td>';
+            }
+            else $string .= '<td class="text-center">' . $data . '</td>';
         }
 
         return $string . '</tr>';
@@ -229,29 +238,10 @@ class ICSView extends View
      *
      * @return string
      */
-    public
-    function displayEndSchedule() {
+    public function displayEndSchedule() {
         return '</tbody>
              </table>
           </div>';
     }
 
-
-    /**
-     * Display an message if there is no lesson
-     *
-     * @param $title            string
-     * @param $current_user     WP_User
-     *
-     * @return bool|string
-     */
-    public function displayNoSchedule($title, $current_user) {
-        if (get_theme_mod('ecran_connecte_schedule_msg', 'show') == 'show' && in_array('television', $current_user->roles)) {
-            return '<h1>' . $title . '</h1><p> Vous n\'avez pas cours !</p>';
-        } else if (!in_array('television', $current_user->roles)) {
-            return '<h1>' . $title . '</h1><p> Vous n\'avez pas cours !</p>';
-        } else {
-            return false;
-        }
-    }
 }

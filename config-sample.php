@@ -9,14 +9,11 @@ define('URL_WEBSITE_VIEWER', 'http://localhost/');
 define('VERSION', /*'2.0'*/ rand(1, 9999999));
 
 define('PATH', /* $_SERVER['DOCUMENT_ROOT'] */ 'C:/xampp/htdocs/tv/');
-define('URL_PATH', /* example: http://localhost/tv -> /tv */ $_SERVER['REQUEST_URI']);
+define('URL_PATH', /* example: http://localhost/tv -> /tv */ '/tv');
 
-/**
- * Remplacez ici <ONESIGNAL_APP_ID> par la valeur du champ "ONESIGNAL APP ID" dans OneSignal
- */
-define('ONESIGNAL_APP_ID',  '<ONESIGNAL_APP_ID>');
+/* Actualise la TV toute les 30s */
+define('TV_REFRESH', true);
 
-/**
- * Remplacez ici <REST_API_KEY> par la valeur du champ "REST API KEY" dans OneSignal
- */
-define('ONESIGNAL_API_KEY', '<REST_API_KEY>');
+define('WEATHER_API_KEY', 'OPEN WEATHER MAP API KEY');
+define('WEATHER_LATITUDE', '43.5156');
+define('WEATHER_LONGITUDE', '5.4510');

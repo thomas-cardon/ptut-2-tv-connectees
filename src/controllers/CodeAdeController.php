@@ -45,15 +45,15 @@ class CodeAdeController extends Controller
 
         if (isset($action)) {
 
-            $validType = ['year', 'group', 'halfGroup'];
+            $validTypes = ['year', 'group', 'halfGroup', 'teacher'];
 
             $title = filter_input(INPUT_POST, 'title');
             $code = filter_input(INPUT_POST, 'code');
             $type = filter_input(INPUT_POST, 'type');
-
+            
             if (is_string($title) && strlen($title) > 4 && strlen($title) < 30 &&
                 is_numeric($code) && is_string($code) && strlen($code) < 20 &&
-                in_array($type, $validType)) {
+                in_array($type, $validTypes)) {
 
                 $this->model->setTitle($title);
                 $this->model->setCode($code);
@@ -71,6 +71,7 @@ class CodeAdeController extends Controller
                 $this->view->errorCreation();
             }
         }
+        
         return $this->view->createForm();
     }
 
@@ -88,7 +89,7 @@ class CodeAdeController extends Controller
 
         $submit = filter_input(INPUT_POST, 'submit');
         if (isset($submit)) {
-            $validType = ['year', 'group', 'halfGroup'];
+            $validType = ['year', 'group', 'halfGroup', 'teacher'];
 
             $title = filter_input(INPUT_POST, 'title');
             $code = filter_input(INPUT_POST, 'code');
@@ -118,16 +119,29 @@ class CodeAdeController extends Controller
     }
 
     /**
-     * Display all codes Ade in a table
-     *
-     * @return string
+     * Displays content
+     * @author Thomas Cardon
+     * @return mixed|string
      */
-    public function displayAllCodes() {
+    public function displayContent($content) {
         $years = $this->model->getAllFromType('year');
         $groups = $this->model->getAllFromType('group');
         $halfGroups = $this->model->getAllFromType('halfGroup');
+        $teachers = $this->model->getAllFromType('teacher');
 
-        return $this->view->displayAllCode($years, $groups, $halfGroups);
+        return
+          $this->view->renderContainer('
+          <p class="lead lead text-start d-inline-block">
+            - <b>Titre</b>: Associé au code, il sera affiché lors de l’affichage de l’emploi du temps
+            <br />
+            - <b>Code ADE</b>: Identifiant sur le système ADE afin de récupérer les bonnes données
+            <br />
+            - <b>Type</b>: Précise si qui ou quoi ces codes appartiennent
+          </p>' . $content, 'Suivre des codes ADE')
+          . $this->view->renderContainerDivider() .
+          $this->view->renderContainer(
+            $this->view->displayTableCode($years, $groups, $halfGroups, $teachers)
+          );
     }
 
     /**

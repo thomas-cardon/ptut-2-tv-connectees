@@ -17,7 +17,7 @@ use Controllers\InformationController;
 use Models\CodeAde;
 use Models\User;
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
 	exit(1);
 }
 
@@ -33,14 +33,21 @@ require 'virtual-pages.php';
 require 'blocks.php';
 
 // Upload schedules
-$submit = filter_input(INPUT_POST, 'updatePluginEcranConnecte');
-if(isset($submit)) {
+$dl1 = filter_input(INPUT_POST, 'updatePluginEcranConnecte');
+$dl2 = filter_input(INPUT_POST, 'dlEDT');
+
+if(isset($dl1) || isset($dl2)) {
     include_once(ABSPATH . 'wp-includes/pluggable.php');
-    $current_user = wp_get_current_user();
-    if(in_array('administrator', $current_user->roles) || in_array('secretaire', $current_user->roles)) {
+
+    if(members_current_user_has_role('administrator') || members_current_user_has_role('secretaire'))
 	    downloadFileICS_func();
-    }
 }
+
+function add_cors_http_header(){
+    header("Access-Control-Allow-Origin: *");
+}
+add_action('init','add_cors_http_header');
+
 
 /**
  * Function for WPCron

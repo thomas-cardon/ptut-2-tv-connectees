@@ -15,7 +15,6 @@ use Views\InformationView;
  */
 class InformationController extends Controller
 {
-
     /**
      * @var Information
      */
@@ -29,7 +28,8 @@ class InformationController extends Controller
     /**
      * Constructor of InformationController
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->model = new Information();
         $this->view = new InformationView();
     }
@@ -41,7 +41,8 @@ class InformationController extends Controller
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
-    public function create() {
+    public function create()
+    {
         $current_user = wp_get_current_user();
 
         // All forms
@@ -137,7 +138,8 @@ class InformationController extends Controller
         }
         // Return a selector with all forms
         return
-            $this->view->displayStartMultiSelect() .
+          $this->view->renderContainer(
+              $this->view->displayStartMultiSelect() .
             $this->view->displayTitleSelect('text', 'Texte', true) .
             $this->view->displayTitleSelect('image', 'Image') .
             $this->view->displayTitleSelect('table', 'Tableau') .
@@ -149,8 +151,10 @@ class InformationController extends Controller
             $this->view->displayContentSelect('table', $this->view->displayFormTab()) .
             $this->view->displayContentSelect('pdf', $this->view->displayFormPDF()) .
             $this->view->displayContentSelect('event', $this->view->displayFormEvent()) .
-            $this->view->displayEndDiv() .
-            $this->view->contextCreateInformation();
+            $this->view->displayEndDiv(),
+              'Créer une information'
+          ) . $this->view->renderContainerDivider() .
+          $this->view->renderContainer($this->view->contextCreateInformation());
     }
 
     /**
@@ -160,7 +164,8 @@ class InformationController extends Controller
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
-    public function modify() {
+    public function modify()
+    {
         $id = $_GET['id'];
 
         if (empty($id) || is_numeric($id) && !$this->model->get($id)) {
@@ -170,7 +175,7 @@ class InformationController extends Controller
         $current_user = wp_get_current_user();
         $information = $this->model->get($id);
 
-        if (!(in_array('administrator', $current_user->roles) || in_array('secretaire', $current_user->roles) || $information->getAuthor()->getId() == $current_user->ID)) {
+        if (!(members_current_user_has_role('administrator') || members_current_user_has_role('secretaire') || $information->getAuthor()->getId() == $current_user->ID)) {
             return $this->view->noInformation();
         }
 
@@ -204,7 +209,7 @@ class InformationController extends Controller
                         } else {
                             $this->view->buildModal('Image non valide', '<p>Ce fichier est une image non valide, veuillez choisir une autre image</p>');
                         }
-                    } else if ($information->getType() == 'pdf') {
+                    } elseif ($information->getType() == 'pdf') {
                         $explodeName = explode('.', $filename);
                         if (end($explodeName) == 'pdf') {
                             $this->deleteFile($information->getId());
@@ -212,7 +217,7 @@ class InformationController extends Controller
                         } else {
                             $this->view->buildModal('PDF non valide', '<p>Ce fichier est un PDF non valide, veuillez choisir un autre PDF</p>');
                         }
-                    } else if ($information->getType() == 'tab') {
+                    } elseif ($information->getType() == 'tab') {
                         $explodeName = explode('.', $filename);
                         $goodExtension = ['xls', 'xlsx', 'ods'];
                         if (in_array(end($explodeName), $goodExtension)) {
@@ -247,7 +252,8 @@ class InformationController extends Controller
      * @param $filename     string
      * @param $tmpName      string
      */
-    public function registerFile($filename, $tmpName, $entity) {
+    public function registerFile($filename, $tmpName, $entity)
+    {
         $id = 'temporary';
         $extension_upload = strtolower(substr(strrchr($filename, '.'), 1));
         $name = PATH . TV_UPLOAD_PATH . $id . '.' . $extension_upload;
@@ -287,13 +293,15 @@ class InformationController extends Controller
      *
      * @param $id int Code
      */
-    public function deleteFile($id) {
+    public function deleteFile($id)
+    {
         $this->model = $this->model->get($id);
         $source = PATH. TV_UPLOAD_PATH . $this->model->getContent();
         wp_delete_file($source);
     }
 
-    public function displayAll() {
+    public function displayTable()
+    {
         $numberAllEntity = $this->model->countAll();
         $url = $this->getPartOfUrl();
         $number = filter_input(INPUT_GET, 'number');
@@ -317,7 +325,7 @@ class InformationController extends Controller
         }
 
         $name = 'Info';
-        $header = ['Titre', 'Contenu', 'Date de création', 'Date d\'expiration', 'Auteur', 'Type', 'Modifier'];
+        $header = ['Titre', 'Contenu', 'Créé le', 'Expire le', 'Auteur', 'Type', ''];
         $dataList = [];
         $row = $begin;
         $imgExtension = ['jpg', 'jpeg', 'gif', 'png', 'svg'];
@@ -334,9 +342,9 @@ class InformationController extends Controller
             if (in_array($information->getType(), ['img', 'pdf', 'event', 'tab'])) {
                 if (in_array($contentExplode[1], $imgExtension)) {
                     $content = '<img class="img-thumbnail img_table_ecran" src="' . $content . $information->getContent() . '" alt="' . $information->getTitle() . '">';
-                } else if ($contentExplode[1] === 'pdf') {
+                } elseif ($contentExplode[1] === 'pdf') {
                     $content = '[pdf-embedder url="' . TV_UPLOAD_PATH . $information->getContent() . '"]';
-                } else if ($information->getType() === 'tab') {
+                } elseif ($information->getType() === 'tab') {
                     $content = 'Tableau Excel';
                 }
             } else {
@@ -346,16 +354,16 @@ class InformationController extends Controller
             $type = $information->getType();
             if ($information->getType() === 'img') {
                 $type = 'Image';
-            } else if ($information->getType() === 'pdf') {
+            } elseif ($information->getType() === 'pdf') {
                 $type = 'PDF';
-            } else if ($information->getType() === 'event') {
+            } elseif ($information->getType() === 'event') {
                 $type = 'Événement';
-            } else if ($information->getType() === 'text') {
+            } elseif ($information->getType() === 'text') {
                 $type = 'Texte';
-            } else if ($information->getType() === 'tab') {
+            } elseif ($information->getType() === 'tab') {
                 $type = 'Table Excel';
             }
-            $dataList[] = [$row, $this->view->buildCheckbox($name, $information->getId()), $information->getTitle(), $content, $information->getCreationDate(), $information->getExpirationDate(), $information->getAuthor()->getLogin(), $type, $this->view->buildLinkForModify(esc_url(get_permalink(get_page_by_title('Modifier une information'))) . '?id=' . $information->getId())];
+            $dataList[] = [$row, $this->view->buildCheckbox($name, $information->getId()), $information->getTitle(), $content, $information->getCreationDate(), $information->getExpirationDate(), 'inconnu' /* $information->getAuthor()->getLogin() */, $type, $this->view->buildLinkForModify(esc_url(get_permalink(get_page_by_title('Modifier une information'))) . '?id=' . $information->getId())];
         }
 
         $submit = filter_input(INPUT_POST, 'delete');
@@ -376,11 +384,14 @@ class InformationController extends Controller
                 $this->view->refreshPage();
             }
         }
-        $returnString = "";
-        if ($pageNumber == 1) {
-            $returnString = $this->view->contextDisplayAll();
-        }
-        return $returnString . $this->view->displayAll($name, 'Informations', $header, $dataList) . $this->view->pageNumber($maxPage, $pageNumber, esc_url(get_permalink(get_page_by_title('Gestion des informations'))), $number);
+
+        return ($pageNumber == 1 ? $this->view->getHeader() : '') .
+        $this->view->renderContainerDivider() .
+        $this->view->renderContainer(
+            $this->view->displayTable($name, 'Informations', $header, $dataList, '', '<a type="submit" class="btn btn-primary" href="' . home_url('/creer-information') . '" role="button" aria-disabled="true">Créer</a>') . $this->view->pageNumber($maxPage, $pageNumber, home_url('/gerer-les-informations'), $number),
+            '',
+            'container-xl py-5 my-5 text-center'
+        );
     }
 
 
@@ -391,13 +402,30 @@ class InformationController extends Controller
      * @param $id
      * @param $endDate
      */
-    public function endDateCheckInfo($id, $endDate) {
+    public function endDateCheckInfo($id, $endDate)
+    {
         if ($endDate <= date("Y-m-d")) {
             $information = $this->model->get($id);
             $this->deleteFile($id);
             $information->delete();
         }
     }
+    
+    /**
+     * Displays the information slideshow
+     * 
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     * @author Thomas Cardon
+     */
+     public function displaySlideshow() {
+       $info = $this->model->getList();
+       
+       foreach ($info as $i)
+         $this->view->carousel->add($i->getTitle(), $i->getContent(), $i->getType());
+         
+       echo $this->view->carousel->build();
+     }
 
     /**
      * Display a slideshow
@@ -406,7 +434,8 @@ class InformationController extends Controller
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
-    public function informationMain() {
+    public function informationMain()
+    {
         $informations = $this->model->getList();
         $this->view->displayStartSlideshow();
         foreach ($informations as $information) {
@@ -425,13 +454,15 @@ class InformationController extends Controller
                 if (is_null($information->getAdminId())) {
                     $adminSite = false;
                 }
+                
                 $this->view->displaySlide($information->getTitle(), $information->getContent(), $information->getType(), $adminSite);
             }
         }
-        $this->view->displayEndDiv();
+        $this->view->displayEndSlideshow();
     }
 
-    public function registerNewInformation() {
+    public function registerNewInformation()
+    {
         $informationList = $this->model->getFromAdminWebsite();
         $myInformationList = $this->model->getAdminWebsiteInformation();
         foreach ($myInformationList as $information) {
@@ -467,7 +498,8 @@ class InformationController extends Controller
     /**
      *  Display a slideshow of event information in full screen
      */
-    public function displayEvent() {
+    public function displayEvent()
+    {
         $events = $this->model->getListInformationEvent();
         $this->view->displayStartSlideEvent();
         foreach ($events as $event) {
@@ -477,7 +509,7 @@ class InformationController extends Controller
             if ($extension == "pdf") {
                 echo '
 				<div class="canvas_pdf" id="' . $event->getContent() . '"></div>';
-                //echo do_shortcode('[pdf-embedder url="'.$event->getContent().'"]');
+            //echo do_shortcode('[pdf-embedder url="'.$event->getContent().'"]');
             } else {
                 echo '<img src="' . TV_UPLOAD_PATH . $event->getContent() . '" alt="' . $event->getTitle() . '">';
             }
@@ -495,7 +527,8 @@ class InformationController extends Controller
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
-    public function readSpreadSheet($content) {
+    public function readSpreadSheet($content)
+    {
         $file = PATH. $content;
 
         $extension = ucfirst(strtolower(end(explode(".", $file))));

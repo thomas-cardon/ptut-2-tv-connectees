@@ -13,38 +13,47 @@ use Models\CodeAde;
  */
 class CodeAdeView extends View
 {
+    private $typesDictionary = array(
+        'year' => 'Année',
+        'group' => 'Groupe',
+        'halfGroup' => 'Demi-Groupe',
+        'teacher' => 'Enseignant'
+    );
+
 
     /**
      * Display form for create code ade
      *
      * @return string
      */
-    public function createForm() {
+    public function createForm()
+    {
+        $radios = '';
+        foreach ($this->typesDictionary as $value => $title) {
+            $radios .= '
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="type" id="' . $value . '" value="' . $value . '">
+            <label class="form-check-label" for="' . $value . '">' . $title . '</label>
+        </div>
+        ';
+        }
+
         return '
         <form method="post">
-            <div class="form-group">
-                <label for="title">Titre</label>
-                <input class="form-control" type="text" id="title" name="title" placeholder="Titre" required="" minlength="5" maxlength="29">
+            <div class="row justify-content-center gx-2 mb-2">
+              <div class="form-floating col-4">
+                  <input class="form-control" type="text" placeholder="Ex: Marc LAPORTE, Groupe 3, etc." id="title" name="title" required="" minlength="5" maxlength="29">
+                  <label for="title">Titre (enseignant: Prénom NOM)</label>
+              </div>
+              <div class="form-floating col-4">
+                  <input class="form-control" type="number" placeholder="Code à récupérer sur l\'interface ADE" id="code" name="code" required="" maxlength="19" pattern="\d+">
+                  <label for="code">Code ADE</label>
+              </div>
             </div>
-            <div class="form-group">
-                <label for="code">Code ADE</label>
-                <input class="form-control" type="text" id="code" name="code" placeholder="Code ADE" required="" maxlength="19" pattern="\d+">
+            <div class="mb-3">
+              ' . $radios . '
             </div>
-            <div class="form-group">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="type" id="year" value="year">
-                    <label class="form-check-label" for="year">Année</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="type" id="group" value="group">
-                    <label class="form-check-label" for="group">Groupe</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="type" id="halfGroup" value="halfGroup">
-                    <label class="form-check-label" for="halfGroup">Demi-groupe</label>
-                </div>
-            </div>
-          <button type="submit" class="btn button_ecran" name="submit">Ajouter</button>
+          <button type="submit" class="btn btn-primary" name="submit">Ajouter</button>
         </form>';
     }
 
@@ -57,28 +66,29 @@ class CodeAdeView extends View
      *
      * @return string
      */
-    public function displayModifyCode($title, $type, $code) {
+    public function displayModifyCode($title, $type, $code)
+    {
         $page = get_page_by_title('Gestion des codes ADE');
         $linkManageCode = get_permalink($page->ID);
 
         return '
         <a href="' . esc_url(get_permalink(get_page_by_title('Gestion des codes ADE'))) . '">< Retour</a>
          <form method="post">
-         	<div class="form-group">
+         	<div class="mb-3">
             	<label for="title">Titre</label>
             	<input class="form-control" type="text" id="title" name="title" placeholder="Titre" value="' . $title . '">
             </div>
-            <div class="form-group">
+            <div class="mb-3">
             	<label for="code">Code</label>
             	<input type="text" class="form-control" id="code" name="code" placeholder="Code" value="' . $code . '">
             </div>
-            <div class="form-group">
+            <div class="mb-3">
             	<label for="type">Selectionner un type</label>
              	<select class="form-control" id="type" name="type">
                     ' . $this->createTypeOption($type) . '
                 </select>
             </div>
-            <button type="submit" class="btn button_ecran" name="submit">Modifier</button>
+            <button type="submit" class="btn btn-primary" name="submit">Modifier</button>
             <a href="' . $linkManageCode . '">Annuler</a>
          </form>';
     }
@@ -90,33 +100,19 @@ class CodeAdeView extends View
      *
      * @return string
      */
-    private function createTypeOption($selectedType) {
+    private function createTypeOption($selectedType)
+    {
         $result = '';
 
-        // Declare available code types
-        $types = array(
-            array(
-                'value' => 'year',
-                'title' => 'Année',
-            ),
-            array(
-                'value' => 'group',
-                'title' => 'Groupe',
-            ),
-            array(
-                'value' => 'halfGroup',
-                'title' => 'Demi-Groupe',
-            ),
-        );
-
         // Build option list
-        foreach ($types as $type) {
-            $result .= '<option value="' . $type['value'] . '"';
+        foreach ($this->typesDictionary as $value => $title) {
+            $result .= '<option value="' . $value . '"';
 
-            if ($selectedType === $type['value'])
+            if ($selectedType === $value) {
                 $result .= ' selected';
+            }
 
-            $result .= '>' . $type['title'] . '</option>' . PHP_EOL;
+            $result .= '>' . $title . '</option>' . PHP_EOL;
         }
 
         return $result;
@@ -131,47 +127,40 @@ class CodeAdeView extends View
      *
      * @return          string
      */
-    public function displayAllCode($years, $groups, $halfGroups) {
+    public function displayTableCode(...$groups)
+    {
         $page = get_page_by_title('Modifier un code ADE');
         $linkManageCodeAde = get_permalink($page->ID);
 
-        $title = 'Codes Ade';
         $name = 'Code';
         $header = ['Titre', 'Code', 'Type', 'Modifier'];
-
-        $codesAde = [$years, $groups, $halfGroups];
 
         $row = array();
         $count = 0;
 
-        foreach ($codesAde as $codeAde) {
+        foreach ($groups as $codeAde) {
             foreach ($codeAde as $code) {
-                if ($code->getType() === 'year') {
-                    $code->setType('Année');
-                } else if ($code->getType() === 'group') {
-                    $code->setType('Groupe');
-                } else if ($code->getType() === 'halfGroup') {
-                    $code->setType('Demi-groupe');
-                }
                 ++$count;
-                $row[] = [$count, $this->buildCheckbox($name, $code->getId()), $code->getTitle(), $code->getCode(), $code->getType(), $this->buildLinkForModify($linkManageCodeAde . '?id=' . $code->getId())];
+                $row[] = [$count, $this->buildCheckbox($name, $code->getId()), $code->getTitle(), $code->getCode(), $this->typesDictionary[$code->getType()], $this->buildLinkForModify($linkManageCodeAde . '?id=' . $code->getId())];
             }
         }
 
-        return $this->displayAll($name, $title, $header, $row, 'code');
+        return $this->displayTable($name, $title, $header, $row, 'code', '');
     }
 
     /**
      * Display a success message for the creation of a new code ADE
      */
-    public function successCreation() {
+    public function successCreation()
+    {
         $this->buildModal('Ajout du code ADE', '<p>Le code ADE a bien été ajouté</p>');
     }
 
     /**
      * Display a success message for the modification of a code ADE
      */
-    public function successModification() {
+    public function successModification()
+    {
         $page = get_page_by_title('Gestion des codes ADE');
         $linkManageCode = get_permalink($page->ID);
         $this->buildModal('Modification du code ADE', '<p>Le code ADE a bien été modifié</p>', $linkManageCode);
@@ -180,28 +169,32 @@ class CodeAdeView extends View
     /**
      * Display an error message for the creation of a code ADE
      */
-    public function errorCreation() {
+    public function errorCreation()
+    {
         $this->buildModal('Erreur lors de l\'ajout du code ADE', '<p>Le code ADE a rencontré une erreur lors de son ajout</p>');
     }
 
     /**
      * Display an error message for the modification of a code ADE
      */
-    public function errorModification() {
+    public function errorModification()
+    {
         $this->buildModal('Erreur lors de la modification du code ADE', '<p>Le code ADE a rencontré une erreur lors de sa modification</p>');
     }
 
     /**
      * Error message if title or code exist
      */
-    public function displayErrorDoubleCode() {
+    public function displayErrorDoubleCode()
+    {
         echo '<p class="alert alert-danger"> Ce code ou ce titre existe déjà</p>';
     }
 
     /**
      * Display an message if there is nothing
      */
-    public function errorNobody() {
+    public function errorNobody()
+    {
         $page = get_page_by_title('Gestion des codes ADE');
         $linkManageCode = get_permalink($page->ID);
         echo '<p>Il n\'y a rien par ici</p><a href="' . $linkManageCode . '">Retour</a>';

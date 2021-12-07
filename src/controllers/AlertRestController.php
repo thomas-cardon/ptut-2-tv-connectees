@@ -2,11 +2,8 @@
 
 namespace Controllers;
 
-include __DIR__ . '/../utils/OneSignalPush.php';
-
 use Models\Alert;
 use Models\CodeAde;
-use Utils\OneSignalPush;
 use WP_Error;
 use WP_REST_Controller;
 use WP_REST_Request;
@@ -149,7 +146,7 @@ class AlertRestController extends WP_REST_Controller
         $alert->setCodes($ade_codes);
 
         // Try to insert the ADE code
-        if (($insert_id = $alert->insert())) {
+        if (($insert_id = $alert->insert())) {/*
             // Send the push notification
             $oneSignalPush = new OneSignalPush();
 
@@ -159,7 +156,7 @@ class AlertRestController extends WP_REST_Controller
                 $oneSignalPush->sendNotification($ade_codes, $alert->getContent());
             }
 
-            // Return the inserted alert ID
+            // Return the inserted alert ID*/
             return new WP_REST_Response(array('id' => $insert_id), 200);
         }
 
@@ -247,8 +244,7 @@ class AlertRestController extends WP_REST_Controller
      * @return WP_Error|bool
      */
     public function get_items_permissions_check($request) {
-        $current_user = wp_get_current_user();
-        return in_array("administrator", $current_user->roles);
+        return true;
     }
 
     /**
@@ -258,7 +254,7 @@ class AlertRestController extends WP_REST_Controller
      * @return true|WP_Error True if the request has access to create items, WP_Error object otherwise.
      */
     public function create_item_permissions_check($request) {
-        return $this->get_items_permissions_check($request);
+        return members_current_user_has_role('administrator');
     }
 
     /**
@@ -268,7 +264,7 @@ class AlertRestController extends WP_REST_Controller
      * @return true|WP_Error True if the request has read access for the item, otherwise WP_Error object.
      */
     public function get_item_permissions_check($request) {
-        return $this->get_items_permissions_check($request);
+        return true;
     }
 
     /**
@@ -278,7 +274,7 @@ class AlertRestController extends WP_REST_Controller
      * @return true|WP_Error True if the request has access to update the item, WP_Error object otherwise.
      */
     public function update_item_permissions_check($request) {
-        return $this->get_items_permissions_check($request);
+        return $this->create_item_permissions_check($request);
     }
 
     /**
@@ -288,7 +284,7 @@ class AlertRestController extends WP_REST_Controller
      * @return true|WP_Error True if the request has access to delete the item, WP_Error object otherwise.
      */
     public function delete_item_permissions_check($request) {
-        return $this->get_items_permissions_check($request);
+        return $this->create_item_permissions_check($request);
     }
 
     /**

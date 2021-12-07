@@ -215,13 +215,14 @@ class Alert extends Model implements Entity, JsonSerializable
      *
      * @return Alert[]
      */
-    public function getForUser($id) {
+    public function getForUser($id, $showNotExpired = false) {
         $request = $this->getDatabase()->prepare('SELECT ecran_alert.id, content, creation_date, expiration_date, author, administration_id
 															FROM ecran_alert
 															JOIN ecran_code_alert ON ecran_alert.id = ecran_code_alert.alert_id
 															JOIN ecran_code_ade ON ecran_code_alert.code_ade_id = ecran_code_ade.id
 															JOIN ecran_code_user ON ecran_code_ade.id = ecran_code_user.code_ade_id
-															WHERE ecran_code_user.user_id = :id ORDER BY expiration_date ASC');
+															WHERE ecran_code_user.user_id = :id ' . ($showNotExpired ? 'AND expiration_date < CURDATE()' : '') . '
+                              ORDER BY expiration_date ASC LIMIT 20');
 
         $request->bindParam(':id', $id, PDO::PARAM_INT);
 
@@ -232,9 +233,16 @@ class Alert extends Model implements Entity, JsonSerializable
 
     /**
      * Get all alerts for everyone
+     * @param showNotExpired - true to query only alerts that hasn't been expired yet
+     * @author Thomas Cardon
      */
-    public function getForEveryone() {
-        $request = $this->getDatabase()->prepare('SELECT ecran_alert.id, content, creation_date, expiration_date, author, administration_id FROM ecran_alert WHERE for_everyone = 1 ORDER BY expiration_date ASC LIMIT 50');
+    public function getForEveryone($showNotExpired = false) {
+        $request = $this->getDatabase()->prepare('
+        SELECT ecran_alert.id, content, creation_date, expiration_date, author, administration_id
+        FROM ecran_alert
+        WHERE for_everyone = 1 ' . ($showNotExpired ? 'AND expiration_date < CURDATE()' : '') . '
+        ORDER BY expiration_date ASC LIMIT 20;
+        ');
 
         $request->bindParam(':id', $id, PDO::PARAM_INT);
 

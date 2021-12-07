@@ -1,5 +1,5 @@
 /**
- * Valid all checkbox
+ * Checks all checkboxes
  *
  * @param source
  * @param name

@@ -2,12 +2,9 @@
 
 namespace Controllers;
 
-include __DIR__ . '/../utils/OneSignalPush.php';
-
 use Models\Alert;
 use Models\CodeAde;
 use Models\User;
-use Utils\OneSignalPush;
 use Views\AlertView;
 
 /**
@@ -82,15 +79,6 @@ class AlertController extends Controller
                 // Insert
                 if ($id = $this->model->insert()) {
                     $this->view->displayAddValidate();
-
-                    // Send the push notification
-                    $oneSignalPush = new OneSignalPush();
-
-                    if ($this->model->isForEveryone()) {
-                        $oneSignalPush->sendNotification(null, $this->model->getContent());
-                    } else {
-                        $oneSignalPush->sendNotification($codesAde, $this->model->getContent());
-                    }
                 } else {
                     $this->view->errorMessageCantAdd();
                 }
@@ -103,7 +91,11 @@ class AlertController extends Controller
         $groups = $codeAde->getAllFromType('group');
         $halfGroups = $codeAde->getAllFromType('halfGroup');
 
-        return $this->view->creationForm($years, $groups, $halfGroups);
+        return
+          $this->view->renderContainer(
+            $this->view->creationForm($years, $groups, $halfGroups), 'Créer une alerte'
+          ) . $this->view->renderContainerDivider() .
+          $this->view->renderContainer($this->view->contextCreateAlert());
     }
 
     /**
@@ -117,9 +109,9 @@ class AlertController extends Controller
         }
         $current_user = wp_get_current_user();
         $alert = $this->model->get($id);
-        if (!in_array('administrator', $current_user->roles) && !in_array('secretaire', $current_user->roles) && $alert->getAuthor()->getId() != $current_user->ID) {
+        
+        if (!members_current_user_has_role('administrator') && !members_current_user_has_role('secretaire') && $alert->getAuthor()->getId() != $current_user->ID)
             return $this->view->alertNotAllowed();
-        }
 
         if ($alert->getAdminId()) {
             return $this->view->alertNotAllowed();
@@ -176,7 +168,7 @@ class AlertController extends Controller
     }
 
 
-    public function displayAll() {
+    public function displayTable() {
         $numberAllEntity = $this->model->countAll();
         $url = $this->getPartOfUrl();
         $number = filter_input(INPUT_GET, 'number');
@@ -193,15 +185,16 @@ class AlertController extends Controller
             $pageNumber = $maxPage;
         }
         $current_user = wp_get_current_user();
-        if (in_array('administrator', $current_user->roles) || in_array('secretaire', $current_user->roles)) {
+        if (members_current_user_has_role('administrator') || members_current_user_has_role('secretaire'))
             $alertList = $this->model->getList($begin, $number);
-        } else {
-            $alertList = $this->model->getAuthorListAlert($current_user->ID, $begin, $number);
-        }
+         else
+           $alertList = $this->model->getAuthorListAlert($current_user->ID, $begin, $number);
+
         $name = 'Alert';
-        $header = ['Contenu', 'Date de création', 'Date d\'expiration', 'Auteur', 'Modifier'];
+        $header = ['Contenu', 'Date de création', 'Date d\'expiration', 'Auteur', ''];
         $dataList = [];
         $row = $begin;
+        
         foreach ($alertList as $alert) {
             ++$row;
             $dataList[] = [$row, $this->view->buildCheckbox($name, $alert->getId()), $alert->getContent(), $alert->getCreationDate(), $alert->getExpirationDate(), $alert->getAuthor()->getLogin(), $this->view->buildLinkForModify(esc_url(get_permalink(get_page_by_title('Modifier une alerte'))) . '?id=' . $alert->getId())];
@@ -218,38 +211,30 @@ class AlertController extends Controller
                 $this->view->refreshPage();
             }
         }
-        if ($pageNumber == 1) {
-            $returnString = $this->view->contextDisplayAll();
-        }
-        return $returnString . $this->view->displayAll($name, 'Alertes', $header, $dataList) . $this->view->pageNumber($maxPage, $pageNumber, esc_url(get_permalink(get_page_by_title('Gestion des alertes'))), $number);
+
+        return ($pageNumber == 1 ? $this->view->getHeader() : '') .
+        $this->view->renderContainerDivider() .
+        $this->view->renderContainer(
+          $this->view->displayTable($name, 'Alertes', $header, $dataList, '', '<a type="submit" class="btn btn-primary" role="button" aria-disabled="true" href="' . home_url('/creer-une-alerte') . '">Créer</a>') . $this->view->pageNumber($maxPage, $pageNumber, home_url('/gerer-les-alertes'), $number)
+        , '', 'container-xl py-5 my-5 text-center');
     }
-
-
+    
     /**
-     * Display all alerts link to the user
+     * displayAlerts()
+     * Displays all alerts in an horizontal list
+     * @author Thomas Cardon
      */
-    public function alertMain() {
-        // Get codes from current user
-        $current_user = wp_get_current_user();
-        $alertsUser = $this->model->getForUser($current_user->ID);
-        //$alertsUser = array_unique($alertsUser); // Delete duplicate
+    public function displayAlerts() {
+      $alerts = $this->model->getForEveryone();
+      $userAlerts = $this->model->getForUser(wp_get_current_user()->ID);
+            
+      foreach ($alerts as $i)
+        $this->view->carousel->add($i->getAuthor(), $i->getContent());
+        
+      foreach ($userAlerts as $i)
+        $this->view->carousel->add($i->getAuthor(), $i->getContent());
 
-        foreach ($this->model->getForEveryone() as $alert) {
-            $alertsUser[] = $alert;
-        }
-
-        $contentList = array();
-        foreach ($alertsUser as $alert) {
-            $endDate = date('Y-m-d', strtotime($alert->getExpirationDate()));
-            $this->endDateCheckAlert($alert->getId(), $endDate); // Check alert
-
-            $content = $alert->getContent() . '&emsp;&emsp;&emsp;&emsp;';
-            array_push($contentList, $content);
-        }
-
-        if (isset($content)) {
-            $this->view->displayAlertMain($contentList);
-        }
+      echo $this->view->carousel->build();
     }
 
     public function registerNewAlert() {

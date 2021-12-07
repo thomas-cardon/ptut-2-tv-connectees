@@ -35,11 +35,11 @@ class StudyDirectorController extends UserController implements Schedule
     }
 
     /**
-     * Display the schedule of the study director
-     *
-     * @return bool|mixed|string
+     * Displays the study director's schedule
+     * @author Thomas Cardon
+     * @return mixed|string
      */
-    public function displayMySchedule() {
+    public function displayContent() {
         $current_user = wp_get_current_user();
         $user = $this->model->get($current_user->ID);
         if (sizeof($user->getCodes()) > 0) {
@@ -119,9 +119,9 @@ class StudyDirectorController extends UserController implements Schedule
     /**
      * Display all study directors
      */
-    public function displayAllStudyDirector() {
+    public function displayTableStudyDirector() {
         $users = $this->model->getUsersByRole('directeuretude');
         $users = $this->model->getMyCodes($users);
-        return $this->view->displayAllStudyDirector($users);
+        return $this->view->displayTableStudyDirector($users);
     }
 }

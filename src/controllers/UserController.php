@@ -6,8 +6,10 @@ use Models\Alert;
 use Models\CodeAde;
 use Models\Information;
 use Models\User;
-use R34ICS;
+
 use Views\UserView;
+
+use R34ICS;
 
 /**
  * Class UserController
@@ -35,6 +37,15 @@ class UserController extends Controller
     public function __construct() {
         $this->model = new User();
         $this->view = new UserView();
+    }
+
+    /**
+     * Displays user view content
+     * @author Thomas Cardon
+     * @return mixed|string
+     */
+    public function displayContent() {
+        return $this->view->displayContent();
     }
 
     /**
@@ -91,16 +102,16 @@ class UserController extends Controller
 
                 //Build Mail
                 $to = $current_user->user_email;
-                $subject = "Désinscription à la télé-connecté";
+                $subject = "Désinscription: TV Connectées";
                 $message = ' <!DOCTYPE html>
                              <html lang="fr">
                              	<head>
-                               		<title>Désnscription à la télé-connecté</title>
+                               		<title>Désinscription à la télé-connecté</title>
                               	</head>
                               	<body>
-                               		<p>Bonjour, vous avez décidé de vous désinscrire sur le site de la Télé Connecté</p>
+                               		<p>Bonjour, vous avez décidé de vous désinscrire du système des TV Connectées</p>
                                		<p> Votre code de désinscription est : ' . $code . '.</p>
-                               		<p> Pour vous désinscrire, rendez-vous sur le site : <a href="' . home_url() . '/mon-compte/"> Tv Connectée.</p>
+                               		<p> Pour poursuivre, rendez-vous <a href="' . home_url() . '/mon-compte/">ici</p>.
                               	</body>
                              </html>';
 
@@ -124,38 +135,31 @@ class UserController extends Controller
                 $this->view->displayWrongPassword();
             }
         }
-        return $this->view->displayDeleteAccount() . $this->view->displayEnterCode();
+        return $this->view->displayDeleteAccount();
     }
 
     /**
-     * Modify his password, delete his account or modify his groups
-     *
-     * @return string
+     * Modifies user's password, delete their account or modify their groups
+     * @author Thomas Cardon
+     * @return mixed|string
      */
-    public function chooseModif() {
+    public function edit() {
         $current_user = wp_get_current_user();
-        $string = $this->view->displayStartMultiSelect();
 
-        if (in_array('etudiant', $current_user->roles)) {
-            $string .= $this->view->displayTitleSelect('code', 'Modifier mes codes', true) .
-                $this->view->displayTitleSelect('pass', 'Modifier mon mot de passe');
-        } else {
-            $string .= $this->view->displayTitleSelect('pass', 'Modifier mon mot de passe', true);
-        }
-
-        $string .= $this->view->displayTitleSelect('delete', 'Supprimer mon compte') .
-            $this->view->displayEndOfTitle();
-
-        if (in_array('etudiant', $current_user->roles)) {
-            $string .= $this->view->displayContentSelect('code', $this->modifyCodes(), true) .
-                $this->view->displayContentSelect('pass', $this->modifyPwd());
-        } else {
-            $string .= $this->view->displayContentSelect('pass', $this->modifyPwd(), true);
-        }
-
-        $string .= $this->view->displayContentSelect('delete', $this->deleteAccount()) . $this->view->displayEndDiv();
-
-        return $string;
+        return $this->view->renderHeroHeader('Vos réglages', 'Changez votre mot de passe, vos groupes ou supprimez votre compte.', URL_PATH . TV_PLUG_PATH . 'public/img/settings.png')
+        . $this->view->renderContainerDivider()
+        . $this->view->renderContainer(
+           $this->view->displayStartMultiSelect()
+        .  $this->view->displayTitleSelect('pass', 'Modifier mon mot de passe', true)
+        .  $this->view->displayTitleSelect('generate', 'Générer un code de suppression')
+        .  $this->view->displayTitleSelect('delete', 'Supprimer mon compte')
+        .  $this->view->displayEndOfTitle()
+        .  $this->view->displayContentSelect('pass', $this->modifyPwd(), true)
+        .  $this->view->displayContentSelect('generate', $this->view->displayEnterCode(), false)
+        .  $this->view->displayContentSelect('delete', $this->deleteAccount())
+        .  $this->view->displayEndDiv()
+        . '<a role="button" class="btn btn-outline-secondary mt-5" href="/politique-de-confidentialite">Mention légales</a>'
+        , '', 'container-sm px-4 pb-3 my-3 text-center');
     }
 
     /**

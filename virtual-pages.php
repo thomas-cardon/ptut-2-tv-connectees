@@ -12,117 +12,94 @@ use EC\VirtualPages\TemplateLoader;
 
 use EC\VirtualPages\PageInterface;
 
-$controller = new PageController ( new TemplateLoader );
+$controller = new PageController(new TemplateLoader());
 
-add_action( 'init', array( $controller, 'init' ) );
+add_action('init', array( $controller, 'init' ));
 
-add_filter( 'do_parse_request', array( $controller, 'dispatch' ), PHP_INT_MAX, 2 );
+add_filter('do_parse_request', array( $controller, 'dispatch' ), PHP_INT_MAX, 2);
 
-add_action( 'loop_end', function( \WP_Query $query ) {
-    if ( isset( $query->virtual_page ) && ! empty( $query->virtual_page ) ) {
-        $query->virtual_page = NULL;
+add_action('loop_end', function (\WP_Query $query) {
+    if (isset($query->virtual_page) && ! empty($query->virtual_page)) {
+        $query->virtual_page = null;
     }
-} );
+});
 
-add_filter( 'the_permalink', function( $plink ) {
+add_filter('the_permalink', function ($plink) {
     global $post, $wp_query;
     if (
-        $wp_query->is_page && isset( $wp_query->virtual_page )
+        $wp_query->is_page && isset($wp_query->virtual_page)
         && $wp_query->virtual_page instanceof Page
-        && isset( $post->is_virtual ) && $post->is_virtual
+        && isset($post->is_virtual) && $post->is_virtual
     ) {
-        $plink = home_url( $wp_query->virtual_page->getUrl() );
+        $plink = home_url($wp_query->virtual_page->getUrl());
     }
     return $plink;
-} );
+});
 
-add_action( 'ec_virtual_pages', function( $controller ) {
-  /**
-   *  Page: /
-   */
-  $controller->addPage( new \EC\VirtualPages\Page( "/" ) )
-    ->setTitle( 'Accueil' )
-    ->setContent( '
+add_action('ec_virtual_pages', function ($controller) {
+    /**
+     *  Page: /
+     */
+    $controller->addPage(new \EC\VirtualPages\Page("/"))
+    ->setTitle('Accueil')
+    ->setContent('
     <!-- wp:tvconnecteeamu/schedule -->
-    Yo
+    test
     <!-- /wp:tvconnecteeamu/schedule -->
-    ' )
-    ->setTemplate( 'page.php' );
+    ')
+    ->setTemplate('page.php');
+
+    $controller->addPage(new \EC\VirtualPages\Page("/tv-mode"))
+    ->setTitle('tv-mode')
+    ->setContent('
+    <!-- wp:tvconnecteeamu/tv-mode -->
+    test
+    <!-- /wp:tvconnecteeamu/tv-mode -->
+    ')
+    ->setTemplate('page-tv.php');
 
     /**
-     *  Page: /creation-des-comptes
+     *  Page: /creer-utilisateur
      */
-  $controller->addPage( new \EC\VirtualPages\Page( "/creation-des-comptes" ) )
-    ->setTitle( 'Créer un utilisateur' )
-    ->setContent( '
-    <!-- wp:heading {"level":1} -->
-    <h1>Création des comptes</h1>
-    <!-- /wp:heading -->
-
+    $controller->addPage(new \EC\VirtualPages\Page("/creer-utilisateur"))
+    ->setTitle('Créer un utilisateur')
+    ->setContent('
     <!-- wp:tvconnecteeamu/creation-user -->
     test
     <!-- /wp:tvconnecteeamu/creation-user -->
-    ' )
-    ->setTemplate( 'page.php' );
+    ')
+    ->setTemplate('page.php');
 
     /**
-     *  Page: /gestion-des-utilisateurs
+     *  Page: /liste-utilisateur
      */
-  $controller->addPage( new \EC\VirtualPages\Page( "/gestion-des-utilisateurs" ) )
-    ->setTitle( 'Gestion des utilisateurs' )
-    ->setContent( '
-    <!-- wp:heading {"level":1} -->
-    <h1>Gestion des utilisateurs</h1>
-    <!-- /wp:heading -->
-
+    $controller->addPage(new \EC\VirtualPages\Page("/liste-utilisateur"))
+    ->setTitle('Liste des utilisateurs')
+    ->setContent('
     <!-- wp:tvconnecteeamu/management-user -->
     test
     <!-- /wp:tvconnecteeamu/management-user -->
-    ' )
-    ->setTemplate( 'page.php' );
+    ')
+    ->setTemplate('page.php');
 
     /**
-     *  Page: /inscription
+     *  Page: /creer-information
      */
-  $controller->addPage( new \EC\VirtualPages\Page( "/inscription" ) )
-    ->setTitle( 'Inscription' )
-    ->setContent( '
-    <!-- wp:heading {"level":1} -->
-    <h1>Inscription</h1>
-    <!-- /wp:heading -->
-
-    <!-- wp:tvconnecteeamu/inscr-student -->
-    test
-    <!-- /wp:tvconnecteeamu/inscr-student -->
-    ' )
-    ->setTemplate( 'page.php' );
-
-  /**
-   *  Page: /creer-information
-   */
-  $controller->addPage( new \EC\VirtualPages\Page( "/creer-information" ) )
-    ->setTitle( 'Créer une information' )
-    ->setContent( '
-    <!-- wp:heading {"level":1} -->
-    <h1>Créer une information</h1>
-    <!-- /wp:heading -->
-
+    $controller->addPage(new \EC\VirtualPages\Page("/creer-information"))
+    ->setTitle('Créer une information')
+    ->setContent('
     <!-- wp:tvconnecteeamu/add-information -->
     test
     <!-- /wp:tvconnecteeamu/add-information -->
-    ' )
-    ->setTemplate( 'page.php' );
+    ')
+    ->setTemplate('page.php');
 
     /**
      *  Page: /creer-une-alerte
      */
-  $controller->addPage( new \EC\VirtualPages\Page( "/creer-une-alerte" ) )
-    ->setTitle( 'Créer une alerte' )
-    ->setContent( '
-    <!-- wp:heading {"level":1} -->
-    <h1>Créer une alerte</h1>
-    <!-- /wp:heading -->
-
+    $controller->addPage(new \EC\VirtualPages\Page("/creer-une-alerte"))
+    ->setTitle('Créer une alerte')
+    ->setContent('
     <!-- wp:tvconnecteeamu/add-alert -->
     test
     <!-- /wp:tvconnecteeamu/add-alert -->
@@ -130,31 +107,27 @@ add_action( 'ec_virtual_pages', function( $controller ) {
     <!-- wp:html -->
     <a href="/gerer-les-alertes/">Gérer les alertes</a>
     <!-- /wp:html -->
-    ' )
-    ->setTemplate( 'page.php' );
+    ')
+    ->setTemplate('page.php');
 
     /**
      *  Page: /emploi-du-temps
      */
-  $controller->addPage( new \EC\VirtualPages\Page( "/gerer-les-informations" ) )
-    ->setTitle( 'Gérer les informations' )
-    ->setContent( '
-    <!-- wp:heading {"level":1} -->
-    <h1>Gestion des informations</h1>
-    <!-- /wp:heading -->
-
+    $controller->addPage(new \EC\VirtualPages\Page("/gerer-les-informations"))
+    ->setTitle('Gérer les informations')
+    ->setContent('
     <!-- wp:tvconnecteeamu/manage-information -->
     test
     <!-- /wp:tvconnecteeamu/manage-information -->
-    ' )
-    ->setTemplate( 'page.php' );
+    ')
+    ->setTemplate('page.php');
 
     /**
      *  Page: /gerer-les-informations/modification-information
      */
-  $controller->addPage( new \EC\VirtualPages\Page( "/gerer-les-informations/modification-information" ) )
-    ->setTitle( 'Modifier une information' )
-    ->setContent( '
+    $controller->addPage(new \EC\VirtualPages\Page("/gerer-les-informations/modification-information"))
+    ->setTitle('Modifier une information')
+    ->setContent('
     <!-- wp:heading {"level":1} -->
     <h1>Modifier une information</h1>
     <!-- /wp:heading -->
@@ -162,57 +135,39 @@ add_action( 'ec_virtual_pages', function( $controller ) {
     <!-- wp:tvconnecteeamu/modify-information -->
     test
     <!-- /wp:tvconnecteeamu/modify-information -->
-    ' )
-    ->setTemplate( 'page.php' );
+    ')
+    ->setTemplate('page.php');
 
     /**
      *  Page: /emploi-du-temps
      */
-  $controller->addPage( new \EC\VirtualPages\Page( "/emploi-du-temps" ) )
-    ->setTitle( 'Emploi du temps' )
-    ->setContent( '
+    $controller->addPage(new \EC\VirtualPages\Page("/emploi-du-temps"))
+    ->setTitle('Emploi du temps')
+    ->setContent('
     <!-- wp:tvconnecteeamu/schedules -->
     test
     <!-- /wp:tvconnecteeamu/schedules -->
-    ' )
-    ->setTemplate( 'page.php' );
+    ')
+    ->setTemplate('page.php');
 
     /**
      *  Page: /mon-compte
      */
-  $controller->addPage( new \EC\VirtualPages\Page( "/mon-compte" ) )
-    ->setTitle( 'Mon compte' )
-    ->setContent( '
-    <!-- wp:heading {"level":1} -->
-    <h1>Mon compte</h1>
-    <!-- /wp:heading -->
-
-    <!-- wp:spacer {"height":34} -->
-    <div style="height:34px" aria-hidden="true" class="wp-block-spacer"></div>
-    <!-- /wp:spacer -->
-
-    <!-- wp:tvconnecteeamu/subscription -->
-    test
-    <!-- /wp:tvconnecteeamu/subscription -->
-
+    $controller->addPage(new \EC\VirtualPages\Page("/mon-compte"))
+    ->setTitle('Mon compte')
+    ->setContent('
     <!-- wp:tvconnecteeamu/choose-account -->
     test
     <!-- /wp:tvconnecteeamu/choose-account -->
-
-    <!-- wp:html -->
-    <center>
-      <a href="/politique-de-confidentialite"> Mention légales</a>
-    </center>
-    <!-- /wp:html -->
-    ' )
-    ->setTemplate( 'page.php' );
+    ')
+    ->setTemplate('page.php');
 
     /**
      *  Page: /gestion-codes-ade/modification-code-ade
      */
-  $controller->addPage( new \EC\VirtualPages\Page( "/gestion-codes-ade/modification-code-ade" ) )
-    ->setTitle( 'Modifier un code ADE' )
-    ->setContent( '
+    $controller->addPage(new \EC\VirtualPages\Page("/gestion-codes-ade/modification-code-ade"))
+    ->setTitle('Modifier un code ADE')
+    ->setContent('
     <!-- wp:heading {"level":1} -->
     <h1>Modifier code ADE</h1>
     <!-- /wp:heading -->
@@ -220,52 +175,57 @@ add_action( 'ec_virtual_pages', function( $controller ) {
     <!-- wp:tvconnecteeamu/modify-code -->
     test
     <!-- /wp:tvconnecteeamu/modify-code -->
-    ' )
-    ->setTemplate( 'page.php' );
+    ')
+    ->setTemplate('page.php');
     /**
      *  Page: /gestion-codes-ade
      */
-  $controller->addPage( new \EC\VirtualPages\Page( "/gestion-codes-ade" ) )
-    ->setTitle( 'Gestion des codes ADE' )
-    ->setContent( '
-    ' )
-    ->setTemplate( 'page.php' );
+    $controller->addPage(new \EC\VirtualPages\Page("/gestion-codes-ade"))
+    ->setTitle('Gestion des codes ADE')
+    ->setContent('
+    <!-- wp:tvconnecteeamu/manage-codes -->
+      <!-- wp:tvconnecteeamu/add-code -->
+      test
+      <!-- /wp:tvconnecteeamu/add-code -->
+    <!-- /wp:tvconnecteeamu/manage-codes -->
+    ')
+    ->setTemplate('page.php');
 
 
-  /**
-   *  Page: /gerer-les-alertes
-   */
-  $controller->addPage( new \EC\VirtualPages\Page( "/gerer-les-alertes" ) )
-    ->setTitle( 'Gérer les alertes' )
-    ->setContent( '
-    <!-- wp:heading {"level":1} -->
-    <h1>Gestion des alertes</h1>
-    <!-- /wp:heading -->
-
+    /**
+     *  Page: /gerer-les-alertes
+     */
+    $controller->addPage(new \EC\VirtualPages\Page("/gerer-les-alertes"))
+    ->setTitle('Gérer les alertes')
+    ->setContent('
     <!-- wp:tvconnecteeamu/manage-alert -->
     test
     <!-- /wp:tvconnecteeamu/manage-alert -->
-    ' )
-    ->setTemplate( 'page.php' );
+    ')
+    ->setTemplate('page.php');
 
 
-  /**
-   *  Page: /tablet-view
-   */
-  $controller->addPage( new \EC\VirtualPages\Page( "/tablet-view" ) )
-    ->setTitle( 'tablet-view' )
-    ->setContent( '' )
-    ->setTemplate( 'page-tablet.php' );
+    /**
+     *  Page: /tablet-view
+     */
+    $controller->addPage(new \EC\VirtualPages\Page("/tablet-view"))
+    ->setTitle('tablet-view')
+    ->setContent('
+    <!-- wp:tvconnecteeamu/tablet-select-year -->
+    test
+    <!-- /wp:tvconnecteeamu/tablet-select-year -->
+    ')
+    ->setTemplate('page-tablet.php');
 
-  /**
-   *  Page: /tablet-view/schedule
-   */
-  $controller->addPage( new \EC\VirtualPages\Page( "/tablet-view/emploi-du-temps" ) )
-    ->setTitle( 'tablet-view' )
-    ->setContent( '
+    /**
+     *  Page: /tablet-view/schedule
+     */
+    $controller->addPage(new \EC\VirtualPages\Page("/tablet-view/emploi-du-temps"))
+    ->setTitle('tablet-view')
+    ->setContent('
     <!-- wp:tvconnecteeamu/tablet-schedule -->
     test
     <!-- /wp:tvconnecteeamu/tablet-schedule -->
-    ' )
-    ->setTemplate( 'page-tablet.php' );
-} );
+    ')
+    ->setTemplate('page-tablet.php');
+});

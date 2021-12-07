@@ -1,38 +1,27 @@
-/**
-CSS de l'emploi du temps
- */
+/** CSS de l'emploi du temps */
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
 
-.shedule_tech{
-    width: 50%;
+.group-title {
+  color: #6F7DA9;
 }
 
-.tv-schedule {
-    width: 100%;
+.schedule {
+  border-radius: 10px;
+  margin-bottom: 0;
+  max-height: 86vh;
+  position: relative;
 }
 
-/* TABLE */
-.errorNotRegister {
-    font-weight: bold;
-    color: white;
-    background-color: red;
+.table-responsive {
+  max-height: 80vh;
 }
 
-/* SLIDESHOW */
-.slideshow-container {
-    position: relative;
-    margin: auto;
+#time {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: bolder;
+  font-size: xxx-large;
 }
 
-.mySlides {
-    display: block;
-}
-
-@media (max-width: 1200px) {
-    .shedule_tech{
-        width: 100%;
-    }
-}
-
-.firstSelect {
-    max-width: 70%;
+#date {
+  text-transform: capitalize;
 }

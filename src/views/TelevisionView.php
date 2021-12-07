@@ -26,7 +26,7 @@ class TelevisionView extends UserView
      */
     public function displayFormTelevision($years, $groups, $halfGroups) {
         $form = '
-        <h2> Compte télévision</h2>
+        <h2>Compte télévision</h2>
         <p class="lead">Pour créer des télévisions, remplissez ce formulaire avec les valeurs demandées.</p>
         <p class="lead">Vous pouvez mettre autant d\'emploi du temps que vous souhaitez, cliquez sur "Ajouter des emplois du temps</p>
         <form method="post" id="registerTvForm">
@@ -45,8 +45,8 @@ class TelevisionView extends UserView
             	<label>Premier emploi du temps</label>' .
             $this->buildSelectCode($years, $groups, $halfGroups) . '
             </div>
-            <input type="button" class="btn button_ecran" onclick="addButtonTv()" value="Ajouter des emplois du temps">
-            <button type="submit" class="btn button_ecran" id="validTv" name="createTv">Créer</button>
+            <input type="button" class="btn btn-primary" onclick="addButtonTv()" value="Ajouter des emplois du temps">
+            <button type="submit" class="btn btn-primary" id="validTv" name="createTv">Créer</button>
         </form>';
 
         return $form;
@@ -59,11 +59,11 @@ class TelevisionView extends UserView
      *
      * @return string
      */
-    public function displayAllTv($users) {
+    public function displayTableTv($users) {
         $page = get_page_by_title('Modifier un utilisateur');
         $linkManageUser = get_permalink($page->ID);
 
-        $title = 'Televisions';
+        $title = '<b>Rôle affiché: </b> Télévision';
         $name = 'Tele';
         $header = ['Login', 'Nombre d\'emplois du temps ', 'Modifier'];
 
@@ -74,7 +74,7 @@ class TelevisionView extends UserView
             $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), sizeof($user->getCodes()), $this->buildLinkForModify($linkManageUser . '?id=' . $user->getId())];
         }
 
-        return $this->displayAll($name, $title, $header, $row, 'tele');
+        return $this->displayTable($name, $title, $header, $row, 'tele', '<a type="submit" class="btn btn-primary" role="button" aria-disabled="true" href="' . home_url('/creer-utilisateur') . '">Créer</a>');
     }
 
     /**
@@ -103,7 +103,7 @@ class TelevisionView extends UserView
                 $string .= '
 					<div class="row">' .
                     $this->buildSelectCode($years, $groups, $halfGroups, $code, $count) .
-                    '<input type="button" id="selectId' . $count . '" onclick="deleteRow(this.id)" class="btn button_ecran" value="Supprimer">
+                    '<input type="button" id="selectId' . $count . '" onclick="deleteRow(this.id)" class="btn btn-primary" value="Supprimer">
 					</div>';
             }
         }
@@ -115,8 +115,8 @@ class TelevisionView extends UserView
         $page = get_page_by_title('Gestion des utilisateurs');
         $linkManageUser = get_permalink($page->ID);
         $string .= '
-            <input type="button" class="btn button_ecran" onclick="addButtonTv()" value="Ajouter des emplois du temps">
-            <button name="modifValidate" class="btn button_ecran" type="submit" id="validTv">Valider</button>
+            <input type="button" class="btn btn-primary" onclick="addButtonTv()" value="Ajouter des emplois du temps">
+            <button name="modifValidate" class="btn btn-primary" type="submit" id="validTv">Valider</button>
             <a href="' . $linkManageUser . '">Annuler</a>
         </form>';
         return $string;
@@ -168,30 +168,27 @@ class TelevisionView extends UserView
      * @return string
      */
     public function modifyPassword() {
-        return '
-		<form method="post">
-		<label>Nouveau mot de passe </label>
-            <input  minlength="4" type="password" class="form-control text-center modal-sm" id="pwdTv" name="pwdTv" placeholder="Nouveau mot de passe" onkeyup=checkPwd("Tv")>
-            <input  minlength="4" type="password" class="form-control text-center modal-sm" id="pwdConfTv" name="pwdConfirmTv" placeholder="Confirmer le nouveau mot de passe" onkeyup=checkPwd("Tv")>
-		</form>';
+        return '<form method="post">
+              		<label>Nouveau mot de passe </label>
+                  <input minlength="4" type="password" class="form-control text-center modal-sm" id="pwdTv" name="pwdTv" placeholder="Nouveau mot de passe" onkeyup=checkPwd("Tv")>
+                  <input minlength="4" type="password" class="form-control text-center modal-sm" id="pwdConfTv" name="pwdConfirmTv" placeholder="Confirmer le nouveau mot de passe" onkeyup=checkPwd("Tv")>
+          		  </form>';
 
     }
-
+    
     /**
-     * Start a slideshow
+     * Display an message if there is no courses of the day
      *
+     * @param $title            string
+     * @author Thomas Cardon
      * @return string
      */
-    public function displayStartSlide() {
-        return '<div id="slideshow-container" class="slideshow-container">';
-    }
-
-    /**
-     * Separate all slide by this
-     *
-     * @return string
-     */
-    public function displayMidSlide() {
-        return '<div class="mySlides">';
+    public function displayNoSchedule() {
+      return '<div class="col-5 mx-auto my-auto text-center">
+                <h1 class="group-title">Télévision à configurer</h1>
+                <div class="alert alert-warning" role="alert">
+                  <b>⚠️ Aucun code ADE enregistré pour cet utilisateur.</b>
+                </div>
+              </div>';
     }
 }

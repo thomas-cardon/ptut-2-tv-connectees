@@ -15,7 +15,6 @@ use Views\TelevisionView;
  */
 class TelevisionController extends UserController implements Schedule
 {
-
     /**
      * @var User
      */
@@ -29,10 +28,57 @@ class TelevisionController extends UserController implements Schedule
     /**
      * Constructor of TelevisionController
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->model = new User();
         $this->view = new TelevisionView();
+    }
+
+    /**
+     * Redirects from / to /tv-mode if user is a TV
+     * @author Thomas Cardon
+     * @return mixed|string
+     */
+    public function displayContent()
+    {
+        return "<script>location.href = '". home_url('/tv-mode') . "'</script>";
+    }
+
+    /**
+     * Displays the TV schedule
+     * @author Thomas Cardon
+     * @return mixed|string
+     */
+    public function displayTVInterface()
+    {
+        $current_user = wp_get_current_user();
+        $user = $this->model->get($current_user->ID);
+        $user = $this->model->getMycodes([$user])[0];
+
+        $string = '
+        <div class="col d-flex flex-row align-items-center float-end">
+          <span id="time">00:00</span>
+          <span id="date" class="ps-2 text-muted">Jeudi<br />1er Janvier 1970</span>
+        </div>
+        <div class="row">
+          <div id="scheduleList" class="col-11 schedule-table">';
+
+        if (count($user->getCodes()) > 0) {
+            foreach ($user->getCodes() as $code) {
+                $string .= $this->displaySchedule($code->getCode());
+            }
+        } else {
+            $string .= $this->view->displayNoSchedule();
+        }
+
+        $string .= '
+          </div>
+          <div class="col-auto">
+          </div>
+        </div>';
+
+        return $string;
     }
 
     /**
@@ -40,13 +86,13 @@ class TelevisionController extends UserController implements Schedule
      *
      * @return string
      */
-    public function insert() {
+    public function insert()
+    {
         $action = filter_input(INPUT_POST, 'createTv');
 
         $codeAde = new CodeAde();
 
         if (isset($action)) {
-
             $login = filter_input(INPUT_POST, 'loginTv');
             $password = filter_input(INPUT_POST, 'pwdTv');
             $passwordConfirm = filter_input(INPUT_POST, 'pwdConfirmTv');
@@ -55,7 +101,6 @@ class TelevisionController extends UserController implements Schedule
             if (is_string($login) && strlen($login) >= 4 && strlen($login) <= 25 &&
                 is_string($password) && strlen($password) >= 8 && strlen($password) <= 25 &&
                 $password === $passwordConfirm) {
-
                 $codesAde = array();
                 foreach ($codes as $code) {
                     if (is_numeric($code) && $code > 0) {
@@ -97,7 +142,8 @@ class TelevisionController extends UserController implements Schedule
      *
      * @return string
      */
-    public function modify($user) {
+    public function modify($user)
+    {
         $page = get_page_by_title('Gestion des utilisateurs');
         $linkManageUser = get_permalink($page->ID);
 
@@ -136,58 +182,9 @@ class TelevisionController extends UserController implements Schedule
      *
      * @return string
      */
-    public function displayAllTv() {
+    public function displayTableTv()
+    {
         $users = $this->model->getUsersByRole('television');
-        return $this->view->displayAllTv($users);
-    }
-
-    /**
-     * Display a list a schedule
-     *
-     * @return mixed|string
-     */
-    public function displayMySchedule() {
-        $current_user = wp_get_current_user();
-        $user = $this->model->get($current_user->ID);
-        $user = $this->model->getMycodes([$user])[0];
-
-        $string = "";
-        if (sizeof($user->getCodes()) > 1) {
-            if (get_theme_mod('ecran_connecte_schedule_scroll', 'vert') == 'vert') {
-                $string .= '<div class="ticker1">
-						<div class="innerWrap tv-schedule">';
-                foreach ($user->getCodes() as $code) {
-                    $path = $this->getFilePath($code->getCode());
-                    if (file_exists($path)) {
-                        if ($this->displaySchedule($code->getCode())) {
-                            $string .= '<div class="list">';
-                            $string .= $this->displaySchedule($code->getCode());
-                            $string .= '</div>';
-                        }
-                    }
-                }
-                $string .= '</div></div>';
-            } else {
-                $string .= $this->view->displayStartSlide();
-                foreach ($user->getCodes() as $code) {
-                    $path = $this->getFilePath($code->getCode());
-                    if (file_exists($path)) {
-                        if ($this->displaySchedule($code->getCode())) {
-                            $string .= $this->view->displayMidSlide();
-                            $string .= $this->displaySchedule($code->getCode());
-                            $string .= $this->view->displayEndDiv();
-                        }
-                    }
-                }
-                $string .= $this->view->displayEndDiv();
-            }
-        } else {
-            if (!empty($user->getCodes()[0])) {
-                $string .= $this->displaySchedule($user->getCodes()[0]->getCode());
-            } else {
-                $string .= '<p>Vous n\'avez pas cours </p>';
-            }
-        }
-        return $string;
+        return $this->view->displayTableTv($users);
     }
 }
