@@ -50,7 +50,7 @@ class WidgetWeather extends WP_Widget
             <div id="weather-card" class="card d-flex align-content-center flex-wrap flex-grow-1" style="height: 12rem;">
               <div class="card-body">
 
-                <div id="weatherCardCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-touch="false">
+                <div id="weatherCardCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-touch="false" data-bs-interval="10000">
                   <!-- Indicators -->
                   <div class="carousel-indicators mb-0">
                     <button type="button" data-bs-target="#weatherCardCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>

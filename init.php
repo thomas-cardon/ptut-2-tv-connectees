@@ -284,6 +284,8 @@ $result = add_role(
  */
 
 add_action('rest_api_init', function () {
+    error_reporting(0);
+    
     $controller = new InformationRestController();
     $controller->register_routes();
 

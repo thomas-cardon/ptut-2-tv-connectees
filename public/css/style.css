@@ -16,10 +16,6 @@
     --color-accent-disabled: #f5bfbf;
 }
 
-.auto-scroll {
-  /*animation: 10s ease-in-out 0s infinite alternate both running slidein;*/
-}
-
 @keyframes slidein {
   0%, 30%     { -webkit-transform: translateY(0%); }
   30%, 40%     { -webkit-transform: translateY(0%); }
