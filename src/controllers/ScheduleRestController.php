@@ -28,12 +28,11 @@ class ScheduleRestController extends WP_REST_Controller
     public function register_routes() {
         register_rest_route(
             $this->namespace,
-            '/' . $this->rest_base,
+            '/' . $this->rest_base . '/(?P<code>\d+)',
             array(
                 array(
                     'methods' => WP_REST_Server::READABLE,
                     'callback' => array($this, 'get_items'),
-                    'permission_callback' => array($this, 'get_items_permissions_check'),
                     'args' => $this->get_collection_params(),
                 ),
                 'schema' => array($this, 'get_public_item_schema'),
@@ -120,8 +119,8 @@ class ScheduleRestController extends WP_REST_Controller
      * @param WP_REST_Request $request Full data about the request.
      * @return WP_Error|WP_REST_Response
      */
-    public function get_items($request) {
-        $s = $this->displaySchedule('8402');
+    public function get_items($request) {        
+        $s = $this->displaySchedule($request['code']);
         ob_clean();
 
         $data = array(
