@@ -57,10 +57,6 @@ class TelevisionController extends UserController implements Schedule
         $user = $this->model->getMycodes([$user])[0];
 
         $string = '
-        <div class="col d-flex flex-row align-items-center float-end">
-          <span id="time">00:00</span>
-          <span id="date" class="ps-2 text-muted">Jeudi<br />1er Janvier 1970</span>
-        </div>
         <div class="row">
           <div id="scheduleList" class="col-11 schedule-table">';
 

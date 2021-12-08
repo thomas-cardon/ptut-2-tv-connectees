@@ -19,7 +19,8 @@
 #time {
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: bolder;
-  font-size: xxx-large;
+  font-size: 4rem;
+  padding-left: 40rem;
 }
 
 #date {
