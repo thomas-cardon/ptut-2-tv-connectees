@@ -20,6 +20,7 @@
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: bolder;
   font-size: xxx-large;
+  font-size: -webkit-xxx-large;
 }
 
 #date {

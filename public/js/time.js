@@ -21,7 +21,7 @@ function updateTime() {
   lastDate = new Date();
   
   if (document.getElementById('time') !== null)
-      document.getElementById('time').innerHTML = lastDate.toLocaleTimeString().slice(0, 5);
+      document.getElementById('time').innerHTML = lastDate.toLocaleTimeString('fr-FR').slice(0, 5);
 }
 
 setTimeout(() => {
