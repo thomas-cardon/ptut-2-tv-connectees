@@ -24,6 +24,13 @@
   color: var(--color-primary-800);
 }
 
+.forecast-icon {
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 4rem;
+  width: 4rem;
+}
+
 #weatherCardCarousel .carousel-indicators {
   position: absolute;
   top: 0;

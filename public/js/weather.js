@@ -47,11 +47,9 @@ function render(json) {
       document.querySelector(`#forecast-d${i} strong`).innerText = d.toLocaleDateString('fr-FR', { weekday: 'short' });
       document.querySelector(`#forecast-d${i} h6`).innerText = Math.round(kelvinToC(day.temp.day)) + '°C';
 
-      document.querySelector(`#forecast-d${i} img`)
-      .setAttribute(
-        'src',
-        `${weather.ASSETS_URL}/conditions/${day.weather[0].icon}.svg`
-      );
+      document.querySelector(`#forecast-d${i} .forecast-icon`)
+      .style
+      .backgroundImage = `url(${weather.ASSETS_URL}/conditions/${day.weather[0].icon}.svg)`;
     });
 
     /* Prévisions par heure */
@@ -61,11 +59,10 @@ function render(json) {
       document.querySelector(`#forecast-h${i} strong`).innerText = h;
       document.querySelector(`#forecast-h${i} h6`).innerText = Math.round(kelvinToC(hour.temp)) + '°C';
 
-      document.querySelector(`#forecast-h${i} img`)
-      .setAttribute(
-        'src',
-        `${weather.ASSETS_URL}/conditions/${hour.weather[0].icon}.svg`
-      );
+      document.querySelector(`#forecast-h${i} .forecast-icon`)
+        .style
+        .backgroundImage = `url(${weather.ASSETS_URL}/conditions/${hour.weather[0].icon}.svg)`;
+
     });
 
     setTimeout(refreshWeather, 900000);

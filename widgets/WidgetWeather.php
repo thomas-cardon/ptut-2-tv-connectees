@@ -78,61 +78,61 @@ class WidgetWeather extends WP_Widget
                       </div>
                     </div>
                     <div id="card-1" class="carousel-item" style="height: 12rem;">
-                      <h3 class="my-1 text-center">Prévisions par heure</h3>
+                      <h3 class="my-1 text-center fs-2">Prévisions par heure</h3>
                       <div class="py-2 my-3 text-center d-flex justify-content-between">
-                        <div id="forecast-h0" class="mx-3 flex-column">
+                        <div id="forecast-h0" class="mx-1 flex-column">
                           <h6>99°C</h6>
-                          <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
+                          <div class="forecast-icon"></div>
                           <p class="mb-0"><strong>25:00</strong></p>
                         </div>
-                        <div id="forecast-h1" class="mx-3 flex-column">
+                        <div id="forecast-h1" class="mx-1 flex-column">
                           <h6>99°C</h6>
-                          <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
+                          <div class="forecast-icon"></div>
                           <p class="mb-0"><strong>25:00</strong></p>
                         </div>
-                        <div id="forecast-h2" class="mx-3 flex-column">
+                        <div id="forecast-h2" class="mx-1 flex-column">
                           <h6>99°C</h6>
-                          <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
+                          <div class="forecast-icon"></div>
                           <p class="mb-0"><strong>25:00</strong></p>
                         </div>
-                        <div id="forecast-h3" class="mx-3 flex-column">
+                        <div id="forecast-h3" class="mx-1 flex-column">
                           <h6>99°C</h6>
-                          <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
+                          <div class="forecast-icon"></div>
                           <p class="mb-0"><strong>25:00</strong></p>
                         </div>
-                        <div id="forecast-h4" class="mx-3 flex-column">
+                        <div id="forecast-h4" class="mx-1 flex-column">
                           <h6>99°C</h6>
-                          <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
+                          <div class="forecast-icon"></div>
                           <p class="mb-0"><strong>25:00</strong></p>
                         </div>
                       </div>
                     </div>
                     <div id="card-2" class="carousel-item" style="height: 12rem;">
-                      <h3 class="my-1 text-center">Prévisions par jour</h3>
+                      <h3 class="my-1 text-center fs-2">Prévisions par jour</h3>
                       <div class="py-2 my-3 text-center d-flex justify-content-between">
-                        <div id="forecast-d0" class="mx-3 flex-column">
+                        <div id="forecast-d0" class="mx-1 flex-column">
                           <h6>99°C</h6>
-                          <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
+                          <div class="forecast-icon"></div>
                           <p class="mb-0 text-capitalize"><strong>Lun.</strong></p>
                         </div>
-                        <div id="forecast-d1" class="mx-3 flex-column">
+                        <div id="forecast-d1" class="mx-1 flex-column">
                           <h6>99°C</h6>
-                          <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
+                          <div class="forecast-icon"></div>
                           <p class="mb-0 text-capitalize"><strong>Mar.</strong></p>
                         </div>
-                        <div id="forecast-d2" class="mx-3 flex-column">
+                        <div id="forecast-d2" class="mx-1 flex-column">
                           <h6>99°C</h6>
-                          <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
+                          <div class="forecast-icon"></div>
                           <p class="mb-0 text-capitalize"><strong>Mer.</strong></p>
                         </div>
-                        <div id="forecast-d3" class="mx-3 flex-column">
+                        <div id="forecast-d3" class="mx-1 flex-column">
                           <h6>99°C</h6>
-                          <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
+                          <div class="forecast-icon"></div>
                           <p class="mb-0 text-capitalize"><strong>Jeu.</strong></p>
                         </div>
-                        <div id="forecast-d4" class="mx-3 flex-column">
+                        <div id="forecast-d4" class="mx-1 flex-column">
                           <h6>99°C</h6>
-                          <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
+                          <div class="forecast-icon"></div>
                           <p class="mb-0 text-capitalize"><strong>Ven.</strong></p>
                         </div>
                       </div>
