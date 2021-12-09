@@ -47,28 +47,28 @@ class WidgetWeather extends WP_Widget
                 api_key: "' . WEATHER_API_KEY . '"
               };
             </script>
-            <div id="weather-card" class="card d-flex align-content-center flex-wrap flex-grow-1" style="height: 12rem;">
-              <div class="card-body">
+            <div id="weather-card" class="flex-wrap card d-flex align-content-around flex-grow-1" style="height: 12rem;">
+              <div class="card-body" style="width: 100%">
 
-                <div id="weatherCardCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-touch="false" data-bs-interval="10000">
+                <div id="weatherCardCarousel" class="carousel slide" style="height: 100%" data-bs-ride="carousel" data-bs-touch="false" data-bs-interval="10000">
                   <!-- Indicators -->
-                  <div class="carousel-indicators mb-0">
+                  <div class="mb-0 carousel-indicators">
                     <button type="button" data-bs-target="#weatherCardCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
                     <button type="button" data-bs-target="#weatherCardCarousel" data-bs-slide-to="1"></button>
                     <button type="button" data-bs-target="#weatherCardCarousel" data-bs-slide-to="2"></button>
                   </div>
                   <!-- Carousel inner -->
-                  <div class="carousel-inner">
+                  <div class="flex-col carousel-inner d-flex align-items-center" style="height: 100%">
                     <div id="card-0" class="carousel-item active" style="height: 12rem;">
-                      <div class="d-flex justify-content-between py-2">
+                      <div class="py-2 d-flex justify-content-evenly">
                         <div>
-                          <h2 class="display-2"><strong id="temperature">00°C</strong></h2>
-                          <small class="mb-0">
+                          <h2 class="display-1"><strong id="temperature">0°C</strong></h2>
+                          <small class="mb-0 fs-6">
                             <span id="wind">0 KM/H</span>&nbsp;—&nbsp;
                             <span id="humidity">80% humidité</span>
                           </small>
                           <br />
-                          <small class="mb-0">
+                          <small class="mb-0 fs-6">
                             Le soleil se couche à <span id="sunset"></span>
                           </small>
                         </div>
@@ -78,29 +78,29 @@ class WidgetWeather extends WP_Widget
                       </div>
                     </div>
                     <div id="card-1" class="carousel-item" style="height: 12rem;">
-                      <h3 class="text-center my-1">Prévisions par heure</h3>
-                      <div class="d-flex text-center justify-content-between my-3 py-2">
-                        <div id="forecast-h0" class="flex-column mx-3">
+                      <h3 class="my-1 text-center">Prévisions par heure</h3>
+                      <div class="py-2 my-3 text-center d-flex justify-content-between">
+                        <div id="forecast-h0" class="mx-3 flex-column">
                           <h6>99°C</h6>
                           <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
                           <p class="mb-0"><strong>25:00</strong></p>
                         </div>
-                        <div id="forecast-h1" class="flex-column mx-3">
+                        <div id="forecast-h1" class="mx-3 flex-column">
                           <h6>99°C</h6>
                           <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
                           <p class="mb-0"><strong>25:00</strong></p>
                         </div>
-                        <div id="forecast-h2" class="flex-column mx-3">
+                        <div id="forecast-h2" class="mx-3 flex-column">
                           <h6>99°C</h6>
                           <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
                           <p class="mb-0"><strong>25:00</strong></p>
                         </div>
-                        <div id="forecast-h3" class="flex-column mx-3">
+                        <div id="forecast-h3" class="mx-3 flex-column">
                           <h6>99°C</h6>
                           <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
                           <p class="mb-0"><strong>25:00</strong></p>
                         </div>
-                        <div id="forecast-h4" class="flex-column mx-3">
+                        <div id="forecast-h4" class="mx-3 flex-column">
                           <h6>99°C</h6>
                           <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
                           <p class="mb-0"><strong>25:00</strong></p>
@@ -108,29 +108,29 @@ class WidgetWeather extends WP_Widget
                       </div>
                     </div>
                     <div id="card-2" class="carousel-item" style="height: 12rem;">
-                      <h3 class="text-center my-1">Prévisions par jour</h3>
-                      <div class="d-flex text-center justify-content-between my-3 py-2">
-                        <div id="forecast-d0" class="flex-column mx-3">
+                      <h3 class="my-1 text-center">Prévisions par jour</h3>
+                      <div class="py-2 my-3 text-center d-flex justify-content-between">
+                        <div id="forecast-d0" class="mx-3 flex-column">
                           <h6>99°C</h6>
                           <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
                           <p class="mb-0 text-capitalize"><strong>Lun.</strong></p>
                         </div>
-                        <div id="forecast-d1" class="flex-column mx-3">
+                        <div id="forecast-d1" class="mx-3 flex-column">
                           <h6>99°C</h6>
                           <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
                           <p class="mb-0 text-capitalize"><strong>Mar.</strong></p>
                         </div>
-                        <div id="forecast-d2" class="flex-column mx-3">
+                        <div id="forecast-d2" class="mx-3 flex-column">
                           <h6>99°C</h6>
                           <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
                           <p class="mb-0 text-capitalize"><strong>Mer.</strong></p>
                         </div>
-                        <div id="forecast-d3" class="flex-column mx-3">
+                        <div id="forecast-d3" class="mx-3 flex-column">
                           <h6>99°C</h6>
                           <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
                           <p class="mb-0 text-capitalize"><strong>Jeu.</strong></p>
                         </div>
-                        <div id="forecast-d4" class="flex-column mx-3">
+                        <div id="forecast-d4" class="mx-3 flex-column">
                           <h6>99°C</h6>
                           <img src="http://localhost/tv/wp-content/plugins/plugin-ecran-connecte/public/img/conditions/04n.svg" width="32px" />
                           <p class="mb-0 text-capitalize"><strong>Ven.</strong></p>

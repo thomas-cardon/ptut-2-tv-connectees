@@ -218,7 +218,7 @@ class ICSView extends View
          /* Nettoyage données ADE */
         foreach ($datas as $key => $data) {
             if ($key === 1) {
-              $data = str_replace(array(' (INFO)', ' G1', ' G2', ' G3', ' G4', ' 4h', ' 2h'), '', $data);
+              $data = str_replace(array(' (INFO)', ' G1', ' G2', ' G3', ' G4', ' 4h', ' 2h', '*'), '', $data);
               $string .= '<td class="text-center">' . $data . '</td>';
             }
             elseif ($key === 2) {

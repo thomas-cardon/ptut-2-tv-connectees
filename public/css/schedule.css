@@ -17,10 +17,6 @@
   max-height: 80vh;
 }
 
-.table-responsive:last-child {
-  padding-bottom: 2rem;
-}
-
 #time {
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: bolder;
