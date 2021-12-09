@@ -3,6 +3,7 @@
 
 .group-title {
   color: #6F7DA9;
+  padding-top: 1rem;
 }
 
 .schedule {
@@ -14,6 +15,10 @@
 
 .table-responsive {
   max-height: 80vh;
+}
+
+.table-responsive:last-child {
+  padding-bottom: 2rem;
 }
 
 #time {
