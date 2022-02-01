@@ -108,17 +108,11 @@ class SecretaryController extends UserController
       Les <b>télévisions</b> sont les utilisateurs utilisés pour afficher ce site sur les téléviseurs. Les comptes télévisions peuvent afficher autant d\'emploi du temps que souhaité.
   ', URL_PATH . TV_PLUG_PATH . 'public/img/gestion.png') . '' . $this->view->renderContainerDivider() . '' . $this->view->renderContainer(
           $this->view->displayStartMultiSelect()
-        . $this->view->displayTitleSelect('teacher', 'Enseignants', true)
-        . $this->view->displayTitleSelect('studyDirector', 'Directeurs d\'études')
-        . $this->view->displayTitleSelect('secretary', 'Secrétaires')
-        . $this->view->displayTitleSelect('technician', 'Technicien')
-        . $this->view->displayTitleSelect('television', 'Télévisions')
+        . $this->view->displayTitleSelect('form', 'Par formulaire', true)
+        . $this->view->displayTitleSelect('excel', 'Par fichier Excel (CSV)')
         . $this->view->displayEndOfTitle()
-        . $this->view->displayContentSelect('teacher', $teacher->insert(), true)
-        . $this->view->displayContentSelect('studyDirector', $studyDirector->insert())
-        . $this->view->displayContentSelect('secretary', $secretary->insert())
-        . $this->view->displayContentSelect('technician', $technician->insert())
-        . $this->view->displayContentSelect('television', $television->insert())
+        . $this->view->displayContentSelect('form', $this->view->displayUserCreationForm(), true)
+        . $this->view->displayContentSelect('excel', $this->view->displayUserCreationFormExcel())
         . $this->view->displayEndDiv()
       );
     }
