@@ -86,7 +86,7 @@ class TelevisionView extends UserView
     public function modifyForm($user, $years, $groups, $halfGroups) {
         $count = 0;
         $string = '
-        <a href="' . home_url('/users/list') . '">< Retour</a>
+        <a href="' . home_url('/users/edit') . '">< Retour</a>
         <h2>' . $user->getLogin() . '</h2>
          <form method="post" id="registerTvForm">
             <label id="selectId1"> Emploi du temps</label>';

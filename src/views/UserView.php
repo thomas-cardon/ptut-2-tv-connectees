@@ -256,24 +256,39 @@ class UserView extends View
         $this->buildModal('Modification échouée', '<div class="alert alert-danger"> Le changement de groupe n\'a pas été pris en compte</div>');
     }
 
+    private function getRoles($user) {
+        $roles = array();
+        foreach ($user->roles as $role) {
+            $roles[] = $role;
+        }
+        return $roles;
+    }
+
     /**
-     * Display all technicians in a table
+     * Displays all users
      *
      * @param $users    User[]
-     *
      * @return string
      */
     public function displayUsers($users) {
         $title = '<b>Rôle affiché: </b> tous';
         $id = 'all';
 
-        $header = ['Identifiant'];
+        $header = ['Identifiant', 'Nom', 'Email', 'Rôle', 'Modifier', 'Supprimer'];
 
         $row = array();
-        $count = 0;
+
         foreach ($users as $user) {
-            ++$count;
-            $row[] = [$count, $this->buildCheckbox('All', $user->getId()), $user->getLogin()];
+            $row[] = [
+              $user->ID,
+              $this->buildCheckbox('All', $user->getId()),
+              $user->get('user_login'),
+              $user->get('display_name'),
+              $user->get('user_email'),
+              implode("'", $this->getRoles($user)),
+              $this->link(add_query_arg(['id' => $user->getId()], home_url('/users/edit')), 'Modifier'),
+              $this->link(add_query_arg(['action' => 'delete', 'id' => $user->getId()], admin_url('admin-post.php')), 'Supprimer')
+            ];
         }
 
         return $this->displayTable($id, $title, $header, $row, $id, '<a type="submit" class="btn btn-primary" role="button" aria-disabled="true" href="' . home_url('/users/create') . '">Créer</a>');

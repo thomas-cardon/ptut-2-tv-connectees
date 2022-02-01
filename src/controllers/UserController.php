@@ -303,7 +303,6 @@ class UserController extends Controller
     }
 
     public function displayUsers() {
-        $users = $this->model->getList();
-        return $this->view->displayUsers($users);
+        return $this->view->displayUsers(User::find());
     }
 }

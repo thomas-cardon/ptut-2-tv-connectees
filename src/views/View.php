@@ -177,14 +177,17 @@ class View
     }
 
     /**
-     * Create a link to modify an element
-     *
-     * @param $link
-     * @deprecated use raw link instead...
+     * Creates a link
+     * @param string $url
+     * @param string $text
+     * @param string $class
+     * @param string $id
      * @return string
+     * 
+     * @author : Thomas Cardon
      */
-    public function buildLinkForModify($link) {
-        return '<a href="' . $link . '">Modifier</a>';
+    public function link($url, $text, $class = '', $id = '') {
+        return '<a id="' . $id . '" class="' . $class . '" href="' . $url . '">' . $text . '</a>';
     }
 
     /**
