@@ -52,41 +52,6 @@ class TechnicianController extends UserController implements Schedule
     }
 
     /**
-     * Insert a technician in the database
-     */
-    public function insert() {
-        $action = filter_input(INPUT_POST, 'createTech');
-
-        if (isset($action)) {
-
-            $login = filter_input(INPUT_POST, 'loginTech');
-            $password = filter_input(INPUT_POST, 'pwdTech');
-            $passwordConfirm = filter_input(INPUT_POST, 'pwdConfirmTech');
-            $email = filter_input(INPUT_POST, 'emailTech');
-
-            if (is_string($login) && strlen($login) >= 4 && strlen($login) <= 25 &&
-                is_string($password) && strlen($password) >= 8 && strlen($password) <= 25 &&
-                $password === $passwordConfirm
-                && is_email($email)) {
-
-                $this->model->setLogin($login);
-                $this->model->setPassword($password);
-                $this->model->setEmail($email);
-                $this->model->setRole('technicien');
-
-                if ($this->model->insert()) {
-                    $this->view->displayInsertValidate();
-                } else {
-                    $this->view->displayErrorInsertion();
-                }
-            } else {
-                $this->view->displayErrorCreation();
-            }
-        }
-        return $this->view->displayFormTechnician();
-    }
-
-    /**
      * Display all technicians in a table
      *
      * @return string

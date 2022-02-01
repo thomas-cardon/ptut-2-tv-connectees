@@ -76,61 +76,7 @@ class TelevisionController extends UserController implements Schedule
 
         return $string;
     }
-
-    /**
-     * Insert a television in the database
-     *
-     * @return string
-     */
-    public function insert()
-    {
-        $action = filter_input(INPUT_POST, 'createTv');
-
-        $codeAde = new CodeAde();
-
-        if (isset($action)) {
-            $login = filter_input(INPUT_POST, 'loginTv');
-            $password = filter_input(INPUT_POST, 'pwdTv');
-            $passwordConfirm = filter_input(INPUT_POST, 'pwdConfirmTv');
-            $codes = $_POST['selectTv'];
-
-            if (is_string($login) && strlen($login) >= 4 && strlen($login) <= 25 &&
-                is_string($password) && strlen($password) >= 8 && strlen($password) <= 25 &&
-                $password === $passwordConfirm) {
-                $codesAde = array();
-                foreach ($codes as $code) {
-                    if (is_numeric($code) && $code > 0) {
-                        if (is_null($codeAde->getByCode($code)->getId())) {
-                            return 'error';
-                        } else {
-                            $codesAde[] = $codeAde->getByCode($code);
-                        }
-                    }
-                }
-
-                $this->model->setLogin($login);
-                $this->model->setEmail($login . '@' . $login . '.fr');
-                $this->model->setPassword($password);
-                $this->model->setRole('television');
-                $this->model->setCodes($codesAde);
-
-                if (!$this->checkDuplicateUser($this->model) && $this->model->insert()) {
-                    $this->view->displayInsertValidate();
-                } else {
-                    $this->view->displayErrorLogin();
-                }
-            } else {
-                $this->view->displayErrorCreation();
-            }
-        }
-
-        $years = $codeAde->getAllFromType('year');
-        $groups = $codeAde->getAllFromType('group');
-        $halfGroups = $codeAde->getAllFromType('halfGroup');
-
-        return $this->view->displayFormTelevision($years, $groups, $halfGroups);
-    }
-
+    
     /**
      * Modify a television
      *

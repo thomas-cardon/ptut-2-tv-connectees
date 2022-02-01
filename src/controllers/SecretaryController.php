@@ -45,40 +45,6 @@ class SecretaryController extends UserController
     }
 
     /**
-     * Insert a secretary in the database
-     */
-    public function insert() {
-        $action = filter_input(INPUT_POST, 'createSecre');
-
-        if (isset($action)) {
-
-            $login = filter_input(INPUT_POST, 'loginSecre');
-            $password = filter_input(INPUT_POST, 'pwdSecre');
-            $passwordConfirm = filter_input(INPUT_POST, 'pwdConfirmSecre');
-            $email = filter_input(INPUT_POST, 'emailSecre');
-
-            if (is_string($login) && strlen($login) >= 4 && strlen($login) <= 25 &&
-                is_string($password) && strlen($password) >= 8 && strlen($password) <= 25 &&
-                $password === $passwordConfirm && is_email($email)) {
-
-                $this->model->setLogin($login);
-                $this->model->setPassword($password);
-                $this->model->setEmail($email);
-                $this->model->setRole('secretaire');
-
-                if (!$this->checkDuplicateUser($this->model) && $this->model->insert()) {
-                    $this->view->displayInsertValidate();
-                } else {
-                    $this->view->displayErrorInsertion();
-                }
-            } else {
-                $this->view->displayErrorCreation();
-            }
-        }
-        return $this->view->displayFormSecretary();
-    }
-
-    /**
      * Display all secretary
      * @return string
      */
