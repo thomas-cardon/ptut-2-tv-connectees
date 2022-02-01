@@ -255,4 +255,27 @@ class UserView extends View
     public function errorMesageChangeCode() {
         $this->buildModal('Modification échouée', '<div class="alert alert-danger"> Le changement de groupe n\'a pas été pris en compte</div>');
     }
+
+    /**
+     * Display all technicians in a table
+     *
+     * @param $users    User[]
+     *
+     * @return string
+     */
+    public function displayUsers($users) {
+        $title = '<b>Rôle affiché: </b> tous';
+        $id = 'all';
+
+        $header = ['Identifiant'];
+
+        $row = array();
+        $count = 0;
+        foreach ($users as $user) {
+            ++$count;
+            $row[] = [$count, $this->buildCheckbox('All', $user->getId()), $user->getLogin()];
+        }
+
+        return $this->displayTable($id, $title, $header, $row, $id, '<a type="submit" class="btn btn-primary" role="button" aria-disabled="true" href="' . home_url('/users/create') . '">Créer</a>');
+    }
 }

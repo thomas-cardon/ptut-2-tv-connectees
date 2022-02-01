@@ -60,21 +60,17 @@ class TelevisionView extends UserView
      * @return string
      */
     public function displayTableTv($users) {
-        $page = get_page_by_title('Modifier un utilisateur');
-        $linkManageUser = get_permalink($page->ID);
-
         $title = '<b>Rôle affiché: </b> Télévision';
-        $name = 'Tele';
-        $header = ['Login', 'Nombre d\'emplois du temps ', 'Modifier'];
+        $header = ['Identifiant', 'Nombre d\'emplois du temps', 'Modifier'];
 
         $row = array();
         $count = 0;
         foreach ($users as $user) {
             ++$count;
-            $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), sizeof($user->getCodes()), $this->buildLinkForModify($linkManageUser . '?id=' . $user->getId())];
+            $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), sizeof($user->getCodes()), add_query_arg('id', $user->getId(), home_url('/users/edit'))];
         }
 
-        return $this->displayTable($name, $title, $header, $row, 'tele', '<a type="submit" class="btn btn-primary" role="button" aria-disabled="true" href="' . home_url('/creer-utilisateur') . '">Créer</a>');
+        return $this->displayTable('TV', $title, $header, $row, 'tele', '<a type="submit" class="btn btn-primary" role="button" aria-disabled="true" href="' . home_url('/users/create') . '">Créer</a>');
     }
 
     /**
@@ -90,7 +86,7 @@ class TelevisionView extends UserView
     public function modifyForm($user, $years, $groups, $halfGroups) {
         $count = 0;
         $string = '
-        <a href="' . esc_url(get_permalink(get_page_by_title('Gestion des utilisateurs'))) . '">< Retour</a>
+        <a href="' . home_url('/users/list') . '">< Retour</a>
         <h2>' . $user->getLogin() . '</h2>
          <form method="post" id="registerTvForm">
             <label id="selectId1"> Emploi du temps</label>';

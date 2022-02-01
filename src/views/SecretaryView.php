@@ -98,7 +98,7 @@ class SecretaryView extends UserView
     {
         $title = '<b>Rôle affiché: </b> Secrétaire';
         $name = 'Secre';
-        $header = ['Login'];
+        $header = ['Identifiant'];
 
         $row = array();
         $count = 0;

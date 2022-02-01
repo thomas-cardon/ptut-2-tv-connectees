@@ -14,10 +14,44 @@ class CarouselView extends View
     public function add($title, $content, $type): void
     {
       $data;
+      echo '<script>
+        const initCanvas = id => window.addEventListener("load", ev => loadCanvas(id)); 
+
+        async function loadCanvas(id) {
+            const PDFJS = window["pdfjs-dist/build/pdf"];
+            PDFJS.GlobalWorkerOptions.workerSrc = "//mozilla.github.io/pdf.js/build/pdf.worker.js";
+            
+            const canvas = document.getElementById(id);
+            console.log(canvas.dataset.url);
+            
+            const loadingTask = PDFJS.getDocument(canvas.dataset.url);
+            const pdf = await loadingTask.promise;
+            
+            const scale = 5.0;
+
+            // Load information from the first page.
+            const page = await pdf.getPage(1);
+            let viewport = page.getViewport({ scale });
+
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            const context = canvas.getContext("2d");
+            
+            // Render the page into the `<canvas>` element.
+            const renderContext = {
+                canvasContext: context,
+                viewport,
+            };
+            await page.render(renderContext);
+            console.log("Page rendered!");
+            console.log("Chargement info #" + id);
+        }
+      </script>';
       
       if ($type !== 'text' && !file_exists(PATH . TV_UPLOAD_PATH . $content)) {
         $data = '
-          <div class="bg-warning bg-gradient w-100 h-100 text-center py-5">
+          <div class="py-5 text-center bg-warning bg-gradient w-100 h-100">
             <h1>Erreur</h1>
             <p class="lead">Fichier introuvable</p>
             <br />
@@ -29,11 +63,14 @@ class CarouselView extends View
       else {
         switch($type) {
           case 'pdf':
-            $data = '<object data="' . URL_PATH . TV_UPLOAD_PATH . $content . '#toolbar=0&page=1&navpanes=0&zoom=50&view=Fit&scrollbar=0" class="d-block w-100 h-100" type="application/pdf"></object>';
+            $data = '
+              <canvas id="' . $content . '" class="d-block w-100" data-url="' . BASE_URL . TV_UPLOAD_PATH . $content . '"></object>
+              <script>initCanvas("' . $content . '");</script>  
+            ';
             break;
           case 'text':
             $data = '
-              <div class="bg-info bg-gradient w-100 h-100 text-center py-5">
+              <div class="py-5 text-center bg-info bg-gradient w-100 h-100">
                 <p style="font-weight: 300;font-size: x-large;text-align: start;padding: 2rem;">' . strip_tags($content) . '</p>
               </div>';
             break;
