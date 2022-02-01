@@ -97,10 +97,9 @@ class SecretaryController extends UserController
       return $this->view->getHeader('Création des utilisateurs', '
       Il y a plusieurs types d\'utilisateurs :
       <br />
-      Les <s>étudiants</s>, enseignants, directeurs d\'études, secrétaires, techniciens, télévisions.
+      Les enseignants, directeurs d\'études, secrétaires, techniciens, télévisions.
 
       <br /> <br />
-      Les <b>étudiants</b> ont accès à leur emploi du temps et reçoivent les alertes les concernants et les informations. <br />
       Les <b>enseignants</b> ont accès à leur emploi du temps et peuvent poster des alertes. <br />
       Les <b>directeurs d\'études</b> ont accès à leur emploi du temps et peuvent poster des alertes et des informations. <br />
       Les <b>secrétaires</b> peuvent poster des alertes et des informations. Ils peuvent aussi créer des utilisateurs. <br />
