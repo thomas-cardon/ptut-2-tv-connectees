@@ -36,16 +36,15 @@ class TechnicianView extends UserView
      */
     public function displayTableTechnicians($users) {
         $title = '<b>Rôle affiché: </b> Technicien';
-        $name = 'Tech';
-        $header = ['Login'];
+        $header = ['Identifiant'];
 
         $row = array();
         $count = 0;
         foreach ($users as $user) {
             ++$count;
-            $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin()];
+            $row[] = [$count, $this->buildCheckbox('Technician', $user->getId()), $user->getLogin()];
         }
 
-        return $this->displayTable($name, $title, $header, $row, $name, '<a type="submit" class="btn btn-primary" role="button" aria-disabled="true" href="' . home_url('/creer-utilisateur') . '">Créer</a>');
+        return $this->displayTable('Technician', $title, $header, $row, 'Technician', '<a type="submit" class="btn btn-primary" role="button" aria-disabled="true" href="' . home_url('/users/create') . '">Créer</a>');
     }
 }

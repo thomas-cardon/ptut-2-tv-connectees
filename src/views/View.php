@@ -81,7 +81,7 @@ class View
      */
     public function displayTable($name, $title, $dataHeader, $dataList, $idTable = '', $create = '<a type="submit" class="btn btn-primary disabled" role="button" aria-disabled="true">Créer</a>') {
         $name = '\'' . $name . '\'';
-        $table = ($title ? '<h2>' . $title . '</h2' : '') . '
+        $table = ($title ? '<h2>' . $title . '</h2>' : '') . '
     		<form method="post">
     			<div class="table-responsive">
     				<table class="table table-hover sortable" id="table' . $idTable . '">
@@ -177,14 +177,17 @@ class View
     }
 
     /**
-     * Create a link for modify an element
-     *
-     * @param $link
-     *
+     * Creates a link
+     * @param string $url
+     * @param string $text
+     * @param string $class
+     * @param string $id
      * @return string
+     * 
+     * @author : Thomas Cardon
      */
-    public function buildLinkForModify($link) {
-        return '<a href="' . $link . '">Modifier</a>';
+    public function link($url, $text, $class = '', $id = '') {
+        return '<a id="' . $id . '" class="' . $class . '" href="' . $url . '">' . $text . '</a>';
     }
 
     /**

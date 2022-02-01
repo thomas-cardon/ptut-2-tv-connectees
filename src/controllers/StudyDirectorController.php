@@ -50,46 +50,6 @@ class StudyDirectorController extends UserController implements Schedule
     }
 
     /**
-     * Insert a study director in the database
-     */
-    public function insert() {
-        $action = filter_input(INPUT_POST, 'createDirec');
-
-        if (isset($action)) {
-
-            $login = filter_input(INPUT_POST, 'loginDirec');
-            $password = filter_input(INPUT_POST, 'pwdDirec');
-            $passwordConfirm = filter_input(INPUT_POST, 'pwdConfirmDirec');
-            $email = filter_input(INPUT_POST, 'emailDirec');
-            $code = filter_input(INPUT_POST, 'codeDirec');
-
-            if (is_string($login) && strlen($login) >= 4 && strlen($login) <= 25 &&
-                is_string($password) && strlen($password) >= 8 && strlen($password) <= 25 &&
-                $password === $passwordConfirm && is_email($email)) {
-
-                $this->model->setLogin($login);
-                $this->model->setPassword($password);
-                $this->model->setEmail($email);
-                $this->model->setRole('directeuretude');
-                $this->model->setCodes($code);
-
-                if ($this->model->insert()) {
-                    $path = $this->getFilePath($code);
-                    if (!file_exists($path)) {
-                        $this->addFile($code);
-                    }
-                    $this->view->displayInsertValidate();
-                } else {
-                    $this->view->displayErrorInsertion();
-                }
-            } else {
-                $this->view->displayErrorCreation();
-            }
-        }
-        return $this->view->displayCreateDirector();
-    }
-
-    /**
      * Modify the study director
      *
      * @param $user   User

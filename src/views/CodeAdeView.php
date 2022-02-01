@@ -119,20 +119,13 @@ class CodeAdeView extends View
     }
 
     /**
-     * Display all informations of a code ade
+     * Displays all ADE code data
      *
-     * @param $years        CodeAde[]
-     * @param $groups       CodeAde[]
-     * @param $halfGroups   CodeAde[]
-     *
-     * @return          string
+     * @param ...$codes CodeAde[]
+     * @return HTMLElement
      */
     public function displayTableCode(...$groups)
     {
-        $page = get_page_by_title('Modifier un code ADE');
-        $linkManageCodeAde = get_permalink($page->ID);
-
-        $name = 'Code';
         $header = ['Titre', 'Code', 'Type', 'Modifier'];
 
         $row = array();
@@ -141,11 +134,11 @@ class CodeAdeView extends View
         foreach ($groups as $codeAde) {
             foreach ($codeAde as $code) {
                 ++$count;
-                $row[] = [$count, $this->buildCheckbox($name, $code->getId()), $code->getTitle(), $code->getCode(), $this->typesDictionary[$code->getType()], $this->buildLinkForModify($linkManageCodeAde . '?id=' . $code->getId())];
+                $row[] = [$count, $this->buildCheckbox($name, $code->getId()), $code->getTitle(), $code->getCode(), add_query_arg('id', $code->getId(), home_url('/gestion-codes-ade/modification-code-ade'))];
             }
         }
 
-        return $this->displayTable($name, $title, $header, $row, 'code', '');
+        return $this->displayTable('Code', 'Codes ADE gérés par le système', $header, $row, 'code', '');
     }
 
     /**

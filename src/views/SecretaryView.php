@@ -98,7 +98,7 @@ class SecretaryView extends UserView
     {
         $title = '<b>Rôle affiché: </b> Secrétaire';
         $name = 'Secre';
-        $header = ['Login'];
+        $header = ['Identifiant'];
 
         $row = array();
         $count = 0;
@@ -116,5 +116,83 @@ class SecretaryView extends UserView
     public function displayNoUser()
     {
         return '<p class="alert alert-danger">Veuillez choisir un utilisateur</p>';
+    }
+
+    /**
+     * Displays the form to create a new user
+     *
+     * @return string
+     */
+    public function displayUserCreationForm() : string
+    {
+        return '<div class="container col-xxl-10">
+        <h2 class="display-6">Créer un utilisateur</h2>
+        <p class="lead">Pour créer un utilisateur, remplissez ce formulaire avec les valeurs demandées.</p>
+
+        <hr class="my-4">
+        
+        ' . (isset($_GET['message']) ? '<div class="alert alert-' . $_GET['message'] . '">' . $_GET['message_content'] . '</div>' : '') . '
+
+        <form method="post" action="' . admin_url('admin-post.php') . '">
+          <div class="form-outline mb-2">
+            <label class="form-label" for="form3Example1cg">Identifiant du compte</label>
+            <input type="text" id="login" name="login" placeholder="Exemple: prenom.nom" class="form-control form-control-lg" minlength="3" required />
+          </div>
+
+          <div class="form-outline mb-2">
+            <label class="form-label" for="email">Votre adresse e-mail</label>
+            <input type="email" id="email" name="email" class="form-control form-control-lg" required />
+          </div>
+
+          <div class="form-outline mb-2">
+            <label class="form-label" for="password">Mot de passe - <i>requis: 1 chiffre, 1 lettre majuscule, 1 lettre minuscule, et 1 symbole parmis ceux-ci: <kbd> !@#$%^&*_=+-</kbd></i></label>
+            <input type="password" id="password" name="password1" class="form-control form-control-lg" minlength="8" required />
+          </div>
+
+          <div class="form-outline mb-2">
+            <label class="form-label" for="password2">Confirmez votre mot de passe</label>
+            <input type="password" id="password2" name="password2" class="form-control form-control-lg" minlength="8" required />
+          </div>
+
+          <input type="hidden" name="action" value="create_user">
+
+          <div class="form-outline mb-2 pb-4">
+            <label class="form-label" for="role">Rôle</label>
+            <select class="form-control form-control-lg" id="role" name="role">
+              <option value="secretary">Secrétaire</option>
+              <option value="admin">Administrateur</option>
+              <option value="teacher">Enseignant</option>
+              <option value="television">Télévision</option>
+              <option value="technician">Technicien</option>
+              <option value"studyDirector">Directeur d\'études</option>
+            </select>
+          </div>
+          
+          <input type="submit" class="btn btn-primary" role="button" aria-disabled="true" value="Créer">
+          <a href="' . home_url('/users/list') . '" class="btn btn-secondary" role="button" aria-disabled="true">Annuler</a>
+        </form>
+      </div>';
+    }
+
+    public function displayUserCreationFormExcel() : string {
+        return '<div class="container col-xxl-10">
+        <h2 class="display-6">Créer un utilisateur</h2>
+        <p class="lead">
+          Pour créer un utilisateur, <a href="#">téléchargez le fichier CSV</a> et remplissez les champs demandés.
+        </p>
+
+        <hr class="my-4">
+        
+        ' . (isset($_GET['message']) ? '<div class="alert alert-' . $_GET['message'] . '">' . $_GET['message_content'] . '</div>' : '') . '
+
+        <form method="post" action="' . admin_url('admin-post.php') . '">
+          <div class="form-outline mb-2">
+            <label for="file" class="form-label">Déposez le fichier Excel ici</label>
+            <input class="form-control form-control-lg" id="file" type="file" />
+          </div>
+
+          <input type="hidden" name="action" value="createUsers">
+        </form>
+      </div>';
     }
 }

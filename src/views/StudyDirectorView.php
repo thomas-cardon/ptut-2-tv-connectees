@@ -56,11 +56,7 @@ class StudyDirectorView extends UserView
      * @return string
      */
     public function displayTableStudyDirector($users) {
-        $page = get_page_by_title('Modifier un utilisateur');
-        $linkManageUser = get_permalink($page->ID);
-
         $title = '<b>Rôle affiché: </b> Directeur d\'études';
-        $name = 'Direc';
         $header = ['Numéro Ent', 'Code ADE', 'Modifier'];
 
         $row = array();
@@ -74,10 +70,10 @@ class StudyDirectorView extends UserView
             }
 
             ++$count;
-            $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), $code, $this->buildLinkForModify($linkManageUser . '?id=' . $user->getId())];
+            $row[] = [$count, $this->buildCheckbox($name, $user->getId()), $user->getLogin(), $code, add_query_arg('id', $user->getId(), home_url('/users/edit'))];
         }
 
-        return $this->displayTable($name, $title, $header, $row, 'director', '<a type="submit" class="btn btn-primary" role="button" aria-disabled="true" href="' . home_url('/creer-utilisateur') . '">Créer</a>');
+        return $this->displayTable('Direc', $title, $header, $row, 'director', '<a type="submit" class="btn btn-primary" role="button" aria-disabled="true" href="' . home_url('/users/create') . '">Créer</a>');
     }
 
     /**
@@ -88,16 +84,14 @@ class StudyDirectorView extends UserView
      * @return string
      */
     public function displayModifyStudyDirector($user) {
-        $page = get_page_by_title('Gestion des utilisateurs');
-        $linkManageUser = get_permalink($page->ID);
-
         $code = 'Aucun code';
+
         if (sizeof($user->getCodes()) > 0) {
             $code = $user->getCodes()[0]->getCode();
         }
 
         return '
-        <a href="' . esc_url(get_permalink(get_page_by_title('Gestion des utilisateurs'))) . '">< Retour</a>
+        <a href="' . home_url('/users/list') . '">< Retour</a>
         <h2>' . $user->getLogin() . '</h2>
         <form method="post">
             <div class="form-group">
@@ -105,7 +99,7 @@ class StudyDirectorView extends UserView
                 <input type="text" class="form-control" id="modifCode" name="modifCode" placeholder="Entrer le Code ADE" value="' . $code . '" required="">
             </div>
             <button class="btn btn-primary" name="modifValidate" type="submit" value="Valider">Valider</button>
-            <a class="btn btn-danger" href="' . $linkManageUser . '">Annuler</a>
+            <a class="btn btn-danger" href="' . home_url('/users/list') . '">Annuler</a>
         </form>';
     }
 }

@@ -87,6 +87,11 @@ function loadScriptsEcran()
         wp_enqueue_script('time_script_ecran', TV_PLUG_PATH . 'public/js/time.js', array(), VERSION, true);
         wp_enqueue_script('scroll_script_ecran', TV_PLUG_PATH . 'public/js/scroll.js', array(), VERSION, true);
         
+        wp_enqueue_script('news_script_ecran', TV_PLUG_PATH . 'public/js/news.js', array('pdfJs_tv_script', 'pdfJs_core_tv_script'), VERSION, true);
+
+        wp_enqueue_script('pdfJs_tv_script', TV_PLUG_PATH . 'public/vendor/pdf-js/pdf.js', array(), VERSION, true);
+        wp_enqueue_script('pdfJs_core_tv_script', TV_PLUG_PATH . 'public/vendor/pdf-js/pdf.worker.js', array(), VERSION, true);
+
         if (TV_REFRESH)
           wp_enqueue_script('refresh_script_ecran', TV_PLUG_PATH . 'public/js/refresh.js', array(), VERSION, true);
     }

@@ -45,40 +45,6 @@ class SecretaryController extends UserController
     }
 
     /**
-     * Insert a secretary in the database
-     */
-    public function insert() {
-        $action = filter_input(INPUT_POST, 'createSecre');
-
-        if (isset($action)) {
-
-            $login = filter_input(INPUT_POST, 'loginSecre');
-            $password = filter_input(INPUT_POST, 'pwdSecre');
-            $passwordConfirm = filter_input(INPUT_POST, 'pwdConfirmSecre');
-            $email = filter_input(INPUT_POST, 'emailSecre');
-
-            if (is_string($login) && strlen($login) >= 4 && strlen($login) <= 25 &&
-                is_string($password) && strlen($password) >= 8 && strlen($password) <= 25 &&
-                $password === $passwordConfirm && is_email($email)) {
-
-                $this->model->setLogin($login);
-                $this->model->setPassword($password);
-                $this->model->setEmail($email);
-                $this->model->setRole('secretaire');
-
-                if (!$this->checkDuplicateUser($this->model) && $this->model->insert()) {
-                    $this->view->displayInsertValidate();
-                } else {
-                    $this->view->displayErrorInsertion();
-                }
-            } else {
-                $this->view->displayErrorCreation();
-            }
-        }
-        return $this->view->displayFormSecretary();
-    }
-
-    /**
      * Display all secretary
      * @return string
      */
@@ -97,10 +63,9 @@ class SecretaryController extends UserController
       return $this->view->getHeader('Création des utilisateurs', '
       Il y a plusieurs types d\'utilisateurs :
       <br />
-      Les <s>étudiants</s>, enseignants, directeurs d\'études, secrétaires, techniciens, télévisions.
+      Les enseignants, directeurs d\'études, secrétaires, techniciens, télévisions.
 
       <br /> <br />
-      Les <b>étudiants</b> ont accès à leur emploi du temps et reçoivent les alertes les concernants et les informations. <br />
       Les <b>enseignants</b> ont accès à leur emploi du temps et peuvent poster des alertes. <br />
       Les <b>directeurs d\'études</b> ont accès à leur emploi du temps et peuvent poster des alertes et des informations. <br />
       Les <b>secrétaires</b> peuvent poster des alertes et des informations. Ils peuvent aussi créer des utilisateurs. <br />
@@ -108,17 +73,11 @@ class SecretaryController extends UserController
       Les <b>télévisions</b> sont les utilisateurs utilisés pour afficher ce site sur les téléviseurs. Les comptes télévisions peuvent afficher autant d\'emploi du temps que souhaité.
   ', URL_PATH . TV_PLUG_PATH . 'public/img/gestion.png') . '' . $this->view->renderContainerDivider() . '' . $this->view->renderContainer(
           $this->view->displayStartMultiSelect()
-        . $this->view->displayTitleSelect('teacher', 'Enseignants', true)
-        . $this->view->displayTitleSelect('studyDirector', 'Directeurs d\'études')
-        . $this->view->displayTitleSelect('secretary', 'Secrétaires')
-        . $this->view->displayTitleSelect('technician', 'Technicien')
-        . $this->view->displayTitleSelect('television', 'Télévisions')
+        . $this->view->displayTitleSelect('form', 'Par formulaire', true)
+        . $this->view->displayTitleSelect('excel', 'Par fichier Excel (CSV)')
         . $this->view->displayEndOfTitle()
-        . $this->view->displayContentSelect('teacher', $teacher->insert(), true)
-        . $this->view->displayContentSelect('studyDirector', $studyDirector->insert())
-        . $this->view->displayContentSelect('secretary', $secretary->insert())
-        . $this->view->displayContentSelect('technician', $technician->insert())
-        . $this->view->displayContentSelect('television', $television->insert())
+        . $this->view->displayContentSelect('form', $this->view->displayUserCreationForm(), true)
+        . $this->view->displayContentSelect('excel', $this->view->displayUserCreationFormExcel())
         . $this->view->displayEndDiv()
       );
     }
@@ -132,6 +91,7 @@ class SecretaryController extends UserController
         $secretary = new SecretaryController();
         $technician = new TechnicianController();
         $television = new TelevisionController();
+        $user = new UserController();
 
         return $this->view->getHeader('Liste des utilisateurs', '
         Il y a plusieurs types d\'utilisateurs :
@@ -152,12 +112,14 @@ class SecretaryController extends UserController
               $this->view->displayTitleSelect('secretary', 'Secrétaires') .
               $this->view->displayTitleSelect('technician', 'Technicien') .
               $this->view->displayTitleSelect('television', 'Télévisions') .
+              $this->view->displayTitleSelect('all', 'Tous les utilisateurs') .
               $this->view->displayEndOfTitle() .
               $this->view->displayContentSelect('teacher', $teacher->displayTableTeachers(), true) .
               $this->view->displayContentSelect('studyDirector', $studyDirector->displayTableStudyDirector()) .
               $this->view->displayContentSelect('secretary', $secretary->displayTableSecretary()) .
               $this->view->displayContentSelect('technician', $technician->displayTableTechnician()) .
               $this->view->displayContentSelect('television', $television->displayTableTv()) .
+              $this->view->displayContentSelect('all', $user->displayUsers()) .
               $this->view->displayEndDiv(), '', 'container-sm px-4 pb-5 my-5 text-center'
             );
     }

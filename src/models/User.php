@@ -239,6 +239,15 @@ class User extends Model implements Entity, JsonSerializable
     }
 
     /**
+     * Returns user list using WP API
+     * @return User[] | false
+     */
+    public static function find() {
+        $users = get_users();
+        return $users;
+    }
+
+    /**
      *
      *
      * @param $role     string

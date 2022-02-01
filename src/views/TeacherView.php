@@ -46,11 +46,8 @@ class TeacherView extends UserView
      * @return string
      */
     public function modifyForm($user) {
-        $page = get_page_by_title('Gestion des utilisateurs');
-        $linkManageUser = get_permalink($page->ID);
-
         return '
-        <a href="' . esc_url(get_permalink(get_page_by_title('Gestion des utilisateurs'))) . '">< Retour</a>
+        <a href="' . home_url('/users/list') . '">< Retour</a>
         <h2>' . $user->getLogin() . '</h2>
         <form method="post">
             <label for="modifCode">Code ADE</label>
@@ -68,20 +65,16 @@ class TeacherView extends UserView
      * @return string
      */
     public function displayTableTeachers($teachers) {
-        $page = get_page_by_title('Modifier un utilisateur');
-        $linkManageUser = get_permalink($page->ID);
-
-        $title = '<b>Rôle affiché: </b> Enseignants';
-        $name = 'Teacher';
-        $header = ['Numéro Ent', 'Code ADE', 'Modifier'];
+        $title = '<b>Rôle affiché: </b> Enseignant';
+        $header = ['Numéro ENT', 'Code ADE', 'Modifier'];
 
         $row = array();
         $count = 0;
         foreach ($teachers as $teacher) {
             ++$count;
-            $row[] = [$count, $this->buildCheckbox($name, $teacher->getId()), $teacher->getLogin(), $teacher->getCodes()[0]->getCode(), $this->buildLinkForModify($linkManageUser . '?id=' . $teacher->getId())];
+            $row[] = [$count, $this->buildCheckbox($name, $teacher->getId()), $teacher->getLogin(), $teacher->getCodes()[0]->getCode(), add_query_arg('id', $teacher->getId(), home_url('/users/edit'))];
         }
 
-        return $this->displayTable($name, $title, $header, $row, 'teacher', '<a type="submit" class="btn btn-primary" role="button" aria-disabled="true" href="' . home_url('/creer-utilisateur') . '">Créer</a>');
+        return $this->displayTable('Teacher', $title, $header, $row, 'teacher', '<a type="submit" class="btn btn-primary" role="button" aria-disabled="true" href="' . home_url('/creer-utilisateur') . '">Créer</a>');
     }
 }
