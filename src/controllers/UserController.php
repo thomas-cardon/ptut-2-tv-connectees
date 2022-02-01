@@ -97,32 +97,14 @@ class UserController extends Controller
         .  $this->view->displayTitleSelect('pass', 'Modifier mon mot de passe', true)
         .  $this->view->displayTitleSelect('generate', 'Générer un code de suppression')
         .  $this->view->displayTitleSelect('delete', 'Supprimer mon compte')
+        .  $this->view->displayTitleSelect('groups', 'Modifier mes groupes')
         .  $this->view->displayEndOfTitle()
-        .  $this->view->displayContentSelect('pass', $this->modifyPwd(), true)
-        .  $this->view->displayContentSelect('generate', $this->view->displayEnterCode(), false)
+        .  $this->view->displayContentSelect('pass', $this->view->displayModifyPassword(), true)
+        .  $this->view->displayContentSelect('generate', $this->view->displayEnterCode())
         .  $this->view->displayContentSelect('delete', $this->view->displayDeleteAccount())
+        .  $this->view->displayContentSelect('groups', '')
         .  $this->view->displayEndDiv()
-        . '<a role="button" class="btn btn-outline-secondary mt-5" href="/politique-de-confidentialite">Mention légales</a>'
         , '', 'container-sm px-4 pb-3 my-3 text-center');
-    }
-
-    /**
-     * Modify the password of the user
-     */
-    public function modifyPwd() {
-        $action = filter_input(INPUT_POST, 'modifyMyPwd');
-        $current_user = wp_get_current_user();
-        if (isset($action)) {
-            $pwd = filter_input(INPUT_POST, 'verifPwd');
-            if (wp_check_password($pwd, $current_user->user_pass)) {
-                $newPwd = filter_input(INPUT_POST, 'newPwd');
-                wp_set_password($newPwd, $current_user->ID);
-                $this->view->displayModificationPassValidate();
-            } else {
-                $this->view->displayWrongPassword();
-            }
-        }
-        return $this->view->displayModifyPassword();
     }
 
     /**
