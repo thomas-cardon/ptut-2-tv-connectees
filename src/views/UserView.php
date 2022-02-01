@@ -44,21 +44,25 @@ class UserView extends View
      * @return string
      */
     public function displayModifyPassword() {
-        return '<div class="container-sm px-5"
+        return '<div class="container-sm px-5">
             <form id="check" method="post">
-                <h2 class="mb-5">Modifier le mot de passe</h2>
+                <h2 class="display-6">Modifier le mot de passe</h2>
+
+                <input type="hidden" name="action" value="modify_password" />
+
                 <div class="mb-3">
                   <label for="oldPwd" class="form-label">Votre ancien mot de passe</label>
-                  <input type="password" class="form-control text-center" name="verifPwd" placeholder="Mot de passe" required="">
+                  <input type="password" class="form-control text-center" name="old_password" placeholder="Mot de passe" minlength="8" maxlength="25" required="" onkeyup=checkPwd("modify")>
                 </div>
                 <div class="mb-3">
                   <label for="newPwd" class="form-label">Votre nouveau mot de passe</label>
-                  <input type="password" class="form-control text-center" name="newPwd" placeholder="Mot de passe" required="">
+                  <input type="password" class="form-control text-center" name="new_password" placeholder="Mot de passe" minlength="8" maxlength="25" required="" onkeyup=checkPwd("modify")>
                 </div>
                 <div class="d-grid">
-                  <button class="btn btn-outline-warning" type="submit" name="modifyMyPwd">Modifier</button>
+                  <input class="btn btn-outline-warning" type="submit" value="Modifier" />
                 </div>
-            </form></div>';
+            </form>
+          </div>';
     }
 
     /**
@@ -67,20 +71,24 @@ class UserView extends View
      * @return string
      */
     public function displayEnterCode() {
-      return '<div class="container-sm px-5"
-          <form id="check" method="post">
-              <h2>Générer un code de suppression</h2>
+      return '<div class="container-sm px-5">
+          <form method="post" action="' . admin_url('admin-post.php') . '">
+              <h2 class="display-6">Générer un code de suppression</h2>
               <p class="lead">
-                Avant de supprimer votre compte, vous devez générer un code de suppression <b>ici</b>.
+                Avant de supprimer votre compte, vous devez générer un code de suppression. Il vous suffit
+                d\'entrer votre mot de passe actuel pour envoyer le code à l\'adresse email que vous avez indiqué lors de votre inscription.
               </p>
-              <div class="mb-3">
-                <label for="verifPwd">Votre mot de passe actuel</label>
-                <input type="password" class="form-control text-center" name="verifPwd" placeholder="Mot de passe" required="">
+
+              <input type="hidden" name="action" value="generate_deletion_codes">
+              <div class="form-group mb-3">
+                <label for="password">Votre mot de passe actuel</label>
+                <input type="password" class="form-control text-center" id="password" name="password" placeholder="Mot de passe" required="">
               </div>
               <div class="d-grid">
-                <button class="btn btn-outline-danger" type="submit" name="deleteMyAccount">Générer le code requis pour supprimer le compte</button>
+                <input class="btn btn-outline-danger" type="submit" value="Générer le code" />
               </div>
-          </form></div>';
+          </form>
+        </div>';
     }
 
     /**
@@ -90,16 +98,19 @@ class UserView extends View
      */
     public function displayDeleteAccount() {
       return '<div class="container-sm px-5"
-          <form id="check" method="post">
-              <h2>Supprimer le compte</h2>
+          <form method="post" action="' . admin_url('admin-post.php') . '">
+              <h2 class="display-6">Vous partez déjà?</h2>
               <p class="lead">
                 Pour supprimer votre compte, vous devez avoir généré un code de suppression via l\'onglet éponyme.
               </p>
-              <div class="mb-3">
-                <input type="text" class="form-control text-center" name="codeDelete" placeholder="Code à rentrer" required="">
+
+              <input type="hidden" name="action" value="delete_me" />
+
+              <div class="form-group mb-3">
+                <input type="text" class="form-control text-center" id="deletionCodes" name="deletionCodes" placeholder="Code à rentrer" required />
               </div>
               <div class="d-grid">
-                <button class="btn btn-outline-danger" type="submit" name="deleteAccount">Supprimer le compte</button>
+                <input class="btn btn-outline-danger" type="submit" value="Supprimer le compte" />
               </div>
           </form></div>';
     }
@@ -196,41 +207,6 @@ class UserView extends View
          </div>
        </section>';
      }
-
-    /**
-     * Display a message for the modification of the password
-     */
-    public function displayModificationPassValidate() {
-        $this->buildModal('Modification du mot de passe', '<div class="alert alert-success" role="alert">La modification à été réussie !</div>', home_url());
-    }
-
-    /**
-     * Display a message if the password is wrong
-     */
-    public function displayWrongPassword() {
-        $this->buildModal('Mot de passe incorrect', '<div class="alert alert-danger">Mauvais mot de passe</div>');
-    }
-
-    /**
-     * Display a message if the
-     */
-    public function displayMailSend() {
-        $this->buildModal('Mail envoyé', '<div class="alert alert-success"> Un mail a été envoyé à votre adresse mail, merci de bien vouloir entrer le code reçu</div>');
-    }
-
-    /**
-     * Message to prevent a login already exist
-     */
-    public function displayErrorCreation() {
-        $this->buildModal('Inscription échouée', '<div class="alert alert-danger">Il y a eu une erreur dans le formulaire, veuillez vérifier vos information et réessayer</div>');
-    }
-
-    /**
-     * Message to prevent a login already exist
-     */
-    public function displayErrorLogin() {
-        $this->buildModal('Inscription échouée', '<div class="alert alert-danger"> Le login est déjà utilisé ! </div>');
-    }
 
     /**
      * Display to user, no lesson today

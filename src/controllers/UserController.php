@@ -82,63 +82,6 @@ class UserController extends Controller
     }
 
     /**
-     * Delete the account of the user
-     */
-    public function deleteAccount() {
-        $action = filter_input(INPUT_POST, 'deleteMyAccount');
-        $actionDelete = filter_input(INPUT_POST, 'deleteAccount');
-        $current_user = wp_get_current_user();
-        $user = $this->model->get($current_user->ID);
-        if (isset($action)) {
-            $password = filter_input(INPUT_POST, 'verifPwd');
-            if (wp_check_password($password, $current_user->user_pass)) {
-
-                $code = wp_generate_password();
-                if (!empty($user->getCodeDeleteAccount())) {
-                    $user->updateCode($code);
-                } else {
-                    $user->createCode($code);
-                }
-
-                //Build Mail
-                $to = $current_user->user_email;
-                $subject = "Désinscription: TV Connectées";
-                $message = ' <!DOCTYPE html>
-                             <html lang="fr">
-                             	<head>
-                               		<title>Désinscription à la télé-connecté</title>
-                              	</head>
-                              	<body>
-                               		<p>Bonjour, vous avez décidé de vous désinscrire du système des TV Connectées</p>
-                               		<p> Votre code de désinscription est : ' . $code . '.</p>
-                               		<p> Pour poursuivre, rendez-vous <a href="' . home_url() . '/mon-compte/">ici</p>.
-                              	</body>
-                             </html>';
-
-                $headers = array('Content-Type: text/html; charset=UTF-8');
-
-                wp_mail($to, $subject, $message, $headers);
-                $this->view->displayMailSend();
-            } else {
-                $this->view->displayWrongPassword();
-            }
-        } elseif (isset($actionDelete)) {
-            $code = filter_input(INPUT_POST, 'codeDelete');
-            $userCode = $user->getCodeDeleteAccount();
-            if ($code == $userCode) {
-                $user->deleteCode();
-                $user->delete();
-                $this->view->displayModificationValidate();
-            } else {
-                echo 'Code ' . $code;
-                echo 'User code ' . $userCode;
-                $this->view->displayWrongPassword();
-            }
-        }
-        return $this->view->displayDeleteAccount();
-    }
-
-    /**
      * Modifies user's password, delete their account or modify their groups
      * @author Thomas Cardon
      * @return mixed|string
@@ -149,6 +92,7 @@ class UserController extends Controller
         return $this->view->renderHeroHeader('Vos réglages', 'Changez votre mot de passe, vos groupes ou supprimez votre compte.', URL_PATH . TV_PLUG_PATH . 'public/img/settings.png')
         . $this->view->renderContainerDivider()
         . $this->view->renderContainer(
+           (isset($_GET['message']) ? '<div class="alert alert-' . $_GET['message'] . '">' . $_GET['message_content'] . '</div>' : '') .
            $this->view->displayStartMultiSelect()
         .  $this->view->displayTitleSelect('pass', 'Modifier mon mot de passe', true)
         .  $this->view->displayTitleSelect('generate', 'Générer un code de suppression')
@@ -156,7 +100,7 @@ class UserController extends Controller
         .  $this->view->displayEndOfTitle()
         .  $this->view->displayContentSelect('pass', $this->modifyPwd(), true)
         .  $this->view->displayContentSelect('generate', $this->view->displayEnterCode(), false)
-        .  $this->view->displayContentSelect('delete', $this->deleteAccount())
+        .  $this->view->displayContentSelect('delete', $this->view->displayDeleteAccount())
         .  $this->view->displayEndDiv()
         . '<a role="button" class="btn btn-outline-secondary mt-5" href="/politique-de-confidentialite">Mention légales</a>'
         , '', 'container-sm px-4 pb-3 my-3 text-center');

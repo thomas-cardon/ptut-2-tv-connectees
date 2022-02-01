@@ -165,9 +165,9 @@ add_action('ec_virtual_pages', function ($controller) {
     ->setTemplate('page.php');
 
     /**
-     *  Page: /mon-compte
+     *  Page: /me
      */
-    $controller->addPage(new \EC\VirtualPages\Page("/mon-compte"))
+    $controller->addPage(new \EC\VirtualPages\Page("/me"))
     ->setTitle('Mon compte')
     ->setContent('
     <!-- wp:tvconnecteeamu/choose-account -->
@@ -240,6 +240,18 @@ add_action('ec_virtual_pages', function ($controller) {
     <!-- wp:tvconnecteeamu/tablet-schedule -->
     test
     <!-- /wp:tvconnecteeamu/tablet-schedule -->
+    ')
+    ->setTemplate('page-tablet.php');
+    
+    /**
+     *  Page: /tablet-view/schedule
+     */
+    $controller->addPage(new \EC\VirtualPages\Page("/cgu"))
+    ->setTitle('Conditions générales d\'utilisation')
+    ->setContent('
+    <!-- wp:tvconnecteeamu/cgu -->
+    test
+    <!-- /wp:tvconnecteeamu/cgu -->
     ')
     ->setTemplate('page-tablet.php');
 });
