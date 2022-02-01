@@ -131,30 +131,30 @@ class SecretaryView extends UserView
 
         <hr class="my-4">
         
-        ' . ($_GET['error'] ? '<div class="alert alert-danger">' . $_GET['error'] . '</div>' : '') . '
+        ' . (isset($_GET['message']) ? '<div class="alert alert-' . $_GET['message'] . '">' . $_GET['message_content'] . '</div>' : '') . '
 
         <form method="post" action="' . admin_url('admin-post.php') . '">
           <div class="form-outline mb-2">
             <label class="form-label" for="form3Example1cg">Identifiant du compte</label>
-            <input type="text" id="login" placeholder="Exemple: prenom.nom" class="form-control form-control-lg" minlength="3" required />
+            <input type="text" id="login" name="login" placeholder="Exemple: prenom.nom" class="form-control form-control-lg" minlength="3" required />
           </div>
 
           <div class="form-outline mb-2">
             <label class="form-label" for="email">Votre adresse e-mail</label>
-            <input type="email" id="email" class="form-control form-control-lg" required />
+            <input type="email" id="email" name="email" class="form-control form-control-lg" required />
           </div>
 
           <div class="form-outline mb-2">
             <label class="form-label" for="password">Mot de passe - <i>requis: 1 chiffre, 1 lettre majuscule, 1 lettre minuscule, et 1 symbole parmis ceux-ci: <kbd> !@#$%^&*_=+-</kbd></i></label>
-            <input type="password" id="password" class="form-control form-control-lg" minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,12}$" required />
+            <input type="password" id="password" name="password1" class="form-control form-control-lg" minlength="8" required />
           </div>
 
           <div class="form-outline mb-2">
             <label class="form-label" for="password2">Confirmez votre mot de passe</label>
-            <input type="password" id="password2" class="form-control form-control-lg" minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,12}$" required />
+            <input type="password" id="password2" name="password2" class="form-control form-control-lg" minlength="8" required />
           </div>
 
-          <input type="hidden" name="action" value="createUser">
+          <input type="hidden" name="action" value="create_user">
 
           <div class="form-outline mb-2 pb-4">
             <label class="form-label" for="role">Rôle</label>
@@ -183,7 +183,7 @@ class SecretaryView extends UserView
 
         <hr class="my-4">
         
-        ' . ($_GET['error'] ? '<div class="alert alert-danger">' . $_GET['error'] . '</div>' : '') . '
+        ' . (isset($_GET['message']) ? '<div class="alert alert-' . $_GET['message'] . '">' . $_GET['message_content'] . '</div>' : '') . '
 
         <form method="post" action="' . admin_url('admin-post.php') . '">
           <div class="form-outline mb-2">

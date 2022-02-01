@@ -131,18 +131,4 @@ function move_fileICS_schedule()
     }
 }
 
-/**
- * Function for "Nuit de l'info"
- * Give numbers of participant
- *
- * @return string
- */
-function displayParticipant()
-{
-    $url = "https://www.nuitdelinfo.com/inscription/sites/55";
-    $result = file_get_contents($url);
-    $result = explode('<li class="list-group-item list-group-item-info">', $result);
-    $result1 = substr($result[1], 0, -60);
-    $result2 = substr($result[2], 0, 70);
-    return '<p class="info-text"> - '.$result1.'</p><p class="info-text"> - '.$result2.'</p>';
-}
+require_once 'register-dashboard-forms.php';
