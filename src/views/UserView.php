@@ -125,59 +125,44 @@ class UserView extends View
      *
      * @return string
      */
-    public function displayModifyMyCodes($codes, $years, $groups, $halfGroups) {
-        $form = '
-        <form method="post">
-            <h2> Modifier mes emplois du temps</h2>
-            <label>Année</label>
-            <select class="form-control" name="modifYear">';
-        if (!empty($codes[0])) {
-            $form .= '<option value="' . $codes[0]->getCode() . '">' . $codes[0]->getTitle() . '</option>';
-        }
 
-        $form .= '<option value="0">Aucun</option>
-				  <optgroup label="Année">';
+    public function displayModifyMyCodesView($codeArray) {
+      $selectedCodes = User::getById()->getCodes(true);
+      $codes = '';
 
-        foreach ($years as $year) {
-            $form .= '<option value="' . $year->getCode() . '">' . $year->getTitle() . '</option >';
-        }
-        $form .= '
-                </optgroup>
-            </select>
-            <label>Groupe</label>
-            <select class="form-control" name="modifGroup">';
+      foreach ($codeArray as $code) {
+        $codes .= '<option value="' . $code->getId() . '" ' . (isset($selectedCodes, $selectedCodes[$code->getId()]) ? 'selected="true"' : '') . '>' . $code->getName() . '</option>';
+      }
 
-        if (!empty($codes[1])) {
-            $form .= '<option value="' . $codes[1]->getCode() . '">' . $codes[1]->getTitle() . '</option>';
-        }
-        $form .= '<option value="0">Aucun</option>
-                  <optgroup label="Groupe">';
+      $form = '<div class="container-sm px-5">
+          <form method="post" action="' . admin_url('admin-post.php') . '">
+              <h2 class="display-6">Modifier mon emploi du temps</h2>
 
-        foreach ($groups as $group) {
-            $form .= '<option value="' . $group->getCode() . '">' . $group->getTitle() . '</option>';
-        }
-        $form .= '
-                </optgroup>
-            </select>
-            <label>Demi-groupe</label>
-            <select class="form-control" name="modifHalfgroup">';
+              <p class="lead">
+                Ce changement sera effectif que pour l\'affichage de l\'emploi du temps en mode TV.
+                Pour changer votre emploi du temps sur la PWA, accédez à l\'onglet "Paramètres". Ils seront alors mis à jour automatiquement.
+              </p>
 
-        if (!empty($codes[2])) {
-            $form .= '<option value="' . $codes[2]->getCode() . '">' . $codes[2]->getTitle() . '</option>';
-        }
-        $form .= '<option value="0"> Aucun</option>
-                  <optgroup label="Demi-Groupe">';
+              <input type="hidden" name="action" value="modify_my_codes" />
+              
+              <select class="form-select form-select-lg mb-3" multiple id="codes" name="codes[]" size="10">
+                <option value="0">Aucun</option>
+                ' . $codes . '
+              </select>
 
-        foreach ($halfGroups as $halfGroup) {
-            $form .= '<option value="' . $halfGroup->getCode() . '">' . $halfGroup->getTitle() . '</option>';
-        }
-        $form .= '
-                </optgroup>
-            </select>
-            <button name="modifvalider" type="submit" class="btn btn-primary">Valider</button>
-         </form>';
+              <p class="lead">
+                Vous pouvez choisir plusieurs codes à la fois. Pour enlever un code, il suffit de le déselectionner.
+                Pour enregistrer vos modifications, cliquez sur le bouton "Modifier".
+              </p>
 
-        return $form;
+              <div class="d-grid">
+                <input class="btn btn-outline-warning" type="submit" value="Modifier" />
+              </div>
+              
+              </form>
+            </div>';
+
+      return $form;
     }
 
     /**

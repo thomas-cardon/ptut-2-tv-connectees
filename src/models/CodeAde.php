@@ -14,7 +14,6 @@ use PDO;
  */
 class CodeAde extends Model implements Entity, JsonSerializable
 {
-
     /**
      * @var int
      */
@@ -35,14 +34,19 @@ class CodeAde extends Model implements Entity, JsonSerializable
      */
     private $code;
 
-    /**
-     * @inheritDoc
-     */
+    public static function find() {
+        $sql = "SELECT * FROM ecran_code_ade";
+        $stmt = self::getConnection()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_CLASS, self::class);
+        return $result;
+    }
+    
     public function insert() {
         $database = $this->getDatabase();
         $request = $database->prepare('INSERT INTO ecran_code_ade (type, title, code) VALUES (:type, :title, :code)');
 
-        $request->bindValue(':title', $this->getTitle(), PDO::PARAM_STR);
+        $request->bindValue(':title', $this->getName(), PDO::PARAM_STR);
         $request->bindValue(':code', $this->getCode(), PDO::PARAM_STR);
         $request->bindValue(':type', $this->getType(), PDO::PARAM_STR);
 
@@ -58,7 +62,7 @@ class CodeAde extends Model implements Entity, JsonSerializable
         $request = $this->getDatabase()->prepare('UPDATE ecran_code_ade SET title = :title, code = :code, type = :type WHERE id = :id');
 
         $request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
-        $request->bindValue(':title', $this->getTitle(), PDO::PARAM_STR);
+        $request->bindValue(':title', $this->getName(), PDO::PARAM_STR);
         $request->bindValue(':code', $this->getCode(), PDO::PARAM_STR);
         $request->bindValue(':type', $this->getType(), PDO::PARAM_STR);
 
@@ -184,7 +188,7 @@ class CodeAde extends Model implements Entity, JsonSerializable
         $entity = new CodeAde();
 
         $entity->setId($data['id']);
-        $entity->setTitle($data['title']);
+        $entity->setName($data['title']);
         $entity->setCode($data['code']);
         $entity->setType($data['type']);
 
@@ -247,14 +251,14 @@ class CodeAde extends Model implements Entity, JsonSerializable
     /**
      * @return string
      */
-    public function getTitle() {
+    public function getName() {
         return $this->title;
     }
 
     /**
      * @param $title
      */
-    public function setTitle($title) {
+    public function setName($title) {
         $this->title = $title;
     }
 

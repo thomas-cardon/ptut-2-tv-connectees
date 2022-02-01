@@ -218,6 +218,11 @@ class User extends Model implements Entity, JsonSerializable
         */
     }
 
+    public static function getById($id = null) {
+        $user = new User();
+        return $user->get($id ?? wp_get_current_user()->ID);
+    }
+
     /**
      * @param int $begin
      * @param int $numberElement
@@ -291,6 +296,31 @@ class User extends Model implements Entity, JsonSerializable
         }
 
         return $users;
+    }
+
+    public function deleteRelatedCodes() : void {
+        $database = $this->getDatabase();
+        $request = $database->prepare('DELETE FROM ecran_code_user WHERE user_id = :id');
+
+        $request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
+
+        $request->execute();
+    }
+
+    public function addCodes($codes) : void {
+        foreach ($codes as $code) {
+            $this->addCode($code);
+        }
+    }
+
+    public function addCode($code) : void {
+        $database = $this->getDatabase();
+        $request = $database->prepare('INSERT INTO ecran_code_user (user_id, code_ade_id) VALUES (:userId, :codeAdeId)');
+
+        $request->bindValue(':userId', $this->getId(), PDO::PARAM_INT);
+        $request->bindValue(':codeAdeId', $code, PDO::PARAM_INT);
+
+        $request->execute();
     }
 
     /**
@@ -497,7 +527,15 @@ class User extends Model implements Entity, JsonSerializable
     /**
      * @return CodeAde[]
      */
-    public function getCodes() {
+    public function getCodes($object = false) {
+        if ($object) {
+            $codes = array();
+            foreach ($this->codes as $code) {
+                $codes[$code->getId()] = $code;
+            }
+
+            return $codes;
+        }
         return $this->codes;
     }
 

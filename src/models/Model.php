@@ -41,6 +41,7 @@ class Model
     /**
      * Return the connection
      *
+     * @deprecated
      * @return PDO
      */
     protected function getDatabase() {
@@ -51,10 +52,21 @@ class Model
     /**
      * Return the connection
      *
+     * @deprecated
      * @return PDO
      */
     protected function getDatabaseViewer() {
         self::setDatabaseViewer();
+        return self::$database;
+    }
+    
+    /**
+     * Returns the connection
+     *
+     * @return PDO
+     */
+    protected static function getConnection() {
+        self::setDatabase();
         return self::$database;
     }
 }

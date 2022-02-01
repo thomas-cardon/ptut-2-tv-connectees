@@ -1,5 +1,7 @@
 <?php
 
+use Models\User;
+
 /**
  * Helper function - checks if role exists
  * @param $role
@@ -295,11 +297,14 @@ function dashboard_generate_deletion_codes() {
         )
     );
 
-    echo '<pre>';
-    echo print_r($_POST);
-    echo '</pre>';
+    exit;
 }
 
+add_action( 'admin_post_modify_my_account', 'dashboard_modify_my_account' );
+
+/**
+ * Handles the modification of the current user's account
+ */
 function dashboard_modify_my_account() {
     $current_user = wp_get_current_user();
 
@@ -349,4 +354,31 @@ function dashboard_modify_my_account() {
             home_url('/me')
         )
     );
+}
+
+add_action( 'admin_post_modify_my_codes', 'dashboard_modify_my_codes' );
+
+/**
+ * Handles the modification of the current user's schedule
+ */
+function dashboard_modify_my_codes() {
+    $codes = $_POST['codes'];
+    
+    $current_user = wp_get_current_user();
+    $user = User::getById($current_user->ID);
+
+    $user->deleteRelatedCodes();
+    $user->addCodes($codes);
+
+    wp_redirect(
+        add_query_arg(
+            array(
+                'message' => 'success',
+                'message_content' => 'Votre emploi du temps à bien été modifié.'
+            ),
+            home_url('/me')
+        )
+    );
+
+    exit;
 }
