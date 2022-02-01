@@ -61,7 +61,7 @@ add_action('ec_virtual_pages', function ($controller) {
     /**
      *  Page: /creer-utilisateur
      */
-    $controller->addPage(new \EC\VirtualPages\Page("/creer-utilisateur"))
+    $controller->addPage(new \EC\VirtualPages\Page("/users/create"))
     ->setTitle('Créer un utilisateur')
     ->setContent('
     <!-- wp:tvconnecteeamu/creation-user -->
@@ -69,11 +69,25 @@ add_action('ec_virtual_pages', function ($controller) {
     <!-- /wp:tvconnecteeamu/creation-user -->
     ')
     ->setTemplate('page.php');
+    
+    /**
+     *  Page: /users/edit/{id}
+     *  Work in progress
+     */
+    $controller->addPage(new \EC\VirtualPages\Page("/users/edit"))
+    ->setTitle('Modifier un utilisateur')
+    ->setContent('
+    <!-- wp:tvconnecteeamu/modification-user -->
+    test
+    <!-- /wp:tvconnecteeamu/modification-user -->
+    ')
+    ->setTemplate('page.php');
+
 
     /**
      *  Page: /liste-utilisateur
      */
-    $controller->addPage(new \EC\VirtualPages\Page("/liste-utilisateur"))
+    $controller->addPage(new \EC\VirtualPages\Page("/users/list"))
     ->setTitle('Liste des utilisateurs')
     ->setContent('
     <!-- wp:tvconnecteeamu/management-user -->
