@@ -301,4 +301,9 @@ class UserController extends Controller
 
         return $this->view->displayModifyMyCodes($this->model->getCodes(), $years, $groups, $halfGroups);
     }
+
+    public function displayUsers() {
+        $users = $this->model->getList();
+        return $this->view->displayUsers($users);
+    }
 }

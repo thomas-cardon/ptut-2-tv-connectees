@@ -132,6 +132,7 @@ class SecretaryController extends UserController
         $secretary = new SecretaryController();
         $technician = new TechnicianController();
         $television = new TelevisionController();
+        $user = new UserController();
 
         return $this->view->getHeader('Liste des utilisateurs', '
         Il y a plusieurs types d\'utilisateurs :
@@ -152,12 +153,14 @@ class SecretaryController extends UserController
               $this->view->displayTitleSelect('secretary', 'Secrétaires') .
               $this->view->displayTitleSelect('technician', 'Technicien') .
               $this->view->displayTitleSelect('television', 'Télévisions') .
+              $this->view->displayTitleSelect('all', 'Tous les utilisateurs') .
               $this->view->displayEndOfTitle() .
               $this->view->displayContentSelect('teacher', $teacher->displayTableTeachers(), true) .
               $this->view->displayContentSelect('studyDirector', $studyDirector->displayTableStudyDirector()) .
               $this->view->displayContentSelect('secretary', $secretary->displayTableSecretary()) .
               $this->view->displayContentSelect('technician', $technician->displayTableTechnician()) .
               $this->view->displayContentSelect('television', $television->displayTableTv()) .
+              $this->view->displayContentSelect('all', $user->displayUsers()) .
               $this->view->displayEndDiv(), '', 'container-sm px-4 pb-5 my-5 text-center'
             );
     }
