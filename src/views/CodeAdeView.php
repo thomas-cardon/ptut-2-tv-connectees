@@ -134,7 +134,7 @@ class CodeAdeView extends View
         foreach ($groups as $codeAde) {
             foreach ($codeAde as $code) {
                 ++$count;
-                $row[] = [$count, $this->buildCheckbox($code->getName(), $code->getId()), $code->getName(), $code->getCode(), $code->getType(), $this->link(add_query_arg('id', $code->getId(), home_url('/gestion-codes-ade/modification-code-ade')), 'voir')];
+                $row[] = [$count, $this->buildCheckbox($code->getTitle(), $code->getId()), $code->getTitle(), $code->getCode(), $code->getType(), $this->link(add_query_arg('id', $code->getId(), home_url('/gestion-codes-ade/modification-code-ade')), 'voir')];
             }
         }
 

@@ -116,7 +116,7 @@ class R34ICS extends Controller
             if (!$this->parser_loaded) {
                 $this->parser_loaded = $this->_load_parser();
             }
-            $ICal = new ICal\ICal;
+            $ICal = new ICal\ICal();
             $ICal->initString($ics_contents);
             $ics_data['title'] = isset($args['title']) ? $args['title'] : $ICal->calendarName();
             $ics_data['description'] = isset($args['description']) ? $args['description'] : $ICal->calendarDescription();

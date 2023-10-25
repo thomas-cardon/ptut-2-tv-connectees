@@ -12,7 +12,7 @@ include 'widgets/WidgetWeather.php';
 include 'widgets/WidgetInformation.php';
 
 // Login for viewer
-require 'config.php';
+require 'config-sample.php';
 
 /**
  * Create all direcstory

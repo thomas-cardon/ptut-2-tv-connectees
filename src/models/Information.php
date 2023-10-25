@@ -361,7 +361,7 @@ class Information extends Model implements Entity, JsonSerializable
      */
     public function setContent($content) {
         $this->content = $content;
-        $this->content_link = BASE_URL . TV_UPLOAD_PATH . $content;
+        $this->content_link = URL_PATH . TV_UPLOAD_PATH . $content;
     }
 
     /**
@@ -392,7 +392,7 @@ class Information extends Model implements Entity, JsonSerializable
         $this->adminId = $adminId;
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize() : JsonSerializable{
         return get_object_vars($this);
     }
 }

@@ -46,7 +46,7 @@ class CodeAde extends Model implements Entity, JsonSerializable
         $database = $this->getDatabase();
         $request = $database->prepare('INSERT INTO ecran_code_ade (type, title, code) VALUES (:type, :title, :code)');
 
-        $request->bindValue(':title', $this->getName(), PDO::PARAM_STR);
+        $request->bindValue(':title', $this->getTitle(), PDO::PARAM_STR);
         $request->bindValue(':code', $this->getCode(), PDO::PARAM_STR);
         $request->bindValue(':type', $this->getType(), PDO::PARAM_STR);
 
@@ -62,7 +62,7 @@ class CodeAde extends Model implements Entity, JsonSerializable
         $request = $this->getDatabase()->prepare('UPDATE ecran_code_ade SET title = :title, code = :code, type = :type WHERE id = :id');
 
         $request->bindValue(':id', $this->getId(), PDO::PARAM_INT);
-        $request->bindValue(':title', $this->getName(), PDO::PARAM_STR);
+        $request->bindValue(':title', $this->getTitle(), PDO::PARAM_STR);
         $request->bindValue(':code', $this->getCode(), PDO::PARAM_STR);
         $request->bindValue(':type', $this->getType(), PDO::PARAM_STR);
 
@@ -188,7 +188,7 @@ class CodeAde extends Model implements Entity, JsonSerializable
         $entity = new CodeAde();
 
         $entity->setId($data['id']);
-        $entity->setName($data['title']);
+        $entity->setTitle($data['title']);
         $entity->setCode($data['code']);
         $entity->setType($data['type']);
 
@@ -251,14 +251,14 @@ class CodeAde extends Model implements Entity, JsonSerializable
     /**
      * @return string
      */
-    public function getName() {
+    public function getTitle() {
         return $this->title;
     }
 
     /**
      * @param $title
      */
-    public function setName($title) {
+    public function setTitle($title) {
         $this->title = $title;
     }
 

@@ -8,8 +8,8 @@ define('URL_WEBSITE_VIEWER', 'http://localhost/');
 
 define('VERSION', /*'2.0'*/ rand(1, 9999999));
 
-define('PATH', /* $_SERVER['DOCUMENT_ROOT'] */ 'C:/xampp/htdocs/tv/');
-define('URL_PATH', /* example: http://localhost/tv -> /tv */ '/tv');
+define('PATH',  $_SERVER['DOCUMENT_ROOT']);
+define('URL_PATH', 'example: http://localhost/tv -> /tv');
 
 /* Actualise la TV toute les 30s */
 define('TV_REFRESH', true);
