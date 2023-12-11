@@ -195,4 +195,16 @@ class SecretaryView extends UserView
         </form>
       </div>';
     }
+
+    public function displaySecretaryWelcome() : string{
+        return '<form method="post">
+    <input type="submit" name="BUT1" value="BUT 1" />
+    <input type="submit" name="BUT2" value="BUT 2" />
+    <input type="submit" name="BUT3" value="BUT 3" />
+    <input type="submit" name="ENSEIGNANT" value="ENSEIGNANTS" />
+    <input type="submit" name="SMACHINES" value="SALLES MACHINES" />
+    <input type="submit" name="SDISPONIBLES" value="SALLES DISPONIBLES" />
+
+</form>';
+    }
 }

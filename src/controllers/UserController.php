@@ -153,6 +153,7 @@ class UserController extends Controller
         return $this->view->displaySelectSchedule();
     }
 
+
     /**
      * Check if a code Ade already exists with the same title or code
      *

@@ -696,3 +696,27 @@ function block_help_map()
   ));
 }
 add_action( 'init', 'block_help_map' );
+
+
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function secretary_welcome_render_callback()
+{
+    if(is_page()) {
+        $user = new SecretaryController();
+        return $user->displayWelcomePage();
+    }
+}
+
+/**
+ * Build a block
+ */
+function block_secretary_welcome() {
+    register_block_type('tvconnecteeamu/secretary-welcome', array(
+        'render_callback' => 'secretary_welcome_render_callback'
+    ));
+}
+add_action( 'init', 'block_secretary_welcome' );

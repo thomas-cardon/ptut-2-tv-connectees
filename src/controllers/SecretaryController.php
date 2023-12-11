@@ -71,7 +71,7 @@ class SecretaryController extends UserController
       Les <b>secrétaires</b> peuvent poster des alertes et des informations. Ils peuvent aussi créer des utilisateurs. <br />
       Les <b>techniciens</b> ont accès aux emplois du temps des promotions. <br />
       Les <b>télévisions</b> sont les utilisateurs utilisés pour afficher ce site sur les téléviseurs. Les comptes télévisions peuvent afficher autant d\'emploi du temps que souhaité.
-  ', URL_PATH . TV_PLUG_PATH . 'public/img/gestion.png') . '' . $this->view->renderContainerDivider() . '' . $this->view->renderContainer(
+  ', URL_PATH . TV_PLUG_PATH . '/public/img/gestion.png') . '' . $this->view->renderContainerDivider() . '' . $this->view->renderContainer(
           $this->view->displayStartMultiSelect()
         . $this->view->displayTitleSelect('form', 'Par formulaire', true)
         . $this->view->displayTitleSelect('excel', 'Par fichier Excel (CSV)')
@@ -122,6 +122,14 @@ class SecretaryController extends UserController
               $this->view->displayContentSelect('all', $user->displayUsers()) .
               $this->view->displayEndDiv(), '', 'container-sm px-4 pb-5 my-5 text-center'
             );
+    }
+
+    /**
+     * Display the welcome page from the secretary view
+     * @return string
+     */
+    function displayWelcomePage(){
+        return $this->view->displaySecretaryWelcome();
     }
 
     /**

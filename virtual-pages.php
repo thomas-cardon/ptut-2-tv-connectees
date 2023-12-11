@@ -171,7 +171,6 @@ add_action('ec_virtual_pages', function ($controller) {
     ->setTitle('Mon compte')
     ->setContent('
     <!-- wp:tvconnecteeamu/choose-account -->
-    test
     <!-- /wp:tvconnecteeamu/choose-account -->
     ')
     ->setTemplate('page.php');
@@ -199,7 +198,6 @@ add_action('ec_virtual_pages', function ($controller) {
     ->setContent('
     <!-- wp:tvconnecteeamu/manage-codes -->
       <!-- wp:tvconnecteeamu/add-code -->
-      test
       <!-- /wp:tvconnecteeamu/add-code -->
     <!-- /wp:tvconnecteeamu/manage-codes -->
     ')
@@ -213,7 +211,6 @@ add_action('ec_virtual_pages', function ($controller) {
     ->setTitle('Gérer les alertes')
     ->setContent('
     <!-- wp:tvconnecteeamu/manage-alert -->
-    test
     <!-- /wp:tvconnecteeamu/manage-alert -->
     ')
     ->setTemplate('page.php');
@@ -254,4 +251,16 @@ add_action('ec_virtual_pages', function ($controller) {
     <!-- /wp:tvconnecteeamu/cgu -->
     ')
     ->setTemplate('page-tablet.php');
+
+    /**
+     *  Page: /secretary/welcome
+     */
+    $controller->addPage(new \EC\VirtualPages\Page("/secretary/welcome"))
+        ->setTitle('Accueil page secrétaires')
+        ->setContent('
+    <!-- wp:tvconnecteeamu/secretary-welcome -->
+    test
+    <!-- /wp:tvconnecteeamu/secretary-welcome -->
+    ')
+        ->setTemplate('page.php');
 });
