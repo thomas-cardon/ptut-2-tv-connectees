@@ -77,9 +77,9 @@ add_action('ec_virtual_pages', function ($controller) {
     $controller->addPage(new \EC\VirtualPages\Page("/users/edit"))
     ->setTitle('Modifier un utilisateur')
     ->setContent('
-    <!-- wp:tvconnecteeamu/modification-user -->
+    <!-- wp:tvconnecteeamu/modify-user -->
     test
-    <!-- /wp:tvconnecteeamu/modification-user -->
+    <!-- /wp:tvconnecteeamu/modify-user -->
     ')
     ->setTemplate('page.php');
 
