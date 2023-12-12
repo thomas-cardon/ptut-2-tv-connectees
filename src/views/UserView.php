@@ -131,7 +131,7 @@ class UserView extends View
       $codes = '';
 
       foreach ($codeArray as $code) {
-        $codes .= '<option value="' . $code->getId() . '" ' . (isset($selectedCodes, $selectedCodes[$code->getId()]) ? 'selected="true"' : '') . '>' . $code->getName() . '</option>';
+        $codes .= '<option value="' . $code->getId() . '" ' . (isset($selectedCodes, $selectedCodes[$code->getId()]) ? 'selected="true"' : '') . '>' . $code->getTitle() . '</option>';
       }
 
       $form = '<div class="container-sm px-5">

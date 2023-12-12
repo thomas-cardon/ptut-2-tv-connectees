@@ -61,7 +61,7 @@ add_action('ec_virtual_pages', function ($controller) {
     /**
      *  Page: /creer-utilisateur
      */
-    $controller->addPage(new \EC\VirtualPages\Page("/users/create"))
+    $controller->addPage(new \EC\VirtualPages\Page("/ creer-utilisateur"))
     ->setTitle('Créer un utilisateur')
     ->setContent('
     <!-- wp:tvconnecteeamu/creation-user -->
@@ -167,7 +167,7 @@ add_action('ec_virtual_pages', function ($controller) {
     /**
      *  Page: /me
      */
-    $controller->addPage(new \EC\VirtualPages\Page("/me"))
+    $controller->addPage(new \EC\VirtualPages\Page("/mon-compte"))
     ->setTitle('Mon compte')
     ->setContent('
     <!-- wp:tvconnecteeamu/choose-account -->

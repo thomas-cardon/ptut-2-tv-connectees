@@ -274,25 +274,26 @@ class View
     public function buildModal($title, $content, $redirect = null) {
         $unique_id = 'modal_'.uniqid();
         $modal = '
-		<!-- MODAL -->
-		<div class="modal" id="' . $unique_id . '" tabindex="-1" role="dialog">
-		  <div class="modal-dialog modal-dialog-centered" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title">' . $title . '</h5>
-		      </div>
-		      <div class="modal-body">
-		        ' . $content . '
-		      </div>
-		      <div class="modal-footer">';
+    <!-- MODAL -->
+    <div class="modal" id="' . $unique_id . '" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">' . $title . '</h5>
+          </div>
+          <div class="modal-body">
+            ' . $content . '
+          </div>
+          <div class="modal-footer">';
         if (empty($redirect)) {
             $modal .= '<button type="button" class="btn btn-primary" onclick="bootstrap.Modal
-            .getOrCreateInstance(document.querySelector("#' . $unique_id . '"))
-            .show();">Fermer</button>';
+        .getOrCreateInstance(document.querySelector(\'#' . $unique_id . '\'))
+        .hide();">Fermer</button>';
         } else {
-            $modal .= '<button type="button" class="btn btn-primary" onclick="document.location.href =\' ' . $redirect . ' \'">Fermer</button>';
+            $modal .= '<button type="button" class="btn btn-primary" onclick="document.location.href =\'' . $redirect . '\'">Fermer</button>';
         }
         $modal .= '</div>
+    }
 		    </div>
 		  </div>
 		</div>

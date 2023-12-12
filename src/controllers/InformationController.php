@@ -531,7 +531,8 @@ class InformationController extends Controller
     {
         $file = PATH. $content;
 
-        $extension = ucfirst(strtolower(end(explode(".", $file))));
+        $array = explode(".", $file);
+        $extension = ucfirst(strtolower(end($array)));
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($extension);
         $reader->setReadDataOnly(true);
         $spreadsheet = $reader->load($file);

@@ -24,7 +24,7 @@ La première étape consiste à mettre en place WordPress.
 
 - Lorsque vous lancerez votre site pour la première fois, WordPress vous demandera d'indiquer :  
     - Le nom de la base de données.   
-    - L'hôte de la base de données.  
+      - L'hôte de la base de données.  
     - Le login de l'utilisateur de la base de données.  
     - Le mot de passe de l'utilisateur de la base de données.  
 
