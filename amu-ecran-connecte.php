@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
 	exit(1);
 }
 
-define('TV_PLUG_PATH', '/wp-content/plugins/plugin-ecran-connecte/');
+define('TV_PLUG_PATH', '/wp-content/plugins/ptut-2-tv-connectees/');
 define('TV_UPLOAD_PATH', '/wp-content/uploads/media/');
 define('TV_ICSFILE_PATH', '/wp-content/uploads/fileICS/');
 

@@ -197,14 +197,12 @@ class SecretaryView extends UserView
     }
 
     public function displaySecretaryWelcome() : string{
-        return '<form method="post">
-    <input type="submit" name="BUT1" value="BUT 1" />
-    <input type="submit" name="BUT2" value="BUT 2" />
-    <input type="submit" name="BUT3" value="BUT 3" />
-    <input type="submit" name="ENSEIGNANT" value="ENSEIGNANTS" />
-    <input type="submit" name="SMACHINES" value="SALLES MACHINES" />
-    <input type="submit" name="SDISPONIBLES" value="SALLES DISPONIBLES" />
-
-</form>';
+        return
+            '<a class="btn" href="' . home_url('/secretary/year-student-schedule') . '">BUT 1</a>
+            <input type="submit" name="BUT2" value="BUT 2" />
+            <input type="submit" name="BUT3" value="BUT 3" />
+            <a class="btn" href="' . home_url('/secretary/teacher-search-schedule') . '">ENSEIGNANTS</a>
+            <a class="btn" href="' . home_url('/secretary/computer-rooms') . '">SALLES MACHINE</a>
+            <a class="btn" href="' . home_url('/secretary/room-schedule') . '">SALLES DISPONIBLES</a>';
     }
 }
