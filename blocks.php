@@ -379,7 +379,7 @@ add_action( 'init', 'block_information_modify' );
 */
 function schedule_render_callback()
 {
-  $controller;
+  $controller = null;
   if (members_current_user_has_role("television"))
     $controller = new TelevisionController();
   else if(members_current_user_has_role("directeuretude")) {
@@ -696,3 +696,243 @@ function block_help_map()
   ));
 }
 add_action( 'init', 'block_help_map' );
+
+
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function secretary_welcome_render_callback()
+{
+    if(is_page()) {
+        $user = new SecretaryController();
+        return $user->displayWelcomePage();
+    }
+}
+
+/**
+ * Build a block
+ */
+function block_secretary_welcome() {
+    register_block_type('tvconnecteeamu/secretary-welcome', array(
+        'render_callback' => 'secretary_welcome_render_callback'
+    ));
+}
+add_action( 'init', 'block_secretary_welcome' );
+
+
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function secretary_computer_rooms_render_callback()
+{
+    if(is_page()) {
+        $user = new SecretaryController();
+        return $user->displayWelcomePage();
+    }
+}
+
+/**
+ * Build a block
+ */
+function block_secretary_computer_rooms() {
+    register_block_type('tvconnecteeamu/computer-rooms', array(
+        'render_callback' => 'secretary_computer_rooms_render_callback'
+    ));
+}
+add_action( 'init', 'block_secretary_computer_rooms' );
+
+
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function secretary_teacher_schedule_render_callback()
+{
+    if(is_page()) {
+        $user = new SecretaryController();
+        return $user->displayWelcomePage();
+    }
+}
+
+/**
+ * Build a block
+ */
+function block_secretary_teacher_schedule() {
+    register_block_type('tvconnecteeamu/teacher-schedule', array(
+        'render_callback' => 'secretary_teacher_schedule_render_callback'
+    ));
+}
+add_action( 'init', 'block_secretary_teacher_schedule' );
+
+
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function secretary_main_menu_render_callback()
+{
+    if(is_page()) {
+        $user = new SecretaryController();
+        return $user->displayWelcomePage();
+    }
+}
+
+/**
+ * Build a block
+ */
+function block_secretary_main_menu() {
+    register_block_type('tvconnecteeamu/main-menu', array(
+        'render_callback' => 'secretary_main_menu_render_callback'
+    ));
+}
+add_action( 'init', 'block_secretary_main_menu' );
+
+
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function secretary_room_schedule_render_callback()
+{
+    if(is_page()) {
+        $user = new SecretaryController();
+        return $user->displayWelcomePage();
+    }
+}
+
+/**
+ * Build a block
+ */
+function block_secretary_room_schedule() {
+    register_block_type('tvconnecteeamu/room-schedule', array(
+        'render_callback' => 'secretary_room_schedule_render_callback'
+    ));
+}
+add_action( 'init', 'block_secretary_room_schedule' );
+
+
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function year_student_schedule_render_callback()
+{
+    if(is_page()) {
+        $user = new SecretaryController();
+        return $user->displayWelcomePage();
+    }
+}
+
+/**
+ * Build a block
+ */
+function block_year_student_schedule() {
+    register_block_type('tvconnecteeamu/year-student-schedule', array(
+        'render_callback' => 'year_student_schedule_render_callback'
+    ));
+}
+add_action( 'init', 'block_year_student_schedule' );
+
+
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function group_student_schedule_render_callback()
+{
+    if(is_page()) {
+        $user = new SecretaryController();
+        return $user->displayWelcomePage();
+    }
+}
+
+/**
+ * Build a block
+ */
+function block_group_student_schedule() {
+    register_block_type('tvconnecteeamu/group-student-schedule', array(
+        'render_callback' => 'group_student_schedule_render_callback'
+    ));
+}
+add_action( 'init', 'block_group_student_schedule' );
+
+
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function all_years_schedule_render_callback()
+{
+    if(is_page()) {
+        $user = new SecretaryController();
+        return $user->displayWelcomePage();
+    }
+}
+
+/**
+ * Build a block
+ */
+function block_all_years_schedule() {
+    register_block_type('tvconnecteeamu/all-years-schedule', array(
+        'render_callback' => 'all_years_schedule_render_callback'
+    ));
+}
+add_action( 'init', 'block_all_years_schedule' );
+
+
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function teacher_search_schedule_render_callback()
+{
+    if(is_page()) {
+        $user = new SecretaryController();
+        return $user->displayWelcomePage();
+    }
+}
+
+/**
+ * Build a block
+ */
+function block_teacher_search_schedule() {
+    register_block_type('tvconnecteeamu/teacher-search-schedule', array(
+        'render_callback' => 'teacher_search_schedule_render_callback'
+    ));
+}
+add_action( 'init', 'block_teacher_search_schedule' );
+
+
+/**
+ * Function of the block
+ *
+ * @return string
+ */
+function weekly_computer_room_schedule_render_callback()
+{
+    if(is_page()) {
+        $user = new SecretaryController();
+        return $user->displayWelcomePage();
+    }
+}
+
+/**
+ * Build a block
+ */
+function block_weekly_computer_room_schedule() {
+    register_block_type('tvconnecteeamu/weekly-computer-room-schedule', array(
+        'render_callback' => 'weekly_computer_room_schedule_render_callback'
+    ));
+}
+add_action( 'init', 'block_weekly_computer_room_schedule' );

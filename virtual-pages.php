@@ -171,7 +171,6 @@ add_action('ec_virtual_pages', function ($controller) {
     ->setTitle('Mon compte')
     ->setContent('
     <!-- wp:tvconnecteeamu/choose-account -->
-    test
     <!-- /wp:tvconnecteeamu/choose-account -->
     ')
     ->setTemplate('page.php');
@@ -199,7 +198,6 @@ add_action('ec_virtual_pages', function ($controller) {
     ->setContent('
     <!-- wp:tvconnecteeamu/manage-codes -->
       <!-- wp:tvconnecteeamu/add-code -->
-      test
       <!-- /wp:tvconnecteeamu/add-code -->
     <!-- /wp:tvconnecteeamu/manage-codes -->
     ')
@@ -213,7 +211,6 @@ add_action('ec_virtual_pages', function ($controller) {
     ->setTitle('Gérer les alertes')
     ->setContent('
     <!-- wp:tvconnecteeamu/manage-alert -->
-    test
     <!-- /wp:tvconnecteeamu/manage-alert -->
     ')
     ->setTemplate('page.php');
@@ -254,4 +251,135 @@ add_action('ec_virtual_pages', function ($controller) {
     <!-- /wp:tvconnecteeamu/cgu -->
     ')
     ->setTemplate('page-tablet.php');
+
+    /**
+     *  Page: /secretary/welcome
+     */
+    $controller->addPage(new \EC\VirtualPages\Page("/secretary/welcome"))
+        ->setTitle('Accueil page secrétaires')
+        ->setContent('
+    <!-- wp:tvconnecteeamu/secretary-welcome -->
+    test
+    <!-- /wp:tvconnecteeamu/secretary-welcome -->
+    ')
+        ->setTemplate('page.php');
+
+    /**
+     *  Page: /secretary/computer-rooms
+     */
+    $controller->addPage(new \EC\VirtualPages\Page("/secretary/computer-rooms"))
+        ->setTitle('Salles machines')
+        ->setContent('
+    <!-- wp:tvconnecteeamu/computer-rooms -->
+    test
+    <!-- /wp:tvconnecteeamu/computer-rooms -->
+    ')
+        ->setTemplate('page.php');
+
+
+    /**
+     *  Page: /secretary/teacher-schedule
+     */
+    $controller->addPage(new \EC\VirtualPages\Page("/secretary/teacher-schedule"))
+        ->setTitle('Emplois du temps professeur')
+        ->setContent('
+    <!-- wp:tvconnecteeamu/teacher-schedule -->
+    test
+    <!-- /wp:tvconnecteeamu/teacher-schedule -->
+    ')
+        ->setTemplate('page.php');
+
+
+    /**
+     *  Page: /secretary/main-menu
+     */
+    $controller->addPage(new \EC\VirtualPages\Page("/secretary/main-menu"))
+        ->setTitle('Menu secretaire')
+        ->setContent('
+    <!-- wp:tvconnecteeamu/main-menu -->
+    test
+    <!-- /wp:tvconnecteeamu/main-menu -->
+    ')
+        ->setTemplate('page.php');
+
+
+    /**
+     *  Page: /secretary/room-schedule
+     */
+    $controller->addPage(new \EC\VirtualPages\Page("/secretary/room-schedule"))
+        ->setTitle('Emplois du temps de la salle :')
+        ->setContent('
+    <!-- wp:tvconnecteeamu/room-schedule -->
+    test
+    <!-- /wp:tvconnecteeamu/room-schedule -->
+    ')
+        ->setTemplate('page.php');
+
+
+    /**
+     *  Page: /secretary/year-student-schedule
+     */
+    $controller->addPage(new \EC\VirtualPages\Page("/secretary/year-student-schedule"))
+        ->setTitle('Emplois du temps des X années')
+        ->setContent('
+    <!-- wp:tvconnecteeamu/year-student-schedule -->
+    test
+    <!-- /wp:tvconnecteeamu/year-student-schedule -->
+    ')
+        ->setTemplate('page.php');
+
+
+    /**
+     *  Page: /secretary/group-student-schedule
+     */
+    $controller->addPage(new \EC\VirtualPages\Page("/secretary/group-student-schedule"))
+        ->setTitle('Emplois du temps du groupe : ')
+        ->setContent('
+    <!-- wp:tvconnecteeamu/group-student-schedule -->
+    test
+    <!-- /wp:tvconnecteeamu/group-student-schedule -->
+    ')
+        ->setTemplate('page.php');
+
+
+    /**
+     *  Page: /secretary/all-years-schedule
+     */
+    $controller->addPage(new \EC\VirtualPages\Page("/secretary/all-years-schedule"))
+        ->setTitle('Emplois du temps')
+        ->setContent('
+    <!-- wp:tvconnecteeamu/all-years-schedule -->
+    test
+    <!-- /wp:tvconnecteeamu/all-years-schedule -->
+    ')
+        ->setTemplate('page.php');
+
+
+    /**
+     *  Page: /secretary/teacher-search-schedule
+     */
+    $controller->addPage(new \EC\VirtualPages\Page("/secretary/teacher-search-schedule"))
+        ->setTitle('Chercher votre emplois du temps')
+        ->setContent('
+    <!-- wp:tvconnecteeamu/teacher-search-schedule -->
+    test
+    <!-- /wp:tvconnecteeamu/teacher-search-schedule -->
+    ')
+        ->setTemplate('page.php');
+
+
+    /**
+     *  Page: /secretary/weekly-computer-room-schedule
+     */
+    $controller->addPage(new \EC\VirtualPages\Page("/secretary/weekly-computer-room-schedule"))
+        ->setTitle('Emplois du temps de la salle')
+        ->setContent('
+    <!-- wp:tvconnecteeamu/weekly-computer-room-schedule -->
+    test
+    <!-- /wp:tvconnecteeamu/weekly-computer-room-schedule -->
+    ')
+        ->setTemplate('page.php');
+
+
+
 });
