@@ -253,7 +253,7 @@ class UserView extends View
         $row = array();
 
         foreach ($users as $user) {
-            // Création de l'URL de suppression avec un nonce
+
             $delete_url = wp_nonce_url(admin_url('admin-post.php?action=delete_user&id=' . $user->getId()), 'delete_user_' . $user->getId());
 
             $row[] = [
