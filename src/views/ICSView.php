@@ -188,6 +188,16 @@ class ICSView extends View
             $label = $event['label'];
         }
         $description = substr($event['description'], 0, -30);
+        $description = preg_replace('/\s+/', ' ', $description);
+        $descriptionSplit = explode(' ', $description);
+        $description = '';
+
+        /* Remove occasional number problem in the professor name */
+        foreach ($descriptionSplit as $descriptionPart){
+            if(is_numeric($descriptionPart) && intval($descriptionPart) > 1000) continue;
+            $description .= $descriptionPart . ' ';
+        }
+
         if (!(date("H:i", strtotime($event['fin'])) <= $time) || $day != date('j')) {
             $current_user = wp_get_current_user();
             if (in_array("technicien", $current_user->roles)) {
