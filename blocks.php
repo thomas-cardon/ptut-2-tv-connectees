@@ -559,8 +559,8 @@ function block_user_modify()
 {
   wp_register_script(
     'user_modify-script',
-    plugins_url( '/blocks/user/modify.js', __FILE__ ),
-    array( 'wp-blocks', 'wp-element', 'wp-data' )
+    plugins_url( '/blocks/user/modify.jwp-blocks', 'wp-element', 'wp-datas', __FILE__ ),
+    array( '' )
   );
 
   register_block_type('tvconnecteeamu/modify-user', array(
