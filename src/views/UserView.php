@@ -231,27 +231,32 @@ class UserView extends View
      * @param $users    User[]
      * @return string
      */
-    public function displayUsers($users) {
+    public function displayUsers($users)
+    {
         $title = '<b>Rôle affiché: </b> tous';
         $id = 'all';
 
-        $header = ['Identifiant', 'Nom', 'Email', 'Rôle', 'Modifier', 'Supprimer'];
+        $header = ['Identifiant', 'Nom', 'Email', 'Rôle', 'Modifier', 'Supprime'];
 
         $row = array();
 
         foreach ($users as $user) {
+
+            $delete_url = wp_nonce_url(admin_url('admin-post.php?action=delete_user&id=' . $user->getId()), 'delete_user_' . $user->getId());
+
             $row[] = [
-              $user->ID,
-              $this->buildCheckbox('All', $user->getId()),
-              $user->get('user_login'),
-              $user->get('display_name'),
-              $user->get('user_email'),
-              implode("'", $this->getRoles($user)),
-              $this->link(add_query_arg(['id' => $user->getId()], home_url('/users/edit')), 'Modifier'),
-              $this->link(add_query_arg(['action' => 'delete', 'id' => $user->getId()], admin_url('admin-post.php')), 'Supprimer')
+                $user->ID,
+                $this->buildCheckbox('All', $user->getId()),
+                $user->get('user_login'),
+                $user->get('display_name'),
+                $user->get('user_email'),
+                implode("'", $this->getRoles($user)),
+                $this->link(add_query_arg(['id' => $user->getId()], home_url('/users/edit')), 'Modifier'),
+                $this->link($delete_url, 'Supprimer')
             ];
         }
 
         return $this->displayTable($id, $title, $header, $row, $id, '<a type="submit" class="btn btn-primary" role="button" aria-disabled="true" href="' . home_url('/users/create') . '">Créer</a>');
     }
 }
+

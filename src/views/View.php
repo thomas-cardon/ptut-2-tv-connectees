@@ -117,7 +117,7 @@ class View
         <div class="row d-flex justify-content-center">
           <div class="col-auto my-auto">
             ' . $create . '
-            <button type="submit" class="btn btn-danger" name="delete" onclick="return confirm(\' Voulez-vous supprimer le(s) élément(s) sélectionné(s) ?\');">Supprimer</button>
+            <button type="submit" class="btn btn-danger" name="delete" onclick="return confirm(\' Voulez-vous supprimer le(s) élément(s) sélectionné(s) ?\');">Suprimer</button>
           </div>
           <div class="col-auto my-auto">
             <span id="passwordHelpInline" class="form-text">
