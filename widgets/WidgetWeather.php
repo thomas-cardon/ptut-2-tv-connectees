@@ -48,7 +48,7 @@ class WidgetWeather extends WP_Widget
               };
             </script>
             <div id="weather-card" class="flex-wrap card d-flex align-content-around flex-grow-1" style="height: 12rem;">
-              <div class="card-body" style="width: 100%">
+              <div class="card-body" style="width: 100%"  >
 
                 <div id="weatherCardCarousel" class="carousel slide" style="height: 100%" data-bs-ride="carousel" data-bs-touch="false" data-bs-interval="10000">
                   <!-- Indicators -->
@@ -62,7 +62,7 @@ class WidgetWeather extends WP_Widget
                     <div id="card-0" class="carousel-item active" style="height: 12rem;">
                       <div class="py-2 d-flex justify-content-evenly">
                         <div>
-                          <h2 class="display-1"><strong id="temperature">0°C</strong></h2>
+                          <h2 class="display-1"><strong id="temperature">5°C</strong></h2>
                           <small class="mb-0 fs-6">
                             <span id="wind">0 KM/H</span>&nbsp;—&nbsp;
                             <span id="humidity">80% humidité</span>

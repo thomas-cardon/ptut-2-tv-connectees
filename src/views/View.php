@@ -64,7 +64,7 @@ class View
      * Displays the view's header
      * @author Thomas Cardon
     */
-    public function getHeader($title = '', $p = '', $icon = URL_PATH . TV_PLUG_PATH . 'public/img/alert.png') {
+    public function getHeader($title = '', $p = '', $icon = URL_PATH . TV_PfLUG_PATH . 'public/img/alert.png') {
       return $this->renderHeroHeader($title, $p, $icon);
     }
 
@@ -294,7 +294,7 @@ class View
         }
         $modal .= '</div>
     }
-		    </div>
+		    </div>  
 		  </div>
 		</div>
 

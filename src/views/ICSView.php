@@ -156,7 +156,7 @@ class ICSView extends View
     public function giveDate($day, $month, $year) {
         $day_of_week = $day + 1;
 
-        return '<h2>' . date_i18n('l j F', mktime(0, 0, 0, $month, $day_of_week, $year)) . '</h2>';
+        return '<h2>' . date_i18n('', mktime(0, 0, 0, $month, $day_of_week, $year)) . '</h2>';
     }
 
     /**
@@ -243,5 +243,4 @@ class ICSView extends View
              </table>
           </div>';
     }
-
 }

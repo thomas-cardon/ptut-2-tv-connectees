@@ -16,7 +16,8 @@ class UserView extends View
      *
      * @return string
      */
-    protected function displayBaseForm($name) {
+    protected function displayBaseForm($name)
+    {
         return '
             <form method="post" class="cadre">
             	<div class="form-group">
@@ -43,7 +44,8 @@ class UserView extends View
      *
      * @return string
      */
-    public function displayModifyPassword() {
+    public function displayModifyPassword()
+    {
         return '<div class="container-sm px-5">
             <form id="check" method="post">
                 <h2 class="display-6">Modifier le mot de passe</h2>
@@ -70,8 +72,9 @@ class UserView extends View
      *
      * @return string
      */
-    public function displayEnterCode() {
-      return '<div class="container-sm px-5">
+    public function displayEnterCode()
+    {
+        return '<div class="container-sm px-5">
           <form method="post" action="' . admin_url('admin-post.php') . '">
               <h2 class="display-6">Générer un code de suppression</h2>
               <p class="lead">
@@ -96,8 +99,9 @@ class UserView extends View
      *
      * @return string
      */
-    public function displayDeleteAccount() {
-      return '<div class="container-sm px-5"
+    public function displayDeleteAccount()
+    {
+        return '<div class="container-sm px-5"
           <form method="post" action="' . admin_url('admin-post.php') . '">
               <h2 class="display-6">Vous partez déjà?</h2>
               <p class="lead">
@@ -126,15 +130,16 @@ class UserView extends View
      * @return string
      */
 
-    public function displayModifyMyCodesView($codeArray) {
-      $selectedCodes = User::getById()->getCodes(true);
-      $codes = '';
+    public function displayModifyMyCodesView($codeArray)
+    {
+        $selectedCodes = User::getById()->getCodes(true);
+        $codes = '';
 
-      foreach ($codeArray as $code) {
-        $codes .= '<option value="' . $code->getId() . '" ' . (isset($selectedCodes, $selectedCodes[$code->getId()]) ? 'selected="true"' : '') . '>' . $code->getTitle() . '</option>';
-      }
+        foreach ($codeArray as $code) {
+            $codes .= '<option value="' . $code->getId() . '" ' . (isset($selectedCodes, $selectedCodes[$code->getId()]) ? 'selected="true"' : '') . '>' . $code->getTitle() . '</option>';
+        }
 
-      $form = '<div class="container-sm px-5">
+        $form = '<div class="container-sm px-5">
           <form method="post" action="' . admin_url('admin-post.php') . '">
               <h2 class="display-6">Modifier mon emploi du temps</h2>
 
@@ -162,13 +167,14 @@ class UserView extends View
               </form>
             </div>';
 
-      return $form;
+        return $form;
     }
 
     /**
      * Display a message to select a schedule
      */
-    public function displaySelectSchedule() {
+    public function displaySelectSchedule()
+    {
         return '<p>Veuillez choisir un emploi du temps.</p>';
     }
 
@@ -177,8 +183,9 @@ class UserView extends View
      *
      * @return string
      */
-     public function displayContent() {
-       return '<section class="container col-xxl-10 py-5">
+    public function displayContent()
+    {
+        return '<section class="container col-xxl-10 py-5">
          <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
            <div class="col-10 col-sm-8 col-lg-6">
              <img draggable="false" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Aix-Marseille_université_%28logo%29.png/1920px-Aix-Marseille_université_%28logo%29.png" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" loading="lazy" width="700" height="500">
@@ -191,33 +198,38 @@ class UserView extends View
            </div>
          </div>
        </section>';
-     }
+    }
 
     /**
      * Display to user, no lesson today
      *
      * @return string
      */
-    public function displayNoStudy() {
+    public function displayNoStudy()
+    {
         return '<p>Vous n\'avez pas cours!</p>';
     }
 
-    public function errorMessageNoCodeRegister() {
+    public function errorMessageNoCodeRegister()
+    {
         $current_user = wp_get_current_user();
         return '
         <h2>' . $current_user->user_login . '</h2>
         <p>Vous êtes enregistré sans aucun emploi du temps, rendez-vous sur votre compte pour pouvoir vous attribuez un code afin d\'accèder à votre emploi du temps</p>';
     }
 
-    public function successMesageChangeCode() {
+    public function successMesageChangeCode()
+    {
         $this->buildModal('Modification validée', '<div class="alert alert-success"> Le changement de groupe a été pris en compte</div>');
     }
 
-    public function errorMesageChangeCode() {
+    public function errorMesageChangeCode()
+    {
         $this->buildModal('Modification échouée', '<div class="alert alert-danger"> Le changement de groupe n\'a pas été pris en compte</div>');
     }
 
-    private function getRoles($user) {
+    private function getRoles($user)
+    {
         $roles = array();
         foreach ($user->roles as $role) {
             $roles[] = $role;
@@ -231,24 +243,28 @@ class UserView extends View
      * @param $users    User[]
      * @return string
      */
-    public function displayUsers($users) {
+    public function displayUsers($users)
+    {
         $title = '<b>Rôle affiché: </b> tous';
         $id = 'all';
 
-        $header = ['Identifiant', 'Nom', 'Email', 'Rôle', 'Modifier', 'Supprimer'];
+        $header = ['Identifiant', 'Nom', 'Email', 'Rôle', 'Modifier', 'Supprime'];
 
         $row = array();
 
         foreach ($users as $user) {
+            // Création de l'URL de suppression avec un nonce
+            $delete_url = wp_nonce_url(admin_url('admin-post.php?action=delete_user&id=' . $user->getId()), 'delete_user_' . $user->getId());
+
             $row[] = [
-              $user->ID,
-              $this->buildCheckbox('All', $user->getId()),
-              $user->get('user_login'),
-              $user->get('display_name'),
-              $user->get('user_email'),
-              implode("'", $this->getRoles($user)),
-              $this->link(add_query_arg(['id' => $user->getId()], home_url('/users/edit')), 'Modifier'),
-              $this->link(add_query_arg(['action' => 'delete', 'id' => $user->getId()], admin_url('admin-post.php')), 'Supprimer')
+                $user->ID,
+                $this->buildCheckbox('All', $user->getId()),
+                $user->get('user_login'),
+                $user->get('display_name'),
+                $user->get('user_email'),
+                implode("'", $this->getRoles($user)),
+                $this->link(add_query_arg(['id' => $user->getId()], home_url('/users/edit')), 'Modifier'),
+                $this->link($delete_url, 'Supprimer')
             ];
         }
 
