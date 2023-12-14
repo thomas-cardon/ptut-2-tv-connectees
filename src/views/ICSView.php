@@ -197,7 +197,6 @@ class ICSView extends View
             if(is_numeric($descriptionPart) && intval($descriptionPart) > 1000) continue;
             $description .= $descriptionPart . ' ';
         }
-        //echo $description[sizeof($description)-1] . '<br>';
 
 
 
@@ -239,9 +238,8 @@ class ICSView extends View
               $professeur = preg_split('/(Groupe [1-9].?)|G[1-9].? |.?[0-9](ère|ème) (A|a)nnée.?|an[1-3]|[A-B].?-[1-3]/',$data);
               $professeur = $professeur[sizeof($professeur)-1];
               $group = preg_split('/' . $professeur . '/',$data);
-              $group = $group[0];
-
-
+              $group = preg_replace(array('/G1/','/G2/','/G3/','/G4/'), array('Groupe 1', 'Groupe 2', 'Groupe 3', 'Groupe 4'),$group[0]);
+              $group = str_replace(array('an1','an2','an3'),'',$group);
 
               $string .= '<td class="text-center">' . $group . '</td>';
               $string .= '<td class="text-center">' . $professeur . '</td>';
