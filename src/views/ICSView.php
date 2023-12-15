@@ -188,12 +188,24 @@ class ICSView extends View
             $label = $event['label'];
         }
         $description = substr($event['description'], 0, -30);
+        $description = preg_replace('/\s+/', ' ', $description);
+        $descriptionSplit = explode(' ', $description);
+        $description = '';
+
+        /* Remove occasional number problem in the professor name */
+        foreach ($descriptionSplit as $descriptionPart){
+            if(is_numeric($descriptionPart) && intval($descriptionPart) > 1000) continue;
+            $description .= $descriptionPart . ' ';
+        }
+
+
+
         if (!(date("H:i", strtotime($event['fin'])) <= $time) || $day != date('j')) {
             $current_user = wp_get_current_user();
             if (in_array("technicien", $current_user->roles)) {
                 return $this->displayLineSchedule([$duration, $event['location']], $active);
             } else {
-                return $this->displayLineSchedule([$duration, $label, $description, $event['location']], $active);
+                return $this->displayLineSchedule([$duration, $label,$description, $event['location']], $active);
             }
         }
 
@@ -220,12 +232,17 @@ class ICSView extends View
             if ($key === 1) {
               $data = str_replace(array(' (INFO)', ' G1', ' G2', ' G3', ' G4', ' 4h', ' 2h', '*'), '', $data);
               $string .= '<td class="text-center">' . $data . '</td>';
+
             }
             elseif ($key === 2) {
-              $group = str_replace(array(' an1', ' an2', ' an3'), '', explode("\n", $data)[0]);
+              $professeur = preg_split('/(Groupe [1-9].?)|G[1-9].? |.?[0-9](ère|ème) (A|a)nnée.?|an[1-3]|[A-B].?-[1-3]/',$data);
+              $professeur = $professeur[sizeof($professeur)-1];
+              $group = preg_split('/' . $professeur . '/',$data);
+              $group = preg_replace(array('/G1/','/G2/','/G3/','/G4/'), array('Groupe 1', 'Groupe 2', 'Groupe 3', 'Groupe 4'),$group[0]);
+              $group = str_replace(array('an1','an2','an3'),'',$group);
 
               $string .= '<td class="text-center">' . $group . '</td>';
-              $string .= '<td class="text-center">' . explode("\n", $data)[1] . '</td>';
+              $string .= '<td class="text-center">' . $professeur . '</td>';
             }
             else $string .= '<td class="text-center">' . $data . '</td>';
         }
