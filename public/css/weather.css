@@ -1,45 +1,73 @@
-/* 2021 Update */
-.gradient-01d {
-  background: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 236, 210, 1));
-  color: var(--color-primary-100);
+/* CSS WEATHER */
+
+* {
+  box-sizing: border-box
 }
 
-.gradient-02d, .gradient-03d {
-  background: linear-gradient(to right, rgba(255, 255, 255, 1), rgb(204, 197, 187));
-  color: var(--color-primary-100);
+.Infos {
+  width: 100%;
+  box-sizing: border-box;
+  color: #FFF;
+  text-align: center;
 }
 
-.gradient-01n, .gradient-02n, .gradient-03n {
-  background: linear-gradient(315deg, #7f5a83 0%, #0d324d 74%);
-  color: var(--color-primary-800);
+.Infos .Weather {
+  box-sizing: border-box;
+  border-top: solid 1px #FFF;
+  font-size: 1.6vw;
+  text-align: center;
+  width: 100%;
+  height: 5vh;
+  margin-bottom: 0 !important;
 }
 
-.gradient-04d {
-  background-image: linear-gradient(0deg, #D9AFD9 0%, #97D9E1 100%);
-  color: var(--color-primary-100);
+.Infos .Weather #weather {
+  border-right: solid 1px #FFF;
+  display: inline-block;
+  height: 100%;
+  width: 49%;
 }
 
-.gradient-04n {
-  background: linear-gradient(to right, #373b44, #4286f4); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  color: var(--color-primary-800);
+.Infos .Weather #wind {
+  display: inline-block;
+  height: 100%;
+  width: 50%;
 }
 
-.forecast-icon {
-  background-repeat: no-repeat;
-  background-size: cover;
-  height: 4rem;
-  width: 4rem;
+.Infos .Weather img {
+  display: inline-block;
+  height: 70%;
 }
 
-#weatherCardCarousel .carousel-indicators {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  margin-top: -5%;
+.Infos .Time {
+  text-align: center;
+  font-size: 1.6vw;
+  font-weight: 600;
+  height: 5vh;
+  margin: -2px 0 -4px 0;
 }
 
-#weatherCardCarousel .carousel-indicators * {
-  height: 8px !important;
-  width: 8px !important;
-  border-radius: 200%;
+.Infos .Date {
+  font-size: 1.6vw;
+  height: 5vh;
+  margin-bottom: 0 !important;
+}
+
+.kmh, .degree {
+  font-size: 1.4vw;
+}
+
+@media only screen and (max-device-width: 1000px) {
+  .Infos {
+    height: 8.7vh;
+    width: 100%;
+  }
+
+  .Infos .Time {
+    font-size: 2.4vh;
+  }
+
+  .Infos .Date {
+    font-size: 1.6vh;
+  }
 }
